@@ -1,9 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
 }
+
+/* =====chat ======= */
+.chat-height {
+  min-height: calc(100vh - 80px);
+  height: 100%;
+}
+
+/* =====chat end ======= */
