@@ -7,7 +7,10 @@
 |No| Package Installs               | Usage for                             |
 |--|--------------------------------|---------------------------------------|
 | 1| yarn add `react-route-dom`     | declarative routing in react web app  |
-| 2| yarn add `-D` `tailwindcss postcss autoprefixer` | `devDependency` of TailwindCSS for building UI  |
+| 2| yarn add `react-icons`         | icon pack for interactive UI building |
+| 3| yarn add `-D` `tailwindcss postcss autoprefixer` | `devDependency` of TailwindCSS for building UI  |
 
 
  
+* ## [React Icons | Web Link][link]
+[link]: https://react-icons.github.io/react-icons
