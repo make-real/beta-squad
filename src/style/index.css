@@ -16,4 +16,70 @@ body {
 .input-style {
   overflow-wrap: break-word;
 }
+.user-box {
+  transition: transform 300ms ease-in-out 0s;
+}
+.msg-icons {
+  opacity: 0;
+}
+.user-box:hover .msg-icons {
+  opacity: 1;
+}
+.tooltip-box {
+  position: relative;
+}
+.tooltip-box .tooltip-text {
+  position: absolute;
+  left: 50%;
+  top: -40px;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  font-size: 10px;
+  color: #ede9e9;
+  background: #464f52;
+  border-radius: 5px;
+  white-space: nowrap;
+  max-width: none;
+  opacity: 0;
+  transition: transform 300ms ease-in-out 0s;
+}
+.tooltip-box .tooltip-text::before {
+  content: "";
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: #464f52;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 1px;
+}
+.tooltip-box:hover .tooltip-text {
+  opacity: 1;
+}
+.attach-box {
+  position: absolute;
+  left: 50%;
+  top: -135px;
+  transform: translateX(-50%);
+  background: #ffffff;
+  padding: 15px;
+  box-shadow: 1px 1px 8px rgb(172, 172, 172);
+  white-space: nowrap;
+  max-width: none;
+  border-radius: 5px;
+  z-index: 100;
+}
+.attach-box::before {
+  content: "";
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: #ffffff;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 1px;
+  box-shadow: 1px 1px 1px rgb(172, 172, 172);
+}
 /* =====chat end ======= */
