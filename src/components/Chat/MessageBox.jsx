@@ -3,17 +3,26 @@ import { ImAttachment } from "react-icons/im";
 import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineGif } from "react-icons/ai";
+import Picker from "emoji-picker-react";
 import users from "../../constant/data2";
 
 const MessageBox = () => {
   const [attachFile, setAttachFile] = useState(false);
   const [mentionModal, setMentionModal] = useState(false);
+  const [input, setInput] = useState("");
+  const [showEmojis, setShowEmojis] = useState(false);
+
+  const onEmojiClick = (e, emojiObject) => {
+    setInput((prevInput) => prevInput + emojiObject.emoji);
+  };
   return (
     <div className="py-3 w-11/12 text-gray-300 relative">
       <div className="relative h-full">
         <input
           type="text"
           placeholder="Message Space Clone"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           className="w-full input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-36"
         />
         <div className="text-gray-400 flex absolute right-2.5 bottom-1/2  translate-y-1/2">
@@ -22,7 +31,7 @@ const MessageBox = () => {
               className="duration-300  hover:text-teal-400 "
               onClick={() => setAttachFile(!attachFile)}
             />
-            {attachFile ? (
+            {attachFile && (
               <div className="attach-box">
                 <h6 className="duration-300  hover:text-teal-400">
                   From computer
@@ -32,8 +41,6 @@ const MessageBox = () => {
                 </h6>
                 <h6 className="duration-300  hover:text-teal-400">Dropbox</h6>
               </div>
-            ) : (
-              <div></div>
             )}
           </div>
           <div className="px-2 cursor-pointer relative">
@@ -42,8 +49,13 @@ const MessageBox = () => {
               onClick={() => setMentionModal(!mentionModal)}
             />
           </div>
-          <div className="px-2 cursor-pointer duration-300  hover:text-teal-400">
-            <BsEmojiSmile />
+          <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
+            <BsEmojiSmile onClick={() => setShowEmojis(!showEmojis)} />
+            {showEmojis && (
+              <div className="absolute  right-0 bottom-8">
+                <Picker onEmojiClick={onEmojiClick} />
+              </div>
+            )}
           </div>
           <div className="px-2 cursor-pointer duration-300  hover:text-teal-400">
             <AiOutlineGif />
@@ -55,7 +67,7 @@ const MessageBox = () => {
           <small>~strikethrough~</small>
         </div>
       </div>
-      {mentionModal ? (
+      {mentionModal && (
         <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
           <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
             <p>@channel Notifies everyone in space</p>
@@ -81,8 +93,6 @@ const MessageBox = () => {
             </div>
           ))}
         </div>
-      ) : (
-        <div></div>
       )}
     </div>
   );
