@@ -13,5 +13,7 @@ body {
   min-height: calc(100vh - 80px);
   height: 100%;
 }
-
+.input-style {
+  overflow-wrap: break-word;
+}
 /* =====chat end ======= */
