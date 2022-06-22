@@ -8,11 +8,11 @@ const List = () => {
     const [addCard, setAddCard] = useState(false);
 
     return (
-        <section className='p-3 bg-gray-50 h-[90vh] overflow-y-scroll'>
+        <section className='p-3 bg-gray-50 w-screen'>
 
-            <table className='w-full text-left '>
+            <table className='text-left max-h-[800px] overflow-y-scroll block min-w-full bg-green-300 w-[800px]'>
 
-                <thead className='sticky top-0'>
+                <thead className='sticky top-0 w-full'>
                     <tr className='bg-white p-8 text-gray-400 font-normal'>
                         <th className='px-4 py-4'>Card Name</th>
                         <th className='px-4 py-4'>Assign</th>
@@ -23,7 +23,7 @@ const List = () => {
                     </tr>
                 </thead>
 
-                <tbody className='max-h-96 overflow-scroll bg-gray-200/50'>
+                <tbody className=' bg-gray-200/50 w-full'>
                     <tr className='bg-sky-50'>
                         <td className='m-1 px-4 py-4  cursor-pointer hover:bg-gray-300 duration-200'>chat</td>
                         <td className='px-4 py-4'><HiOutlineUserAdd /></td>
@@ -48,9 +48,160 @@ const List = () => {
                         <td className='px-4 py-4'>Alex jon</td>
                         <td className='px-4 py-4'>Add a Tag</td>
                     </tr>
+                    <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr> <tr className=''>
+                        <td className='px-4 py-4'>list add </td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
+                    <tr className='bg-sky-50'>
+                        <td className='px-4 py-4'>taiseen azam</td>
+                        <td className='px-4 py-4'><HiOutlineUserAdd /></td>
+                        <td className='px-4 py-4'>Set Dates</td>
+                        <td className='px-4 py-4'>25%</td>
+                        <td className='px-4 py-4'>Alex jon</td>
+                        <td className='px-4 py-4'>Add a Tag</td>
+                    </tr>
                 </tbody>
             </table>
-
 
 
 
@@ -63,7 +214,6 @@ const List = () => {
                     <RiAddCircleFill className='text-2xl' />
                     <h1>ADD A CARD</h1>
                 </div>
-
                 {
                     addCard && <AddCard setAddCard={setAddCard} />
                 }
