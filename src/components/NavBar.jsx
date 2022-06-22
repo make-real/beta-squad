@@ -4,13 +4,17 @@ import { navLinks } from '../constant/data';
 import { NavLink } from 'react-router-dom';
 import { TbFilter } from 'react-icons/tb';
 import { FaPlus } from 'react-icons/fa';
+import { useState } from 'react';
 import haySpace from '../assets/haySpace.png';
 
 
 const NavBar = () => {
 
+  const [linkClick, setLinkClick] = useState('');
+
   const activeLink = 'mr-8  py-4 font-bold text-teal-400';
   const normalLink = 'mr-8  py-4 font-bold text-gray-300';
+
 
   return (
     <header className='flex items-center justify-between px-8 py-2 border-b border-gray-300'>
@@ -22,18 +26,19 @@ const NavBar = () => {
           <img src={haySpace} alt="logo" />
         </div>
 
-        <div>
+        <div div="true">
           <div className='flex items-center gap-3'>
             <h2 className='text-teal-500 text-xl font-bold'>Space Clone </h2>
             <p className='text-[12px] text-gray-300 font-light'>Project purpose...</p>
           </div>
 
-          <nav >
+          <nav>
             {
-              navLinks.map(({ id, name, path }) => (
+              navLinks.map(({ name, path }) => (
                 <NavLink
+                  key={path}
                   to={path}
-                  key={id}
+                  onClick={() => setLinkClick(path)}
                   className={({ isActive }) => isActive ? activeLink : normalLink}
                 >
                   {name}
@@ -45,6 +50,7 @@ const NavBar = () => {
       </div>
 
 
+
       {/* 🟨🟨🟨 Right Side */}
       <div className="flex items-center justify-center text-gray-400">
 
@@ -52,19 +58,22 @@ const NavBar = () => {
           <FiVideo className='text-xl font-bold' />
         </div>
 
-        <div className='p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 '>
-          <HiMenuAlt1 className='text-xl font-bold' />
-        </div>
+        {
+          linkClick === '/' &&
+          <div className='p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 '>
+            <HiMenuAlt1 className='text-xl font-bold' />
+          </div>
+        }
 
-        <div className='p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 '>
+        <div className={`${linkClick === '/' ? 'hidden' : 'block'} ${linkClick === 'timeline' ? 'hidden' : 'block'} p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}>
           <FiSearch className='text-xl font-bold' />
         </div>
 
-        <div className='p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 '>
+        <div className={`${linkClick === '/' ? 'hidden' : 'block'} ${linkClick === 'timeline' ? 'hidden' : 'block'} p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}>
           <TbFilter className='text-xl font-bold' />
         </div>
 
-        <div className='p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 '>
+        <div className={`${linkClick === 'kanban' ? 'block' : 'hidden'} p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}>
           <FaPlus className='text-xl font-bold' />
         </div>
 
@@ -82,7 +91,7 @@ const NavBar = () => {
 
       </div>
 
-    </header>
+    </header >
   )
 }
 
