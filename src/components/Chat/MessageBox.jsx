@@ -15,6 +15,17 @@ const MessageBox = () => {
   const onEmojiClick = (e, emojiObject) => {
     setInput((prevInput) => prevInput + emojiObject.emoji);
   };
+
+  const handleAttach = () => {
+    setAttachFile(true);
+    setShowEmojis(false);
+  };
+  const handleEmoji = () => {
+    setAttachFile(false);
+    setShowEmojis(true);
+  };
+  const handleGif = () => {};
+
   return (
     <div className="py-3 w-11/12 text-gray-300 relative">
       <div className="relative h-full">
@@ -29,7 +40,7 @@ const MessageBox = () => {
           <div className="px-1.5 cursor-pointer relative">
             <ImAttachment
               className="duration-300  hover:text-teal-400 "
-              onClick={() => setAttachFile(!attachFile)}
+              onClick={() => handleAttach()}
             />
             {attachFile && (
               <div className="attach-box">
@@ -50,7 +61,7 @@ const MessageBox = () => {
             />
           </div>
           <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
-            <BsEmojiSmile onClick={() => setShowEmojis(!showEmojis)} />
+            <BsEmojiSmile onClick={() => handleEmoji()} />
             {showEmojis && (
               <div className="absolute  right-0 bottom-8">
                 <Picker onEmojiClick={onEmojiClick} />
