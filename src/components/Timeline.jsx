@@ -15,8 +15,6 @@ import { RiAddCircleFill } from "react-icons/ri";
 
 import { checkBoxFilter } from "../constant/data";
 
-
-
 import AddCard from "./AddCard";
 
 const Timeline = () => {
@@ -24,13 +22,11 @@ const Timeline = () => {
   const [addCard, setAddCard] = useState(false);
   const [spaceFilter, setSpaceFilter] = useState(false);
 
-
   const selectedDay = (val) => {
     console.log(val);
   };
   const beforeDate = () => {
     const today = new Date();
-    const priorDate = new Date().setDate(today.getDate() - 10);
   };
 
   return (
@@ -232,17 +228,6 @@ const Timeline = () => {
                   value="value10"
                 />
                 <label for="tags">No Tags (0)</label>
-
-     
-        
-
-   
-          
-
-         
-
-             
-
               </div>
             </div>
           </div>
@@ -261,9 +246,6 @@ const Timeline = () => {
         {addCard && <AddCard setAddCard={setAddCard} />}
       </div>
 
-    </section>
-
-
       {/* 🟨🟨🟨 Position Fixed at the bottom */}
       <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-100">
         <div
@@ -275,7 +257,7 @@ const Timeline = () => {
         </div>
         {addCard && <AddCard setAddCard={setAddCard} />}
       </div>
-    </div>
+    </section>
   );
 };
 
