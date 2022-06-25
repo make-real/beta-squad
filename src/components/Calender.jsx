@@ -9,7 +9,6 @@ const Calender = () => {
     const [active, setActive] = useState('');
     const [addCard, setAddCard] = useState(false);
 
-
     const oneDayTimes = [
         '12:00 AM', '1:00 AM', '2:00 AM', '3:00 AM', '4:00 AM', '5:00 AM', '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM',
         '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM', '11:00 PM',
@@ -24,11 +23,10 @@ const Calender = () => {
 
     const addCardVisibility = () => {
         setAddCard(true);
-
         // setAddCard(false);
-
         // setAddCard(true);
     }
+
 
     return (
         <section className=''>
@@ -62,9 +60,9 @@ const Calender = () => {
 
 
             {/* 🟨🟨🟨 Body Section 🟨🟨🟨 */}
-            <div className='p-8 '>
+            <div className='p-8'>
 
-                <div className='fixed t-16 right-16'>
+                <div className={`absolute top-42 right-8`}>
                     {
                         addCard && <AddCardMini setAddCard={setAddCard} />
                     }
@@ -89,7 +87,11 @@ const Calender = () => {
                         <div className='border-gray-300 border-r border-l border-b'>
                             {
                                 oneDayTimes.map(time =>
-                                    <p key={time} className='w-[92vw] h-10 bg-sky-50 border-t border-gray-300 '></p>
+                                    <p
+                                        key={time}
+                                        onClick={addCardVisibility}
+                                        className='w-[92vw] h-10 bg-sky-50 border-t border-gray-300'
+                                    ></p>
                                 )
                             }
                         </div>
