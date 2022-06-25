@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,14 +9,13 @@ body {
   font-family: "Varela Round", sans-serif;
 }
 
-@layer utilities{
-
-  .calenderSection{
+@layer utilities {
+  .calenderSection {
     @apply p-1.5 px-2 cursor-pointer hover:bg-gray-100 hover:text-teal-500 duration-200 rounded-lg font-bold;
   }
 
-  .arrowSymbol{
-    @apply w-7 h-8 hover:bg-gray-100 hover:text-teal-500 duration-300 cursor-pointer flex items-center justify-center rounded-md
+  .arrowSymbol {
+    @apply w-7 h-8 hover:bg-gray-100 hover:text-teal-500 duration-300 cursor-pointer flex items-center justify-center rounded-md;
   }
 }
 
@@ -137,7 +136,6 @@ body {
   box-shadow: inset 0 0 0 0.2em rgb(214, 213, 213), inset 0 0 0 1em #b9e7ec;
 }
 
-
 .styled-checkbox {
   position: absolute;
   opacity: 0;
@@ -199,4 +197,10 @@ body {
   flex-shrink: 0;
 }
 
+/* .timebox-color {
+  background: rgb(156 163 175);
+} */
+.timebox-color :nth-child(odd) {
+  background: rgb(154, 179, 227) !important;
+}
 /* =====timeline===== */
