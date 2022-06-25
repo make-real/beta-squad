@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import DatePicker from "react-horizontal-datepicker";
+
 import {
   IoIosArrowBack,
   IoIosArrowForward,
@@ -10,7 +12,10 @@ import {
 import { IoCloseOutline, IoPlanet } from "react-icons/io5";
 
 import { RiAddCircleFill } from "react-icons/ri";
+
 import { checkBoxFilter } from "../constant/data";
+
+
 
 import AddCard from "./AddCard";
 
@@ -18,6 +23,7 @@ const Timeline = () => {
   const [timeDropDown, setTimeDropDown] = useState(false);
   const [addCard, setAddCard] = useState(false);
   const [spaceFilter, setSpaceFilter] = useState(false);
+
 
   const selectedDay = (val) => {
     console.log(val);
@@ -225,6 +231,17 @@ const Timeline = () => {
                   value="value10"
                 />
                 <label for="tags">No Tags (0)</label>
+
+     
+        
+
+   
+          
+
+         
+
+             
+
               </div>
             </div>
           </div>
@@ -242,7 +259,22 @@ const Timeline = () => {
         </div>
         {addCard && <AddCard setAddCard={setAddCard} />}
       </div>
+
     </section>
+
+
+      {/* 🟨🟨🟨 Position Fixed at the bottom */}
+      <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-100">
+        <div
+          onClick={() => setAddCard(true)}
+          className="flex gap-3 items-center border border-dashed border-black p-3 rounded bg-white text-gray-500 cursor-pointer duration-300 hover:bg-gray-200"
+        >
+          <RiAddCircleFill className="text-2xl" />
+          <h1>ADD A CARD</h1>
+        </div>
+        {addCard && <AddCard setAddCard={setAddCard} />}
+      </div>
+    </div>
   );
 };
 
