@@ -24,7 +24,6 @@ const Timeline = () => {
   };
   const beforeDate = () => {
     const today = new Date();
-    const priorDate = new Date().setDate(today.getDate() - 10);
   };
 
   return (
