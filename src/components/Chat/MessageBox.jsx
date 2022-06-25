@@ -17,12 +17,14 @@ const MessageBox = () => {
   };
 
   const handleAttach = () => {
-    setAttachFile(true);
+    setAttachFile((prev) => !prev);
     setShowEmojis(false);
+    setMentionModal(false);
   };
   const handleEmoji = () => {
     setAttachFile(false);
-    setShowEmojis(true);
+    setShowEmojis((prev) => !prev);
+    setMentionModal(false);
   };
   const handleGif = () => {};
 
