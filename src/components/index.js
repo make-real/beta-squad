@@ -1,3 +1,4 @@
+export { default as AddCardButton } from './AddCardButton';
 export { default as AddCardMini } from './AddCardMini';
 export { default as Calender } from './Calender';
 export { default as Timeline } from './Timeline';
