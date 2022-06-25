@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-
-import DatePicker from "react-horizontal-datepicker";
-
 import {
   IoIosArrowBack,
   IoIosArrowForward,
@@ -13,7 +10,7 @@ import { IoCloseOutline, IoPlanet } from "react-icons/io5";
 
 import { RiAddCircleFill } from "react-icons/ri";
 
-import { checkBoxFilter } from "../constant/data";
+import { checkBoxFilter, timelineData } from "../constant/data";
 
 import AddCard from "./AddCard";
 
@@ -21,12 +18,21 @@ const Timeline = () => {
   const [timeDropDown, setTimeDropDown] = useState(false);
   const [addCard, setAddCard] = useState(false);
   const [spaceFilter, setSpaceFilter] = useState(false);
+  const [timeChange, setTimeChange] = useState("Week");
 
-  const selectedDay = (val) => {
-    console.log(val);
+  const handleTimeDropDown = () => {
+    setTimeDropDown((prev) => !prev);
+    setSpaceFilter(false);
   };
-  const beforeDate = () => {
-    const today = new Date();
+
+  const handleSpaceFilter = () => {
+    setTimeDropDown(false);
+    setSpaceFilter((prev) => !prev);
+  };
+
+  const handleTimeChange = (time) => {
+    setTimeChange(time);
+    setTimeDropDown(false);
   };
 
   return (
@@ -52,9 +58,9 @@ const Timeline = () => {
               <button
                 class="border my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center "
                 type="button"
-                onClick={() => setTimeDropDown(!timeDropDown)}
+                onClick={handleTimeDropDown}
               >
-                <small className="pr-7 text-sm my-auto">Week</small>
+                <small className="pr-7 text-sm my-auto">{timeChange}</small>
                 {timeDropDown ? <IoMdArrowDropup /> : <IoMdArrowDropdown />}
               </button>
 
@@ -64,20 +70,35 @@ const Timeline = () => {
                     class="py-1 text-sm text-gray-500 dark:text-gray-200"
                     aria-labelledby="dropdownDefault"
                   >
-                    <li class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700">
-                      Dashboard
+                    <li
+                      class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                      onClick={() => handleTimeChange("Week")}
+                    >
+                      Week
                     </li>
-                    <li class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700">
-                      Settings
+                    <li
+                      class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                      onClick={() => handleTimeChange("2 Weeks")}
+                    >
+                      2 Weeks
                     </li>
-                    <li class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700">
-                      Earnings
+                    <li
+                      class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                      onClick={() => handleTimeChange("Month")}
+                    >
+                      Month
                     </li>
-                    <li class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700">
-                      Sign out
+                    <li
+                      class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                      onClick={() => handleTimeChange("3 Months")}
+                    >
+                      3 Months
                     </li>
-                    <li class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700">
-                      Sign out
+                    <li
+                      class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                      onClick={() => handleTimeChange("Half Year")}
+                    >
+                      Half Year
                     </li>
                   </ul>
                 </div>
@@ -88,7 +109,7 @@ const Timeline = () => {
               <button
                 class="border text-sm my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg  px-5 py-1.5 text-center inline-flex items-center "
                 type="button"
-                onClick={() => setSpaceFilter(!spaceFilter)}
+                onClick={handleSpaceFilter}
               >
                 <IoPlanet />
                 <span className="px-3">Space Filters</span>
@@ -98,32 +119,28 @@ const Timeline = () => {
           </div>
         </div>
 
-        {/* date slider */}
-        <div>
-          <DatePicker
-            getSelectedDay={selectedDay}
-            endDate={300}
-            selectDate={beforeDate}
-            labelFormat={"MMMM"}
-            color={"#374e8c"}
-            marked={[
-              {
-                date: new Date(2022, 6, 28),
-                marked: true,
-                style: {
-                  color: "#ff0000",
-                  padding: "2px",
-                  fontSize: 12,
-                },
-                text: "1x",
-              },
-              {
-                date: new Date(),
-                marked: true,
-                text: "5x",
-              },
-            ]}
-          />
+        <div className="pb-6.5 relative flex">
+          {timelineData.map((item, index) => (
+            <div className="flex-1" key={item.id}>
+              <div className=" text-center text-xs py-1.5">
+                <h6 className="text-gray-700	">{item.number}</h6>
+                <h6 className="text-gray-400	text-">{item.week}</h6>
+              </div>
+              <div
+                className={`h-[100px] border  w-100  ${
+                  index % 2 ? "bg-gray-100" : "bg-gray-200"
+                }`}
+              ></div>
+            </div>
+          ))}
+
+          <div className="absolute left-0 top-1/2 border border-gray-400 text-gray-400 duration-200 hover:border-gray-600 hover:text-gray-600 py-2.5 px-[6px] bg-white -translate-y-1/3 rounded-r-lg">
+            <IoIosArrowBack />
+          </div>
+
+          <div className="absolute right-0 top-1/2 border border-gray-400 text-gray-400 duration-200 hover:border-gray-600 hover:text-gray-600 py-2.5 px-[6px] bg-white -translate-y-1/3 rounded-l-lg">
+            <IoIosArrowForward />
+          </div>
         </div>
       </div>
 
