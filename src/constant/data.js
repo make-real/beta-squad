@@ -224,3 +224,12 @@ export const timelineData = [
     week: "Thu",
   },
 ];
+
+export const timelineDataMonth = [
+  { id: 1, month: "Jun", year: "2022" },
+  { id: 2, month: "July", year: "2022" },
+  { id: 3, month: "August", year: "2022" },
+  { id: 4, month: "September", year: "2022" },
+  { id: 5, month: "October", year: "2022" },
+  { id: 6, month: "November", year: "2022" },
+];

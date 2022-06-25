@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   IoIosArrowBack,
   IoIosArrowForward,
-  IoIosClose,
   IoMdArrowDropdown,
   IoMdArrowDropup,
 } from "react-icons/io";
@@ -10,7 +9,11 @@ import { IoCloseOutline, IoPlanet } from "react-icons/io5";
 
 import { RiAddCircleFill } from "react-icons/ri";
 
-import { checkBoxFilter, timelineData } from "../constant/data";
+import {
+  checkBoxFilter,
+  timelineData,
+  timelineDataMonth,
+} from "../constant/data";
 
 import AddCard from "./AddCard";
 
@@ -120,19 +123,87 @@ const Timeline = () => {
         </div>
 
         <div className="pb-6.5 relative flex">
-          {timelineData.map((item, index) => (
-            <div className="flex-1" key={item.id}>
-              <div className=" text-center text-xs py-1.5">
-                <h6 className="text-gray-700	">{item.number}</h6>
-                <h6 className="text-gray-400	text-">{item.week}</h6>
-              </div>
-              <div
-                className={`h-[100px] border  w-100  ${
-                  index % 2 ? "bg-gray-100" : "bg-gray-200"
-                }`}
-              ></div>
+          {timeChange === "Week" ? (
+            <div className="flex w-full">
+              {timelineData.slice(0, 7).map((item, index) => (
+                <div className="flex-1" key={item.id}>
+                  <div className=" text-center text-xs py-1.5">
+                    <h6 className="text-gray-700">{item.number}</h6>
+                    <h6 className="text-gray-400">{item.week}</h6>
+                  </div>
+                  <div
+                    className={`h-[120px] w-100  ${
+                      index % 2 ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  ></div>
+                </div>
+              ))}
             </div>
-          ))}
+          ) : timeChange === "2 Weeks" ? (
+            <div className="flex w-full">
+              {timelineData.slice(0, 14).map((item, index) => (
+                <div className="flex-1" key={item.id}>
+                  <div className=" text-center text-xs py-1.5">
+                    <h6 className="text-gray-700">{item.number}</h6>
+                    <h6 className="text-gray-400">{item.week}</h6>
+                  </div>
+                  <div
+                    className={`h-[120px] w-100  ${
+                      index % 2 ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          ) : timeChange === "Month" ? (
+            <div className="flex w-full">
+              {timelineData.map((item, index) => (
+                <div className="flex-1" key={item.id}>
+                  <div className=" text-center text-xs py-1.5">
+                    <h6 className="text-gray-700">{item.number}</h6>
+                    <h6 className="text-gray-400">{item.week}</h6>
+                  </div>
+                  <div
+                    className={`h-[120px] w-100  ${
+                      index % 2 ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          ) : timeChange === "3 Months" ? (
+            <div className="flex w-full">
+              {timelineDataMonth.slice(0, 3).map((item, index) => (
+                <div className="flex-1" key={item.id}>
+                  <div className=" text-center text-xs py-1.5">
+                    <h6 className="text-gray-700">{item.month}</h6>
+                    <h6 className="text-gray-400">{item.year}</h6>
+                  </div>
+                  <div
+                    className={`h-[120px] w-100  ${
+                      index % 2 ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex w-full">
+              {timelineDataMonth.map((item, index) => (
+                <div className="flex-1" key={item.id}>
+                  <div className=" text-center text-xs py-1.5">
+                    <h6 className="text-gray-700">{item.month}</h6>
+                    <h6 className="text-gray-400">{item.year}</h6>
+                  </div>
+                  <div
+                    className={`h-[120px] w-100  ${
+                      index % 2 ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="absolute left-0 top-1/2 border border-gray-400 text-gray-400 duration-200 hover:border-gray-600 hover:text-gray-600 py-2.5 px-[6px] bg-white -translate-y-1/3 rounded-r-lg">
             <IoIosArrowBack />
