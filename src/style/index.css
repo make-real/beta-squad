@@ -95,3 +95,45 @@ body {
   box-shadow: 1px 1px 1px rgb(172, 172, 172);
 }
 /* =====chat end ======= */
+
+/* =====timeline===== */
+
+.custom_radio input[type="radio"] {
+  display: none;
+}
+.custom_radio input[type="radio"] + label {
+  position: relative;
+  display: inline-block;
+  padding-left: 2em;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.custom_radio input[type="radio"] + label:before,
+.custom_radio input[type="radio"] + label:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.2em;
+  height: 1.2em;
+  text-align: center;
+  color: rgb(233, 21, 21);
+  font-family: Times;
+  border-radius: 50%;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.custom_radio input[type="radio"] + label:before {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 0.2em rgb(188, 187, 187),
+    inset 0 0 0 1em rgb(255, 254, 254);
+}
+
+.custom_radio input[type="radio"]:checked + label:before {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 0.2em rgb(214, 213, 213), inset 0 0 0 1em #b9e7ec;
+}
+/* =====timeline===== */
