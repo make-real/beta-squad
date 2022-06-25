@@ -5,12 +5,16 @@ const AddCard = ({ setAddCard }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         console.log('click');
     }
 
 
     return (
-        <div className='fixed top-0 bottom-0 left-0 right-0 bg-gray-500/60 flex items-center justify-center z-10 overflow-hidden'>
+        <div
+            className='fixed top-0 bottom-0 left-0 right-0 bg-gray-500/60 flex items-center justify-center z-10 overflow-hidden'
+            onClick={() => setAddCard(false)}
+        >
             <div className='w-[500px] bg-white rounded-[16px] px-5 py-3 relative'>
 
                 <h2 className='text-purple-900/70 font-bold'>Create a card</h2>
@@ -22,7 +26,7 @@ const AddCard = ({ setAddCard }) => {
                     <CgClose className='text-xl' />
                 </div>
 
-                <form action="" className='py-3 text-gray-300' >
+                <form action="" className='py-3 text-gray-300' onSubmit={handleSubmit}>
                     <label htmlFor="cardName" className='text-[12px]'>Card name</label>
                     <input id='cardName' type="text" placeholder='Type in a card name...' className='w-full py-1 px-2 border rounded-xl outline-none focus:border-blue-300 duration-200 placeholder:text-sm' />
 
@@ -51,8 +55,9 @@ const AddCard = ({ setAddCard }) => {
                     </div>
 
                     <div className='flex justify-end gap-2'>
-                        <button onClick={() => setAddCard(false)} className='px-2 py-2 duration-200 hover:bg-gray-100 hover:text-purple-900/70 rounded-xl'>Cancel</button>
-                        <button className='px-6 py-2 duration-200 text-white bg-purple-900/70 hover:text-white rounded-xl'>Add Card</button>
+                        <button type="button" onClick={() => setAddCard(false)} className='px-2 py-2 duration-200 hover:bg-gray-100 hover:text-purple-900/70 rounded-xl'>Cancel</button>
+                        <button type="button" className='px-6 py-2 duration-200 text-white bg-purple-900/70 hover:text-white rounded-xl'>Add Card</button>
+                        {/* <input type="button" value='Add Card' className='px-6 py-2 duration-200 text-white bg-purple-900/70 hover:text-white rounded-xl' /> */}
                     </div>
                 </form>
             </div>

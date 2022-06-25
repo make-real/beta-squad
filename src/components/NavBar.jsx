@@ -13,7 +13,7 @@ const NavBar = () => {
   const [linkClick, setLinkClick] = useState('');
 
   const activeLink = 'mr-8  py-4 font-bold text-teal-400';
-  const normalLink = 'mr-8  py-4 font-bold text-gray-300';
+  const normalLink = 'mr-8  py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline';
 
 
   return (

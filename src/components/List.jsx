@@ -1,272 +1,51 @@
 import { HiOutlineUserAdd } from "react-icons/hi";
-import { RiAddCircleFill } from "react-icons/ri";
-import { useState } from "react";
-import { AddCard } from ".";
+import { month } from "../constant/data";
+import { AddCardButton } from ".";
+
 
 const List = () => {
-  const [addCard, setAddCard] = useState(false);
+
+  const userName = ['Mahbub vhai', 'Faruk Hossain', 'Mousumi Mitu', 'Taiseen Azam']
 
   return (
     <section className="p-3 bg-gray-50 w-full">
-      <table className="text-left max-h-[800px] overflow-y-scroll  bg-green-300 w-full">
+
+      <table className="text-left max-h-[800px] overflow-y-scroll w-full">
+
         <thead className="sticky top-0 w-full">
-          <tr className="bg-white p-8 text-gray-400 font-normal">
-            <th className="px-4 py-4">Card Name</th>
-            <th className="px-4 py-4">Assign</th>
-            <th className="px-4 py-4">Date</th>
-            <th className="px-4 py-4">Progress</th>
-            <th className="px-4 py-4">List</th>
-            <th className="px-4 py-4">Tags</th>
+          <tr className="bg-white p-8 text-gray-400 font-thin font-[Signika]">
+            <th className="py-3 px-4">Card Name</th>
+            <th className="py-3 px-4">Assign</th>
+            <th className="py-3 px-4">Date</th>
+            <th className="py-3 px-4">Progress</th>
+            <th className="py-3 px-4">List</th>
+            <th className="py-3 px-4">Tags</th>
           </tr>
         </thead>
 
-        <tbody className=" bg-gray-200/50 w-full">
-          <tr className="bg-sky-50">
-            <td className="m-1 px-4 py-4  cursor-pointer hover:bg-gray-300 duration-200">
-              chat
-            </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>{" "}
-          <tr className="">
-            <td className="px-4 py-4">list add </td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
-          <tr className="bg-sky-50">
-            <td className="px-4 py-4">taiseen azam</td>
-            <td className="px-4 py-4">
-              <HiOutlineUserAdd />
-            </td>
-            <td className="px-4 py-4">Set Dates</td>
-            <td className="px-4 py-4">25%</td>
-            <td className="px-4 py-4">Alex jon</td>
-            <td className="px-4 py-4">Add a Tag</td>
-          </tr>
+        <tbody className="bg-gray-200/70 w-full">
+
+          {
+            month.map((data, i) => (
+              <tr className={`${i % 2 === 0 && 'bg-slate-100'}`} key={data}>
+                <td className="p-1 cursor-pointer">
+                  <div className="p-3 hover:bg-gray-300 duration-200 rounded-lg">{userName[i]}</div>
+                </td>
+                <td className="p-1"><div className="cursor-pointer w-10 h-10 flex justify-center items-center rounded-md duration-200 hover:bg-gray-200 group"><HiOutlineUserAdd className="text-xl text-gray-600 group-hover:text-teal-500" /></div></td>
+                <td className="p-1"><span className="p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-300 hover:text-teal-500">Set Dates</span></td>
+                <td className="p-1"><div className="w-12  h-12 text-center leading-[48px] cursor-pointer rounded-full text-sm bg-white hover:bg-gray-200 hover:text-purple-900 duration-200">25%</div></td>
+                <td className="p-1"><span className="p-3 cursor-pointer hover:text-teal-300 duration-200">{userName[i]?.split(' ')[0]}</span></td>
+                <td className="p-1"><span className="px-8 py-2 bg-white cursor-pointer hover:bg-zinc-200 duration-200 rounded-md">Add a Tag</span></td>
+              </tr>
+            ))
+          }
+
         </tbody>
       </table>
 
-      {/* 🟨🟨🟨 Position Fixed at the bottom */}
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-100">
-        <div
-          onClick={() => setAddCard(true)}
-          className="flex gap-3 items-center border border-dashed border-black p-3 rounded bg-white text-gray-500 cursor-pointer duration-300 hover:bg-gray-200"
-        >
-          <RiAddCircleFill className="text-2xl" />
-          <h1>ADD A CARD</h1>
-        </div>
-        {addCard && <AddCard setAddCard={setAddCard} />}
-      </div>
+
+      <AddCardButton />
+
     </section>
   );
 };
