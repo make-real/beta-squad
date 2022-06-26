@@ -53,6 +53,10 @@ const Members = () => {
           <h6 className="text-sm ">Add quest</h6>
         </div>
       </div>
+
+      <div className="p-2 mt-2 w-fit duration-300 cursor-pointer text-gray-400 hover:bg-gray-200 rounded-md hover:text-teal-600">
+        <h6 className="text-sm ">Leave space</h6>
+      </div>
     </section>
   );
 };
