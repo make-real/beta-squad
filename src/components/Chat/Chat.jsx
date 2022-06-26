@@ -4,10 +4,12 @@ import TextMessage from "./TextMessage";
 
 const Chat = () => {
   return (
-    <div className="mx-8 pb-2 relative  chat-height ">
-      <div className="absolute w-full  bottom-0 ">
+    <div className="mx-8 pb-2  chat-height ">
+      <div className="fixed bottom-0  w-11/12">
         <TextMessage />
-        <MessageBox />
+        <div className="w-[95%]">
+          <MessageBox />
+        </div>
       </div>
     </div>
   );

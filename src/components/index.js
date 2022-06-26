@@ -5,7 +5,7 @@ export { default as Timeline } from "./Timeline";
 export { default as AddCard } from "./AddCard";
 export { default as SideBar } from "./SideBar";
 export { default as Chat } from "./Chat/Chat";
-export { default as NavBar } from "./NavBar";
+export { default as NavBar } from "./Navbar/NavBar";
 export { default as Board } from "./Board";
 export { default as List } from "./List";
 export { default as GIF } from "./Chat/GIF";
