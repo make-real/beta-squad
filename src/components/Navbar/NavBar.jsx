@@ -108,7 +108,7 @@ const NavBar = () => {
           <h3>hello</h3>
         </div>
         {/* members */}
-        <Members />
+        {/* <Members /> */}
       </div>
     </header>
   );
