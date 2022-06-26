@@ -5,12 +5,14 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineGif } from "react-icons/ai";
 import Picker from "emoji-picker-react";
 import users from "../../constant/data2";
+import GIF from "./GIF";
 
 const MessageBox = () => {
   const [attachFile, setAttachFile] = useState(false);
   const [mentionModal, setMentionModal] = useState(false);
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
+  const [showGif, setShowGif] = useState(false);
 
   const onEmojiClick = (e, emojiObject) => {
     setInput((prevInput) => prevInput + emojiObject.emoji);
@@ -20,13 +22,26 @@ const MessageBox = () => {
     setAttachFile((prev) => !prev);
     setShowEmojis(false);
     setMentionModal(false);
+    setShowGif(false);
   };
   const handleEmoji = () => {
     setAttachFile(false);
     setShowEmojis((prev) => !prev);
     setMentionModal(false);
+    setShowGif(false);
   };
-  const handleGif = () => {};
+  const handleMention = () => {
+    setAttachFile(false);
+    setShowEmojis(false);
+    setMentionModal((prev) => !prev);
+    setShowGif(false);
+  };
+  const handleGif = () => {
+    setAttachFile(false);
+    setShowEmojis(false);
+    setMentionModal(false);
+    setShowGif((prev) => !prev);
+  };
 
   return (
     <div className="py-3 w-11/12 text-gray-300 relative">
@@ -59,7 +74,7 @@ const MessageBox = () => {
           <div className="px-2 cursor-pointer relative">
             <GoMention
               className="duration-300  hover:text-teal-400"
-              onClick={() => setMentionModal(!mentionModal)}
+              onClick={handleMention}
             />
           </div>
           <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
@@ -70,8 +85,11 @@ const MessageBox = () => {
               </div>
             )}
           </div>
-          <div className="px-2 cursor-pointer duration-300  hover:text-teal-400">
-            <AiOutlineGif />
+          <div className="px-2  ">
+            <AiOutlineGif className="duration-300 cursor-pointer hover:text-teal-400" />
+            <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
+              <GIF />
+            </div>
           </div>
         </div>
         <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
