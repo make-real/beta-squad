@@ -105,6 +105,7 @@ const NavBar = () => {
       <div className="fixed border right-0 top-[66px] h-[89vh] w-[275px] z-50 bg-gray-100 p-1">
         <div className="flex justify-end cursor-pointer text-lg hover:text-teal-500">
           <IoIosClose />
+          <h3>hello</h3>
         </div>
         {/* members */}
         <Members />
