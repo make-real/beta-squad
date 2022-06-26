@@ -17,7 +17,7 @@ const NavBar = () => {
 
 
   return (
-    <header className='flex items-center justify-between px-8 py-2 border-b border-gray-300'>
+    <header className='px-8 py-2 flex items-center justify-between border-b border-gray-300'>
 
       {/* 🟨🟨🟨 Left Side */}
       <div className='flex items-center gap-5'>
