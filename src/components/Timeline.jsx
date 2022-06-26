@@ -21,7 +21,7 @@ const Timeline = () => {
   const [timeDropDown, setTimeDropDown] = useState(false);
   const [addCard, setAddCard] = useState(false);
   const [spaceFilter, setSpaceFilter] = useState(false);
-  const [timeChange, setTimeChange] = useState("Week");
+  const [timeChange, setTimeChange] = useState("2 Weeks");
 
   const handleTimeDropDown = () => {
     setTimeDropDown((prev) => !prev);
