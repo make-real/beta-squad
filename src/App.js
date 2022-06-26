@@ -2,26 +2,29 @@ import {
   Board,
   Calender,
   Chat,
-  GIF,
   List,
   NavBar,
+  SideBar,
   Timeline,
 } from "./components";
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <main>
-      <NavBar />
+    <main className="flex">
+      <SideBar />
 
-      <Routes>
-        <Route path="/" element={<Chat />} />
-        <Route path="/kanban" element={<Board />} />
-        <Route path="/list" element={<List />} />
-        <Route path="/calendar" element={<Calender />} />
-        <Route path="/timeline" element={<Timeline />} />
-        <Route path="/gif" element={<GIF />} />
-      </Routes>
+      <div className="flex-grow">
+        <NavBar />
+
+        <Routes>
+          <Route path="/" element={<Chat />} />
+          <Route path="/kanban" element={<Board />} />
+          <Route path="/list" element={<List />} />
+          <Route path="/calendar" element={<Calender />} />
+          <Route path="/timeline" element={<Timeline />} />
+        </Routes>
+      </div>
     </main>
   );
 };

@@ -1,6 +1,3 @@
-import { CgClose } from 'react-icons/cg';
-
-
 const AddCardMini = ({ setAddCard }) => {
 
     const handleSubmit = (e) => {
