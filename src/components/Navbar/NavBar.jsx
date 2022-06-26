@@ -11,6 +11,13 @@ import { IoIosClose } from "react-icons/io";
 
 const NavBar = () => {
   const [linkClick, setLinkClick] = useState("");
+  const [sidePanel, setSidePanel] = useState(false);
+  const [navIcons, setNavIcons] = useState("");
+
+  const handleSidePanel = (name) => {
+    setSidePanel(true);
+    setNavIcons(name);
+  };
 
   const activeLink = "mr-8  py-4 font-bold text-teal-400";
   const normalLink =
@@ -70,6 +77,7 @@ const NavBar = () => {
         </div>
 
         <div
+          onClick={() => handleSidePanel("filter")}
           className={`${linkClick === "/" ? "hidden" : "block"} ${
             linkClick === "timeline" ? "hidden" : "block"
           } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
@@ -85,31 +93,59 @@ const NavBar = () => {
           <FaPlus className="text-xl font-bold" />
         </div>
 
-        <div className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 ">
+        <div
+          onClick={() => handleSidePanel("setting")}
+          className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
+        >
           <FiSettings className="text-xl font-bold" />
         </div>
 
-        <div className="relative">
-          <div className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 ">
-            <HiOutlineUser className="text-xl font-bold" />
-          </div>
+        <div
+          className="flex p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
+          onClick={() => handleSidePanel("add-member")}
+        >
+          <HiOutlineUser className="text-xl font-bold" />
+          <span className="my-auto text-xs ">5</span>
         </div>
 
-        <div className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 ">
+        <div
+          onClick={() => handleSidePanel("add-on")}
+          className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
+        >
           <HiOutlinePuzzle className="text-xl font-bold" />
         </div>
       </div>
 
       {/* 🟨🟨🟨 side box open */}
 
-      <div className="fixed border right-0 top-[66px] h-[89vh] w-[275px] z-50 bg-gray-100 p-1">
-        <div className="flex justify-end cursor-pointer text-lg hover:text-teal-500">
-          <IoIosClose />
-          <h3>hello</h3>
+      {sidePanel && (
+        <div className="fixed border right-0 top-[66px] h-full w-[310px] z-50 bg-gray-100 p-1">
+          <div
+            className="flex justify-end cursor-pointer text-lg hover:text-teal-500"
+            onClick={() => setSidePanel(false)}
+          >
+            <IoIosClose />
+          </div>
+          {/* members */}
+          {navIcons === "filter" ? (
+            <div>
+              <h2>filter</h2>
+            </div>
+          ) : navIcons === "setting" ? (
+            <div>
+              <h2>setting</h2>
+            </div>
+          ) : navIcons === "add-member" ? (
+            <div>
+              <Members />
+            </div>
+          ) : (
+            <div>
+              <h2>add on</h2>
+            </div>
+          )}
         </div>
-        {/* members */}
-        {/* <Members /> */}
-      </div>
+      )}
     </header>
   );
 };
