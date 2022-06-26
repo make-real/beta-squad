@@ -1,8 +1,8 @@
 import { FaLessThan, FaGreaterThan } from 'react-icons/fa';
+import { useStyleContext } from '../context/StyleContext';
 import { month, oneDayTimes } from '../constant/data';
 import { useEffect, useState } from 'react';
 import AddCardMini from './AddCardMini';
-import { useStyleContext } from '../context/StyleContext';
 
 
 const Calender = () => {
