@@ -101,10 +101,11 @@ const NavBar = () => {
         </div>
 
         <div
-          className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
+          className="flex p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
           onClick={() => handleSidePanel("add-member")}
         >
           <HiOutlineUser className="text-xl font-bold" />
+          <span className="my-auto text-xs ">5</span>
         </div>
 
         <div
@@ -118,7 +119,7 @@ const NavBar = () => {
       {/* 🟨🟨🟨 side box open */}
 
       {sidePanel && (
-        <div className="fixed border right-0 top-[66px] h-[89vh] w-[275px] z-50 bg-gray-100 p-1">
+        <div className="fixed border right-0 top-[66px] h-full w-[310px] z-50 bg-gray-100 p-1">
           <div
             className="flex justify-end cursor-pointer text-lg hover:text-teal-500"
             onClick={() => setSidePanel(false)}
