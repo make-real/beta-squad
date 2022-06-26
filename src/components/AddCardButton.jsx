@@ -8,7 +8,7 @@ const AddCardButton = () => {
     const [addCard, setAddCard] = useState(false);
 
     return (
-        <div className="fixed bottom-0 left-0 w-full p-4 bg-gray-100">
+        <div className="fixed bottom-0  w-[96%] p-4 bg-gray-100">
             
             <div
                 onClick={() => setAddCard(true)}
