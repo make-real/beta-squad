@@ -1,28 +1,29 @@
 import { Board, Calender, Chat, List, NavBar, SideBar, Timeline } from './components';
 import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 
 
 const App = () => {
 
+  // const [margin, setMargin] = useState(false);
+
   return (
-    <main className='flex'>
+    <main className='overflow-hidden'>
 
       <SideBar />
 
-      <div className='flex-grow'>
-        <NavBar />
+      <NavBar />
 
+      <Routes>
 
-        <Routes>
+        <Route path="/" element={<Chat />} />
+        <Route path="/kanban" element={<Board />} />
+        <Route path="/list" element={<List />} />
+        <Route path="/calendar" element={<Calender />} />
+        <Route path="/timeline" element={<Timeline />} />
 
-          <Route path="/" element={<Chat />} />
-          <Route path="/kanban" element={<Board />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/calendar" element={<Calender />} />
-          <Route path="/timeline" element={<Timeline />} />
+      </Routes>
 
-        </Routes>
-      </div>
     </main>
   )
 }

@@ -2,16 +2,18 @@ import { FaLessThan, FaGreaterThan } from 'react-icons/fa';
 import { month, oneDayTimes } from '../constant/data';
 import { useEffect, useState } from 'react';
 import AddCardMini from './AddCardMini';
+import { useStyleContext } from '../context/StyleContext';
 
 
 const Calender = () => {
 
+    const { margin } = useStyleContext();
     const [active, setActive] = useState('');
     const [addCard, setAddCard] = useState(false);
 
     const timeLine = ['Day', 'Week', 'Month', 'List'];
 
-    useEffect(() => setActive(timeLine[2]), [])
+    useEffect(() => setActive(timeLine[2]), []);
 
 
     const addCardVisibility = () => {
@@ -20,10 +22,10 @@ const Calender = () => {
 
 
     return (
-        <section className=''>
+        <section className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} pt-[90px] duration-200`}>
 
             {/* 🟨🟨🟨 Header Section 🟨🟨🟨 */}
-            <div className='flex items-center justify-between text-gray-400 p-4'>
+            <div className='flex items-center justify-between text-gray-400 px-2'>
 
                 <div className='calenderSection'>Today</div>
 
