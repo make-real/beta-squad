@@ -1,3 +1,4 @@
+import { useStyleContext } from "../context/StyleContext";
 import { HiOutlineUserAdd } from "react-icons/hi";
 import { month } from "../constant/data";
 import { AddCardButton } from ".";
@@ -5,14 +6,17 @@ import { AddCardButton } from ".";
 
 const List = () => {
 
+  const { margin } = useStyleContext();
+
   const userName = ['Mahbub vhai', 'Faruk Hossain', 'Mousumi Mitu', 'Taiseen Azam']
 
+
   return (
-    <section className="p-3 bg-gray-50 w-full">
+    <section className={`pt-20 px-3 bg-gray-100 w-screen`}>
 
-      <table className="text-left max-h-[800px] overflow-y-scroll w-full">
+      <table className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} duration-200  text-left max-h-[800px] min-w-full`}>
 
-        <thead className="sticky top-0 w-full">
+        <thead className="sticky top-0 ">
           <tr className="bg-white p-8 text-gray-400 font-thin font-[Signika]">
             <th className="py-3 px-4">Card Name</th>
             <th className="py-3 px-4">Assign</th>
@@ -23,8 +27,7 @@ const List = () => {
           </tr>
         </thead>
 
-        <tbody className="bg-gray-200/70 w-full">
-
+        <tbody className="bg-gray-200/70 ">
           {
             month.map((data, i) => (
               <tr className={`${i % 2 === 0 && 'bg-slate-100'}`} key={data}>
@@ -39,12 +42,10 @@ const List = () => {
               </tr>
             ))
           }
-
         </tbody>
       </table>
 
-
-      <AddCardButton />
+      <AddCardButton margin={margin} />
 
     </section>
   );

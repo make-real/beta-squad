@@ -3,13 +3,12 @@ import { useState } from "react";
 import { AddCard } from ".";
 
 
-const AddCardButton = () => {
+const AddCardButton = ({ margin }) => {
 
     const [addCard, setAddCard] = useState(false);
 
     return (
-        <div className="fixed bottom-0  w-[96%] p-4 bg-gray-100">
-            
+        <div className={`${margin ? 'ml-[310px] w-[83.3%]' : 'ml-[35px] w-[97.7%]'} fixed bottom-0 p-4 bg-gray-200 duration-200`}>
             <div
                 onClick={() => setAddCard(true)}
                 className="flex gap-3 items-center border border-dashed border-black p-3 rounded bg-white text-gray-500 cursor-pointer duration-300 hover:bg-gray-200"
