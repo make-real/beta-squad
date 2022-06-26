@@ -10,8 +10,7 @@
 | 2| yarn add `react-icons`         | icon pack for interactive UI building |
 | 3| yarn add `-D` `tailwindcss postcss autoprefixer` | `devDependency` of TailwindCSS for building UI  |
 | 4| yarn add `@tippyjs/react` | tool tip for extra little info at UI       |
-
-
+| 5| yarn add `@giphy/react-components` | GIF for chatting UI       |
 
  
 * ## [React Icons | Web Link][link]

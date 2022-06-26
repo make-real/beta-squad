@@ -9,6 +9,7 @@ import {
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
 
+
 const TextMessage = () => {
   return (
     <div>
@@ -21,7 +22,8 @@ const TextMessage = () => {
           <span className="text-zinc-900">Space Clone</span>
         </p>
       </div>
-      <div className="border-b mb-4 relative border ">
+
+      <div className="border-b mb-4 relative border">
         <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-48 p-1.5 text-xs text-gray-800 text-center rounded-2xl bg-white">
           Yesterday, June 21st
         </p>

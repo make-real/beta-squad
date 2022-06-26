@@ -8,11 +8,11 @@ const List = () => {
 
   const { margin } = useStyleContext();
 
-  const userName = ['Mahbub vhai', 'Faruk Hossain', 'Mousumi Mitu', 'Taiseen Azam']
+  const userName = ['Mahbub vhai', 'Faruk Hossain', 'Mousumi Mitu', 'Taiseen Azam'];
 
 
   return (
-    <section className={`pt-20 px-3 bg-gray-100 w-screen`}>
+    <section className={`pt-20 px-3 bg-gray-100`}>
 
       <table className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} duration-200  text-left max-h-[800px] min-w-full`}>
 
@@ -30,7 +30,7 @@ const List = () => {
         <tbody className="bg-gray-200/70 ">
           {
             month.map((data, i) => (
-              <tr className={`${i % 2 === 0 && 'bg-slate-100'}`} key={data}>
+              <tr className={`${i % 2 && 'bg-slate-100'}`} key={data}>
                 <td className="p-1 cursor-pointer">
                   <div className="p-3 hover:bg-gray-300 duration-200 rounded-lg">{userName[i]}</div>
                 </td>
@@ -45,7 +45,7 @@ const List = () => {
         </tbody>
       </table>
 
-      <AddCardButton margin={margin} />
+      <AddCardButton />
 
     </section>
   );

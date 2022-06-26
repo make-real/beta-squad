@@ -1,28 +1,18 @@
-import React, { useState } from "react";
-import {
-  IoIosArrowBack,
-  IoIosArrowForward,
-  IoMdArrowDropdown,
-  IoMdArrowDropup,
-} from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward, IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { checkBoxFilter, timelineData, timelineDataMonth, } from "../constant/data";
 import { IoCloseOutline, IoPlanet } from "react-icons/io5";
-
-import { RiAddCircleFill } from "react-icons/ri";
-
-import {
-  checkBoxFilter,
-  timelineData,
-  timelineDataMonth,
-} from "../constant/data";
-
-import AddCard from "./AddCard";
+import { useStyleContext } from "../context/StyleContext";
+import { useState } from "react";
 import AddCardButton from "./AddCardButton";
 
+
 const Timeline = () => {
-  const [timeDropDown, setTimeDropDown] = useState(false);
-  const [addCard, setAddCard] = useState(false);
+
+  const { margin } = useStyleContext();
   const [spaceFilter, setSpaceFilter] = useState(false);
+  const [timeDropDown, setTimeDropDown] = useState(false);
   const [timeChange, setTimeChange] = useState("2 Weeks");
+
 
   const handleTimeDropDown = () => {
     setTimeDropDown((prev) => !prev);
@@ -39,9 +29,12 @@ const Timeline = () => {
     setTimeDropDown(false);
   };
 
+
   return (
-    <section className="bg-slate-50	h-full ">
-      <div className="	p-8 relative">
+    <section className='pt-24 bg-slate-50'>
+
+      <div className={`${margin ? 'ml-[290px]' : 'ml-[12px]'} duration-200  pl-16 pr-8 relative h-screen`}>
+
         <div className="bg-white">
           <div className=" p-1 flex justify-between text-gray-700">
             <div className="flex-1 flex text-[13px]">
@@ -134,9 +127,8 @@ const Timeline = () => {
                       <h6 className="text-gray-400">{item.week}</h6>
                     </div>
                     <div
-                      className={`h-[120px] w-100  ${
-                        index % 2 ? "bg-gray-100" : "bg-gray-200"
-                      }`}
+                      className={`h-[120px] w-100  ${index % 2 ? "bg-gray-100" : "bg-gray-200"
+                        }`}
                     ></div>
                   </div>
                 ))}
@@ -150,9 +142,8 @@ const Timeline = () => {
                       <h6 className="text-gray-400">{item.week}</h6>
                     </div>
                     <div
-                      className={`h-[120px] w-100  ${
-                        index % 2 ? "bg-gray-100" : "bg-gray-200"
-                      }`}
+                      className={`h-[120px] w-100  ${index % 2 ? "bg-gray-100" : "bg-gray-200"
+                        }`}
                     ></div>
                   </div>
                 ))}
@@ -166,9 +157,8 @@ const Timeline = () => {
                       <h6 className="text-gray-400">{item.week}</h6>
                     </div>
                     <div
-                      className={`h-[120px] w-100  ${
-                        index % 2 ? "bg-gray-100" : "bg-gray-200"
-                      }`}
+                      className={`h-[120px] w-100  ${index % 2 ? "bg-gray-100" : "bg-gray-200"
+                        }`}
                     ></div>
                   </div>
                 ))}
@@ -182,9 +172,8 @@ const Timeline = () => {
                       <h6 className="text-gray-400">{item.year}</h6>
                     </div>
                     <div
-                      className={`h-[120px] w-100  ${
-                        index % 2 ? "bg-gray-100" : "bg-gray-200"
-                      }`}
+                      className={`h-[120px] w-100  ${index % 2 ? "bg-gray-100" : "bg-gray-200"
+                        }`}
                     ></div>
                   </div>
                 ))}
@@ -198,9 +187,8 @@ const Timeline = () => {
                       <h6 className="text-gray-400">{item.year}</h6>
                     </div>
                     <div
-                      className={`h-[120px] w-100  ${
-                        index % 2 ? "bg-gray-100" : "bg-gray-200"
-                      }`}
+                      className={`h-[120px] w-100  ${index % 2 ? "bg-gray-100" : "bg-gray-200"
+                        }`}
                     ></div>
                   </div>
                 ))}
@@ -328,9 +316,11 @@ const Timeline = () => {
             </div>
           </div>
         )}
+
       </div>
 
       <AddCardButton />
+
     </section>
   );
 };
