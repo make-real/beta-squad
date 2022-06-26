@@ -27,7 +27,7 @@ const users = [
   {
     id: 5,
     name: "Mahbub",
-    img: user,
+    img: "",
     position: "Manager",
   },
   {
