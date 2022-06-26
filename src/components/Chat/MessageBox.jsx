@@ -4,7 +4,7 @@ import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
 import { AiOutlineGif } from "react-icons/ai";
 import Picker from "emoji-picker-react";
-import users from "../../constant/data2";
+import users from "../../constant/users";
 import GIF from "./GIF";
 
 const MessageBox = () => {
@@ -44,7 +44,7 @@ const MessageBox = () => {
   };
 
   return (
-    <div className="py-3 w-11/12 text-gray-300 relative">
+    <div className="py-3  text-gray-300 relative pb-5">
       <div className="relative h-full">
         <input
           type="text"
@@ -86,10 +86,15 @@ const MessageBox = () => {
             )}
           </div>
           <div className="px-2  ">
-            <AiOutlineGif className="duration-300 cursor-pointer hover:text-teal-400" />
-            <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
-              <GIF />
-            </div>
+            <AiOutlineGif
+              className="duration-300 cursor-pointer hover:text-teal-400"
+              onClick={handleGif}
+            />
+            {showGif && (
+              <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
+                <GIF />
+              </div>
+            )}
           </div>
         </div>
         <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
