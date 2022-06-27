@@ -20,7 +20,7 @@ const SideBar = () => {
 
 
             {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
-            <div className={`${!margin ? 'w-[0px]' : 'w-[275px]'} bg-gray-700 pt-2 duration-200`}>
+            <div className={`${!margin ? 'w-[0px]' : 'w-[275px]'} bg-[#202F3E] pt-2 duration-200`}>
                 <div className='w-10 h-9 bg-orange-500 cursor-pointer float-right' onClick={() => setMargin(false)}>
 
                 </div>
