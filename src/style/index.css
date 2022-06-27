@@ -200,7 +200,41 @@ body {
 /* .timebox-color {
   background: rgb(156 163 175);
 } */
-.timebox-color :nth-child(odd) {
-  background: rgb(154, 179, 227) !important;
-}
+
 /* =====timeline===== */
+
+.slider {
+  background-color: rgb(214, 213, 213);
+  -webkit-transition: 0.4s;
+  transition: 0.4s cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #b9c3ce;
+  -webkit-transition: 0.4s;
+  transition: 0.4s cubic-bezier(0, 1, 0.5, 1);
+  border-radius: 3px;
+}
+.toggle-checkbox:checked + .slider {
+  background-color: #abdfe3;
+}
+.toggle-checkbox:checked + .slider:before {
+  transform: translate(16px, -7px);
+  background-color: #57bec7;
+}
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+  top: 50%;
+  right: 0;
+}

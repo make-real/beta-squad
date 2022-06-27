@@ -9,10 +9,10 @@ import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import haySpace from "../../assets/haySpace.png";
 import Members from "./Members";
-
+import AddOn from "./AddOn";
+import Setting from "./Setting";
 
 const NavBar = () => {
-
   const { margin } = useStyleContext();
   const [linkClick, setLinkClick] = useState("");
   const [sidePanel, setSidePanel] = useState(false);
@@ -24,13 +24,15 @@ const NavBar = () => {
   };
 
   const activeLink = "mr-8  py-4 font-bold text-teal-400";
-  const normalLink = "mr-8  py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
-
+  const normalLink =
+    "mr-8  py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
 
   return (
-    <header className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} fixed top-0 left-0 right-0 z-30 duration-200 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}>
-
-
+    <header
+      className={`${
+        margin ? "ml-[325px]" : "ml-[50px]"
+      } fixed top-0 left-0 right-0 z-30 duration-200 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+    >
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
         <div className="w-12 h-12">
@@ -46,25 +48,21 @@ const NavBar = () => {
           </div>
 
           <nav>
-            {
-              navLinks.map(({ name, path }) => (
-                <NavLink
-                  key={path}
-                  to={path}
-                  onClick={() => setLinkClick(path)}
-                  className={({ isActive }) =>
-                    isActive ? activeLink : normalLink
-                  }
-                >
-                  {name}
-                </NavLink>
-              ))
-            }
+            {navLinks.map(({ name, path }) => (
+              <NavLink
+                key={path}
+                to={path}
+                onClick={() => setLinkClick(path)}
+                className={({ isActive }) =>
+                  isActive ? activeLink : normalLink
+                }
+              >
+                {name}
+              </NavLink>
+            ))}
           </nav>
         </div>
       </div>
-
-
 
       {/* 🟨🟨🟨 Right Side */}
       <div className="flex items-center justify-center text-gray-400">
@@ -72,17 +70,16 @@ const NavBar = () => {
           <FiVideo className="text-xl font-bold" />
         </div>
 
-        {
-          linkClick === "/" && (
-            <div className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 ">
-              <HiMenuAlt1 className="text-xl font-bold" />
-            </div>
-          )
-        }
+        {linkClick === "/" && (
+          <div className="p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 ">
+            <HiMenuAlt1 className="text-xl font-bold" />
+          </div>
+        )}
 
         <div
-          className={`${linkClick === "/" ? "hidden" : "block"} ${linkClick === "timeline" ? "hidden" : "block"
-            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${linkClick === "/" ? "hidden" : "block"} ${
+            linkClick === "timeline" ? "hidden" : "block"
+          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <FiSearch className="text-xl font-bold" />
         </div>
@@ -97,8 +94,9 @@ const NavBar = () => {
         </div>
 
         <div
-          className={`${linkClick === "kanban" ? "block" : "hidden"
-            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${
+            linkClick === "kanban" ? "block" : "hidden"
+          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <FaPlus className="text-xl font-bold" />
         </div>
@@ -126,7 +124,6 @@ const NavBar = () => {
         </div>
       </div>
 
-
       {sidePanel && (
         <div className="fixed border right-0 top-[66px] h-full w-[310px] z-50 bg-gray-100 p-1">
           <div
@@ -141,16 +138,16 @@ const NavBar = () => {
               <h2>filter</h2>
             </div>
           ) : navIcons === "setting" ? (
-            <div>
-              <h2>setting</h2>
+            <div className="h-full overflow-y-auto">
+              <Setting />
             </div>
           ) : navIcons === "add-member" ? (
-            <div>
+            <div className="h-full overflow-y-auto">
               <Members />
             </div>
           ) : (
-            <div>
-              <h2>add on</h2>
+            <div className="h-full overflow-y-auto">
+              <AddOn />
             </div>
           )}
         </div>
