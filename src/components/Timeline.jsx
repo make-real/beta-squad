@@ -54,7 +54,7 @@ const Timeline = () => {
             <div className="flex-1 flex justify-end">
               <div className=" relative pr-7">
                 <button
-                  class="border my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center "
+                  className="border my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center "
                   type="button"
                   onClick={handleTimeDropDown}
                 >
@@ -63,37 +63,37 @@ const Timeline = () => {
                 </button>
 
                 {timeDropDown && (
-                  <div class="z-10 w-32 absolute left-0 top-[50px] bg-slate-100	 divide-y divide-gray-100 rounded shadow  dark:bg-gray-700">
+                  <div className="z-10 w-32 absolute left-0 top-[50px] bg-slate-100	 divide-y divide-gray-100 rounded shadow  dark:bg-gray-700">
                     <ul
-                      class="py-1 text-sm text-gray-500 dark:text-gray-200 cursor-pointer"
+                      className="py-1 text-sm text-gray-500 dark:text-gray-200 cursor-pointer"
                       aria-labelledby="dropdownDefault"
                     >
                       <li
-                        class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                        className="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
                         onClick={() => handleTimeChange("Week")}
                       >
                         Week
                       </li>
                       <li
-                        class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                        className="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
                         onClick={() => handleTimeChange("2 Weeks")}
                       >
                         2 Weeks
                       </li>
                       <li
-                        class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                        className="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
                         onClick={() => handleTimeChange("Month")}
                       >
                         Month
                       </li>
                       <li
-                        class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                        className="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
                         onClick={() => handleTimeChange("3 Months")}
                       >
                         3 Months
                       </li>
                       <li
-                        class="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
+                        className="block pl-4 pr-7 py-2 hover:bg-slate-200 hover:text-gray-700"
                         onClick={() => handleTimeChange("Half Year")}
                       >
                         Half Year
@@ -105,7 +105,7 @@ const Timeline = () => {
 
               <div className="">
                 <button
-                  class="border text-sm my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg  px-5 py-1.5 text-center inline-flex items-center "
+                  className="border text-sm my-auto text-gray-600 hover:text-gray-800 hover:bg-gray-200 font-medium rounded-lg  px-5 py-1.5 text-center inline-flex items-center "
                   type="button"
                   onClick={handleSpaceFilter}
                 >
@@ -217,7 +217,7 @@ const Timeline = () => {
 
             <div className="overflow-y-auto px-2 space-y-5">
               <div className="bg-white px-1.5 py-1.5 rounded-lg">
-                <div class="custom_radio px-2.5 py-2 ">
+                <div className="custom_radio px-2.5 py-2 ">
                   <h6 className="text-slate-500	">Status</h6>
 
                   <div className="hover:bg-gray-100 mb-1.5 p-1 rounded-lg ">
@@ -276,7 +276,7 @@ const Timeline = () => {
                     key={item.id}
                   >
                     <input
-                      class="styled-checkbox"
+                      className="styled-checkbox"
                       id={item.idName}
                       type="checkbox"
                       value={item.value}
@@ -291,7 +291,7 @@ const Timeline = () => {
 
                 <div className="px-3.5 hover:bg-gray-100 rounded-lg">
                   <input
-                    class="styled-checkbox"
+                    className="styled-checkbox"
                     id="unassigned"
                     type="checkbox"
                     value="value9"
@@ -305,7 +305,7 @@ const Timeline = () => {
 
                 <div className="px-3.5 hover:bg-gray-100 rounded-lg">
                   <input
-                    class="styled-checkbox"
+                    className="styled-checkbox"
                     id="tags"
                     type="checkbox"
                     value="value10"
