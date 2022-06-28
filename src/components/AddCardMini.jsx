@@ -49,3 +49,5 @@ const AddCardMini = ({ setAddCard }) => {
 }
 
 export default AddCardMini;
+
+// git ls-files -z -d | xargs -0 git checkout --
