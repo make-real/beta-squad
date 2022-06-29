@@ -6,7 +6,7 @@ const UserSettingLayout = () => {
   return (
     <div>
       <UserSettings />
-      <div>{<Outlet />}</div>
+      <div className="bg-[#F8F9F9] ml-[325px] ">{<Outlet />}</div>
     </div>
   );
 };

@@ -46,7 +46,7 @@ const UserSettings = () => {
           </div>
         </div>
 
-        <div className="m-8 space-y-1.5 ">
+        <div className="m-4 space-y-1.5 ">
           <Link
             to=""
             className="flex p-2.5 rounded-md hover:bg-[#293C4F] bg-[#111F2D]"
