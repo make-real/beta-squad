@@ -5,8 +5,6 @@ import { useState } from 'react';
 
 const App = () => {
 
-  // const [margin, setMargin] = useState(false);
-
   return (
     <main className='overflow-hidden'>
 
@@ -15,13 +13,11 @@ const App = () => {
       <NavBar />
 
       <Routes>
-
         <Route path="/" element={<Chat />} />
         <Route path="/kanban" element={<Board />} />
         <Route path="/list" element={<List />} />
         <Route path="/calendar" element={<Calender />} />
         <Route path="/timeline" element={<Timeline />} />
-
       </Routes>
 
     </main>
