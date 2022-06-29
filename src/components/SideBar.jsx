@@ -28,6 +28,7 @@ import Tippy from "@tippyjs/react";
 import asserts from "../assets";
 import "tippy.js/dist/tippy.css";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SideBar = () => {
   const { margin, setMargin } = useStyleContext();
@@ -272,13 +273,13 @@ const SideBar = () => {
 
           <div className="border-b border-gray-300 my-2"></div>
 
-          <a
-            href="/#"
+          <Link
+            to="/settings"
             className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
           >
             <Settings className="text-[#B9C3CE]" />{" "}
             <span className="group-hover:text-purple-500">Settings</span>
-          </a>
+          </Link>
           <a
             href="/#"
             className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
@@ -307,13 +308,13 @@ const SideBar = () => {
             <Mobile className="text-[#B9C3CE]" />{" "}
             <span className="group-hover:text-purple-500">Apps</span>
           </a>
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
           >
             <LogOut className="text-[#B9C3CE]" />{" "}
             <span className="group-hover:text-purple-500">Log out</span>
-          </a>
+          </Link>
         </nav>
       </div>
     </section>

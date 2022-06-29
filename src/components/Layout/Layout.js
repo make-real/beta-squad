@@ -7,7 +7,6 @@ const Layout = () => {
   return (
     <div>
       <SideBar />
-
       <NavBar />
       <div className="">{<Outlet />}</div>
     </div>

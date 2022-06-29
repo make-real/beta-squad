@@ -3,15 +3,15 @@ import {
   Calender,
   Chat,
   List,
-  NavBar,
-  SideBar,
   Timeline,
   Register,
   Login,
   Layout,
 } from "./components";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import Profile from "./components/UserSettings/Profile";
+import UserSettingLayout from "./components/Layout/UserSettingLayout";
+import ManageWorkspace from "./components/UserSettings/ManageWorkspace";
 
 const App = () => {
   return (
@@ -20,6 +20,11 @@ const App = () => {
         <Route path="/" />
         <Route index element={<Login />} />
         <Route path="register" element={<Register />} />
+
+        <Route path="settings" element={<UserSettingLayout />}>
+          <Route index element={<Profile />} />
+          <Route path="manage-workspace" element={<ManageWorkspace />} />
+        </Route>
 
         <Route path="projects" element={<Layout />}>
           <Route index element={<Chat />} />
