@@ -88,7 +88,7 @@ const Login = () => {
 
             <div className="text-center">
               <button className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg ">
-                Get started now
+                <Link to="/projects"> Get started now</Link>
               </button>
             </div>
           </form>

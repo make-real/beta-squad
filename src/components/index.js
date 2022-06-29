@@ -11,3 +11,4 @@ export { default as List } from "./List";
 export { default as GIF } from "./Chat/GIF";
 export { default as Register } from "./Login-Signup/Register";
 export { default as Login } from "./Login-Signup/Login";
+export { default as Layout } from "./Layout/Layout";
