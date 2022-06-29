@@ -7,10 +7,11 @@ import { NavLink } from "react-router-dom";
 import { TbFilter } from "react-icons/tb";
 import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
-import haySpace from "../../assets/haySpace.png";
 import Members from "./Members";
 import AddOn from "./AddOn";
 import Setting from "./Setting";
+import asserts from "../../assets";
+
 
 const NavBar = () => {
   const { margin } = useStyleContext();
@@ -36,7 +37,7 @@ const NavBar = () => {
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
         <div className="w-12 h-12">
-          <img src={haySpace} alt="logo" />
+          <img src={asserts.haySpace} alt="logo" />
         </div>
 
         <div div="true">

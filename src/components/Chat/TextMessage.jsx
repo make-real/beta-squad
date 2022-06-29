@@ -1,6 +1,3 @@
-import React from "react";
-import haySpace from "../../assets/haySpace.png";
-import user from "../../assets/user.jpg";
 import {
   BsArrow90DegRight,
   BsEmojiSmile,
@@ -8,6 +5,7 @@ import {
 } from "react-icons/bs";
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
+import asserts from "../../assets";
 
 
 const TextMessage = () => {
@@ -15,7 +13,7 @@ const TextMessage = () => {
     <div>
       <div className="flex py-3.5">
         <div className="w-7 h-7">
-          <img src={haySpace} alt="logo" />
+          <img src={asserts.haySpace} alt="logo" />
         </div>
         <p className="my-auto pl-3 text-gray-600">
           This is the beginning of conversation in space:{" "}
@@ -69,7 +67,7 @@ const TextMessage = () => {
 
       <div className="flex py-2.5 hover:bg-slate-50 relative user-box">
         <div className="w-10 h-10 border-slate-700	border-4 rounded-full  relative	">
-          <img src={user} alt="user" className="rounded-full" />
+          <img src={asserts.user} alt="user" className="rounded-full" />
         </div>
         <div className="pl-4 ">
           <h6 className="text-xs text-sky-900	pb-2">Mitu Mousumi</h6>

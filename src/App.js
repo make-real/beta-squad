@@ -13,7 +13,6 @@ import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 const App = () => {
-  // const [margin, setMargin] = useState(false);
 
   return (
     <main className="overflow-hidden">
