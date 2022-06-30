@@ -32,7 +32,7 @@ const NavBar = () => {
     <header
       className={`${
         margin ? "ml-[325px]" : "ml-[50px]"
-      } fixed top-0 left-0 right-0 z-30 duration-200 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+      } fixed top-0 left-0 right-0 z-30  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">

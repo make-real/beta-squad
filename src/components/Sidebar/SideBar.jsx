@@ -1,40 +1,37 @@
 import {
-  Addons,
   ArrowLeft,
   ArrowRight,
   Bell,
-  Calendar,
   CloseMenuBtn,
-  Dots,
+  DotsDouble,
   Eye,
   Folder,
   Logo,
   LogoRed,
-  LogOut,
-  Mobile,
   OpenMenuBtn,
   OverWatch,
   Plus,
   Search,
-  Settings,
-  Smile,
   SMS,
-  SpaceLogo,
-  Subscription,
   Task,
-} from "../assets/icons";
-import { useStyleContext } from "../context/StyleContext";
-import Tippy from "@tippyjs/react";
-import asserts from "../assets";
-import "tippy.js/dist/tippy.css";
+} from "../../assets/icons";
+import { useStyleContext } from "../../context/StyleContext";
 import { useState } from "react";
+import UserSettings from "./UserSettings";
+import Tippy from "@tippyjs/react";
+import asserts from "../../assets";
+import "tippy.js/dist/tippy.css";
+
 
 const SideBar = () => {
+
   const { margin, setMargin } = useStyleContext();
   const [userMenu, setUserMenu] = useState(false);
 
+
   return (
     <section className={`fixed top-0 bottom-0 bg-gray-800 flex z-20`}>
+
       {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
       <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2 z-20">
         {margin ? (
@@ -91,9 +88,8 @@ const SideBar = () => {
 
       {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
       <div
-        className={`${
-          !margin ? "hidden" : "w-[275px]"
-        } bg-[#202F3E] duration-200`}
+        className={`${!margin ? "hidden" : "w-[275px]"
+          } bg-[#202F3E] duration-200`}
       >
         <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
           <div className="flex items-center space-x-4">
@@ -175,7 +171,7 @@ const SideBar = () => {
         {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
         <div className="my-10">
           <div className="flex space-x-3 px-2 items-center group">
-            <Dots className="invisible group-hover:visible cursor-grab" />
+            <DotsDouble className="invisible group-hover:visible cursor-grab" />
             <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
               <Logo />{" "}
               <p className=" text-[#7088a1] font-bold">Developer Space</p>
@@ -183,14 +179,14 @@ const SideBar = () => {
           </div>
 
           <div className="flex space-x-3 px-2 items-center group">
-            <Dots className="invisible group-hover:visible cursor-grab" />
+            <DotsDouble className="invisible group-hover:visible cursor-grab" />
             <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
               <Logo /> <p className=" text-[#7088a1] font-bold">Space Clone</p>
             </div>
           </div>
 
           <div className="flex space-x-3 px-2 items-center group">
-            <Dots className="invisible group-hover:visible cursor-grab" />
+            <DotsDouble className="invisible group-hover:visible cursor-grab" />
             <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
               <LogoRed />{" "}
               <p className=" text-[#7088a1] font-bold">Personal Space</p>
@@ -249,73 +245,8 @@ const SideBar = () => {
       </div>
 
       {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
-      <div
-        className={`${
-          margin && userMenu ? "fixed" : "hidden"
-        } top-12 left-0 z-50 w-[235px] h-[345px] bg-white rounded-md before:content-[''] before:w-8 before:h-8 before:bg-white before:absolute before:top-[-4px] before:left-[66px] before:rotate-45 before:z-[-10]`}
-      >
-        <nav className="py-4 px-3">
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <SpaceLogo className="text-[#B9C3CE] group-hover:text-purple-500" />
-            <span>Show Workspace list</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Smile className="text-[#B9C3CE] group-hover:text-purple-500" />
-            <span>Set your status</span>
-          </a>
+      <UserSettings userMenu={userMenu}/>
 
-          <div className="border-b border-gray-300 my-2"></div>
-
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Settings className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Settings</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Subscription className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Subscription</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Calendar className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Book a demo</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Addons className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Addons</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Mobile className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Apps</span>
-          </a>
-          <a
-            href="/login"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <LogOut className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Log out</span>
-          </a>
-        </nav>
-      </div>
     </section>
   );
 };
