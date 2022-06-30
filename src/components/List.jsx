@@ -14,7 +14,7 @@ const List = () => {
   return (
     <section className={`pt-20 px-3 bg-gray-100`}>
 
-      <table className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} duration-200  text-left max-h-[800px] min-w-full`}>
+      <table className={`${margin ? 'ml-[325px] w-[81vw]' : 'ml-[50px] w-[95vw]'} duration-200  text-left max-h-[800px]`}>
 
         <thead className="sticky top-0 ">
           <tr className="bg-white p-8 text-gray-400 font-thin font-[Signika]">

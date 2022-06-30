@@ -2,7 +2,7 @@ const LogoRed = () => {
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 40 40" version="1.1">
-      <g stroke="none" stroke-width="1" fill-rule="evenodd" fill="#E94149">
+      <g stroke="none" strokeWidth="1" fillRule="evenodd" fill="#E94149">
         <g transform="translate(-331.000000, -13.000000)" fill="#E94149">
           <g transform="translate(281.000000, -14.000000)" fill="#E94149">
             <g fill="#E94149">
