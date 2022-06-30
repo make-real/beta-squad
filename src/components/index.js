@@ -1,4 +1,5 @@
-export { default as UserSettings } from "./Sidebar/UserSettings";
+export { default as UserSettingsDropDown } from "./Sidebar/UserSettingsDropDown";
+export { default as UserSettings } from "./UserSettings/UserSettings";
 export { default as Register } from "./Login-Signup/Register";
 export { default as AddCardButton } from "./AddCardButton";
 export { default as Login } from "./Login-Signup/Login";

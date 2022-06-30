@@ -17,10 +17,11 @@ import {
 } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
 import { useState } from "react";
-import UserSettings from "./UserSettings";
+import UserSettings from "./UserSettingsDropDown";
 import Tippy from "@tippyjs/react";
 import asserts from "../../assets";
 import "tippy.js/dist/tippy.css";
+import { Link } from "react-router-dom";
 
 
 const SideBar = () => {
@@ -246,6 +247,54 @@ const SideBar = () => {
 
       {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
       <UserSettings userMenu={userMenu}/>
+
+          {/* <div className="border-b border-gray-300 my-2"></div>
+
+          <Link
+            to="/settings"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <Settings className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Settings</span>
+          </Link>
+          <a
+            href="/#"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <Subscription className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Subscription</span>
+          </a>
+          <a
+            href="/#"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <Calendar className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Book a demo</span>
+          </a>
+          <a
+            href="/#"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <Addons className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Addons</span>
+          </a>
+          <a
+            href="/#"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <Mobile className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Apps</span>
+          </a>
+          <Link
+            to="/login"
+            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+          >
+            <LogOut className="text-[#B9C3CE]" />{" "}
+            <span className="group-hover:text-purple-500">Log out</span>
+          </Link>
+        </nav>
+      </div> */}
+
 
     </section>
   );

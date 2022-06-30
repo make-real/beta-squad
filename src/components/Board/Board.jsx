@@ -39,7 +39,7 @@ const Board = () => {
 
 
     const CartSettingOptions = ({ listNumber }) => (
-        <div className='absolute top-[60px] left-[115px] w-[280px] p-3 rounded-lg shadow-2xl z-20 bg-white
+        <div className='absolute top-[60px] left-[115px] w-[280px] h-[400px] p-3 rounded-lg shadow-2xl z-20 bg-white
                             before:content-[""] before:w-8 before:h-8 before:bg-white before:absolute before:top-[-8px] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:z-[-10]'>
 
             <p className='text-center pb-2'>More Options</p>
@@ -81,12 +81,13 @@ const Board = () => {
 
 
 
+
             {
                 addListNames.length > 0 &&
                 addListNames.map((list, i) => (
                     <div className='bg-gray-100 w-72 h-64 rounded-lg mb-2 mr-3 flex flex-col justify-between' key={i}>
 
-                        <div className='flex items-center justify-between p-4 relative'>
+                        <div className='relative flex items-center justify-between p-4'>
                             <p className='text-gray-500 text-lg'>{list || 'New List'}</p>
                             <DotsSingle
                                 className='text-gray-500 cursor-grab w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200'
