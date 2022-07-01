@@ -1,9 +1,9 @@
-import { Close, Copy, Delete, DotsSingle, LinkingChain } from '../../assets/icons'
+import BoardActionDropDown from './BoardActionDropDown';
+import { Close, DotsSingle } from '../../assets/icons';
 import { useState } from 'react';
-import RightOK from './../../assets/icons/svg/RightOK';
 
 
-const BoardModal = ({ setBoardModal }) => {
+const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
 
@@ -13,7 +13,7 @@ const BoardModal = ({ setBoardModal }) => {
             onClick={() => setBoardModal(false)}
         >
 
-            <div className='bg-gray-50 w-3/4 h-[80vh] rounded-2xl' onClick={(e) => e.stopPropagation()}>
+            <div className='bg-gray-50 w-[95%] h-[90vh] rounded-2xl' onClick={e => e.stopPropagation()}>
 
                 <div className='flex items-center justify-between'>
 
@@ -32,24 +32,14 @@ const BoardModal = ({ setBoardModal }) => {
                         />
 
 
-                        {   // Little Action Menu for Board Modal 
+                        {
+                            // Little Action Menu for Board Modal 
                             modalActionToggling &&
-                            <div className='w-[210px] absolute top-[65px] right-[30px] bg-white p-2 rounded-lg shadow-xl z-20 after:content-[""] after:w-8 after:h-8 after:bg-white after:absolute after:top-[-10px] after:right-[15px] after:rotate-45 after:z-[-10]'>
-
-                                <div className='flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1 group z-60'>
-                                    <Copy className='group-hover:text-teal-500' /> <span>Copy Card</span>
-                                </div>
-
-                                <div className='flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1 group'>
-                                    <LinkingChain className='group-hover:text-teal-500' /> <span>Copy Card link</span>
-                                </div>
-                                <div className='flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1 group'>
-                                    <RightOK className='group-hover:text-teal-500' /> <span>Make as not done</span>
-                                </div>
-                                <div className='flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1 group'>
-                                    <Delete className='group-hover:text-teal-500' /> <span>Archive Card</span>
-                                </div>
-                            </div>
+                            <BoardActionDropDown
+                                noteDone={noteDone}
+                                setNoteDone={setNoteDone}
+                                setModalActionToggling={setModalActionToggling}
+                            />
                         }
 
                     </div>

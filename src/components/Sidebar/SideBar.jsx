@@ -21,14 +21,13 @@ import UserSettings from "./UserSettingsDropDown";
 import Tippy from "@tippyjs/react";
 import asserts from "../../assets";
 import "tippy.js/dist/tippy.css";
-import { Link } from "react-router-dom";
+
 
 
 const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
   const [userMenu, setUserMenu] = useState(false);
-  const [data, setData] = useState(null);
 
 
   return (

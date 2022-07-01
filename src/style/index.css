@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -20,6 +20,10 @@ body {
 
   .userSettings {
     @apply flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 text-sm;
+  }
+
+  .boardActionDropDown{
+    @apply flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1
   }
 }
 
