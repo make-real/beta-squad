@@ -15,6 +15,7 @@ export { default as CheckList } from './svg/CheckList';
 export { default as AtTheRate } from './svg/AtTheRate';
 export { default as Settings } from './svg/Settings';
 export { default as Calendar } from './svg/Calendar';
+export { default as UserPlus } from './svg/UserPlus';
 export { default as LogoRed } from './svg/LogoRed';
 export { default as EyeOpen } from './svg/EyeOpen';
 export { default as RightOK } from './svg/RightOK';

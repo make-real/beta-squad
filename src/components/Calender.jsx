@@ -22,7 +22,7 @@ const Calender = () => {
 
     const DayUI = ({ margin }) => (
         <div className='flex'>
-            <div>
+            <div className='flex-grow'>
                 {
                     oneDayTimes.map(time =>
                         <p key={time} className='w-24 h-10 border-t border-t-white text-gray-400 leading-10 '>
@@ -31,13 +31,13 @@ const Calender = () => {
                     )
                 }
             </div>
-            <div className='border-gray-300 border-r border-l border-b'>
+            <div className='border-gray-300 border-r border-l border-b flex-grow'>
                 {
                     oneDayTimes.map(time =>
                         <p
                             key={time}
                             onClick={addCardVisibility}
-                            className={`${margin ? 'w-[74vw]' : 'w-[88vw]'} h-10 bg-sky-50 border-t border-gray-300`}
+                            className={`${margin ? 'w-[67vw]' : 'w-[85vw]'} h-10 bg-sky-50 border-t border-gray-300`}
                         ></p>
                     )
                 }
@@ -57,8 +57,8 @@ const Calender = () => {
                 }
             </div>
 
-            <div >
-                <div className='flex justify-around items-center '>
+            <div className='flex-grow'>
+                <div className='flex justify-around items-center'>
                     <p>19 Sun</p>
                     <p>20 Mon</p>
                     <p>21 Tue</p>
@@ -72,7 +72,7 @@ const Calender = () => {
                         <div
                             key={time}
                             onClick={addCardVisibility}
-                            className={`${margin ? 'w-[74vw]' : 'w-[88vw]'} h-10 border-t flex justify-evenly items-center`}
+                            className={`${margin ? 'w-[67vw]' : 'w-[85vw]'} h-10 border-t flex justify-evenly items-center`}
                         >
                             <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
                             <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
