@@ -28,6 +28,7 @@ const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
   const [userMenu, setUserMenu] = useState(false);
+  const [data, setData] = useState(null);
 
 
   return (
