@@ -29,7 +29,7 @@ const UserSettings = () => {
       </Link>
 
       <Link
-        to="/settings/manage-workspace"
+        to="/settings/developer"
         className="font-bold mt-3 flex w-full hover:bg-[#253443] p-2 rounded-sm "
       >
         Developer Console
@@ -48,7 +48,7 @@ const UserSettings = () => {
 
         <div className="m-4 space-y-1.5 ">
           <Link
-            to=""
+            to="/settings/preferences"
             className="flex p-2.5 rounded-md hover:bg-[#293C4F] bg-[#111F2D]"
           >
             <AiOutlineSetting className="my-auto mr-2" /> <h6> Preferences</h6>

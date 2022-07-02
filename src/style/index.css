@@ -230,10 +230,17 @@ body {
 .toggle-checkbox:checked + .slider {
   background-color: #abdfe3;
 }
+.toggle-checkbox:checked + .slider2 {
+  background-color: #dfc5e0 !important;
+}
 .toggle-checkbox:checked + .slider:before {
   transform: translate(16px, -7px);
   background-color: #57bec7;
 }
+.toggle-checkbox:checked + .slider2:before {
+  background-color: #bf8ac0 !important;
+}
+
 .slider.round {
   border-radius: 20px;
 }

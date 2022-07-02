@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import user from "../../assets/images/user.jpg";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RiAttachment2 } from "react-icons/ri";
-import { IconName, ImSwitch } from "react-icons/im";
+import { ImSwitch } from "react-icons/im";
 
 const Profile = () => {
   const [expandBox, setExpandBox] = useState(false);
