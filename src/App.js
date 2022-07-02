@@ -7,14 +7,15 @@ import {
   Register,
   Login,
   Layout,
+  Profile,
+  DeveloperConsole,
+  ManageWorkspace,
+  UserSettingLayout,
+  Preferences,
 } from "./components";
 import { Routes, Route } from "react-router-dom";
-import Profile from "./components/UserSettings/Profile";
-import UserSettingLayout from "./components/Layout/UserSettingLayout";
-import ManageWorkspace from "./components/UserSettings/ManageWorkspace";
 
 const App = () => {
-
   return (
     <main className="overflow-hidden">
       <Routes>
@@ -25,6 +26,8 @@ const App = () => {
         <Route path="settings" element={<UserSettingLayout />}>
           <Route index element={<Profile />} />
           <Route path="manage-workspace" element={<ManageWorkspace />} />
+          <Route path="developer" element={<DeveloperConsole />} />
+          <Route path="preferences" element={<Preferences />} />
         </Route>
 
         <Route path="projects" element={<Layout />}>

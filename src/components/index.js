@@ -1,5 +1,10 @@
 export { default as UserSettingsDropDown } from "./Sidebar/UserSettingsDropDown";
 export { default as UserSettings } from "./UserSettings/UserSettings";
+export { default as Profile } from "./UserSettings/Profile";
+export { default as ManageWorkspace } from "./UserSettings/ManageWorkspace";
+export { default as DeveloperConsole } from "./UserSettings/DeveloperConsole";
+export { default as Preferences } from "./UserSettings/Preferences";
+export { default as UserSettingLayout } from "./Layout/UserSettingLayout";
 export { default as Register } from "./Login-Signup/Register";
 export { default as AddCardButton } from "./AddCardButton";
 export { default as Login } from "./Login-Signup/Login";
