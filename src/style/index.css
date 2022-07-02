@@ -22,16 +22,13 @@ body {
     @apply flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 text-sm;
   }
 
-  .boardActionDropDown{
-    @apply flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1
+  .boardActionDropDown {
+    @apply flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1;
   }
 }
 
 /* =====chat ======= */
-.chat-height {
-  min-height: calc(100vh - 80px);
-  height: 100%;
-}
+
 .input-style {
   overflow-wrap: break-word;
 }
@@ -246,6 +243,3 @@ body {
   top: 50%;
   right: 0;
 }
-
-
-
