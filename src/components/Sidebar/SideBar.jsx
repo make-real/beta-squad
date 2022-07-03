@@ -18,9 +18,11 @@ import {
 import { useStyleContext } from "../../context/StyleContext";
 import { useState } from "react";
 import UserSettings from "./UserSettingsDropDown";
+import NotificationSMS from "./NotificationSMS";
 import Tippy from "@tippyjs/react";
 import asserts from "../../assets";
 import "tippy.js/dist/tippy.css";
+import NotificationBell from './NotificationBell';
 
 
 
@@ -28,6 +30,8 @@ const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
   const [userMenu, setUserMenu] = useState(false);
+  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
+  const [userNotificationBell, setUserNotificationBell] = useState(false);
 
 
   return (
@@ -105,11 +109,15 @@ const SideBar = () => {
               />
             </div>
 
-            <div className=" cursor-pointer flex justify-center items-center">
+            <div className=" cursor-pointer flex justify-center items-center"
+              onClick={() => { setUserNotificationSMS(pre => !pre); setUserNotificationBell(false) }}
+            >
               <SMS className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
 
-            <div className=" cursor-pointer flex justify-center items-center">
+            <div className=" cursor-pointer flex justify-center items-center"
+              onClick={() => { setUserNotificationBell(pre => !pre); setUserNotificationSMS(false) }}
+            >
               <Bell className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
           </div>
@@ -246,57 +254,12 @@ const SideBar = () => {
       </div>
 
       {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
-      <UserSettings userMenu={userMenu}/>
+      <UserSettings userMenu={userMenu} />
 
-          {/* <div className="border-b border-gray-300 my-2"></div>
+      <NotificationSMS userNotificationSMS={userNotificationSMS} />
 
-          <Link
-            to="/settings"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Settings className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Settings</span>
-          </Link>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Subscription className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Subscription</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Calendar className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Book a demo</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Addons className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Addons</span>
-          </a>
-          <a
-            href="/#"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <Mobile className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Apps</span>
-          </a>
-          <Link
-            to="/login"
-            className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-          >
-            <LogOut className="text-[#B9C3CE]" />{" "}
-            <span className="group-hover:text-purple-500">Log out</span>
-          </Link>
-        </nav>
-      </div> */}
-
-
-    </section>
+      <NotificationBell userNotificationBell={userNotificationBell} />
+    </section >
   );
 };
 

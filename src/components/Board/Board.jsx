@@ -18,7 +18,6 @@ const Board = () => {
     const [addListName, setAddListName] = useState('');
     const [addListNames, setAddListNames] = useState([]);
 
-    console.log(noteDone);
 
     const handleAddList = () => {
         setInputListToggle(pre => !pre)
