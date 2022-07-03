@@ -1,11 +1,12 @@
 import BoardActionDropDown from './BoardActionDropDown';
-import { ArrowRight, Close, DotsSingle, EyeOpen, RightOK, UserPlus } from '../../assets/icons';
+import { ArrowRight, Close, DotsSingle, EyeOpen, RightOK, Tag, UserPlus } from '../../assets/icons';
 import { useState } from 'react';
 
 
 const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
+    const [showTags, setShowTags] = useState(false)
 
     return (
         <section
@@ -91,6 +92,44 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                                 MOVE TO NEXT LIST
                             </div>
                         </div>
+
+                        <div className='p-3'>
+                            <input type="text" className='w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50' />
+                        </div>
+
+                        <div className='p-3 flex relative'>
+                            <div
+                                className='w-10 h-10 grid place-items-center cursor-pointer hover:bg-gray-100 rounded-md duration-200'
+                                onClick={() => setShowTags(pre => !pre)}
+                            >
+                                <Tag className='text-[#B9C3CE] hover:text-teal-400' />
+                            </div>
+                            <input type="text" placeholder='Add a tag...' className='ml-2 px-2 outline-none w-full bg-gray-50' onClick={() => setShowTags(true)} />
+
+
+                            {
+                                showTags &&
+                                <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col gap-2 text-gray-800 shadow-2xl '>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-green-500 w-fit rounded-full'>done</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-red-500 w-fit rounded-full'>Important</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-sky-500 w-fit rounded-full'>ON Going...</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-orange-500 w-fit rounded-full'>api ready</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-pink-500 w-fit rounded-full'>Improvement</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-blue-500 w-fit rounded-full'>easy</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-gray-500 w-fit rounded-full'>ON Going...</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-green-500 w-fit rounded-full'>done</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-red-500 w-fit rounded-full'>Important</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-sky-500 w-fit rounded-full'>ON Going...</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-orange-500 w-fit rounded-full'>api ready</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-pink-500 w-fit rounded-full'>Improvement</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-blue-500 w-fit rounded-full'>easy</span></div>
+                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-gray-500 w-fit rounded-full'>ON Going...</span></div>
+
+                                </div>
+                            }
+
+                        </div>
+
                     </div>
 
                     <div className='w-1/2'>
@@ -102,7 +141,7 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
 
                 {/* 🟨🟨🟨 Section 3 🟨🟨🟨 */}
-                <div className='flex h-[12vh]'>
+                <div className='flex h-[10vh]'>
 
                     <div className='w-1/2 border-r border-gray-300 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150'>
                         <span>Drop files here or </span>
