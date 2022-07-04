@@ -1,12 +1,28 @@
 import BoardActionDropDown from './BoardActionDropDown';
-import { ArrowRight, Close, DotsSingle, EyeOpen, RightOK, Tag, UserPlus } from '../../assets/icons';
+import { ArrowRight, Attachment, AtTheRate, CheckList, Close, Description, DotsSingle, EyeOpen, GIF, RightOK, Smile, Tag, UserPlus } from '../../assets/icons';
 import { useState } from 'react';
 
 
 const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
-    const [showTags, setShowTags] = useState(false)
+    const [showTags, setShowTags] = useState(false);
+    const [setTags, setSetTags] = useState([]);
+    const [tagContext, setTagContext] = useState(['done', 'Important', 'ON Going...', 'api ready', 'Improvement', 'easy']);
+    const tagColor = ['red', 'orange', 'green', 'pink', 'blue', 'gray']
+
+
+    const handleAddTags = (tag) => {
+        setSetTags(pre => [...pre, tag]);
+        setTagContext(pre => pre.filter(data => data !== tag));
+    }
+
+    const handleDeleteTags = (tag) => {
+        setSetTags(pre => pre.filter(item => item !== tag));
+        setTagContext(pre => [...pre, tag]);
+
+    }
+
 
     return (
         <section
@@ -104,39 +120,93 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                             >
                                 <Tag className='text-[#B9C3CE] hover:text-teal-400' />
                             </div>
-                            <input type="text" placeholder='Add a tag...' className='ml-2 px-2 outline-none w-full bg-gray-50' onClick={() => setShowTags(true)} />
+
+                            <div className='flex items-center flex-wrap gap-1'>
+                                {
+                                    // 🟨🟨🟨 Just Tag Display
+                                    setTags.map((data, i) => (
+                                        <span className={`px-2 py-1 bg-${tagColor[i]}-500 text-white cursor-pointer rounded-full hover:bg-${tagColor[i]}-600`}
+                                            onClick={() => handleDeleteTags(data)}
+                                        >{data}</span>
+                                    ))
+                                }
+                                {
+                                    tagContext.length > 0
+                                        ? <input type="text" placeholder='Add a tag...' className='ml-2 px-2 outline-none  bg-gray-50' onClick={() => setShowTags(true)} />
+                                        : null
+                                }
+                            </div>
 
 
                             {
+                                // 🟨🟨🟨 all tags 🟨🟨🟨
                                 showTags &&
-                                <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col gap-2 text-gray-800 shadow-2xl '>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-green-500 w-fit rounded-full'>done</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-red-500 w-fit rounded-full'>Important</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-sky-500 w-fit rounded-full'>ON Going...</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-orange-500 w-fit rounded-full'>api ready</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-pink-500 w-fit rounded-full'>Improvement</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-blue-500 w-fit rounded-full'>easy</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-gray-500 w-fit rounded-full'>ON Going...</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-green-500 w-fit rounded-full'>done</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-red-500 w-fit rounded-full'>Important</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-sky-500 w-fit rounded-full'>ON Going...</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-orange-500 w-fit rounded-full'>api ready</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-pink-500 w-fit rounded-full'>Improvement</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-blue-500 w-fit rounded-full'>easy</span></div>
-                                    <div className='pl-3 pb-3 hover:bg-gray-300'><span className='px-2 py-1 bg-gray-500 w-fit rounded-full'>ON Going...</span></div>
+                                <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white'>
+
+                                    {
+
+                                        tagContext.map((data, i) => (
+                                            <div
+                                                key={data}
+                                                onClick={() => { setShowTags(false); handleAddTags(data) }}
+                                                className='pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer'
+                                            >
+                                                <span className={`px-2 py-1 bg-${tagColor[i]}-500 w-fit rounded-full`}>{data}</span>
+                                            </div>
+                                        ))
+                                    }
+
 
                                 </div>
                             }
 
                         </div>
 
+
+                        <div className='mt-8 ml-4 '>
+                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+                                <Description className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Description</span>
+                            </div>
+
+                            <input type="text" className='w-[90%] h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer' />
+                        </div>
+
+
+
+                        <div className='mt-8 ml-4 '>
+                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+                                <CheckList className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Checklist</span>
+                            </div>
+                        </div>
+
+
+
+                        <div className='mt-8 ml-4 '>
+                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+
+                                <Attachment className='text-[#B9C3CE] group-hover:text-teal-400' />
+                                <label htmlFor="file">Attachments</label>
+                                <input type="file" id="file" className='hidden' />
+                            </div>
+                        </div>
+
+
                     </div>
 
-                    <div className='w-1/2'>
 
+                    <div className='w-1/2 text-gray-400 px-4 py-3  text-center'>
+                        Chatting area
                     </div>
 
                 </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -149,7 +219,21 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                         <input type="file" id="file" className='hidden' />
                     </div>
 
-                    <div className='w-1/2'>
+
+
+                    <div className='w-1/2 grid place-items-center'>
+
+                        <div className='px-6 py-2 border border-gray-400 rounded-xl w-[95%] flex items-center gap-2'>
+
+                            <input type="text" className='w-[80%] outline-none p-1 bg-gray-50' />
+
+                            <div className='flex items-center gap-3 text-[#B9C3CE] '>
+                                <Attachment className='hover:text-teal-500 cursor-pointer duration-200' />
+                                <AtTheRate className='hover:text-teal-500 cursor-pointer duration-200' />
+                                <Smile className='hover:text-teal-500 cursor-pointer duration-200' />
+                                <GIF className='hover:text-teal-500 cursor-pointer duration-200' />
+                            </div>
+                        </div>
 
                     </div>
 
