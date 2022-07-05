@@ -20,7 +20,6 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
     const handleDeleteTags = (tag) => {
         setSetTags(pre => pre.filter(item => item !== tag));
         setTagContext(pre => [...pre, tag]);
-
     }
 
 
@@ -31,6 +30,8 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
         >
 
             <div className='bg-gray-50 w-[95%] h-[90vh] rounded-2xl' onClick={e => e.stopPropagation()}>
+
+
 
                 {/* 🟨🟨🟨 Section 1 🟨🟨🟨 */}
                 <div className='flex items-center justify-between border-b border-gray-300 p-2'>
@@ -92,6 +93,14 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
 
 
+
+
+
+
+
+
+
+
                 {/* 🟨🟨🟨 Section 2 🟨🟨🟨 */}
                 <div className='flex border-b border-gray-300'>
 
@@ -142,9 +151,7 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                                 // 🟨🟨🟨 all tags 🟨🟨🟨
                                 showTags &&
                                 <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white'>
-
                                     {
-
                                         tagContext.map((data, i) => (
                                             <div
                                                 key={data}
@@ -155,11 +162,8 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                                             </div>
                                         ))
                                     }
-
-
                                 </div>
                             }
-
                         </div>
 
 
@@ -238,6 +242,8 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                     </div>
 
                 </div>
+
+
 
             </div>
         </section >

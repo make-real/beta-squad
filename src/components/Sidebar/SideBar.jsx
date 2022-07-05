@@ -23,6 +23,7 @@ import Tippy from "@tippyjs/react";
 import asserts from "../../assets";
 import "tippy.js/dist/tippy.css";
 import NotificationBell from './NotificationBell';
+import CreateSpace from "./CreateSpace";
 
 
 
@@ -32,6 +33,7 @@ const SideBar = () => {
   const [userMenu, setUserMenu] = useState(false);
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
+  const [createSpace, setCreateSpace] = useState(false);
 
 
   return (
@@ -100,7 +102,7 @@ const SideBar = () => {
           <div className="flex items-center space-x-4">
             <div
               className="mt-3 mb-2"
-              onClick={() => setUserMenu((pre) => !pre)}
+              onClick={() => { setUserMenu((pre) => !pre); setUserNotificationBell(false); setUserNotificationSMS(false) }}
             >
               <img
                 alt="userImage"
@@ -110,13 +112,13 @@ const SideBar = () => {
             </div>
 
             <div className=" cursor-pointer flex justify-center items-center"
-              onClick={() => { setUserNotificationSMS(pre => !pre); setUserNotificationBell(false) }}
+              onClick={() => { setUserNotificationSMS(pre => !pre); setUserNotificationBell(false); setUserMenu(false) }}
             >
               <SMS className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
 
             <div className=" cursor-pointer flex justify-center items-center"
-              onClick={() => { setUserNotificationBell(pre => !pre); setUserNotificationSMS(false) }}
+              onClick={() => { setUserNotificationBell(pre => !pre); setUserNotificationSMS(false); setUserMenu(false) }}
             >
               <Bell className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
@@ -129,6 +131,8 @@ const SideBar = () => {
             onClick={() => {
               setMargin(false);
               setUserMenu(false);
+              setUserNotificationBell(false);
+              setUserNotificationSMS(false);
             }}
           >
             <CloseMenuBtn
@@ -166,9 +170,17 @@ const SideBar = () => {
             <Search />
           </div>
 
-          <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200">
+          <div
+            className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200"
+            onClick={() => setCreateSpace(true)}
+          >
             <Plus className="cursor-pointer text-gray-600 w-6 h-6 p-1 rounded-full bg-gray-400 " />
           </div>
+
+          {
+            createSpace && <CreateSpace setCreateSpace={setCreateSpace}/>
+          }
+
         </div>
 
         {/* 🟨🟨🟨 Folder Creation 🟨🟨🟨 */}

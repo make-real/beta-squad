@@ -5,9 +5,17 @@ const Style = createContext();
 export const StyleContext = ({ children }) => {
 
     const [margin, setMargin] = useState(false);
+    const [themeColor, setThemeColor] = useState('');
 
     return (
-        <Style.Provider value={{ margin, setMargin }}>
+        <Style.Provider value={
+            {
+                margin,
+                setMargin,
+                themeColor,
+                setThemeColor
+            }
+        }>
             {
                 children
             }
