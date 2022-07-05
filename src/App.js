@@ -16,12 +16,15 @@ import {
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
+
   return (
-    <main className="overflow-hidden">
+    <main className="">
       <Routes>
+
         <Route path="/" />
         <Route index element={<Login />} />
         <Route path="register" element={<Register />} />
+
 
         <Route path="settings" element={<UserSettingLayout />}>
           <Route index element={<Profile />} />
@@ -30,6 +33,7 @@ const App = () => {
           <Route path="preferences" element={<Preferences />} />
         </Route>
 
+
         <Route path="projects" element={<Layout />}>
           <Route index element={<Chat />} />
           <Route path="kanban" element={<Board />} />
@@ -37,6 +41,7 @@ const App = () => {
           <Route path="calendar" element={<Calender />} />
           <Route path="timeline" element={<Timeline />} />
         </Route>
+        
       </Routes>
     </main>
   );

@@ -1,8 +1,8 @@
-import { useStyleContext } from '../../context/StyleContext';
 import { Copy, Delete, DotsSingle, EyeOpen, Plus, RightArrow, RightOK, Smile, UserPlus } from '../../assets/icons';
+import { useStyleContext } from '../../context/StyleContext';
 import { useState } from 'react';
-import BoardModal from './BoardModal';
 import BoardActionDropDown from './BoardActionDropDown';
+import BoardModal from './BoardModal';
 
 
 const Board = () => {
@@ -13,20 +13,48 @@ const Board = () => {
     const [cartOptionsToggle, setCartOptionsToggle] = useState(false);
     const [modalActionToggling, setModalActionToggling] = useState(false);
     const [visible, setVisible] = useState(false);
-    const [boardModal, setBoardModal] = useState(false);
     const [noteDone, setNoteDone] = useState(false);
-    const [addListName, setAddListName] = useState('');
-    const [addListNames, setAddListNames] = useState([]);
+    const [boardModal, setBoardModal] = useState(false);
 
+    const [addListName, setAddListName] = useState('');
+
+    const [addListNames, setAddListNames] = useState({
+        name: '',
+        cards: [],
+    });
+    const [addTaskItem, setAddTaskItem] = useState({
+        name: '',
+        progress: '',
+        tags: [],
+    });
+    const [totalTaskList, setTotalTaskList] = useState([])
+
+    // console.log(addTaskItem);
+    // console.log(totalTaskList);
+
+    // user 1st input
+    const handleAddListNameInput = (e) => {
+        setAddListName(e.target.value)
+    }
+
+    const handleAddTaskItem = (e) => {
+        setAddTaskItem(pre => ({ ...pre, name: e.target.value }));
+    }
 
     const handleAddList = () => {
         setInputListToggle(pre => !pre)
-        setAddListNames(pre => [...pre, addListName]);
+        setAddListNames(pre => ({ ...pre, name: addListName }));
+        setAddListNames(pre => ({ ...pre, cards: [...pre.cards, addTaskItem] }));
+        setTotalTaskList(pre => [...pre, addListNames]);
+
         setAddListName('');
+        setAddTaskItem(pre => ({ ...pre, name: '' }))
+
     }
 
+    // delete form card
     const handleRemoveFromListName = (listNumber) => {
-        setAddListNames(pre => pre.filter((item, i) => i !== listNumber))
+        setTotalTaskList(pre => pre.filter((item, i) => i !== listNumber))
         setCartOptionsToggle(false);
     }
 
@@ -35,9 +63,7 @@ const Board = () => {
         setInputListToggle(false)
     }
 
-    const handleAddListName = (e) => {
-        setAddListName(e.target.value)
-    }
+
 
 
 
@@ -85,12 +111,12 @@ const Board = () => {
 
 
             {
-                addListNames.length > 0 &&
-                addListNames.map((list, i) => (
+                // addListNames.length > 0 &&
+                totalTaskList.map((list, i) => (
                     <div className='bg-gray-100 w-72 h-64 rounded-lg mb-2 mr-3 flex flex-col justify-between' key={i}>
 
                         <div className='relative flex items-center justify-between p-4'>
-                            <p className='text-gray-500 text-lg'>{list || 'New List'}</p>
+                            <p className='text-gray-500 text-lg'>{list.name || 'New List'}</p>
                             <DotsSingle
                                 className='text-gray-500 cursor-grab w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200'
                                 onClick={() => { setInsideCardListGet(i); setCartOptionsToggle(pre => !pre) }}
@@ -108,9 +134,9 @@ const Board = () => {
                                         <form className='w-full p-1 '>
 
                                             <textarea
-                                                value={addListName}
+                                                value={addTaskItem.name}
                                                 placeholder='Add list name'
-                                                onChange={handleAddListName}
+                                                onChange={handleAddTaskItem}
                                                 rows='3' className='p-3 w-full rounded-lg outline-none border border-t-4 border-teal-400 focus:'
                                             />
 
@@ -148,7 +174,7 @@ const Board = () => {
                                 <textarea
                                     value={addListName}
                                     placeholder='Add list name'
-                                    onChange={handleAddListName}
+                                    onChange={handleAddListNameInput}
                                     rows='3' className='p-3 w-full rounded-lg outline-none focus:'
                                 />
                                 <div className='flex justify-end gap-2 mt-3'>
