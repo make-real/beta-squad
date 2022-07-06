@@ -24,6 +24,7 @@ import asserts from "../../assets";
 import "tippy.js/dist/tippy.css";
 import NotificationBell from './NotificationBell';
 import CreateSpace from "./CreateSpace";
+import NewWorkspace from "./NewWorkspace";
 
 
 
@@ -34,6 +35,7 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [createSpace, setCreateSpace] = useState(false);
+  const [newWorkShop, setNewWorkShop] = useState(false);
 
 
   return (
@@ -57,9 +59,16 @@ const SideBar = () => {
               </div>
             </Tippy>
 
-            <div className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
+            <div
+              onClick={() => setNewWorkShop(true)}
+              className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
               <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
             </div>
+
+            {
+              newWorkShop && <NewWorkspace setNewWorkShop={setNewWorkShop}/>
+            }
+
           </>
         ) : (
           <>
@@ -178,7 +187,7 @@ const SideBar = () => {
           </div>
 
           {
-            createSpace && <CreateSpace setCreateSpace={setCreateSpace}/>
+            createSpace && <CreateSpace setCreateSpace={setCreateSpace} />
           }
 
         </div>
