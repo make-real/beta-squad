@@ -9,16 +9,17 @@ const CreateSpace = ({ setCreateSpace }) => {
     const { setThemeColor } = useStyleContext()
     const [clickColorBox, setClickColorBox] = useState(false);
     const [colorBoxIndex, setColorBoxIndex] = useState(0);
+    
     const [boxColor] = useState([
-        'blue-600',
-        'sky-400',
-        'yellow-400',
-        'red-500',
-        'pink-400',
-        'green-500',
-        'sky-300',
-        'blue-800',
-        'pink-600'
+        'bg-blue-600',
+        'bg-sky-400',
+        'bg-yellow-400',
+        'bg-red-500',
+        'bg-pink-400',
+        'bg-green-500',
+        'bg-sky-300',
+        'bg-blue-800',
+        'bg-pink-600'
     ]);
 
 
@@ -38,7 +39,7 @@ const CreateSpace = ({ setCreateSpace }) => {
 
 
 
-                <div className='p-6 text-gray-600'>
+                <div className='p-5 py-7 text-gray-600'>
 
                     <p className='text-sm text-fuchsia-700 font-bold'>CREATE SPACE</p>
                     <div className='my-3 text-sm'>
@@ -57,7 +58,6 @@ const CreateSpace = ({ setCreateSpace }) => {
                     </div>
 
 
-
                     <div className='my-2 text-sm'>
                         <p>Space color</p>
 
@@ -69,7 +69,7 @@ const CreateSpace = ({ setCreateSpace }) => {
                                             <div
                                                 key={box}
                                                 // onClick={() => {   }}
-                                                className={`${clickColorBox ? 'w-12 h-12' : 'w-7 h-7'} rounded-full cursor-pointer bg-${box}`}>
+                                                className={`${clickColorBox ? 'w-12 h-12' : 'w-7 h-7'} rounded-full cursor-pointer ${box}`}>
                                                 <div className={`${clickColorBox ? 'grid' : 'hidden'} place-items-center w-full h-full text-white`}>
                                                     <RightOK />
                                                 </div>
@@ -79,7 +79,7 @@ const CreateSpace = ({ setCreateSpace }) => {
                                             <div
                                                 key={box}
                                                 onClick={() => { setClickColorBox(true); setColorBoxIndex(i); setThemeColor(box) }}
-                                                className={`w-7 h-7 rounded-full cursor-pointer  bg-${box}`}>
+                                                className={`w-7 h-7 rounded-full cursor-pointer ${box}`}>
                                             </div>
                                         )
                                 ))
@@ -89,6 +89,43 @@ const CreateSpace = ({ setCreateSpace }) => {
                     </div>
 
 
+                    <div className='my-2 text-sm'>
+                        <p>Space privacy</p>
+
+                        <form className='px-3 py-3' >
+                            <div className='flex items-center gap-3 mb-1'>
+                                <input
+                                    type="radio"
+                                    id="public"
+                                    value="public"
+                                    name="spacePrivacy"
+                                    className='cursor-pointer w-5 h-5'
+                                />
+                                <label htmlFor="public" className='cursor-pointer'>Public to team</label>
+                            </div>
+                            <p className='pl-3 text-gray-400'>Space is visible to members of your team. Only people added to the space can edit it.</p>
+
+                            <div className='flex items-center gap-3 mb-1 mt-4'>
+                                <input
+                                    type="radio"
+                                    id="private"
+                                    value="private"
+                                    name="spacePrivacy"
+                                    className='cursor-pointer w-5 h-5'
+                                />
+                                <label htmlFor="private" className='cursor-pointer'>Private</label>
+                            </div>
+
+                            <p className='pl-3 text-gray-400'>Space is private. Only people added to the space can view it and edit.</p>
+                        
+                            <div className='flex gap-2 items-center justify-end mt-5'>
+                                <button className='px-4 py-2 bg-gray-200 rounded-lg text-gray-400' onClick={() => setCreateSpace(false)}>Cancel</button>
+                                <button className='px-4 py-2 bg-fuchsia-600 rounded-lg text-gray-200'>Create Space</button>
+                            </div>
+                            
+                        </form>
+
+                    </div>
 
                 </div>
             </div>
@@ -97,3 +134,15 @@ const CreateSpace = ({ setCreateSpace }) => {
 }
 
 export default CreateSpace
+
+
+
+// before:absolute
+// before:left-[-25px]
+// before:top-[-1px]
+// before:w-5
+// before:h-5
+// before:rounded-full
+// before:border-2
+// before:border-gray-400
+// before:label-checked:bg-red-600

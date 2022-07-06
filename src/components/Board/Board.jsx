@@ -20,7 +20,7 @@ const Board = () => {
 
     const [addListNames, setAddListNames] = useState({
         name: '',
-        cards: [],
+        cards: [  ],
     });
     const [addTaskItem, setAddTaskItem] = useState({
         name: '',
