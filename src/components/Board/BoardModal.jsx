@@ -9,7 +9,16 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
     const [showTags, setShowTags] = useState(false);
     const [setTags, setSetTags] = useState([]);
     const [tagContext, setTagContext] = useState(['done', 'Important', 'ON Going...', 'api ready', 'Improvement', 'easy']);
-    const tagColor = ['red', 'orange', 'green', 'pink', 'blue', 'gray']
+    const tagColor = [
+        'bg-red-500',
+        'bg-orange-500',
+        'bg-green-500',
+        'bg-pink-500',
+        'bg-blue-500',
+        'bg-gray-500',
+    ]
+
+
 
 
     const handleAddTags = (tag) => {
@@ -134,7 +143,7 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                                 {
                                     // 🟨🟨🟨 Just Tag Display
                                     setTags.map((data, i) => (
-                                        <span className={`px-2 py-1 bg-${tagColor[i]}-500 text-white cursor-pointer rounded-full hover:bg-${tagColor[i]}-600`}
+                                        <span className={`px-2 py-1 ${tagColor[i]} text-white cursor-pointer rounded-full`}
                                             onClick={() => handleDeleteTags(data)}
                                         >{data}</span>
                                     ))
@@ -158,7 +167,7 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                                                 onClick={() => { setShowTags(false); handleAddTags(data) }}
                                                 className='pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer'
                                             >
-                                                <span className={`px-2 py-1 bg-${tagColor[i]}-500 w-fit rounded-full`}>{data}</span>
+                                                <span className={`px-2 py-1 ${tagColor[i]} w-fit rounded-full`}>{data}</span>
                                             </div>
                                         ))
                                     }

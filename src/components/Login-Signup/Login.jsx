@@ -1,26 +1,60 @@
-import React from "react";
-import icon1 from "../../assets/timecamp.png";
-import icon2 from "../../assets/remotecamp.png";
-import bg1 from "../../assets/signIn2.png";
-import bg2 from "../../assets/signIn1.png";
-
+import { Link, useNavigate } from "react-router-dom";
+import { userSignIn } from "../../hooks/useFetch";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import images from '../../assets';
+
 
 const Login = () => {
+
+
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({})
+  const [userInput, setUserInput] = useState({ email: '', password: '' });
+
+
+  // collect all user input data from UI 
+  const handleUserInput = e => {
+    const { name, value } = e.target;
+    setUserInput(prev => ({ ...prev, [name]: value }));
+  }
+
+
+  // User Info send to backend for registration...
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await userSignIn(userInput);
+      setUserInfo(data)
+
+      // store user JWT token at local storage for future reference
+      localStorage.setItem('jwt', JSON.stringify(data.jwtToken))
+
+      // navigate user into user profile page...
+      navigate('/projects');
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   return (
     <section className="flex">
+
       {/* left side */}
-      <div className="w-[455px] min-h-screen  text-white bg-cover bg-center bg-[url('/src/assets/loginPage.png')]">
+      <div className="w-[455px] min-h-screen text-white bg-cover bg-center bg-[url('/src/assets/images/loginPage.png')]">
+
         <div className="pt-[80px]">
           <h6 className="text-2xl text-center">HeySpace</h6>
 
-          <div className="pt-8 pl-9 pr-4 text-sm">
-            <div className="relative">
-              <img src={bg1} alt="bg" className="w-full" />
-              <img src={bg2} alt="bg2" className="absolute left-1/2 top-1/2" />
-            </div>
-            <div className="pt-[70px] pb-10 px-3">
+          <div className="pt-8 pl-9 pr-4 text-sm relative">
+
+            <img src={images.signIn1} alt="bg" className='w-52 absolute bottom-36 right-14 z-10' />
+            <img src={images.signIn2} alt="bg2" className="w-96 absolute top-8 left-8" />
+
+            <div className="pt-[70px] pb-10 px-3 mt-72">
               <h6 className="font-bold">Hey space tip</h6>
               <p>
                 Did someone say something brilliant? Add his/ her message into
@@ -30,10 +64,13 @@ const Login = () => {
             </div>
           </div>
         </div>
+
       </div>
+
 
       {/* right side */}
       <div className="mx-9 pt-[60px] flex-1">
+
         <div className="flex justify-end">
           <h6 className="my-auto text-gray-400 pr-2">Don't have an account?</h6>
 
@@ -61,34 +98,39 @@ const Login = () => {
             </span>
           </div>
 
-          <form className="space-y-3 mt-5">
+
+          <form className="space-y-3 mt-5" onSubmit={handleSubmit}>
             <div className="text-sm">
-              <label For="email" className="text-gray-700">
+              <label htmlFor="email" className="text-gray-700">
                 Email:
               </label>
               <input
+                required
                 type="email"
-                id="email"
+                name="email"
                 placeholder="email@company.com"
                 className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                onChange={handleUserInput}
               />
             </div>
 
             <div className="text-sm">
-              <label For="password" className="text-gray-700">
+              <label htmlFor="password" className="text-gray-700">
                 Password:
               </label>
               <input
+                required
                 type="password"
-                id="password"
+                name="password"
                 placeholder="Password"
                 className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                onChange={handleUserInput}
               />
             </div>
 
             <div className="text-center">
-              <button className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg ">
-                <Link to="/projects"> Get started now</Link>
+              <button type="submit" className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg ">
+                Get started now
               </button>
             </div>
           </form>
@@ -98,14 +140,30 @@ const Login = () => {
           </div>
 
           <div className="my-4 flex justify-between">
-            {" "}
-            <img src={icon1} alt="" className=" w-[100px] h-7" />
-            <img src={icon2} alt="" className=" w-[100px] h-7" />
+            <img src={images.timeCamp} alt="" className=" w-[100px] h-7" />
+            <img src={images.remoteCamp} alt="" className=" w-[100px] h-7" />
           </div>
         </div>
+
       </div>
     </section>
   );
 };
 
-export default Login;
+export default React.memo(Login);
+
+
+
+// "jwtToken": "",
+// "loggedUser": {
+//     "_id":
+//     "fullName":
+//     "username":
+//     "email":
+//     "phone":
+//     "emailVerified":
+//     "phoneVerified":
+//     "createdAt":
+//     "updatedAt":
+//     "__v":
+// }

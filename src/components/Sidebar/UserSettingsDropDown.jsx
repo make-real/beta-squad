@@ -9,11 +9,28 @@ import {
     SpaceLogo,
     Subscription,
 } from "../../assets/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userLogOut } from "../../hooks/useFetch";
 
 const UserSettings = ({ userMenu }) => {
 
+    const navigate = useNavigate();
     const { margin } = useStyleContext();
+
+
+    // user logout button press...
+    const handleLogOut = async () => {
+
+        try {
+            await userLogOut();
+        } catch (error) {
+            console.log(error)
+        }
+
+        localStorage.clear();
+        navigate('/');
+    }
+
 
     return (
 
@@ -76,13 +93,13 @@ const UserSettings = ({ userMenu }) => {
                     <Mobile className="text-[#B9C3CE]" />{" "}
                     <span className="group-hover:text-purple-500">Apps</span>
                 </a>
-                <Link
-                    to="/"
+                <div
+                    onClick={handleLogOut}
                     className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
                 >
                     <LogOut className="text-[#B9C3CE]" />{" "}
                     <span className="group-hover:text-purple-500">Log out</span>
-                </Link>
+                </div>
             </nav>
         </div>
 

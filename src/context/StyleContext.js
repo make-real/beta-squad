@@ -6,7 +6,7 @@ export const StyleContext = ({ children }) => {
 
     const [margin, setMargin] = useState(false);
     const [themeColor, setThemeColor] = useState('');
-
+    
     return (
         <Style.Provider value={
             {
