@@ -1,14 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import user from "../../assets/userLogin.png";
-import logo from "../../assets/logo.png";
-import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineArrowLeft, AiOutlineSetting } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
+import { FiShoppingBag } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import { CgBox } from "react-icons/cg";
 import { BsTag } from "react-icons/bs";
-import { FiShoppingBag } from "react-icons/fi";
+import images from "../../assets";
+
 
 const UserSettings = () => {
+
   return (
     <section className="w-[325px] text-sm fixed top-0 bottom-0 text-[#9FB4C3] bg-[#23313F] rounded-r-lg p-3">
       <Link
@@ -16,7 +16,7 @@ const UserSettings = () => {
         className="text-white mt-4 font-bold flex bg-[#253443] p-1.5 rounded-sm border-b-2 border-[#2d4154]"
       >
         <div className="w-11 h-11 ">
-          <img src={user} alt="" />
+          <img src={images.user} alt="" />
         </div>
         <h6 className="my-auto  pl-6">Profile Settings</h6>
       </Link>
@@ -38,7 +38,7 @@ const UserSettings = () => {
       <div className="border-b-2 border-[#293C4F] ">
         <div className=" font-bold mt-3 flex w-full  bg-[#293C4F] p-2.5 rounded-md ">
           <div className="w-12 h-12 rounded-md overflow-hidden">
-            <img src={logo} alt="" />
+            <img src={images.logo} alt="" />
           </div>
           <div className="flex-1 flex justify-between hover:text-white">
             <h6 className="my-auto pl-3">Make Real</h6>

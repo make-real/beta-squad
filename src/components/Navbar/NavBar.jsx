@@ -16,7 +16,7 @@ import asserts from "../../assets";
 const NavBar = () => {
 
   const { margin } = useStyleContext();
-  const [linkClick, setLinkClick] = useState("");
+  const [linkClick, setLinkClick] = useState(navLinks[0].path);
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");
 
@@ -25,14 +25,13 @@ const NavBar = () => {
     setNavIcons(name);
   };
 
-  const activeLink = "mr-8  py-4 font-bold text-teal-400";
-  const normalLink = "mr-8  py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
+  const activeLink = "mr-8 py-4 font-bold text-teal-400";
+  const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
 
   return (
     <header
-      className={`${
-        margin ? "ml-[325px]" : "ml-[50px]"
-      } fixed top-0 left-0 right-0 -z-0  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+      className={`${margin ? "ml-[325px]" : "ml-[50px]"
+        } fixed top-0 left-0 right-0 -z-0  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
@@ -78,26 +77,23 @@ const NavBar = () => {
         )}
 
         <div
-          className={`${linkClick === "/" ? "hidden" : "block"} ${
-            linkClick === "timeline" ? "hidden" : "block"
-          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${linkClick === "/" ? "hidden" : "block"} ${linkClick === "timeline" ? "hidden" : "block"
+            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <FiSearch className="text-xl font-bold" />
         </div>
 
         <div
           onClick={() => handleSidePanel("filter")}
-          className={`${linkClick === "/" ? "hidden" : "block"} ${
-            linkClick === "timeline" ? "hidden" : "block"
-          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${linkClick === "/" ? "hidden" : "block"} ${linkClick === "timeline" ? "hidden" : "block"
+            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <TbFilter className="text-xl font-bold" />
         </div>
 
         <div
-          className={`${
-            linkClick === "kanban" ? "block" : "hidden"
-          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${linkClick === "kanban" ? "block" : "hidden"
+            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <FaPlus className="text-xl font-bold" />
         </div>

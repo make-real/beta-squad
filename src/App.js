@@ -13,9 +13,22 @@ import {
   UserSettingLayout,
   Preferences,
 } from "./components";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { fetchUserToken } from './util/fetchUserToken';
 
 const App = () => {
+
+
+  const ProtectedRoute = ({ children }) => {
+
+    const jwt = fetchUserToken() || false;
+
+    if (!jwt) return <Navigate to="/" />;
+
+    return children;
+  };
+
+  console.log('App .js');
 
   return (
     <main className="">
@@ -26,22 +39,22 @@ const App = () => {
         <Route path="register" element={<Register />} />
 
 
-        <Route path="settings" element={<UserSettingLayout />}>
-          <Route index element={<Profile />} />
-          <Route path="manage-workspace" element={<ManageWorkspace />} />
-          <Route path="developer" element={<DeveloperConsole />} />
-          <Route path="preferences" element={<Preferences />} />
+        <Route path="settings" element={<ProtectedRoute> <UserSettingLayout /> </ProtectedRoute>}>
+          <Route index element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
+          <Route path="manage-workspace" element={<ProtectedRoute> <ManageWorkspace /> </ProtectedRoute>} />
+          <Route path="developer" element={<ProtectedRoute> <DeveloperConsole /> </ProtectedRoute>} />
+          <Route path="preferences" element={<ProtectedRoute> <Preferences /> </ProtectedRoute>} />
         </Route>
 
 
-        <Route path="projects" element={<Layout />}>
-          <Route index element={<Chat />} />
-          <Route path="kanban" element={<Board />} />
-          <Route path="list" element={<List />} />
-          <Route path="calendar" element={<Calender />} />
-          <Route path="timeline" element={<Timeline />} />
+        <Route path="projects" element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
+          <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
+          <Route path="kanban" element={<ProtectedRoute> <Board /> </ProtectedRoute>} />
+          <Route path="list" element={<ProtectedRoute> <List /> </ProtectedRoute>} />
+          <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
+          <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
         </Route>
-        
+
       </Routes>
     </main>
   );
