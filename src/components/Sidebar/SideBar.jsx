@@ -13,6 +13,8 @@ import {
   Plus,
   Search,
   SMS,
+  SpaceLogo,
+  SpaceLogoLock,
   Task,
 } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
@@ -34,8 +36,9 @@ const SideBar = () => {
   const [userMenu, setUserMenu] = useState(false);
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
-  const [createSpace, setCreateSpace] = useState(false);
+  const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [newWorkShop, setNewWorkShop] = useState(false);
+  const [allSpace, setAllSpace] = useState([]);
 
 
   return (
@@ -66,7 +69,7 @@ const SideBar = () => {
             </div>
 
             {
-              newWorkShop && <NewWorkspace setNewWorkShop={setNewWorkShop}/>
+              newWorkShop && <NewWorkspace setNewWorkShop={setNewWorkShop} />
             }
 
           </>
@@ -181,13 +184,17 @@ const SideBar = () => {
 
           <div
             className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200"
-            onClick={() => setCreateSpace(true)}
+            onClick={() => setCreateSpaceModal(true)}
           >
             <Plus className="cursor-pointer text-gray-600 w-6 h-6 p-1 rounded-full bg-gray-400 " />
           </div>
 
           {
-            createSpace && <CreateSpace setCreateSpace={setCreateSpace} />
+            createSpaceModal &&
+            <CreateSpace
+              setCreateSpaceModal={setCreateSpaceModal}
+              setAllSpace={setAllSpace}
+            />
           }
 
         </div>
@@ -200,28 +207,21 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
         <div className="my-10">
-          <div className="flex space-x-3 px-2 items-center group">
-            <DotsDouble className="invisible group-hover:visible cursor-grab" />
-            <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
-              <Logo />{" "}
-              <p className=" text-[#7088a1] font-bold">Developer Space</p>
-            </div>
-          </div>
-
-          <div className="flex space-x-3 px-2 items-center group">
-            <DotsDouble className="invisible group-hover:visible cursor-grab" />
-            <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
-              <Logo /> <p className=" text-[#7088a1] font-bold">Space Clone</p>
-            </div>
-          </div>
-
-          <div className="flex space-x-3 px-2 items-center group">
-            <DotsDouble className="invisible group-hover:visible cursor-grab" />
-            <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
-              <LogoRed />{" "}
-              <p className=" text-[#7088a1] font-bold">Personal Space</p>
-            </div>
-          </div>
+          {
+            allSpace.map((space, i) =>
+              <div className="flex space-x-3 px-2 items-center group" key={i}>
+                <DotsDouble className="invisible group-hover:visible cursor-grab" />
+                <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
+                  {
+                    space.privacy.includes('private')
+                      ? <SpaceLogoLock className={`${space.color.replace('bg', 'text')}`} />
+                      : <SpaceLogo className={`${space.color.replace('bg', 'text')}`} />
+                  }
+                  <p className=" text-[#7088a1] font-bold">{space.name}</p>
+                </div>
+              </div>
+            )
+          }
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">

@@ -1,3 +1,4 @@
+export { default as SpaceLogoLock } from './svg/SpaceLogoLock';
 export { default as CloseMenuBtn } from './svg/CloseMenuBtn';
 export { default as Subscription } from './svg/Subscription';
 export { default as LinkingChain } from './svg/LinkingChain';
@@ -28,7 +29,6 @@ export { default as LogOut } from './svg/LogOut';
 export { default as Delete } from './svg/Delete';
 export { default as Smile } from './svg/Smile';
 export { default as Close } from './svg/Close';
-export { default as Logo } from './svg/Logo';
 export { default as Task } from './svg/Task';
 export { default as Plus } from './svg/Plus';
 export { default as Bell } from './svg/Bell';

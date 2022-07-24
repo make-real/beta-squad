@@ -10,11 +10,12 @@ const api = axios.create({ baseURL: 'https://space-api.makereal.click' });
 
 
 // with every url request send user identification at server side for authentication...
+// send user auth automatically every time
 api.interceptors.request.use(req => {
 
     // 1st ==> get user token from LocalStorage, that server send to client...
     const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
-
+console.log(serverSendToken)
     if (serverSendToken) {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
         // & we can see it by at browser Network Console
@@ -68,3 +69,10 @@ export const accountVerification = (userData) => api.post('/api/user-auth/accoun
 // GET Methods
 export const getUserProfileInfo = (userId) => useFetch(`/api/users/profile/${userId}`);
 export const getUserBySearch = (userQuery) => useFetch(`/api/users?search=${userQuery}`);
+
+// export const getUserInfo = (userID) => useFetch(`api/users/profile/${userID}`);
+
+
+
+// POST ==> Workspace create 
+export const workspaceCreation  = (name) => api.post('/api/workspaces', name);

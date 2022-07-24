@@ -3,14 +3,16 @@ import { userSignIn } from "../../hooks/useFetch";
 import { FcGoogle } from "react-icons/fc";
 import React, { useState } from "react";
 import images from '../../assets';
+import { useUserInfoContext } from "../../context/UserInfoContext";
 
 
 const Login = () => {
 
 
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({})
+  const { setLoginUserInfo } = useUserInfoContext();
   const [userInput, setUserInput] = useState({ email: '', password: '' });
+  const [errorInfo, setErrorInfo] = useState({ email: '', password: '' });
 
 
   // collect all user input data from UI 
@@ -26,7 +28,9 @@ const Login = () => {
 
     try {
       const { data } = await userSignIn(userInput);
-      setUserInfo(data)
+
+      // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
+      setLoginUserInfo(data.loggedUser);
 
       // store user JWT token at local storage for future reference
       localStorage.setItem('jwt', JSON.stringify(data.jwtToken))
@@ -35,7 +39,9 @@ const Login = () => {
       navigate('/projects');
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      setErrorInfo(pre => ({ ...pre, email: error.response.data.issue.email }));
+      setErrorInfo(pre => ({ ...pre, password: error.response.data.issue.password }));
     }
   }
 
@@ -99,8 +105,8 @@ const Login = () => {
           </div>
 
 
-          <form className="space-y-3 mt-5" onSubmit={handleSubmit}>
-            <div className="text-sm">
+          <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
+            <div className="text-sm relative">
               <label htmlFor="email" className="text-gray-700">
                 Email:
               </label>
@@ -109,12 +115,16 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="email@company.com"
-                className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.email && 'border-red-500'}`}
                 onChange={handleUserInput}
               />
+              {
+                errorInfo.email &&
+                <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.email}</span>
+              }
             </div>
 
-            <div className="text-sm">
+            <div className="text-sm relative">
               <label htmlFor="password" className="text-gray-700">
                 Password:
               </label>
@@ -123,17 +133,25 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.password && 'border-red-500'}`}
                 onChange={handleUserInput}
               />
+              {
+                errorInfo.password &&
+                <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.password}</span>
+              }
             </div>
 
-            <div className="text-center">
-              <button type="submit" className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg ">
-                Get started now
+            <div className="text-center pt-4">
+              <button
+                type="submit"
+                className={`py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg`}>
+                Sign in
               </button>
             </div>
+
           </form>
+
 
           <div className="pt-[80px] text-center">
             <span className="text-sm ">Companies who love HeySpace</span>

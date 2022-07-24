@@ -6,11 +6,11 @@
 ## Yarn | Project Dependencies...
 |No| Package Installs               | Usage for                                 |
 |--|--------------------------------|-------------------------------------------|
-| 1| yarn add `react-route-dom`     | declarative routing in react web app      |
-| 2| yarn add `react-icons`         | icon pack for interactive UI building     |
-| 3| yarn add `axios`               | GIF for chatting UI                       |
+| 1| yarn add `react-route-dom`     | Declarative routing in react web app      |
+| 2| yarn add `react-icons`         | Icon pack for interactive UI building     |
+| 3| yarn add `axios`               | Data fetching from backend                |
 | 4| yarn add `-D` `tailwindcss postcss autoprefixer` | `devDependency` of TailwindCSS for building UI  |
-| 5| yarn add `@tippyjs/react`          | tool tip for extra little info at UI  |
+| 5| yarn add `@tippyjs/react`          | Tool tip for extra little info at UI  |
 | 6| yarn add `@giphy/react-components` | GIF for chatting UI                   |
 
  
@@ -53,7 +53,6 @@
     │   │   │   │   ├───Folder.jsx
     │   │   │   │   ├───GIF.jsx
     │   │   │   │   ├───LinkingChain.jsx
-    │   │   │   │   ├───Logo.jsx
     │   │   │   │   ├───LogoRed.jsx
     │   │   │   │   ├───LogOut.jsx
     │   │   │   │   ├───Mobile.jsx
@@ -66,6 +65,7 @@
     │   │   │   │   ├───Settings.jsx
     │   │   │   │   ├───Smile.jsx
     │   │   │   │   ├───SMS.jsx
+    │   │   │   │   ├───SpaceLogoLock.jsx
     │   │   │   │   ├───SpaceLogo.jsx
     │   │   │   │   ├───Subscription.jsx
     │   │   │   │   ├───Tag.jsx
@@ -114,7 +114,7 @@
     │   │   │   ├───Layout.js
     │   │   │   └───UserSettingLayout.jsx
     │   │   │
-    │   │   ├───Login-Signup
+    │   │   ├───LoginRegistration
     │   │   │   ├───Login.jsx
     │   │   │   └───Register.jsx
     │   │   │

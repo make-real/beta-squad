@@ -27,8 +27,7 @@ const App = () => {
 
     return children;
   };
-
-  console.log('App .js');
+  
 
   return (
     <main className="">

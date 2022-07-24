@@ -1,12 +1,39 @@
-import { AiOutlineSetting } from "react-icons/ai";
-import React, { useState } from "react";
-import user from "../../assets/images/user.jpg";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { AiOutlineSetting } from "react-icons/ai";
 import { RiAttachment2 } from "react-icons/ri";
 import { ImSwitch } from "react-icons/im";
+import { useState } from "react";
+import user from "../../assets/images/user.jpg";
+import { useUserInfoContext } from "../../context/UserInfoContext";
+
 
 const Profile = () => {
+
   const [expandBox, setExpandBox] = useState(false);
+
+  const { loginUserInfo } = useUserInfoContext();
+
+  const [localUserInfo, setLocalUserInfo] = useState(loginUserInfo);
+  console.log(localUserInfo);
+
+  // useEffect(() => {
+
+
+  //   // const fetchData = async () => {
+
+  //   //   try {
+
+  //   //     const { data } = getUserProfileInfo()
+  //   //       setUserInfo(data);
+  //   //   } catch (error) {
+  //   //     console.log(error);
+  //   //   }
+  //   // }
+
+  //   // fetchData();
+
+  // }, [])
+
   return (
     <div className=" min-h-screen  w-[820px] p-5 space-y-4 h-screen ">
       <div className="text-[#7088A1] text-lg font-bold flex ">
@@ -23,25 +50,31 @@ const Profile = () => {
             </h6>
             <form className="w-[250px]  text-sm text-gray-600 space-y-3">
               <div>
-                <label For="name">Full name</label>
+                <label htmlFor="name">Full name</label>
                 <input
                   type="text"
+                  value={localUserInfo.fullName}
+                  onChange={e => setLocalUserInfo(pre => ({ ...pre, fullName: e.target.value }))}
                   className="w-full border p-1.5 rounded-md outline-none"
                 />
               </div>
 
               <div>
-                <label For="nickname">Nickname</label>
+                <label htmlFor="nickname">Nickname</label>
                 <input
                   type="text"
+                  value={localUserInfo.username}
+                  onChange={e => setLocalUserInfo(pre => ({ ...pre, username: e.target.value }))}
                   className="w-full border p-1.5 rounded-md outline-none"
                 />
               </div>
 
               <div>
-                <label For="email">Email</label>
+                <label htmlFor="email">Email</label>
                 <input
                   type="text"
+                  value={localUserInfo.email}
+                  onChange={e => setLocalUserInfo(pre => ({ ...pre, email: e.target.value }))}
                   className="w-full border p-1.5 rounded-md outline-none"
                 />
               </div>
@@ -55,7 +88,7 @@ const Profile = () => {
             </h6>
 
             <div className="w-32 h-32  mx-auto">
-              <img src={user} alt="user" className="rounded-full border" />
+              <img src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'} alt="user" className="rounded-full border" />
             </div>
 
             <div
