@@ -1,10 +1,9 @@
+import { useUserInfoContext } from "../../context/UserInfoContext";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { AiOutlineSetting } from "react-icons/ai";
 import { RiAttachment2 } from "react-icons/ri";
 import { ImSwitch } from "react-icons/im";
 import { useState } from "react";
-import user from "../../assets/images/user.jpg";
-import { useUserInfoContext } from "../../context/UserInfoContext";
 
 
 const Profile = () => {
