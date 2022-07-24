@@ -18,6 +18,12 @@
 [link]: https://react-icons.github.io/react-icons
 
 
+## Components Relationship, inside component tree...
+<p align="center"> 
+  <img src='./src/assets/ComponentsTree.svg' alt='ComponentTree'/>
+</p>
+
+
 ## Project Folder & File Structure 
 ```jsx
 
@@ -53,7 +59,6 @@
     │   │   │   │   ├───Folder.jsx
     │   │   │   │   ├───GIF.jsx
     │   │   │   │   ├───LinkingChain.jsx
-    │   │   │   │   ├───LogoRed.jsx
     │   │   │   │   ├───LogOut.jsx
     │   │   │   │   ├───Mobile.jsx
     │   │   │   │   ├───OpenMenuBtn.jsx
