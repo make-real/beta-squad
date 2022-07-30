@@ -40,8 +40,8 @@ const Login = () => {
 
     } catch (error) {
       // console.log(error);
-      setErrorInfo(pre => ({ ...pre, email: error.response.data.issue.email }));
-      setErrorInfo(pre => ({ ...pre, password: error.response.data.issue.password }));
+      setErrorInfo(pre => ({ ...pre, email: error.response.data?.issue?.email }));
+      setErrorInfo(pre => ({ ...pre, password: error.response.data?.issue?.password }));
     }
   }
 

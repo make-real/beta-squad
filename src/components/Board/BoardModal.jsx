@@ -206,10 +206,10 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
                     </div>
 
-
+{/* 
                     <div className='w-1/2 text-gray-400 px-4 py-3  text-center'>
                         Chatting area
-                    </div>
+                    </div> */}
 
                 </div>
 

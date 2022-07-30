@@ -15,11 +15,16 @@ api.interceptors.request.use(req => {
 
     // 1st ==> get user token from LocalStorage, that server send to client...
     const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
-console.log(serverSendToken)
+    // console.log(serverSendToken)
+
     if (serverSendToken) {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
         // & we can see it by at browser Network Console
         req.headers.authorization = `Bearer ${serverSendToken}`;
+    } else {
+        // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
+
+        console.log('No Token Found, Please Re-Connect Internet');
     }
 
     return req;
@@ -75,4 +80,4 @@ export const getUserBySearch = (userQuery) => useFetch(`/api/users?search=${user
 
 
 // POST ==> Workspace create 
-export const workspaceCreation  = (name) => api.post('/api/workspaces', name);
+export const workspaceCreation = (name) => api.post('/api/workspaces', name);

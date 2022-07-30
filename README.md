@@ -18,7 +18,7 @@
 [link]: https://react-icons.github.io/react-icons
 
 
-## Components Relationship, inside component tree...
+## Parent Child - Components Relationship - Inside Component Tree...
 <p align="center"> 
   <img src='./src/assets/ComponentsTree.svg' alt='ComponentTree'/>
 </p>
@@ -82,18 +82,20 @@
     │   │   ├───images
     │   │   │   ├───defaultList.png
     │   │   │   ├───haySpace.png
+    │   │   │   ├───loginPage.png
+    │   │   │   ├───logo.png
     │   │   │   ├───Mahbub.jpg
     │   │   │   ├───makeReal.png
+    │   │   │   ├───remoteCamp.png
+    │   │   │   ├───signIn1.png
+    │   │   │   ├───signIn2.png
+    │   │   │   ├───timeCamp.png
+    │   │   │   ├───userLogin.png
     │   │   │   └───user.jpg
     │   │   │
-    │   │   ├───index.js
-    │   │   ├───loginPage.png
-    │   │   ├───logo.png
-    │   │   ├───remoteCamp.png
-    │   │   ├───signIn1.png
-    │   │   ├───signIn2.png
-    │   │   ├───timeCamp.png
-    │   │   └───userLogin.png
+    │   │   ├───ComponentsTree.svg
+    │   │   │
+    │   │   └───index.js
     │   │
     │   ├───components
     │   │   ├───AddCard.jsx
