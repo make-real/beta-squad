@@ -6,8 +6,6 @@ import {
   DotsDouble,
   Eye,
   Folder,
-  Logo,
-  LogoRed,
   OpenMenuBtn,
   OverWatch,
   Plus,
@@ -19,14 +17,15 @@ import {
 } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
 import { useState } from "react";
-import UserSettings from "./UserSettingsDropDown";
-import NotificationSMS from "./NotificationSMS";
-import Tippy from "@tippyjs/react";
 import asserts from "../../assets";
+import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+
+import UserSettings from "./UserSettingsDropDown";
 import NotificationBell from './NotificationBell';
-import CreateSpace from "./CreateSpace";
+import NotificationSMS from "./NotificationSMS";
 import NewWorkspace from "./NewWorkspace";
+import CreateSpace from "./CreateSpace";
 
 
 
@@ -214,10 +213,11 @@ const SideBar = () => {
                 <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
                   {
                     space.privacy.includes('private')
-                      ? <SpaceLogoLock className={`${space.color.replace('bg', 'text')}`} />
-                      : <SpaceLogo className={`${space.color.replace('bg', 'text')}`} />
+                      ? <SpaceLogoLock className={`${space.color}` || 'text-[#57BEC7]'} />
+                      : <SpaceLogo className={`${space.color}` || 'text-[#57BEC7]'} />
                   }
                   <p className=" text-[#7088a1] font-bold">{space.name}</p>
+
                 </div>
               </div>
             )

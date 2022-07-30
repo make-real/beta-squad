@@ -17,15 +17,15 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
 
 
     const [boxColor] = useState([
-        'bg-blue-600',
-        'bg-sky-400',
-        'bg-yellow-400',
-        'bg-red-500',
-        'bg-pink-400',
-        'bg-green-500',
-        'bg-sky-300',
-        'bg-blue-800',
-        'bg-pink-600'
+        ['bg-blue-600', 'text-blue-600'],
+        ['bg-sky-400', 'text-sky-400'],
+        ['bg-yellow-400', 'text-yellow-400'],
+        ['bg-red-500', 'text-red-500'],
+        ['bg-pink-400', 'text-pink-400'],
+        ['bg-green-500', 'text-green-500'],
+        ['bg-sky-300', 'text-sky-300'],
+        ['bg-blue-800', 'text-blue-800'],
+        ['bg-pink-600', 'text-pink-600']
     ]);
 
     const handleSpaceCreation = (e) => {
@@ -88,9 +88,9 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
                                     colorBoxIndex === i
                                         ? (
                                             <div
-                                                key={box}
+                                                key={i}
                                                 onClick={() => { console.log('user click') }}
-                                                className={`${clickColorBox ? 'w-12 h-12' : 'w-7 h-7'} rounded-full cursor-pointer ${box}`}>
+                                                className={`${clickColorBox ? 'w-12 h-12' : 'w-7 h-7'} rounded-full cursor-pointer ${box[0]}`}>
                                                 <div className={`${clickColorBox ? 'grid' : 'hidden'} place-items-center w-full h-full text-white`}>
                                                     <RightOK />
                                                 </div>
@@ -101,10 +101,10 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
                                             <div
                                                 key={box}
                                                 onClick={() => {
-                                                    setClickColorBox(true); setColorBoxIndex(i); setThemeColor(box);
-                                                    setCreateNewSpace(pre => ({ ...pre, color: box }))
+                                                    setClickColorBox(true); setColorBoxIndex(i); setThemeColor(box[1]);
+                                                    setCreateNewSpace(pre => ({ ...pre, color: box[1] }))
                                                 }}
-                                                className={`w-7 h-7 rounded-full cursor-pointer ${box}`}>
+                                                className={`w-7 h-7 rounded-full cursor-pointer ${box[0]}`}>
                                             </div>
                                         )
                                 ))
