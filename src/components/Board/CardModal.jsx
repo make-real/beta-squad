@@ -1,9 +1,10 @@
-import BoardActionDropDown from './BoardActionDropDown';
+import CardSettingDropDown from './CardSettingDropDown';
 import { ArrowRight, Attachment, AtTheRate, CheckList, Close, Description, DotsSingle, EyeOpen, GIF, RightOK, Smile, Tag, UserPlus } from '../../assets/icons';
 import { useState } from 'react';
 
 
-const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
+// This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
+const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
     const [showTags, setShowTags] = useState(false);
@@ -90,7 +91,7 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
                         {
                             // Little Action Menu for Board Modal 
                             modalActionToggling &&
-                            <BoardActionDropDown
+                            <CardSettingDropDown
                                 noteDone={noteDone}
                                 setNoteDone={setNoteDone}
                                 setModalActionToggling={setModalActionToggling}
@@ -259,4 +260,4 @@ const BoardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
     )
 }
 
-export default BoardModal
+export default CardModal
