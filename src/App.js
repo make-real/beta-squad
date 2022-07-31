@@ -30,7 +30,7 @@ const App = () => {
   
 
   return (
-    <main className="">
+    <main>
       <Routes>
 
         <Route path="/" />

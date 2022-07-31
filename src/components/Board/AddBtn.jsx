@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import { Plus } from '../../assets/icons';
+import { useState } from 'react';
 
 
-const AddBtn = ({ onSubmit }) => {
+// This <Component /> called by 🟨🟨🟨 Board.jsx 🟨🟨🟨
+// This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
+const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
 
     const [userInput, setUserInput] = useState('');
     const [inputToggle, setInputToggle] = useState(false);
@@ -13,38 +15,42 @@ const AddBtn = ({ onSubmit }) => {
         // value send into caller/Parent component...
         if (onSubmit) onSubmit(userInput);
 
-        // Reset input field + Close User Input Window
-        setUserInput('')
-        setInputToggle(false)
-
+        // Reset input field + Close User Input Window after user input something
+        setUserInput('');
+        setInputToggle(false);
     }
 
+
     return (
-        <div className='w-72  rounded-lg bg-gray-200 cursor-pointer hover:bg-gray-300'>
+        <div className={`${btnText === 'card' ? 'w-full' : 'w-72'} rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200`}>
             {
                 inputToggle
                     ? (
                         <form className='w-full px-3 py-2' onSubmit={handleSubmit}>
-                            <input
+                            <textarea
+                                row='3'
                                 required
                                 value={userInput}
-                                placeholder='Add list name'
+                                placeholder={placeHolder}
                                 onChange={(e) => setUserInput(e.target.value)}
-                                className='mt-1.5 px-3 py-2 w-full rounded-lg outline-none border border-transparent focus:border-blue-400'
+                                className={`mt-1.5 px-3 py-2 w-full rounded-lg outline-none border border-transparent focus:border-blue-400 ${btnText === 'card' && 'border-t-4 border-teal-400'}`}
                             />
                             <div className='flex justify-end gap-2 mt-3 mb-2'>
-                                <button
-                                    onClick={() => setInputToggle(false)}
-                                    className='px-2 py-2 duration-200 hover:bg-gray-200 hover:text-red-500 rounded-xl select-none cursor-pointer'
+                                <div
+                                    onClick={() => { setInputToggle(false); setUserInput('') }}
+                                    className='px-2 py-2 duration-200 hover:bg-gray-300 hover:text-red-500 rounded-xl select-none cursor-pointer'
                                 >
                                     Cancel
-                                </button>
+                                </div>
+
+                                {/* 🚧🚧🚧 If 2 button tag's use here, interpreter show Form not connected warning in console 🚧🚧🚧 */}
 
                                 <button
+                                    primary="true"
                                     type="submit"
                                     className='px-3 py-1 duration-200 text-white bg-teal-500 hover:text-white rounded-xl'
                                 >
-                                    Add Card
+                                    Add {btnText}
                                 </button>
                             </div>
                         </form>
@@ -55,7 +61,7 @@ const AddBtn = ({ onSubmit }) => {
                             onClick={() => setInputToggle(true)}
                         >
                             <Plus className='text-gray-500' />
-                            <p className='text-gray-500 text-lg'>Add a list</p>
+                            <p className='text-gray-500 text-lg'>Add a {btnText}...</p>
                         </div>
                     )
             }
