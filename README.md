@@ -107,9 +107,16 @@
     │   │   ├───Timeline.jsx
     │   │   │
     │   │   ├───Board
+    │   │   │   ├───AddBtn.jsx
     │   │   │   ├───Board.jsx
-    │   │   │   ├───BoardActionDropDown.jsx
-    │   │   │   └───BoardModal.jsx
+    │   │   │   ├───BoardList.jsx
+    │   │   │   ├───BoardListSettingDropDown.jsx
+    │   │   │   ├───Card.jsx
+    │   │   │   ├───CardChip.jsx
+    │   │   │   ├───CardModal.jsx
+    │   │   │   ├───CardSettingDropDown.jsx
+    │   │   │   ├───ConfirmDialog.jsx
+    │   │   │   └───index.js
     │   │   │
     │   │   ├───Chat
     │   │   │   ├───Chat.jsx

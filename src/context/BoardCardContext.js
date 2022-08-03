@@ -13,7 +13,7 @@ export const BoardCardContext = ({ children }) => {
     const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
 
 
-    const removeBoard = bid => setBoardList(pre => pre.filter(({ id }) => id !== bid))
+    const removeList = bid => setBoardList(pre => pre.filter(({ id }) => id !== bid))
 
 
     const addCard = (name, bid) => {
@@ -112,7 +112,7 @@ export const BoardCardContext = ({ children }) => {
         <BoardCardItem.Provider value={{
             boardLists,
             addBoardList,
-            removeBoard,
+            removeList,
             addCard,
             updateCard,
             removeCard,

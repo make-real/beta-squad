@@ -20,6 +20,16 @@ const Register = () => {
     agreeTerm: false,
   })
 
+  // error info catch object...
+  const [errorInfo, setErrorInfo] = useState({
+    email: '',
+    password: '',
+    phone: '',
+  });
+
+
+  // console.log(errorInfo);
+
 
   // collect all user input data from UI 
   const handleUserInput = e => {
@@ -40,7 +50,11 @@ const Register = () => {
       localStorage.setItem('userId', JSON.stringify(data.userId));
 
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      // get error info...
+      setErrorInfo(pre => ({ ...pre, email: error.response.data?.issue?.email }));
+      setErrorInfo(pre => ({ ...pre, password: error.response.data?.issue?.password }));
+      setErrorInfo(pre => ({ ...pre, phone: error.response.data?.issue?.phone }));
     }
   }
 
@@ -59,7 +73,7 @@ const Register = () => {
       setTimeout(() => navigate('/'), 2000);
 
     } catch (error) {
-      console.log(error.response.data.issue?.message);
+      // console.log(error.response.data.issue?.message);
       setUserVerificationErrorStatus(error.response.data.issue?.message);
       setUserVerificationStatus('')
     }
@@ -176,7 +190,7 @@ const Register = () => {
                 </div>
               )
               : (
-                <form className="space-y-3 mt-5" onSubmit={handleSubmit}>
+                <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
                   <div className="text-sm">
                     <label htmlFor="name" className="text-gray-700">
                       Full Name :
@@ -192,7 +206,7 @@ const Register = () => {
                     />
                   </div>
 
-                  <div className="text-sm">
+                  <div className="text-sm relative">
                     <label htmlFor="email" className="text-gray-700">
                       Email:
                     </label>
@@ -204,9 +218,13 @@ const Register = () => {
                       className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
                       onChange={handleUserInput}
                     />
+                    {
+                      errorInfo.email &&
+                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.email}</span>
+                    }
                   </div>
 
-                  <div className="text-sm">
+                  <div className="text-sm relative">
                     <label htmlFor="password" className="text-gray-700">
                       Password:
                     </label>
@@ -214,24 +232,31 @@ const Register = () => {
                       required
                       type="password"
                       name="password"
-                      placeholder="Password"
+                      placeholder="Give Strong Password"
                       className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
                       onChange={handleUserInput}
                     />
+                    {
+                      errorInfo.password &&
+                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.password}</span>
+                    }
                   </div>
 
-                  <div className="text-sm">
+                  <div className="text-sm relative">
                     <label htmlFor="number" className="text-gray-700">
                       Phone number (optional):
                     </label>
                     <input
                       type="tel"
                       name="phone"
-                      placeholder="Phone number.."
+                      placeholder="+88 01717 000000"
                       className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
                       onChange={handleUserInput}
-
                     />
+                    {
+                      errorInfo.phone &&
+                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.phone}</span>
+                    }
                   </div>
 
                   <div className="text-sm">
@@ -282,6 +307,7 @@ const Register = () => {
 
         </div >
       </div >
+
     </section >
   );
 };

@@ -9,6 +9,7 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
     const [userInput, setUserInput] = useState('');
     const [inputToggle, setInputToggle] = useState(false);
 
+
     const handleSubmit = e => {
         e.preventDefault();
 
@@ -21,8 +22,15 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
     }
 
 
+    // handle keyBoard enter button press
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') handleSubmit(e);
+    }
+
+
+
     return (
-        <div className={`${btnText === 'card' ? 'w-full' : 'w-72'} rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200`}>
+        <div className={`${btnText === 'card' ? 'w-full rounded-b-lg' : 'w-72 rounded-lg'} bg-gray-100 cursor-pointer hover:bg-gray-200`}>
             {
                 inputToggle
                     ? (
@@ -30,9 +38,11 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
                             <textarea
                                 row='3'
                                 required
+                                autoFocus
                                 value={userInput}
                                 placeholder={placeHolder}
                                 onChange={(e) => setUserInput(e.target.value)}
+                                onKeyDown={handleEnter}
                                 className={`mt-1.5 px-3 py-2 w-full rounded-lg outline-none border border-transparent focus:border-blue-400 ${btnText === 'card' && 'border-t-4 border-teal-400'}`}
                             />
                             <div className='flex justify-end gap-2 mt-3 mb-2'>
@@ -60,7 +70,7 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
                             className='flex items-center space-x-3 px-3 py-2'
                             onClick={() => setInputToggle(true)}
                         >
-                            <Plus className='text-gray-500' />
+                            <Plus className={`${btnText === 'card' ? 'text-gray-200 bg-gray-400 p-1 rounded-full' : 'text-gray-500'}`} />
                             <p className='text-gray-500 text-lg'>Add a {btnText}...</p>
                         </div>
                     )

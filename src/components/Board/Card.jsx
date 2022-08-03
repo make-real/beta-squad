@@ -9,10 +9,9 @@ const Card = ({ card, listID }) => {
 
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [boardModal, setBoardModal] = useState(false);
     const [noteDone, setNoteDone] = useState(false);
-
+    const [visible, setVisible] = useState(false);
 
 
     const handleClick = e => {
@@ -53,21 +52,21 @@ const Card = ({ card, listID }) => {
 
             {/* For Tag's / Card Chip's */}
             <div className='p-1 text-white flex gap-2'>
-                <CardChip tag='Done' bgColor='bg-green-500'/>
-                <CardChip tag='Warning' bgColor='bg-orange-500'/>
-                <CardChip tag='Active' bgColor='bg-red-500'/>
+                <CardChip tag='Done' bgColor='bg-green-500' />
+                <CardChip tag='Warning' bgColor='bg-orange-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
             </div>
 
             {
-                // For 3 Dots, Menu toggling...
+                // ⚪⚪⚪ For 3 Dots, Menu toggling...
                 visible &&
                 <div onClick={(e) => { e.stopPropagation(); setCardSettingDropDownToggle(pre => !pre) }}>
-                    <DotsSingle className={`absolute top-4 right-1 cursor-pointer py-1.5 w-6 h-8 rounded-lg  hover:bg-gray-300 duration-200 text-gray-400 active:bg-gray-300 ${cardSettingDropDownToggle ? 'bg-gray-300' : ''}`} />
+                    <DotsSingle className={`absolute top-4 right-1 cursor-pointer py-1.5 w-6 h-8 rounded-lg hover:bg-gray-300 duration-200 text-gray-400 active:bg-gray-300 ${cardSettingDropDownToggle ? 'bg-gray-300' : ''}`} />
                 </div>
             }
 
             {
-                // Toggling menu display 
+                // ⚪⚪⚪ 3 dots click & toggling this menu display 
                 cardSettingDropDownToggle &&
                 <CardSettingDropDown
                     right={true}
@@ -75,7 +74,7 @@ const Card = ({ card, listID }) => {
                     listID={listID}
                     noteDone={noteDone}
                     setNoteDone={setNoteDone}
-                    setModalActionToggling={setCardSettingDropDownToggle}
+                    setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />
             }
 
@@ -86,14 +85,12 @@ const Card = ({ card, listID }) => {
             </div>
 
 
-
-
             {
                 // When Task Click >>> then Modal Open
                 boardModal &&
                 <CardModal
-                    setBoardModal={setBoardModal}
                     noteDone={noteDone}
+                    setBoardModal={setBoardModal}
                     setNoteDone={setNoteDone}
                 />
             }
