@@ -8,9 +8,10 @@ const Board = () => {
     const { margin } = useStyleContext();
     const { boardLists, addBoardList } = useBoardCardContext();
 
-
+    
     return (
-        <section className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} pt-[90px] duration-200 px-4 flex gap-3 items-start flex-wrap h-screen`}>
+        <section className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} 
+        pt-[85px] duration-200 px-4 flex gap-3 items-start flex-wrap h-[98vh]`}>
 
             {
                 // all board list print at UI by this loop...
