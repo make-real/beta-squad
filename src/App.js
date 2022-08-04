@@ -12,6 +12,7 @@ import {
   ManageWorkspace,
   UserSettingLayout,
   Preferences,
+  PageNotFound,
 } from "./components";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
@@ -27,7 +28,7 @@ const App = () => {
 
     return children;
   };
-  
+
 
   return (
     <main>
@@ -53,6 +54,8 @@ const App = () => {
           <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
         </Route>
+
+        <Route path="*" element={<PageNotFound />} />
 
       </Routes>
     </main>

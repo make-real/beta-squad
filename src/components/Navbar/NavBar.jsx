@@ -3,10 +3,10 @@ import { FiVideo, FiSearch, FiSettings } from "react-icons/fi";
 import { useStyleContext } from "../../context/StyleContext";
 import { navLinks } from "../../constant/data";
 import { IoIosClose } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { TbFilter } from "react-icons/tb";
 import { FaPlus } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Members from "./Members";
 import AddOn from "./AddOn";
 import Setting from "./Setting";
@@ -16,23 +16,27 @@ import asserts from "../../assets";
 const NavBar = () => {
 
   const { margin } = useStyleContext();
-  const [linkClick, setLinkClick] = useState(navLinks[0].path);
+  const [linkClick, setLinkClick] = useState(navLinks[0].name);
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");
+
 
   const handleSidePanel = (name) => {
     setSidePanel(true);
     setNavIcons(name);
   };
 
+  
   const activeLink = "mr-8 py-4 font-bold text-teal-400";
   const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
+
 
   return (
     <header
       className={`${margin ? "ml-[325px]" : "ml-[50px]"
         } fixed top-0 left-0 right-0 -z-0  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
+
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
         <div className="w-12 h-12">
@@ -49,20 +53,19 @@ const NavBar = () => {
 
           <nav>
             {navLinks.map(({ name, path }) => (
-              <NavLink
+              <Link
                 key={path}
                 to={path}
-                onClick={() => setLinkClick(path)}
-                className={({ isActive }) =>
-                  isActive ? activeLink : normalLink
-                }
+                onClick={() => setLinkClick(name)}
+                className={name === linkClick ? activeLink : normalLink}
               >
                 {name}
-              </NavLink>
+              </Link>
             ))}
           </nav>
         </div>
       </div>
+
 
       {/* 🟨🟨🟨 Right Side */}
       <div className="flex items-center justify-center text-gray-400">

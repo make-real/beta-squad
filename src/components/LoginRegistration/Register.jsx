@@ -69,8 +69,8 @@ const Register = () => {
       setUserVerificationStatus(data?.message);
       setUserVerificationErrorStatus('')
 
-      // after 2 second auto redirect user into login state...
-      setTimeout(() => navigate('/'), 2000);
+      // after 2 second auto redirect user into this route...
+      setTimeout(() => navigate('/projects'), 2000);
 
     } catch (error) {
       // console.log(error.response.data.issue?.message);

@@ -33,7 +33,7 @@ export const month = [
 export const navLinks = [
   {
     name: "Chat",
-    path: "/projects",
+    path: "/projects/",
   },
   {
     name: "Board",

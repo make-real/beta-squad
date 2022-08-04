@@ -23,6 +23,11 @@
   <img src='./src/assets/ComponentsTree.svg' alt='ComponentTree'/>
 </p>
 
+## Board Section Component Relationship + Data Flow
+<p align="center"> 
+  <img src='./src/assets/BoardListCard.svg' alt='ComponentTree'/>
+</p>
+
 
 ## Project Folder & File Structure 
 ```jsx
@@ -104,6 +109,7 @@
     │   │   ├───Calender.jsx
     │   │   ├───index.js
     │   │   ├───List.jsx
+    │   │   ├───PageNotFound.jsx
     │   │   ├───Timeline.jsx
     │   │   │
     │   │   ├───Board

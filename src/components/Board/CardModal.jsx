@@ -1,5 +1,5 @@
-import CardSettingDropDown from './CardSettingDropDown';
 import { ArrowRight, Attachment, AtTheRate, CheckList, Close, Description, DotsSingle, EyeOpen, GIF, RightOK, Smile, Tag, UserPlus } from '../../assets/icons';
+import { CardSettingDropDown } from '.';
 import { useState } from 'react';
 
 
@@ -18,8 +18,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
         'bg-blue-500',
         'bg-gray-500',
     ]
-
-
 
 
     const handleAddTags = (tag) => {
@@ -207,7 +205,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
                     </div>
 
-{/* 
+                    {/* 
                     <div className='w-1/2 text-gray-400 px-4 py-3  text-center'>
                         Chatting area
                     </div> */}
