@@ -19,3 +19,4 @@ export { default as AddCard } from "./AddCard";
 export { default as Chat } from "./Chat/Chat";
 export { default as GIF } from "./Chat/GIF";
 export { default as List } from "./List";
+export { default as PageNotFound } from "./PageNotFound";

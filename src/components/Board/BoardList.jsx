@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { DotsSingle } from '../../assets/icons';
 
 
-
 // This <Component /> called by 🟨🟨🟨 Board.jsx 🟨🟨🟨
 const BoardList = ({ boardList }) => {
 
@@ -28,7 +27,7 @@ const BoardList = ({ boardList }) => {
     return (
         // ${boardList.cards.length  >= 4  ? 'h-full' : 'h-fit'}
 
-        <div className={`h-full rounded-lg mb-2 mr-3 flex flex-col`}>
+        <div className={`w-[300px] h-full rounded-lg mb-2 mr-3 flex flex-col`}>
 
             {/* Board List Header + Its needful drop down settings */}
             <div className='bg-gray-100 relative flex items-center justify-between p-4 rounded-t-lg' ref={dropDownRef}>
@@ -49,7 +48,7 @@ const BoardList = ({ boardList }) => {
             </div>
 
 
-            <div className='bg-gray-100 px-3 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll'>
+            <div className='bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll'>
                 {
                     // all card's inside a list, are printed at UI by this loop...
                     boardList.cards.map(card => <Card key={card.id} card={card} listID={boardList.id} />)

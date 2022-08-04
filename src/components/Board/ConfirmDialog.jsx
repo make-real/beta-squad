@@ -6,7 +6,7 @@ import { Close } from '../../assets/icons'
 // This <Component /> called by 🟨🟨🟨 CardSettingDropDown.jsx 🟨🟨🟨
 const ConfirmDialog = ({ listID, cardID, setBoardListSettingDropDownToggle, setCardSettingDropDownToggle, setConfirmModalOpen }) => {
 
-  const { removeList, removeCard } = useBoardCardContext();
+  const { removeBoardList, removeCard } = useBoardCardContext();
 
 
   //🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
@@ -34,7 +34,7 @@ const ConfirmDialog = ({ listID, cardID, setBoardListSettingDropDownToggle, setC
     // if no card id is present, its mean list delete operation happening by user
     if (cardID === undefined) {
       // list delete
-      removeList(listID);
+      removeBoardList(listID);
       setBoardListSettingDropDownToggle(false);
 
     } else {

@@ -167,12 +167,12 @@ const SideBar = () => {
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <Task />
-          <p className="uppercase text-[#7088a1] font-bold">My Tasks</p>
+          <p className="uppercase text-[#7088a1] font-bold line-through">My Tasks</p>
         </div>
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <OverWatch />
-          <p className="uppercase text-[#7088a1] font-bold">OverWatch</p>
+          <p className="uppercase text-[#7088a1] font-bold line-through">OverWatch</p>
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">

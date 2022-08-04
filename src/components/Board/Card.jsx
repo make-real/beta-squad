@@ -1,7 +1,6 @@
 import { DotsSingle, Plus, RightOK, Smile, UserPlus } from '../../assets/icons';
-import { CardModal, CardSettingDropDown } from '.';
+import { CardModal, CardSettingDropDown, CardChip } from '.';
 import { useEffect, useRef, useState } from 'react'
-import CardChip from './CardChip';
 
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
