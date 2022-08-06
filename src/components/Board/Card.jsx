@@ -1,6 +1,7 @@
 import { DotsSingle, Plus, RightOK, Smile, UserPlus } from '../../assets/icons';
 import { CardModal, CardSettingDropDown, CardChip } from '.';
 import { useEffect, useRef, useState } from 'react'
+import { useBoardCardContext } from '../../context/BoardCardContext';
 
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
@@ -8,6 +9,7 @@ const Card = ({ card, listID }) => {
 
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
+    const { handleDragEnd, handleDragEnter } = useBoardCardContext();
     const [boardModal, setBoardModal] = useState(false);
     const [noteDone, setNoteDone] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -27,10 +29,13 @@ const Card = ({ card, listID }) => {
     return (
 
         <div
+            draggable
             ref={dropDownRef}
             onClick={() => setBoardModal(true)}
             onMouseEnter={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
+            onDragEnd={() => handleDragEnd(listID, card.id)}
+            onDragEnter={() => handleDragEnter(listID, card.id)}
             className='relative w-[275px] bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200'>
 
             {

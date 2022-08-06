@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { getAllWorkSpaces } from "../hooks/useFetch";
 
 const BoardCardItem = createContext();
 
@@ -9,6 +10,41 @@ export const BoardCardContext = ({ children }) => {
 
     const [boardLists, setBoardList] = useState(JSON.parse(localStorage.getItem('kanban')) || []);
     // console.log(boardList);
+
+
+    // const { data, loading, error } = getAllWorkSpaces();
+    // console.log('Data ==> ', data);
+
+    // useEffect(() => {
+
+    //     const fetchData = async () => {
+
+    //         const token = localStorage.getItem("jwt");
+    //         console.log(token);
+
+    //         try {
+    //             const url = 'https://space-api.makereal.click/api/workspaces'
+    //             const res = await fetch(url, {
+    //                 headers: {
+    //                     'authorization': `Bearer ${token}`,
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //             });
+    //             console.log(res);
+
+    //             const data = await res.json()
+    //             console.log(data);
+
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //     fetchData();
+
+    // }, []);
+
+
+
 
     const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
 

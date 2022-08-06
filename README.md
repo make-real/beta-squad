@@ -12,8 +12,12 @@
 | 4| yarn add `-D` `tailwindcss postcss autoprefixer` | `devDependency` of TailwindCSS for building UI  |
 | 5| yarn add `@tippyjs/react`          | Tool tip for extra little info at UI  |
 | 6| yarn add `@giphy/react-components` | GIF for chatting UI                   |
+| 7| yarn add `react-toastify`          | [Popup Toast Notification][tostDoc]   |
 
+
+[tostDoc]: https://fkhadra.github.io/react-toastify/introduction
  
+
 ### [React Icons | Web Link][link]
 [link]: https://react-icons.github.io/react-icons
 
@@ -26,6 +30,13 @@
 ## Board Section Component Relationship + Data Flow
 <p align="center"> 
   <img src='./src/assets/BoardListCard.svg' alt='ComponentTree'/>
+</p>
+
+</p>
+
+## Sidebar Section Component Relationship + Data Flow
+<p align="center"> 
+  <img src='./src/assets/SideBar.svg' alt='ComponentTree'/>
 </p>
 
 
@@ -145,8 +156,10 @@
     │   │   │   └───Setting.jsx
     │   │   │
     │   │   ├───Sidebar
-    │   │   │   ├───CreateSpace.jsx
-    │   │   │   ├───NewWorkspace.jsx
+    │   │   │   ├───index.js
+    │   │   │   ├───ModalSearchSpace.jsx
+    │   │   │   ├───ModalSpaceCreate.jsx
+    │   │   │   ├───ModalWorkSpaceCreate.jsx
     │   │   │   ├───NotificationBell.jsx
     │   │   │   ├───NotificationSMS.jsx
     │   │   │   ├───SideBar.jsx

@@ -65,12 +65,12 @@ const AddOn = () => {
                 Estimate task to be on top your work hours.
               </p>
 
-              <label class="switch relative inline-block w-[30px] h-[10px] 	my-3">
+              <label className="switch relative inline-block w-[30px] h-[10px] 	my-3">
                 <input
                   type="checkbox"
                   className="opacity-0 w-0 h-0 toggle-checkbox"
                 />
-                <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
+                <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
               </label>
             </div>
 
@@ -81,13 +81,13 @@ const AddOn = () => {
               </p>
 
               <div className=" flex">
-                <label class="switch relative inline-block w-[30px] h-[10px] 	my-3">
+                <label className="switch relative inline-block w-[30px] h-[10px] 	my-3">
                   <input
                     type="checkbox"
                     className="opacity-0 w-0 h-0 toggle-checkbox"
                     checked
                   />
-                  <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
+                  <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
                 </label>
 
                 <h6 className="my-auto pl-3 text-xs text-gray-400">
@@ -103,13 +103,13 @@ const AddOn = () => {
               </p>
 
               <div className=" flex">
-                <label class="switch relative inline-block w-[30px] h-[10px] 	my-3">
+                <label className="switch relative inline-block w-[30px] h-[10px] 	my-3">
                   <input
                     type="checkbox"
                     className="opacity-0 w-0 h-0 toggle-checkbox"
                     checked
                   />
-                  <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
+                  <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
                 </label>
               </div>
             </div>
@@ -124,13 +124,13 @@ const AddOn = () => {
               </p>
 
               <div className=" flex">
-                <label class="switch relative inline-block w-[30px] h-[10px] 	my-3">
+                <label className="switch relative inline-block w-[30px] h-[10px] 	my-3">
                   <input
                     type="checkbox"
                     className="opacity-0 w-0 h-0 toggle-checkbox"
                     checked
                   />
-                  <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
+                  <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] "></span>
                 </label>
               </div>
             </div>

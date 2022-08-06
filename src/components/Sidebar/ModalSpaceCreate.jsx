@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { RightOK } from '../../assets/icons';
-import Close from '../../assets/icons/svg/Close';
 import { useStyleContext } from '../../context/StyleContext';
+import { RightOK } from '../../assets/icons';
+import { Close } from '../../assets/icons';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 
-const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
+const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
 
     const { setThemeColor } = useStyleContext()
     const [clickColorBox, setClickColorBox] = useState(false);
@@ -28,36 +29,43 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
         ['bg-pink-600', 'text-pink-600']
     ]);
 
+
+    // add space function...
     const handleSpaceCreation = (e) => {
         e.preventDefault();
+
+        // add this space into user allSpace array... & send back to parent component...
         setAllSpace(pre => ([...pre, createNewSpace]));
-        setCreateNewSpace({
-            name: '',
-            color: '',
-            privacy: '',
-        });
+
+        // reset all input fields...
+        setCreateNewSpace({ name: '', color: '', privacy: '' });
+
+        // display a notification for user
+        toast.success(`${createNewSpace?.name} - space create successfully`, { autoClose: 3000 });
+
+        // close this modal
         setCreateSpaceModal(false);
     }
 
 
     return (
-        <section className='fixed top-0 right-0 left-0 bottom-0 bg-black/30 grid place-items-center'>
+        <section className='fixed top-0 right-0 left-0 bottom-0 bg-black/30 grid place-items-center z-50'>
 
             <form className='relative w-[670px] h-[520px] bg-white rounded-xl shadow-2xl p-3 ' onSubmit={handleSpaceCreation} >
 
                 {/* 🟨🟨🟨 UI For Close Button */}
                 <div
-                    className='absolute top-2 right-2 w-8 h-8 rounded-lg hover:bg-gray-200 grid place-items-center cursor-pointer duration-200'
+                    className='absolute top-2 right-2 w-8 h-8 rounded-lg group hover:bg-gray-200 grid place-items-center cursor-pointer duration-200'
                     onClick={() => setCreateSpaceModal(false)}
                 >
-                    <Close width="14" height="14" className='text-gray-400' />
+                    <Close width="14" height="14" className='text-gray-400 group-hover:text-fuchsia-600 duration-200' />
                 </div>
 
 
 
                 <div className='p-5 py-7 text-gray-600'>
 
-                    <p className='text-sm text-fuchsia-700 font-bold'>CREATE SPACE</p>
+                    <p className='text-sm text-fuchsia-600 font-bold'>CREATE SPACE</p>
                     <div className='my-3 text-sm'>
                         <label htmlFor="name">Space name</label>
                         <input
@@ -89,7 +97,6 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
                                         ? (
                                             <div
                                                 key={i}
-                                                onClick={() => { console.log('user click') }}
                                                 className={`${clickColorBox ? 'w-12 h-12' : 'w-7 h-7'} rounded-full cursor-pointer ${box[0]}`}>
                                                 <div className={`${clickColorBox ? 'grid' : 'hidden'} place-items-center w-full h-full text-white`}>
                                                     <RightOK />
@@ -173,7 +180,7 @@ const CreateSpace = ({ setCreateSpaceModal, setAllSpace }) => {
     )
 }
 
-export default CreateSpace
+export default ModalSpaceCreate
 
 
 
