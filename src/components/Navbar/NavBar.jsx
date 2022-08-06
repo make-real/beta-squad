@@ -6,7 +6,7 @@ import { IoIosClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { TbFilter } from "react-icons/tb";
 import { FaPlus } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Members from "./Members";
 import AddOn from "./AddOn";
 import Setting from "./Setting";

@@ -1,21 +1,25 @@
-import { useState } from 'react'
-import { Close } from '../../assets/icons'
 import { workspaceCreation } from '../../hooks/useFetch';
+import { Close } from '../../assets/icons';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 
-const NewWorkspace = ({ setNewWorkShop }) => {
+const ModalWorkSpaceCreate = ({ setNewWorkShop }) => {
 
     const [workSpaceName, setWorkSpaceName] = useState('');
 
 
+    // work space create...
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const { data } = await workspaceCreation(workSpaceName);
-            console.log(data);
-            console.log(workSpaceName);
+            // its a POST method | object send into backend/server
+            const { data } = await workspaceCreation({ name: workSpaceName });
 
+            // display a success notification for user...
+            toast.success(`${data?.workspace?.name} : work space create successfully`, { autoClose: 3000 });
             // {
             //     "workspace": {
             //         "_id": "62dd4e9e4cd94215aec5d19f",
@@ -24,11 +28,44 @@ const NewWorkspace = ({ setNewWorkShop }) => {
             //     }
             // }
         } catch (error) {
-            console.log(error);
+            // display error notification for developers...
+            console.log(error?.response?.data?.issue);
+
+            // display error notification for users...
+            toast.error(error?.response?.data?.issue?.name, { autoClose: 3000 });
+            toast.error(error?.response?.data?.issue?.message, { autoClose: 3000 });
         }
 
+        // after submit data... auto close this Modal UI...
         setNewWorkShop(false)
     }
+
+
+
+    
+    useEffect(() => {
+        // {
+        //     "workspaces": [
+        //         {
+        //             "_id": "62ec297e4cd94215aec5d45f",
+        //             "name": "We",
+        //             "createdAt": "2022-08-04T20:18:06.372Z",
+        //             "updatedAt": "2022-08-04T20:18:06.372Z",
+        //             "__v": 0
+        //         },
+        //         {
+        //             "_id": "62ec27664cd94215aec5d436",
+        //             "name": "Demo WS",
+        //             "createdAt": "2022-08-04T20:09:10.213Z",
+        //             "updatedAt": "2022-08-04T20:09:10.213Z",
+        //             "__v": 0
+        //         }
+        //     ]
+        // }
+
+    }, [workSpaceName])
+
+
 
     return (
         <section className='fixed top-0 left-0 right-0 bottom-0 z-30 bg-black/50 grid place-items-center'>
@@ -67,4 +104,4 @@ const NewWorkspace = ({ setNewWorkShop }) => {
     )
 }
 
-export default NewWorkspace
+export default ModalWorkSpaceCreate

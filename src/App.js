@@ -1,29 +1,19 @@
 import {
-  Board,
-  Calender,
-  Chat,
-  List,
-  Timeline,
-  Register,
-  Login,
-  Layout,
-  Profile,
-  DeveloperConsole,
-  ManageWorkspace,
-  UserSettingLayout,
-  Preferences,
-  PageNotFound,
+  Board, Calender, Chat, List, Timeline, Register, Login, Layout, Profile, DeveloperConsole, ManageWorkspace, UserSettingLayout, Preferences, PageNotFound,
 } from "./components";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => {
-
 
   const ProtectedRoute = ({ children }) => {
 
     const jwt = fetchUserToken() || false;
 
+    // if no token present... redirect user into login page...
     if (!jwt) return <Navigate to="/" />;
 
     return children;
@@ -58,6 +48,9 @@ const App = () => {
         <Route path="*" element={<PageNotFound />} />
 
       </Routes>
+
+      {/* theme="dark" */}
+      <ToastContainer  theme="colored" style={{ fontSize: "18px" }}  />
     </main>
   );
 };

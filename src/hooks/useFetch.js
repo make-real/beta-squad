@@ -10,17 +10,18 @@ const api = axios.create({ baseURL: 'https://space-api.makereal.click' });
 
 
 // with every url request send user identification at server side for authentication...
-// send user auth automatically every time
+// send user auth automatically every time with every request...
 api.interceptors.request.use(req => {
 
     // 1st ==> get user token from LocalStorage, that server send to client...
     const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
-    // console.log(serverSendToken)
+
 
     if (serverSendToken) {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
         // & we can see it by at browser Network Console
         req.headers.authorization = `Bearer ${serverSendToken}`;
+        // console.log(serverSendToken)
     } else {
         // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
 
@@ -39,6 +40,7 @@ const useFetch = (endPoint) => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false);
 
+    console.log('useFetch call...');
 
     useEffect(() => {
 
@@ -64,6 +66,12 @@ const useFetch = (endPoint) => {
 // export default useFetch;
 
 
+
+
+// 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
+// 🟨 REST api Section...🟨
+// 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
+
 // POST + DELETE ==> Methods For User Registration + Login + Logout 
 export const userSignUp = (userData) => api.post('/api/user-auth/sign-up', userData);
 export const userSignIn = (userData) => api.post('/api/user-auth/login', userData);
@@ -75,9 +83,11 @@ export const accountVerification = (userData) => api.post('/api/user-auth/accoun
 export const getUserProfileInfo = (userId) => useFetch(`/api/users/profile/${userId}`);
 export const getUserBySearch = (userQuery) => useFetch(`/api/users?search=${userQuery}`);
 
+export const getAllWorkSpaces = () => useFetch('/api/workspaces');
+
 // export const getUserInfo = (userID) => useFetch(`api/users/profile/${userID}`);
 
 
 
 // POST ==> Workspace create 
-export const workspaceCreation = (name) => api.post('/api/workspaces', name);
+export const workspaceCreation = (newWorkSpaceObj) => api.post('/api/workspaces', newWorkSpaceObj);

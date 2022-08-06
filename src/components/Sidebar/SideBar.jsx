@@ -1,123 +1,110 @@
 import {
-  ArrowLeft,
-  ArrowRight,
-  Bell,
-  CloseMenuBtn,
-  DotsDouble,
-  Eye,
-  Folder,
-  OpenMenuBtn,
-  OverWatch,
-  Plus,
-  Search,
-  SMS,
-  SpaceLogo,
-  SpaceLogoLock,
-  Task,
+  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder, OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
 } from "../../assets/icons";
+import { UserSettingsDropDown, NotificationBell, NotificationSMS, ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace } from ".";
 import { useStyleContext } from "../../context/StyleContext";
 import { useState } from "react";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
-import UserSettings from "./UserSettingsDropDown";
-import NotificationBell from './NotificationBell';
-import NotificationSMS from "./NotificationSMS";
-import NewWorkspace from "./NewWorkspace";
-import CreateSpace from "./CreateSpace";
-
-
 
 const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
-  const [userMenu, setUserMenu] = useState(false);
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
+  const [spaceSearchModal, setSpaceSearchModal] = useState(false);
   const [newWorkShop, setNewWorkShop] = useState(false);
+  // const [userMenu, setUserMenu] = useState(false);
+  const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
   const [allSpace, setAllSpace] = useState([]);
+
 
 
   return (
     <section className={`fixed top-0 bottom-0 bg-gray-800 flex z-20`}>
 
+
       {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
       <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2 z-20">
-        {margin ? (
-          <>
-            <Tippy
-              placement="right"
-              content="Make Reals"
-              className="bg-gray-600/70 text-[10px] w-40 "
-            >
-              <div className="relative ml-1.5 mr-1 p-1.5 bg-[#7088A1] rounded-[5px] cursor-pointer duration-200 hover:bg-[#4D6378] before:content-[''] before:absolute before:top-[50%] before:left-[-6px] before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md">
+        {
+          margin ? (
+            <>
+              <Tippy
+                placement="right"
+                content="Make Reals"
+                className="bg-gray-600/70 text-[10px] w-40 "
+              >
+                <div className="relative ml-1.5 mr-1 p-1.5 bg-[#7088A1] rounded-[5px] cursor-pointer duration-200 hover:bg-[#4D6378] before:content-[''] before:absolute before:top-[50%] before:left-[-6px] before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md">
+                  <img
+                    src={asserts.makeReal}
+                    alt="searchIcon"
+                    className="rounded-[4px]"
+                  />
+                </div>
+              </Tippy>
+
+              <div
+                onClick={() => setNewWorkShop(true)}
+                className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
+                <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
+              </div>
+
+            </>
+          ) : (
+            <>
+              <OpenMenuBtn
+                width={28}
+                height={28}
+                onClick={() => setMargin(true)}
+                className="cursor-pointer text-gray-400 hover:text-gray-50"
+              />
+
+              {/* sidebar mene open command, but css disturb me :( */}
+              {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
+
+              <div className="mt-3 mb-2">
                 <img
-                  src={asserts.makeReal}
-                  alt="searchIcon"
-                  className="rounded-[4px]"
+                  alt="userImage"
+                  // src={asserts.Mahbub}
+                  src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
+                  className="w-8 h-8 rounded-full cursor-pointer"
                 />
               </div>
-            </Tippy>
 
-            <div
-              onClick={() => setNewWorkShop(true)}
-              className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
-              <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
-            </div>
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <Search />
+              </div>
 
-            {
-              newWorkShop && <NewWorkspace setNewWorkShop={setNewWorkShop} />
-            }
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <Task />
+              </div>
 
-          </>
-        ) : (
-          <>
-            <OpenMenuBtn
-              width={28}
-              height={28}
-              onClick={() => setMargin(true)}
-              className="cursor-pointer text-gray-400 hover:text-gray-50"
-            />
-
-            <div className="mt-3 mb-2">
-              <img
-                alt="userImage"
-                src={asserts.Mahbub}
-                className="w-8 h-8 rounded-full cursor-pointer"
-              />
-            </div>
-
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <Search />
-            </div>
-
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <Task />
-            </div>
-
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <OverWatch />
-            </div>
-          </>
-        )}
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <OverWatch />
+              </div>
+            </>
+          )
+        }
       </div>
 
+
+
       {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
-      <div
-        className={`${!margin ? "hidden" : "w-[275px]"
-          } bg-[#202F3E] duration-200`}
-      >
+      <div className={`${!margin ? "hidden" : "w-[275px]"} bg-[#202F3E] duration-200`}>
+
         <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
           <div className="flex items-center space-x-4">
             <div
               className="mt-3 mb-2"
-              onClick={() => { setUserMenu((pre) => !pre); setUserNotificationBell(false); setUserNotificationSMS(false) }}
+              onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: false })); setUserNotificationBell(false); setUserNotificationSMS(false) }}
             >
               <img
                 alt="userImage"
-                src={asserts.Mahbub}
+                // src={asserts.Mahbub}
+                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                 className="w-6 h-6 rounded-full cursor-pointer"
               />
             </div>
@@ -176,8 +163,12 @@ const SideBar = () => {
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">
-          <div className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full ">
-            <p className="text-[#7088a1] font-bold w-full">YOUR SPACES</p>{" "}
+
+          <div
+            className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
+            onClick={() => setSpaceSearchModal(true)}
+          >
+            <p className="text-[#7088a1] font-bold w-full">YOUR SPACES</p>
             <Search />
           </div>
 
@@ -188,19 +179,11 @@ const SideBar = () => {
             <Plus className="cursor-pointer text-gray-600 w-6 h-6 p-1 rounded-full bg-gray-400 " />
           </div>
 
-          {
-            createSpaceModal &&
-            <CreateSpace
-              setCreateSpaceModal={setCreateSpaceModal}
-              setAllSpace={setAllSpace}
-            />
-          }
-
         </div>
 
         {/* 🟨🟨🟨 Folder Creation 🟨🟨🟨 */}
         <div className="hover:bg-[#344453] duration-200 flex items-center p-2 cursor-pointer rounded-lg mr-2 ml-6 w-fit">
-          <Folder className="text-[#3f5266] text-sm" />{" "}
+          <Folder className="text-[#3f5266] text-sm" />
           <p className="text-[#3f5266] font-bold ml-2 text-sm">Create Folder</p>
         </div>
 
@@ -239,7 +222,8 @@ const SideBar = () => {
           <div className="flex items-center justify-between p-2.5 mr-2 ml-2 hover:bg-[#344453] cursor-pointer rounded-lg group">
             <div className="flex items-center space-x-4">
               <img
-                src={asserts.Mahbub}
+                // src={asserts.Mahbub}
+                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
@@ -263,7 +247,7 @@ const SideBar = () => {
           <div className="flex items-center justify-between p-2.5 mr-2 ml-2 hover:bg-[#344453] cursor-pointer rounded-lg group">
             <div className="flex items-center space-x-4">
               <img
-                src={asserts.user}
+                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
@@ -272,14 +256,32 @@ const SideBar = () => {
             <Eye className="invisible group-hover:visible" />
           </div>
         </div>
+
       </div>
 
+
       {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
-      <UserSettings userMenu={userMenu} />
+      <UserSettingsDropDown userMenu={userMenu} />
 
       <NotificationSMS userNotificationSMS={userNotificationSMS} />
 
       <NotificationBell userNotificationBell={userNotificationBell} />
+
+      {
+        // 🟨🟨🟨 Create New WorkSpace Modal Open / Popup 🟨🟨🟨
+        newWorkShop && <ModalWorkSpaceCreate setNewWorkShop={setNewWorkShop} />
+      }
+
+      {
+        // 🟨🟨🟨 Space Searching Modal Open / Popup 🟨🟨🟨
+        spaceSearchModal && <ModalSearchSpace setSpaceSearchModal={setSpaceSearchModal} setAllSpace={setAllSpace} />
+      }
+
+      {
+        // 🟨🟨🟨 Create Space Modal Open / Popup 🟨🟨🟨
+        createSpaceModal && <ModalSpaceCreate setCreateSpaceModal={setCreateSpaceModal} setAllSpace={setAllSpace} />
+      }
+
     </section >
   );
 };
