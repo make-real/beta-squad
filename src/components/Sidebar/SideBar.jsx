@@ -71,7 +71,7 @@ const SideBar = () => {
         });
         const {spaces} = await res.json()
         setAllSpace(spaces);
-        // console.log(spaces);
+        console.log(spaces);
       } catch (error) {
         console.log(error);
       }
@@ -96,7 +96,9 @@ const SideBar = () => {
     // call this function...
     getSpaceData();
 
-  }, []);
+    // when id workSpace ID change, 
+    // re-fetch all space's under this specific workSpace ID...
+  }, [selectedWorkSpace._id]);
 
 
 
