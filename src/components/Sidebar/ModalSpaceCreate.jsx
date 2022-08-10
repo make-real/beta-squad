@@ -6,10 +6,13 @@ import { RightOK } from '../../assets/icons';
 import { useEffect, useState } from 'react';
 import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addNewSpace } from '../../store/slice/space';
 
 
 const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
 
+    const dispatch = useDispatch();
     const { selectedWorkSpace } = useWorkSpaceContext();
     const { setThemeColor } = useStyleContext();
     const [clickColorBox, setClickColorBox] = useState([]);
@@ -43,7 +46,9 @@ const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
             toast.success(`${data?.space?.name} - space create successfully`, { autoClose: 3000 });
 
             // add this space into user allSpace [array]... & send back to parent component...
-            setAllSpace(pre => ([...pre, data?.space]));
+            // setAllSpace(pre => ([...pre, data?.space]));
+
+            dispatch(addNewSpace(data?.space))
 
         } catch (error) {
             // error for developer for deBugging...

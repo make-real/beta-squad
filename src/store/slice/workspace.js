@@ -10,11 +10,14 @@ export const workspaceSlice = createSlice({
   initialState,
   reducers: {
     addWorkSpace: (state, { payload }) => {
-      return state.workspaces.push(payload);
+      state.workspaces = payload;
+    },
+    setSelectedWorkSpaceId: (state, { payload }) => {
+      state.selectedWorkspace = payload;
     },
   },
 });
 
-export const { addWorkSpace } = workspaceSlice.actions;
+export const { addWorkSpace, setSelectedWorkSpaceId } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

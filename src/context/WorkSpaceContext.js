@@ -6,7 +6,7 @@ export const WorkSpaceContext = ({ children }) => {
 
     const [selectedWorkSpace, setSelectedWorkSpace] = useState({});
 
-    console.log(selectedWorkSpace);
+    // console.log(selectedWorkSpace);
 
     return (
         <WorkSpace.Provider value={

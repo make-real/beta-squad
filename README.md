@@ -13,6 +13,9 @@
 | 5| yarn add `@tippyjs/react`          | Tool tip for extra little info at UI  |
 | 6| yarn add `@giphy/react-components` | GIF for chatting UI                   |
 | 7| yarn add `react-toastify`          | [Popup Toast Notification][tostDoc]   |
+| 8| yarn add `react-redux`             | globally data/state management        |
+| 9| yarn add `@reduxjs-toolkit`        | globally data/state management        |
+
 
 
 [tostDoc]: https://fkhadra.github.io/react-toastify/introduction
