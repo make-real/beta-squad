@@ -21,7 +21,8 @@ api.interceptors.request.use(req => {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
         // & we can see it by at browser Network Console
         req.headers.authorization = `Bearer ${serverSendToken}`;
-        // console.log(serverSendToken)
+        console.log(serverSendToken)
+
     } else {
         // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
 
@@ -40,7 +41,6 @@ const useFetch = (endPoint) => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false);
 
-    console.log('useFetch call...');
 
     useEffect(() => {
 
@@ -63,7 +63,27 @@ const useFetch = (endPoint) => {
     return { data, loading, error };
 }
 
-// export default useFetch;
+
+// const useFetchObject = async (endPoint) => {
+
+//     const [data, setData] = useState({});
+//     const [loading, setLoading] = useState(true)
+//     const [error, setError] = useState(false);
+
+//     console.log('useFetch call...');
+
+//     try {
+//         setLoading(true);
+//         const { data: { result } } = await api.get(endPoint);
+//         setData(result);
+//         setLoading(false);
+//     } catch (error) {
+//         setError(error);
+//     }
+
+//     return { data, loading, error };
+// }
+
 
 
 
@@ -83,7 +103,6 @@ export const accountVerification = (userData) => api.post('/api/user-auth/accoun
 export const getUserProfileInfo = (userId) => useFetch(`/api/users/profile/${userId}`);
 export const getUserBySearch = (userQuery) => useFetch(`/api/users?search=${userQuery}`);
 
-export const getAllWorkSpaces = () => useFetch('/api/workspaces');
 
 // export const getUserInfo = (userID) => useFetch(`api/users/profile/${userID}`);
 
@@ -91,3 +110,10 @@ export const getAllWorkSpaces = () => useFetch('/api/workspaces');
 
 // POST ==> Workspace create 
 export const workspaceCreation = (newWorkSpaceObj) => api.post('/api/workspaces', newWorkSpaceObj);
+
+// this method don't work... (DeBug it future...)
+// export const getAllWorkSpaces = () => useFetchObject('/api/workspaces');
+
+
+// POST ==> space create --- under Workspace reference ID
+export const spaceCreation = (newSpaceObj) => api.post('/api/spaces', newSpaceObj);
