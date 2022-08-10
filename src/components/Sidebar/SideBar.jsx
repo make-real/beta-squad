@@ -2,24 +2,101 @@ import {
   ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder, OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
 } from "../../assets/icons";
 import { UserSettingsDropDown, NotificationBell, NotificationSMS, ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace } from ".";
+import { useWorkSpaceContext } from "../../context/WorkSpaceContext";
 import { useStyleContext } from "../../context/StyleContext";
-import { useState } from "react";
+import { getAllWorkSpaces } from "../../hooks/useFetch";
+import { useEffect, useState } from "react";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 
+
 const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
+  const { selectedWorkSpace, setSelectedWorkSpace } = useWorkSpaceContext();
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
-  const [newWorkShop, setNewWorkShop] = useState(false);
-  // const [userMenu, setUserMenu] = useState(false);
+  const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
   const [allSpace, setAllSpace] = useState([]);
+
+  // console.log(allSpace);
+
+  // const { data, loading, error } = getAllWorkSpaces();
+
+  const [data, setData] = useState([]);
+
+  console.log(allSpace)
+  
+  // 🟨🟨🟨 GET request for Work-Spaces data... 🟨🟨🟨
+  const getWorkSpaceData = async () => {
+
+    // 1st ==> get user token from LocalStorage, that server send to client...
+    const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
+
+    if (serverSendToken) {
+
+      try {
+        const res = await fetch('https://space-api.makereal.click/api/workspaces', {
+          headers: { 'Authorization': `Bearer ${serverSendToken}` }
+        });
+        const data = await res.json()
+        setData(data.workspaces);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('No Token Found, Please Re-Connect Internet');
+    }
+  }
+
+
+  // 🟨🟨🟨 GET request for all Spaces data... 🟨🟨🟨
+  const getSpaceData = async () => {
+
+    // 1st ==> get user token from LocalStorage, that server send to client...
+    const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
+
+    if (serverSendToken) {
+
+      const url = `https://space-api.makereal.click/api/spaces?workspaceId=${selectedWorkSpace._id}`;
+      console.log(url)
+      try {
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${serverSendToken}` }
+        });
+        const {spaces} = await res.json()
+        setAllSpace(spaces);
+        // console.log(spaces);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('No Token Found, Please Re-Connect Internet');
+    }
+  }
+
+
+  // re-render for workSpace
+  useEffect(() => {
+
+    // call this function...
+    getWorkSpaceData();
+
+  }, []);
+
+
+  // re-render for space's under 
+  useEffect(() => {
+
+    // call this function...
+    getSpaceData();
+
+  }, []);
 
 
 
@@ -32,22 +109,42 @@ const SideBar = () => {
         {
           margin ? (
             <>
-              <Tippy
-                placement="right"
-                content="Make Reals"
-                className="bg-gray-600/70 text-[10px] w-40 "
-              >
-                <div className="relative ml-1.5 mr-1 p-1.5 bg-[#7088A1] rounded-[5px] cursor-pointer duration-200 hover:bg-[#4D6378] before:content-[''] before:absolute before:top-[50%] before:left-[-6px] before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md">
-                  <img
-                    src={asserts.makeReal}
-                    alt="searchIcon"
-                    className="rounded-[4px]"
-                  />
-                </div>
-              </Tippy>
+              <div className="space-y-1">
+                {
+                  // 🟨🟨🟨 all work-Space loop here...
+                  data.map(workSpace => (
+                    <Tippy
+                      key={workSpace?._id}
+                      placement="right"
+                      content={workSpace?.name}
+                      className="bg-gray-600/70 text-[10px] w-40"
+                    >
+                      {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
+                      <div className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
+                      ${selectedWorkSpace.name === workSpace?.name ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
+                        onClick={() => setSelectedWorkSpace(workSpace)}
+                      >
+                        {/* <img
+                          src={asserts.makeReal}
+                          alt="searchIcon"
+                          className="rounded-[4px]"
+                        /> */}
+                        <div
+                          // onClick={() => setNewWorkShop(true)}
+                          className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold">
+                          {workSpace.name.charAt(0)}
+                        </div>
 
+                      </div>
+                    </Tippy>
+                  ))
+                }
+              </div>
+
+
+              {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
               <div
-                onClick={() => setNewWorkShop(true)}
+                onClick={() => setNewWorkSpace(true)}
                 className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
                 <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
               </div>
@@ -68,7 +165,6 @@ const SideBar = () => {
               <div className="mt-3 mb-2">
                 <img
                   alt="userImage"
-                  // src={asserts.Mahbub}
                   src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                   className="w-8 h-8 rounded-full cursor-pointer"
                 />
@@ -103,7 +199,6 @@ const SideBar = () => {
             >
               <img
                 alt="userImage"
-                // src={asserts.Mahbub}
                 src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                 className="w-6 h-6 rounded-full cursor-pointer"
               />
@@ -143,7 +238,7 @@ const SideBar = () => {
 
         <div className="flex items-center w-full m-3 space-x-4">
           <div className="w-[60%] hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 mt-[2px] cursor-pointer rounded-lg mr-2 ">
-            <Search /> <p className="text-[#7088a1] font-bold">Search...</p>
+            <Search /> <p className="text-sideBarTextColor font-bold">Search...</p>
           </div>
 
           <div className="w-[20%] flex justify-between">
@@ -154,29 +249,30 @@ const SideBar = () => {
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <Task />
-          <p className="uppercase text-[#7088a1] font-bold line-through">My Tasks</p>
+          <p className="uppercase text-sideBarTextColor font-bold line-through">My Tasks</p>
         </div>
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <OverWatch />
-          <p className="uppercase text-[#7088a1] font-bold line-through">OverWatch</p>
+          <p className="uppercase text-sideBarTextColor font-bold line-through">OverWatch</p>
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">
 
           <div
+            // 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎
             className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
             onClick={() => setSpaceSearchModal(true)}
           >
-            <p className="text-[#7088a1] font-bold w-full">YOUR SPACES</p>
+            <p className="text-sideBarTextColor font-bold w-full">YOUR SPACES</p>
             <Search />
           </div>
 
           <div
-            className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200"
+            className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200 active:bg-slate-900"
             onClick={() => setCreateSpaceModal(true)}
           >
-            <Plus className="cursor-pointer text-gray-600 w-6 h-6 p-1 rounded-full bg-gray-400 " />
+            <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor" />
           </div>
 
         </div>
@@ -190,16 +286,16 @@ const SideBar = () => {
         {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
         <div className="my-10">
           {
-            allSpace.map((space, i) =>
+            allSpace?.map((space, i) =>
               <div className="flex space-x-3 px-2 items-center group" key={i}>
                 <DotsDouble className="invisible group-hover:visible cursor-grab" />
-                <div className="flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
+                <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
                   {
                     space.privacy.includes('private')
-                      ? <SpaceLogoLock className={`${space.color}` || 'text-[#57BEC7]'} />
-                      : <SpaceLogo className={`${space.color}` || 'text-[#57BEC7]'} />
+                      ? <SpaceLogoLock color={space.color || '#57BEC7'} />
+                      : <SpaceLogo color={space.color || '#57BEC7'} />
                   }
-                  <p className=" text-[#7088a1] font-bold">{space.name}</p>
+                  <p className=" text-sideBarTextColor font-bold">{space.name}</p>
 
                 </div>
               </div>
@@ -209,11 +305,11 @@ const SideBar = () => {
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">
           <div className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full ">
-            <p className="text-[#7088a1] font-bold w-full">CHATS</p> <Search />
+            <p className="text-sideBarTextColor font-bold w-full">CHATS</p> <Search />
           </div>
 
           <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200">
-            <Plus className="cursor-pointer text-gray-600 w-6 h-6 p-1 rounded-full bg-gray-400 " />
+            <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor active:bg-slate-900" />
           </div>
         </div>
 
@@ -222,12 +318,11 @@ const SideBar = () => {
           <div className="flex items-center justify-between p-2.5 mr-2 ml-2 hover:bg-[#344453] cursor-pointer rounded-lg group">
             <div className="flex items-center space-x-4">
               <img
-                // src={asserts.Mahbub}
                 src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
-              <p className="capitalize text-[#7088a1] font-bold">Mahbub</p>
+              <p className="capitalize text-sideBarTextColor font-bold">Mahbub</p>
             </div>
             <Eye className="invisible group-hover:visible" />
           </div>
@@ -239,7 +334,7 @@ const SideBar = () => {
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
-              <p className="capitalize text-[#7088a1] font-bold">Hey Bot</p>
+              <p className="capitalize text-sideBarTextColor font-bold">Hey Bot</p>
             </div>
             <Eye className="invisible group-hover:visible" />
           </div>
@@ -251,7 +346,7 @@ const SideBar = () => {
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
-              <p className="capitalize text-[#7088a1] font-bold">Mitu</p>
+              <p className="capitalize text-sideBarTextColor font-bold">Mitu</p>
             </div>
             <Eye className="invisible group-hover:visible" />
           </div>
@@ -268,18 +363,28 @@ const SideBar = () => {
       <NotificationBell userNotificationBell={userNotificationBell} />
 
       {
-        // 🟨🟨🟨 Create New WorkSpace Modal Open / Popup 🟨🟨🟨
-        newWorkShop && <ModalWorkSpaceCreate setNewWorkShop={setNewWorkShop} />
+        // 🟨🟨🟨 ➕➕➕ Create New WorkSpace Modal Open / Popup 🟨🟨🟨
+        newWorkSpace && <ModalWorkSpaceCreate setNewWorkSpace={setNewWorkSpace} />
       }
 
       {
-        // 🟨🟨🟨 Space Searching Modal Open / Popup 🟨🟨🟨
-        spaceSearchModal && <ModalSearchSpace setSpaceSearchModal={setSpaceSearchModal} setAllSpace={setAllSpace} />
+        // 🟨🟨🟨 🔎🔎🔎 Space Searching Modal Open / Popup 🟨🟨🟨
+        spaceSearchModal &&
+        <ModalSearchSpace
+          allSpace={allSpace}
+          setSpaceSearchModal={setSpaceSearchModal}
+          setCreateSpaceModal={setCreateSpaceModal}
+
+        />
       }
 
       {
-        // 🟨🟨🟨 Create Space Modal Open / Popup 🟨🟨🟨
-        createSpaceModal && <ModalSpaceCreate setCreateSpaceModal={setCreateSpaceModal} setAllSpace={setAllSpace} />
+        // 🟨🟨🟨 ➕➕➕ Create Space Modal Open / Popup 🟨🟨🟨
+        createSpaceModal &&
+        <ModalSpaceCreate
+          setAllSpace={setAllSpace}
+          setCreateSpaceModal={setCreateSpaceModal}
+        />
       }
 
     </section >

@@ -5,6 +5,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .calenderSection {
+    @apply p-1.5 px-2 cursor-pointer hover:bg-gray-100 hover:text-teal-500 duration-200 rounded-lg font-bold;
+  }
+
+  .arrowSymbol {
+    @apply w-7 h-8 hover:bg-gray-100 hover:text-teal-500 duration-300 cursor-pointer flex items-center justify-center rounded-md;
+  }
+
+  .userSettings {
+    @apply flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 text-sm;
+  }
+
+  .boardActionDropDown {
+    @apply flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1;
+  }
+
+  .radioButton{
+    @apply relative appearance-none w-5 h-5 rounded-full cursor-pointer bg-white border-2 border-themeColor before:absolute before:w-3 before:h-3 before:content-[''] before:bg-white before:left-[50%] before:top-[50%] before:translate-y-[-50%] before:translate-x-[-50%] before:rounded-full checked:before:bg-themeColor/50
+  }
+}
+
 body {
   font-family: "Varela Round", sans-serif;
 }
@@ -28,23 +50,6 @@ body {
   background-color: #f8f8f8;
 }
 
-@layer utilities {
-  .calenderSection {
-    @apply p-1.5 px-2 cursor-pointer hover:bg-gray-100 hover:text-teal-500 duration-200 rounded-lg font-bold;
-  }
-
-  .arrowSymbol {
-    @apply w-7 h-8 hover:bg-gray-100 hover:text-teal-500 duration-300 cursor-pointer flex items-center justify-center rounded-md;
-  }
-
-  .userSettings {
-    @apply flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 text-sm;
-  }
-
-  .boardActionDropDown {
-    @apply flex items-center gap-3 p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE] mb-1;
-  }
-}
 
 /* =====chat ======= */
 

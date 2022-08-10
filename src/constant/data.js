@@ -1,3 +1,15 @@
+export const boxHexColorCodes = [
+  '#2563eb',
+  '#38bdf8',
+  '#facc15',
+  '#ef4444',
+  '#f472b6',
+  '#4ade80',
+  '#7dd3fc',
+  '#1e40af',
+  '#db2777',
+];
+
 export const oneDayTimes = [
   "12:00 AM",
   "1:00 AM",

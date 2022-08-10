@@ -1,6 +1,6 @@
 import { ArrowRight, Attachment, AtTheRate, CheckList, Close, Description, DotsSingle, EyeOpen, GIF, RightOK, Smile, Tag, UserPlus } from '../../assets/icons';
 import { CardSettingDropDown } from '.';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
@@ -18,6 +18,17 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
         'bg-blue-500',
         'bg-gray-500',
     ]
+
+
+    // user esc key press Event Listener for closing modal... 
+    useEffect(() => {
+        const handleEscapeKeyPress = e => {
+            if (e.code === 'Escape') setBoardModal(false);
+        }
+
+        document.addEventListener('keydown', handleEscapeKeyPress);
+        return () => document.removeEventListener('keydown', handleEscapeKeyPress);
+    }, [setBoardModal]);
 
 
     const handleAddTags = (tag) => {
