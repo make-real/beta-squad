@@ -4,6 +4,7 @@ const net = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
 });
 
+
 net.interceptors.request.use(
   function (config) {
     const token = JSON.parse(localStorage.getItem('jwt'))
@@ -24,6 +25,7 @@ net.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 
 net.interceptors.response.use(
   (response) => {

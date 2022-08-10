@@ -6,18 +6,20 @@ import { RightOK } from '../../assets/icons';
 import { useEffect, useState } from 'react';
 import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addNewSpace } from '../../store/slice/space';
 
 
 const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
 
     const dispatch = useDispatch();
-    const { selectedWorkSpace } = useWorkSpaceContext();
+    const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
+
     const { setThemeColor } = useStyleContext();
+
     const [clickColorBox, setClickColorBox] = useState([]);
     const [createNewSpace, setCreateNewSpace] = useState({
-        workspaceId: selectedWorkSpace._id,
+        workspaceId: userSelectedWorkSpaceId,
         name: '',
         color: '',
         privacy: '',

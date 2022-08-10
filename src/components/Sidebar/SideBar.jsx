@@ -56,7 +56,7 @@ const SideBar = () => {
         dispatch(addWorkSpace(data.workspaces));
         dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
 
-        // console.log(data.workspaces[0]?._id)
+        console.log(data.workspaces)
 
       } catch (error) {
         console.log(error);
@@ -69,18 +69,17 @@ const SideBar = () => {
   }, []);
 
 
-  // re-render for space's under 
+  // re-render for space's under specific workSpace
   useEffect(() => {
 
-    // 🟨🟨🟨 GET request for all Spaces data... 🟨🟨🟨
+    // GET request for all Spaces data...
     const getSpaceData = async () => {
 
       const { data } = await axios.get(`/spaces`, { params: { workspaceId: userSelectedWorkSpaceId } });
 
       dispatch(addSpace(data.spaces));
-      dispatch(setSelectedSpaceId(data.spaces[0]?._id));
 
-      console.log('space ==> ', data.spaces[0]?._id);
+      dispatch(setSelectedSpaceId(data.spaces[0]?._id));
     }
 
 
