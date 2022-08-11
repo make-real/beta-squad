@@ -14,7 +14,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
         <div
             onClick={e => { e.stopPropagation(); setCardSettingDropDownToggle(false) }}
             className={`w-[210px] absolute top-[65px] 
-            ${right ? 'right-[-90px]' : 'right-[30px]'} bg-white p-2 rounded-lg shadow-xl z-50 
+            ${right ? 'right-[-10px]' : 'right-[0px]'} bg-white p-2 rounded-lg shadow-xl z-[999999999999999999] 
             after:content-[""] 
             after:w-8 
             after:h-8 
@@ -23,7 +23,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
             after:rotate-45 
             after:z-[-10]
             after:top-[-10px] 
-            ${right ? 'after:right-[50%] after:translate-x-[50%] ' : 'after:right-[15px]'} `}
+            ${right ? 'after:right-[8%] after:translate-x-[8%] ' : 'after:right-[-5px]'} `}
         >
 
             <div className='boardActionDropDown group line-through relative'>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAllWorkSpaces } from "../hooks/useFetch";
+
 
 const BoardCardItem = createContext();
 
@@ -9,42 +9,7 @@ export const BoardCardContext = ({ children }) => {
     const [target, setTarget] = useState({ bid: '', cid: '' });
 
     const [boardLists, setBoardList] = useState(JSON.parse(localStorage.getItem('kanban')) || []);
-    // console.log(boardList);
-
-
-    // const { data, loading, error } = getAllWorkSpaces();
-    // console.log('Data ==> ', data);
-
-    // useEffect(() => {
-
-    //     const fetchData = async () => {
-
-    //         const token = localStorage.getItem("jwt");
-    //         console.log(token);
-
-    //         try {
-    //             const url = 'https://space-api.makereal.click/api/workspaces'
-    //             const res = await fetch(url, {
-    //                 headers: {
-    //                     'authorization': `Bearer ${token}`,
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //             });
-    //             console.log(res);
-
-    //             const data = await res.json()
-    //             console.log(data);
-
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    //     fetchData();
-
-    // }, []);
-
-
-
+   
 
     const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
 
@@ -90,9 +55,9 @@ export const BoardCardContext = ({ children }) => {
 
         // 🟥🟥🟥 3rd ==> remove tha specific Card from a specific Board + Update Board
         // setBoards(pre => pre[boardIndex].cards.filter(({ id }) => id !== bid));
-        const tempBoard = [...boardLists];                      // copy 
+        const tempBoard = [...boardLists];                  // copy 
         tempBoard[boardIndex].cards.splice(cardIndex, 1);   // delete
-        setBoardList(tempBoard);                               // update 
+        setBoardList(tempBoard);                            // update 
     }
 
 
@@ -106,9 +71,9 @@ export const BoardCardContext = ({ children }) => {
         const cardIndex = boardLists[boardIndex].cards.findIndex(({ id }) => id === cid);
         if (cardIndex < 0) return; // IF no card found, return nothing...
 
-        const tempBoard = [...boardLists];                      // copy 
+        const tempBoard = [...boardLists];                  // copy 
         tempBoard[boardIndex].cards[cardIndex] = card;      // replace / update that specific card
-        setBoardList(tempBoard);                               // update state variable
+        setBoardList(tempBoard);                            // update state variable
     }
 
 
@@ -130,13 +95,13 @@ export const BoardCardContext = ({ children }) => {
         d_cIndex = boardLists[d_bIndex]?.cards?.findIndex(({ id }) => id === target.cid);
         if (d_cIndex < 0) return;
 
-        const tempBoard = [...boardLists];                              // copy all board's
+        const tempBoard = [...boardLists];                          // copy all board's
         const tempCard = tempBoard[s_bIndex].cards[s_cIndex];       // copy of that selected card
 
         tempBoard[s_bIndex].cards.splice(s_cIndex, 1);              // remove that selected card from source board
         tempBoard[d_bIndex].cards.splice(d_cIndex, 0, tempCard);    // add that coped card into destination board
 
-        setBoardList(tempBoard)                                        // update boards
+        setBoardList(tempBoard)                                     // update boards
     }
 
 
@@ -163,122 +128,3 @@ export const BoardCardContext = ({ children }) => {
 }
 
 export const useBoardCardContext = () => useContext(BoardCardItem);
-
-
-
-
-
-// {{BASE-URL}}/api/spaces/{{spaceId}}/board
-
-// {
-//     "list": {
-//         "name": "HTML",
-//         "spaceRef": "62c5595c4cd94215aec5cfbb",
-//         "_id": "62e595954cd94215aec5d1f1",
-//         "createdAt": "2022-07-30T20:33:25.700Z",
-//         "updatedAt": "2022-07-30T20:33:25.700Z",
-//         "__v": 0
-//     }
-// }
-
-
-
-
-// {
-//     "lists": [
-//         {
-//             "_id": "62e595954cd94215aec5d1f1",
-//             "name": "HTML",
-//             "cards": [
-//                 {
-//                     "_id": "62e5964e4cd94215aec5d20d",
-//                     "name": "NFT",
-//                     "progress": 0,
-//                     "tags": [],
-//                     "spaceRef": "62c5595c4cd94215aec5cfbb",
-//                     "listRef": "62e595954cd94215aec5d1f1"
-//                 }
-//             ]
-//         },
-//         {
-//             "_id": "62d65e454cd94215aec5d00a",
-//             "name": "Hi there",
-//             "cards": []
-//         },
-//         {
-//             "_id": "62c559ed4cd94215aec5cfc5",
-//             "name": "Hello task 232",
-//             "cards": [
-//                 {
-//                     "_id": "62c55a064cd94215aec5cfcd",
-//                     "name": "Sam",
-//                     "progress": 0,
-//                     "tags": [],
-//                     "spaceRef": "62c5595c4cd94215aec5cfbb",
-//                     "listRef": "62c559ed4cd94215aec5cfc5"
-//                 },
-//                 {
-//                     "_id": "62c55a644cd94215aec5cfd5",
-//                     "name": "Facebook",
-//                     "progress": 0,
-//                     "tags": [],
-//                     "spaceRef": "62c5595c4cd94215aec5cfbb",
-//                     "listRef": "62c559ed4cd94215aec5cfc5"
-//                 },
-//                 {
-//                     "_id": "62c55a6c4cd94215aec5cfdd",
-//                     "name": "Google",
-//                     "progress": 0,
-//                     "tags": [],
-//                     "spaceRef": "62c5595c4cd94215aec5cfbb",
-//                     "listRef": "62c559ed4cd94215aec5cfc5"
-//                 },
-//                 {
-//                     "_id": "62d65e134cd94215aec5d003",
-//                     "name": "Gmail",
-//                     "progress": 0,
-//                     "tags": [],
-//                     "spaceRef": "62c5595c4cd94215aec5cfbb",
-//                     "listRef": "62c559ed4cd94215aec5cfc5"
-//                 }
-//             ]
-//         }
-//     ]
-// }
-
-
-// Create Card
-// {{BASE-URL}}/api/spaces/{{spaceId}}/board/{{listId}}/card
-
-// {
-//     "card": {
-//         "name": "NFT",
-//         "checkList": [],
-//         "spaceRef": "62c5595c4cd94215aec5cfbb",
-//         "listRef": "62e595954cd94215aec5d1f1",
-//         "_id": "62e5964e4cd94215aec5d20d",
-//         "createdAt": "2022-07-30T20:36:30.392Z",
-//         "updatedAt": "2022-07-30T20:36:30.392Z",
-//         "__v": 0
-//     }
-// }
-
-
-
-// Get Single Card
-// {{BASE-URL}}/api/spaces/{{spaceId}}/board/{{listId}}/card/{{cardId}}
-
-// {
-//     "card": {
-//         "_id": "62d65e134cd94215aec5d003",
-//         "name": "Gmail",
-//         "progress": 0,
-//         "tags": [],
-//         "attachments": [],
-//         "assignee": [],
-//         "checkList": [],
-//         "spaceRef": "62c5595c4cd94215aec5cfbb",
-//         "listRef": "62c559ed4cd94215aec5cfc5",
-//         "__v": 0
-//     }
-// }

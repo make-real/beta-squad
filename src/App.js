@@ -1,5 +1,6 @@
 import {
-  Board, Calender, Chat, List, Timeline, Register, Login, Layout, Profile, DeveloperConsole, ManageWorkspace, UserSettingLayout, Preferences, PageNotFound,
+  Board, Calender, Chat, List, Timeline, Register, Login, Layout, Profile, DeveloperConsole,
+  ManageWorkspace, UserSettingLayout, Preferences, PageNotFound,
 } from "./components";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
@@ -50,7 +51,7 @@ const App = () => {
       </Routes>
 
       {/* theme="dark" */}
-      <ToastContainer  theme="colored" style={{ fontSize: "18px" }}  />
+      <ToastContainer theme="colored" style={{ fontSize: "18px" }} />
     </main>
   );
 };

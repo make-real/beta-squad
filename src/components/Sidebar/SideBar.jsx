@@ -1,13 +1,19 @@
 import {
-  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder, OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
+  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder,
+  OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
 } from "../../assets/icons";
-import { UserSettingsDropDown, NotificationBell, NotificationSMS, ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace } from ".";
-import { useWorkSpaceContext } from "../../context/WorkSpaceContext";
+import {
+  UserSettingsDropDown, NotificationBell, NotificationSMS,
+  ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace
+} from ".";
+import { addWorkSpace, setSelectedWorkSpaceId } from '../../store/slice/workspace';
+import { addSpace, setSelectedSpaceId } from '../../store/slice/space';
 import { useStyleContext } from "../../context/StyleContext";
-import { getAllWorkSpaces } from "../../hooks/useFetch";
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
+import axios from "../../net";
 import "tippy.js/dist/tippy.css";
 
 
@@ -15,90 +21,81 @@ import "tippy.js/dist/tippy.css";
 const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
-  const { selectedWorkSpace, setSelectedWorkSpace } = useWorkSpaceContext();
-  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
-  const [userNotificationBell, setUserNotificationBell] = useState(false);
+  const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
-  const [newWorkSpace, setNewWorkSpace] = useState(false);
+  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
+  const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-  const [allSpace, setAllSpace] = useState([]);
 
-  // console.log(allSpace);
+  // For Work-Spaces
+  const data = useSelector(state => state.workspace.workspaces);
+  const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
 
-  // const { data, loading, error } = getAllWorkSpaces();
+  // For All Space
+  const allSpace = useSelector(state => state.space.allSpaces);
+  // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
-  const [data, setData] = useState([]);
-
-  console.log(allSpace)
-  
-  // 🟨🟨🟨 GET request for Work-Spaces data... 🟨🟨🟨
-  const getWorkSpaceData = async () => {
-
-    // 1st ==> get user token from LocalStorage, that server send to client...
-    const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
-
-    if (serverSendToken) {
-
-      try {
-        const res = await fetch('https://space-api.makereal.click/api/workspaces', {
-          headers: { 'Authorization': `Bearer ${serverSendToken}` }
-        });
-        const data = await res.json()
-        setData(data.workspaces);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log('No Token Found, Please Re-Connect Internet');
-    }
-  }
+  const dispatch = useDispatch();
 
 
-  // 🟨🟨🟨 GET request for all Spaces data... 🟨🟨🟨
-  const getSpaceData = async () => {
-
-    // 1st ==> get user token from LocalStorage, that server send to client...
-    const serverSendToken = JSON.parse(localStorage.getItem('jwt'))
-
-    if (serverSendToken) {
-
-      const url = `https://space-api.makereal.click/api/spaces?workspaceId=${selectedWorkSpace._id}`;
-      console.log(url)
-      try {
-        const res = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${serverSendToken}` }
-        });
-        const {spaces} = await res.json()
-        setAllSpace(spaces);
-        console.log(spaces);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log('No Token Found, Please Re-Connect Internet');
-    }
-  }
-
-
-  // re-render for workSpace
+  // re-render for Work-Space
   useEffect(() => {
+
+    // 🟨🟨🟨 GET request for Work-Spaces data...
+    const getWorkSpaceData = async () => {
+
+      try {
+        const { data } = await axios.get('/workspaces');
+
+        // get all Work-Space data 
+        dispatch(addWorkSpace(data.workspaces));
+
+        // by default select 1st Work-Space ID
+        dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
+
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+
 
     // call this function...
     getWorkSpaceData();
 
-  }, []);
+  }, [dispatch]);
 
 
-  // re-render for space's under 
+  // re-render for space's under specific workSpace
   useEffect(() => {
+
+    // 🟨🟨🟨 GET request for all Spaces data...
+    const getSpaceData = async () => {
+
+      try {
+        const { data } = await axios.get(`/spaces`, { params: { workspaceId: userSelectedWorkSpaceId } });
+
+        // get all Space data 
+        dispatch(addSpace(data.spaces));
+
+        // by default select 1st Space ID
+        dispatch(setSelectedSpaceId(data.spaces[0]?._id));
+
+      } catch (error) {
+        console.log('space selection ==> ', error);
+      }
+
+    }
+
 
     // call this function...
     getSpaceData();
 
     // when id workSpace ID change, 
     // re-fetch all space's under this specific workSpace ID...
-  }, [selectedWorkSpace._id]);
+  }, [dispatch, userSelectedWorkSpaceId]);
+
 
 
 
@@ -123,8 +120,8 @@ const SideBar = () => {
                     >
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${selectedWorkSpace.name === workSpace?.name ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
-                        onClick={() => setSelectedWorkSpace(workSpace)}
+                      ${userSelectedWorkSpaceId === workSpace?._id ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
+                        onClick={() => dispatch(setSelectedWorkSpaceId(workSpace?._id))}
                       >
                         {/* <img
                           src={asserts.makeReal}
@@ -289,7 +286,9 @@ const SideBar = () => {
         <div className="my-10">
           {
             allSpace?.map((space, i) =>
-              <div className="flex space-x-3 px-2 items-center group" key={i}>
+              <div className="flex space-x-3 px-2 items-center group" key={i}
+
+              >
                 <DotsDouble className="invisible group-hover:visible cursor-grab" />
                 <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
                   {
@@ -384,7 +383,6 @@ const SideBar = () => {
         // 🟨🟨🟨 ➕➕➕ Create Space Modal Open / Popup 🟨🟨🟨
         createSpaceModal &&
         <ModalSpaceCreate
-          setAllSpace={setAllSpace}
           setCreateSpaceModal={setCreateSpaceModal}
         />
       }
