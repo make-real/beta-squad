@@ -5,8 +5,7 @@ import axios from 'axios';
 
 
 // Backend || Server ==> URL Address
-const api = axios.create({ baseURL: 'https://space-api.makereal.click' });
-
+const api = axios.create({ baseURL: 'https://space-api.makereal.click/api' });
 
 
 // with every url request send user identification at server side for authentication...
@@ -21,12 +20,13 @@ api.interceptors.request.use(req => {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
         // & we can see it by at browser Network Console
         req.headers.authorization = `Bearer ${serverSendToken}`;
+
         // console.log(serverSendToken)
 
     } else {
         // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
 
-        console.log('No Token Found, Please Re-Connect Internet');
+        // console.log('No Token Found, Please Re-Connect Internet');
     }
 
     return req;
@@ -92,28 +92,25 @@ const useFetch = (endPoint) => {
 // 🟨 REST api Section...🟨
 // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
 
-// POST + DELETE ==> Methods For User Registration + Login + Logout 
-export const userSignUp = (userData) => api.post('/api/user-auth/sign-up', userData);
-export const userSignIn = (userData) => api.post('/api/user-auth/login', userData);
-export const userLogOut = () => api.delete('/api/user-auth/logout');
-export const accountVerification = (userData) => api.post('/api/user-auth/account-verification', userData);
+// POST + DELETE ==> Methods For User...
+// 1) Registration
+// 2) Account Verification Code
+// 3) Login 
+// 4) Logout 
+export const userSignUp = userInfo => api.post('/user-auth/sign-up', userInfo);
+export const userSignIn = userInfo => api.post('/user-auth/login', userInfo);
+export const userLogOut = _ => api.delete('/user-auth/logout');
+export const accountVerification = code => api.post('/user-auth/account-verification', code);
 
 
 // GET Methods
-export const getUserProfileInfo = (userId) => useFetch(`/api/users/profile/${userId}`);
-export const getUserBySearch = (userQuery) => useFetch(`/api/users?search=${userQuery}`);
+export const getUserProfileInfo = userId => useFetch(`/users/profile/${userId}`);
+export const getUserBySearch = userQuery => useFetch(`/users?search=${userQuery}`);
 
 
-// export const getUserInfo = (userID) => useFetch(`api/users/profile/${userID}`);
+// POST ==> Work-Space Create 
+export const workspaceCreation = newWorkSpaceObj => api.post('/workspaces', newWorkSpaceObj);
 
 
-
-// POST ==> Workspace create 
-export const workspaceCreation = (newWorkSpaceObj) => api.post('/api/workspaces', newWorkSpaceObj);
-
-// this method don't work... (DeBug it future...)
-// export const getAllWorkSpaces = () => useFetchObject('/api/workspaces');
-
-
-// POST ==> space create --- under Workspace reference ID
-export const spaceCreation = (newSpaceObj) => api.post('/api/spaces', newSpaceObj);
+// POST ==> Space Create --- under specific Work-Space reference ID
+export const spaceCreation = newSpaceObj => api.post('/spaces', newSpaceObj);

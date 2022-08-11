@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
   selectedWorkspace: null,
   workspaces: [],
 };
+
 
 export const workspaceSlice = createSlice({
   name: "workspace",
@@ -17,6 +19,7 @@ export const workspaceSlice = createSlice({
     },
   },
 });
+
 
 export const { addWorkSpace, setSelectedWorkSpaceId } = workspaceSlice.actions;
 

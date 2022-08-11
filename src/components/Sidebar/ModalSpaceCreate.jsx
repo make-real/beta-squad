@@ -1,16 +1,16 @@
-import { useWorkSpaceContext } from '../../context/WorkSpaceContext';
 import { useStyleContext } from '../../context/StyleContext';
 import { boxHexColorCodes } from '../../constant/data';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewSpace } from '../../store/slice/space';
 import { spaceCreation } from '../../hooks/useFetch';
 import { RightOK } from '../../assets/icons';
 import { useEffect, useState } from 'react';
 import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNewSpace } from '../../store/slice/space';
 
 
-const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
+
+const ModalSpaceCreate = ({ setCreateSpaceModal }) => {
 
     const dispatch = useDispatch();
     const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
@@ -48,8 +48,6 @@ const ModalSpaceCreate = ({ setCreateSpaceModal, setAllSpace }) => {
             toast.success(`${data?.space?.name} - space create successfully`, { autoClose: 3000 });
 
             // add this space into user allSpace [array]... & send back to parent component...
-            // setAllSpace(pre => ([...pre, data?.space]));
-
             dispatch(addNewSpace(data?.space))
 
         } catch (error) {

@@ -1,11 +1,13 @@
 import axios from "axios";
 
+
 const net = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
 });
 
 
 net.interceptors.request.use(
+
   function (config) {
     const token = JSON.parse(localStorage.getItem('jwt'))
 
@@ -21,16 +23,20 @@ net.interceptors.request.use(
 
     return config;
   },
+
   function (error) {
     return Promise.reject(error);
   }
+
 );
 
 
 net.interceptors.response.use(
+
   (response) => {
     return response;
   },
+
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
@@ -42,5 +48,6 @@ net.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default net;

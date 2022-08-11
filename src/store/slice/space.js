@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
     selectedSpace: null,
     allSpaces: [],
 };
+
 
 export const spaceSlice = createSlice({
     name: "space",
@@ -20,6 +22,7 @@ export const spaceSlice = createSlice({
         },
     },
 });
+
 
 export const { addSpace, setSelectedSpaceId, addNewSpace } = spaceSlice.actions;
 

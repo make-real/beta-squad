@@ -1,92 +1,101 @@
 import {
-  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder, OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
+  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder,
+  OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
 } from "../../assets/icons";
-import { UserSettingsDropDown, NotificationBell, NotificationSMS, ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace } from ".";
-import { useWorkSpaceContext } from "../../context/WorkSpaceContext";
+import {
+  UserSettingsDropDown, NotificationBell, NotificationSMS,
+  ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace
+} from ".";
+import { addWorkSpace, setSelectedWorkSpaceId } from '../../store/slice/workspace';
+import { addSpace, setSelectedSpaceId } from '../../store/slice/space';
 import { useStyleContext } from "../../context/StyleContext";
-import { getAllWorkSpaces } from "../../hooks/useFetch";
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 import axios from "../../net";
-import { addWorkSpace, setSelectedWorkSpaceId } from '../../store/slice/workspace';
-import { addSpace, setSelectedSpaceId } from '../../store/slice/space';
+import "tippy.js/dist/tippy.css";
 
-
-
-import { useDispatch, useSelector } from 'react-redux'
 
 
 const SideBar = () => {
 
   const { margin, setMargin } = useStyleContext();
-  const { selectedWorkSpace, setSelectedWorkSpace } = useWorkSpaceContext();
-  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
-  const [userNotificationBell, setUserNotificationBell] = useState(false);
+  const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
-  const [newWorkSpace, setNewWorkSpace] = useState(false);
+  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
+  const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-  // const [allSpace, setAllSpace] = useState([]);
 
-  // for workespaces
+  // For Work-Spaces
   const data = useSelector(state => state.workspace.workspaces);
   const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
 
-  // for space's
+  // For All Space
   const allSpace = useSelector(state => state.space.allSpaces);
-  const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+  // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+
   const dispatch = useDispatch();
 
 
-  // console.log('work space' , selectedId)
-  // console.log('space' , selectedSpaceId)
-
-
-  // re-render for workSpace
+  // re-render for Work-Space
   useEffect(() => {
 
-    // 🟨🟨🟨 GET request for Work-Spaces data... 🟨🟨🟨
+    // 🟨🟨🟨 GET request for Work-Spaces data...
     const getWorkSpaceData = async () => {
+
       try {
         const { data } = await axios.get('/workspaces');
-        // setData(data.workspaces);
 
+        // get all Work-Space data 
         dispatch(addWorkSpace(data.workspaces));
-        dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
 
-        console.log(data.workspaces)
+        // by default select 1st Work-Space ID
+        dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
 
       } catch (error) {
         console.log(error);
       }
+
     }
+
 
     // call this function...
     getWorkSpaceData();
 
-  }, []);
+  }, [dispatch]);
 
 
   // re-render for space's under specific workSpace
   useEffect(() => {
 
-    // GET request for all Spaces data...
+    // 🟨🟨🟨 GET request for all Spaces data...
     const getSpaceData = async () => {
 
-      const { data } = await axios.get(`/spaces`, { params: { workspaceId: userSelectedWorkSpaceId } });
+      try {
+        const { data } = await axios.get(`/spaces`, { params: { workspaceId: userSelectedWorkSpaceId } });
 
-      dispatch(addSpace(data.spaces));
+        // get all Space data 
+        dispatch(addSpace(data.spaces));
 
-      dispatch(setSelectedSpaceId(data.spaces[0]?._id));
+        // by default select 1st Space ID
+        dispatch(setSelectedSpaceId(data.spaces[0]?._id));
+
+      } catch (error) {
+        console.log('space selection ==> ', error);
+      }
+
     }
 
 
     // call this function...
     getSpaceData();
 
-  }, [userSelectedWorkSpaceId]);
+    // when id workSpace ID change, 
+    // re-fetch all space's under this specific workSpace ID...
+  }, [dispatch, userSelectedWorkSpaceId]);
+
 
 
 
@@ -111,7 +120,7 @@ const SideBar = () => {
                     >
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${selectedWorkSpace.name === workSpace?.name ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
+                      ${userSelectedWorkSpaceId === workSpace?._id ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
                         onClick={() => dispatch(setSelectedWorkSpaceId(workSpace?._id))}
                       >
                         {/* <img
@@ -374,7 +383,6 @@ const SideBar = () => {
         // 🟨🟨🟨 ➕➕➕ Create Space Modal Open / Popup 🟨🟨🟨
         createSpaceModal &&
         <ModalSpaceCreate
-          // setAllSpace={setAllSpace}
           setCreateSpaceModal={setCreateSpaceModal}
         />
       }
