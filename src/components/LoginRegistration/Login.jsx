@@ -2,63 +2,72 @@ import { Link, useNavigate } from "react-router-dom";
 import { userSignIn } from "../../hooks/useFetch";
 import { FcGoogle } from "react-icons/fc";
 import React, { useState } from "react";
-import images from '../../assets';
+import images from "../../assets";
 import { useUserInfoContext } from "../../context/UserInfoContext";
-
+import Loader from "../Loader";
 
 const Login = () => {
-
-
   const navigate = useNavigate();
   const { setLoginUserInfo } = useUserInfoContext();
-  const [userInput, setUserInput] = useState({ email: '', password: '' });
-  const [errorInfo, setErrorInfo] = useState({ email: '', password: '' });
+  const [loader, setLoader] = useState(false);
+  const [userInput, setUserInput] = useState({ email: "", password: "" });
+  const [errorInfo, setErrorInfo] = useState({ email: "", password: "" });
 
-
-  // collect all user input data from UI 
-  const handleUserInput = e => {
+  // collect all user input data from UI
+  const handleUserInput = (e) => {
     const { name, value } = e.target;
-    setUserInput(prev => ({ ...prev, [name]: value }));
-  }
-
+    setUserInput((prev) => ({ ...prev, [name]: value }));
+  };
 
   // User Info send to backend for registration...
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setLoader(true);
       const { data } = await userSignIn(userInput);
 
       // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
       setLoginUserInfo(data.loggedUser);
 
       // store user JWT token at local storage for future reference
-      localStorage.setItem('jwt', JSON.stringify(data.jwtToken))
+      localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
 
       // navigate user into user profile page...
-      navigate('/projects');
-
+      navigate("/projects");
+      setLoader(false);
     } catch (error) {
+      setLoader(false);
       // console.log(error);
-      setErrorInfo(pre => ({ ...pre, email: error.response.data?.issue?.email }));
-      setErrorInfo(pre => ({ ...pre, password: error.response.data?.issue?.password }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        email: error.response.data?.issue?.email,
+      }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        password: error.response.data?.issue?.password,
+      }));
     }
-  }
-
+  };
 
   return (
     <section className="flex">
-
       {/* left side */}
       <div className="w-[455px] min-h-screen text-white bg-cover bg-center bg-[url('/src/assets/images/loginPage.png')]">
-
         <div className="pt-[80px]">
           <h6 className="text-2xl text-center">HeySpace</h6>
 
           <div className="pt-8 pl-9 pr-4 text-sm relative">
-
-            <img src={images.signIn1} alt="bg" className='w-52 absolute bottom-36 right-14 z-10' />
-            <img src={images.signIn2} alt="bg2" className="w-96 absolute top-8 left-8" />
+            <img
+              src={images.signIn1}
+              alt="bg"
+              className="w-52 absolute bottom-36 right-14 z-10"
+            />
+            <img
+              src={images.signIn2}
+              alt="bg2"
+              className="w-96 absolute top-8 left-8"
+            />
 
             <div className="pt-[70px] pb-10 px-3 mt-72">
               <h6 className="font-bold">Hey space tip</h6>
@@ -70,13 +79,10 @@ const Login = () => {
             </div>
           </div>
         </div>
-
       </div>
-
 
       {/* right side */}
       <div className="mx-9 pt-[60px] flex-1">
-
         <div className="flex justify-end">
           <h6 className="my-auto text-gray-400 pr-2">Don't have an account?</h6>
 
@@ -104,7 +110,6 @@ const Login = () => {
             </span>
           </div>
 
-
           <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
             <div className="text-sm relative">
               <label htmlFor="email" className="text-gray-700">
@@ -115,13 +120,16 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="email@company.com"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.email && 'border-red-500'}`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.email && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
-              {
-                errorInfo.email &&
-                <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.email}</span>
-              }
+              {errorInfo.email && (
+                <span className="absolute top-[102%] right-0 text-red-500">
+                  {errorInfo.email}
+                </span>
+              )}
             </div>
 
             <div className="text-sm relative">
@@ -133,25 +141,27 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.password && 'border-red-500'}`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.password && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
-              {
-                errorInfo.password &&
-                <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.password}</span>
-              }
+              {errorInfo.password && (
+                <span className="absolute top-[102%] right-0 text-red-500">
+                  {errorInfo.password}
+                </span>
+              )}
             </div>
 
             <div className="text-center pt-4">
               <button
                 type="submit"
-                className={`py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg`}>
-                Sign in
+                className={`py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg`}
+              >
+                {loader ? <Loader dark /> : "Sign in"}
               </button>
             </div>
-
           </form>
-
 
           <div className="pt-[80px] text-center">
             <span className="text-sm ">Companies who love HeySpace</span>
@@ -162,15 +172,12 @@ const Login = () => {
             <img src={images.remoteCamp} alt="" className=" w-[100px] h-7" />
           </div>
         </div>
-
       </div>
     </section>
   );
 };
 
 export default React.memo(Login);
-
-
 
 // "jwtToken": "",
 // "loggedUser": {

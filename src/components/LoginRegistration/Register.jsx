@@ -3,90 +3,95 @@ import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import images from "../../assets";
-
+import Loader from "../Loader";
 
 const Register = () => {
-
   const navigate = useNavigate();
-  const [userVerificationStatus, setUserVerificationStatus] = useState('');
-  const [userVerificationErrorStatus, setUserVerificationErrorStatus] = useState('');
-  const [activationCode, setActivationCode] = useState('');
-  const [userId, setUserId] = useState(''); // || JSON.parse(localStorage.getItem('userId'))
+  const [userVerificationStatus, setUserVerificationStatus] = useState("");
+  const [userVerificationErrorStatus, setUserVerificationErrorStatus] =
+    useState("");
+  const [activationCode, setActivationCode] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [userId, setUserId] = useState(""); // || JSON.parse(localStorage.getItem('userId'))
   const [userInfo, setUserInfo] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    phone: '',
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
     agreeTerm: false,
-  })
+  });
 
   // error info catch object...
   const [errorInfo, setErrorInfo] = useState({
-    email: '',
-    password: '',
-    phone: '',
+    email: "",
+    password: "",
+    phone: "",
   });
-
 
   // console.log(errorInfo);
 
-
-  // collect all user input data from UI 
-  const handleUserInput = e => {
+  // collect all user input data from UI
+  const handleUserInput = (e) => {
     const { name, value } = e.target;
-    setUserInfo(prev => ({ ...prev, [name]: value }));
-  }
-
+    setUserInfo((prev) => ({ ...prev, [name]: value }));
+  };
 
   // User Info send to backend for registration...
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setLoader(true);
       const { data } = await userSignUp(userInfo);
-      setUserId(data.userId)
+      setUserId(data.userId);
 
       // store user id at local storage for future reference
-      localStorage.setItem('userId', JSON.stringify(data.userId));
-
+      localStorage.setItem("userId", JSON.stringify(data.userId));
+      setLoader(false);
     } catch (error) {
+      setLoader(false);
       // console.log(error);
       // get error info...
-      setErrorInfo(pre => ({ ...pre, email: error.response.data?.issue?.email }));
-      setErrorInfo(pre => ({ ...pre, password: error.response.data?.issue?.password }));
-      setErrorInfo(pre => ({ ...pre, phone: error.response.data?.issue?.phone }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        email: error.response.data?.issue?.email,
+      }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        password: error.response.data?.issue?.password,
+      }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        phone: error.response.data?.issue?.phone,
+      }));
     }
-  }
+  };
 
-
-  // user account activation by CODE verification process 
+  // user account activation by CODE verification process
   const handleAccountActivation = async (e) => {
     e.preventDefault();
 
     try {
-      const userIdActive = { userId, code: activationCode }
+      setLoader(true);
+      const userIdActive = { userId, code: activationCode };
       const { data } = await accountVerification(userIdActive);
       setUserVerificationStatus(data?.message);
-      setUserVerificationErrorStatus('')
-
+      setUserVerificationErrorStatus("");
+      setLoader(false);
       // after 2 second auto redirect user into this route...
-      setTimeout(() => navigate('/projects'), 2000);
-
+      setTimeout(() => navigate("/projects"), 2000);
     } catch (error) {
+      setLoader(false);
       // console.log(error.response.data.issue?.message);
       setUserVerificationErrorStatus(error.response.data.issue?.message);
-      setUserVerificationStatus('')
+      setUserVerificationStatus("");
     }
-  }
-
-
+  };
 
   return (
     <section className="flex">
-
       {/* left side */}
       <div className="w-[455px] h-screen text-white bg-cover bg-center bg-[url('/src/assets/images/loginPage.png')]">
-
         <div className="pt-[80px]">
           <h6 className="text-2xl text-center">HeySpace</h6>
 
@@ -109,7 +114,7 @@ const Register = () => {
             </p>
 
             <div className="flex pt-3">
-              <div >
+              <div>
                 <img src={images.userLogin} alt="" />
               </div>
               <div className="my-auto pl-2">
@@ -121,10 +126,8 @@ const Register = () => {
         </div>
       </div>
 
-
       {/* right side */}
       <div className="mx-9 pt-[60px] flex-1">
-
         <div className="flex justify-end">
           <h6 className="my-auto text-gray-400 pr-2">
             Already have an account?
@@ -137,8 +140,6 @@ const Register = () => {
             sign in
           </Link>
         </div>
-
-
 
         <div className="w-[400px]  mx-auto mt-8">
           <h2 className="text-center text-2xl font-bold text-cyan-800	">
@@ -156,159 +157,168 @@ const Register = () => {
             </span>
           </div>
 
+          {userId ? (
+            <div className="p-4 space-y-4 mb-8">
+              <p className="text-md font-bold text-center">
+                Please enter a code to active your account
+              </p>
+              <input
+                required
+                type="text"
+                placeholder="Enter 5 Digit Code"
+                onChange={(e) => setActivationCode(e.target.value)}
+                className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+              />
 
-          {
-            userId
-              ? (
-                <div className="p-4 space-y-4 mb-8">
-                  <p className="text-md font-bold text-center">Please enter a code to active your account</p>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Enter 5 Digit Code"
-                    onChange={e => setActivationCode(e.target.value)}
-                    className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
-                  />
+              <button
+                onClick={handleAccountActivation}
+                disabled={!(activationCode.length === 5)}
+                className={`py-2 w-full ${
+                  activationCode.length === 5
+                    ? "bg-[#C595C6] cursor-pointer"
+                    : "bg-gray-300 cursor-not-allowed"
+                } text-yellow-50 rounded-lg`}
+              >
+                {loader ? <Loader dark /> : "Active Account"}
+              </button>
 
-                  <button
-                    onClick={handleAccountActivation}
-                    disabled={!(activationCode.length === 5)}
-                    className={`py-2 w-full ${activationCode.length === 5 ? 'bg-[#C595C6] cursor-pointer' : 'bg-gray-300 cursor-not-allowed'} text-yellow-50 rounded-lg`}
-                  >
-                    Active Account
-                  </button>
+              {userVerificationStatus && (
+                <p className="text-center text-green-600">
+                  Your email is verified
+                </p>
+              )}
+              {userVerificationErrorStatus && (
+                <p className="text-center text-red-600">
+                  Your email is already verified
+                </p>
+              )}
+            </div>
+          ) : (
+            <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
+              <div className="text-sm">
+                <label htmlFor="name" className="text-gray-700">
+                  Full Name :
+                </label>
+                <input
+                  required
+                  autoFocus
+                  type="text"
+                  name="fullName"
+                  placeholder="John Smith"
+                  className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                  onChange={handleUserInput}
+                />
+              </div>
 
-                  {
-                    userVerificationStatus &&
-                    <p className="text-center text-green-600">Your email is verified</p>
+              <div className="text-sm relative">
+                <label htmlFor="email" className="text-gray-700">
+                  Email:
+                </label>
+                <input
+                  required
+                  type="email"
+                  name="email"
+                  placeholder="email@company.com"
+                  className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                  onChange={handleUserInput}
+                />
+                {errorInfo.email && (
+                  <span className="absolute top-[102%] right-0 text-red-500">
+                    {errorInfo.email}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-sm relative">
+                <label htmlFor="password" className="text-gray-700">
+                  Password:
+                </label>
+                <input
+                  required
+                  type="password"
+                  name="password"
+                  placeholder="Give Strong Password"
+                  className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                  onChange={handleUserInput}
+                />
+                {errorInfo.password && (
+                  <span className="absolute top-[102%] right-0 text-red-500">
+                    {errorInfo.password}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-sm relative">
+                <label htmlFor="number" className="text-gray-700">
+                  Phone number (optional):
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="+88 01717 000000"
+                  className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
+                  onChange={handleUserInput}
+                />
+                {errorInfo.phone && (
+                  <span className="absolute top-[102%] right-0 text-red-500">
+                    {errorInfo.phone}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-sm">
+                <input
+                  required
+                  type="checkbox"
+                  name="agreeTerm"
+                  onChange={(e) =>
+                    setUserInfo((pre) => ({
+                      ...pre,
+                      agreeTerm: e.target.checked,
+                    }))
                   }
-                  {
-                    userVerificationErrorStatus &&
-                    <p className="text-center text-red-600">Your email is already verified</p>
-                  }
+                />
 
-                </div>
-              )
-              : (
-                <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
-                  <div className="text-sm">
-                    <label htmlFor="name" className="text-gray-700">
-                      Full Name :
-                    </label>
-                    <input
-                      required
-                      autoFocus
-                      type="text"
-                      name="fullName"
-                      placeholder="John Smith"
-                      className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
-                      onChange={handleUserInput}
-                    />
-                  </div>
+                <label htmlFor="checkbox" className="text-gray-700 pl-1">
+                  By creating an account you agree to the{" "}
+                  <Link to="/" className="underline text-[#C595C6]">
+                    Terms and Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link to="/" className="underline text-[#C595C6]">
+                    Privacy Policy
+                  </Link>{" "}
+                  .
+                </label>
+              </div>
 
-                  <div className="text-sm relative">
-                    <label htmlFor="email" className="text-gray-700">
-                      Email:
-                    </label>
-                    <input
-                      required
-                      type="email"
-                      name="email"
-                      placeholder="email@company.com"
-                      className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
-                      onChange={handleUserInput}
-                    />
-                    {
-                      errorInfo.email &&
-                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.email}</span>
-                    }
-                  </div>
-
-                  <div className="text-sm relative">
-                    <label htmlFor="password" className="text-gray-700">
-                      Password:
-                    </label>
-                    <input
-                      required
-                      type="password"
-                      name="password"
-                      placeholder="Give Strong Password"
-                      className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
-                      onChange={handleUserInput}
-                    />
-                    {
-                      errorInfo.password &&
-                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.password}</span>
-                    }
-                  </div>
-
-                  <div className="text-sm relative">
-                    <label htmlFor="number" className="text-gray-700">
-                      Phone number (optional):
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="+88 01717 000000"
-                      className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
-                      onChange={handleUserInput}
-                    />
-                    {
-                      errorInfo.phone &&
-                      <span className="absolute top-[102%] right-0 text-red-500">{errorInfo.phone}</span>
-                    }
-                  </div>
-
-                  <div className="text-sm">
-
-                    <input
-                      required
-                      type="checkbox"
-                      name="agreeTerm"
-                      onChange={e => setUserInfo(pre => ({ ...pre, agreeTerm: e.target.checked }))}
-                    />
-
-                    <label htmlFor="checkbox" className="text-gray-700 pl-1">
-                      By creating an account you agree to the{" "}
-                      <Link to="/" className="underline text-[#C595C6]">
-                        Terms and Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link to="/" className="underline text-[#C595C6]">
-                        Privacy Policy
-                      </Link>{" "}
-                      .
-                    </label>
-                  </div>
-
-                  <div className="text-center flex flex-col space-y-3">
-                    {/* <Link to='/' className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg">
+              <div className="text-center flex flex-col space-y-3">
+                {/* <Link to='/' className="py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg">
                 Get started now
               </Link> */}
 
-                    <button
-                      disabled={!userInfo.agreeTerm}
-                      type='submit'
-                      className={`py-2 w-full ${userInfo.agreeTerm ? 'bg-[#C595C6]' : 'bg-gray-300'} text-yellow-50 rounded-lg`}>
-                      Get started now
-                    </button>
+                <button
+                  disabled={!userInfo.agreeTerm}
+                  type="submit"
+                  className={`py-2 w-full ${
+                    userInfo.agreeTerm ? "bg-[#C595C6]" : "bg-gray-300"
+                  } text-yellow-50 rounded-lg`}
+                >
+                  {loader ? <Loader dark /> : "Get started now"}
+                </button>
 
-                    <span className="text-sm">Companies who love HeySpace</span>
-                  </div>
-                </form>
-              )
-
-          }
+                <span className="text-sm">Companies who love HeySpace</span>
+              </div>
+            </form>
+          )}
 
           <div className="my-4 flex justify-between">
             <img src={images.timeCamp} alt="" className=" w-[100px] h-7" />
             <img src={images.remoteCamp} alt="" className=" w-[100px] h-7" />
           </div>
-
-        </div >
-      </div >
-
-    </section >
+        </div>
+      </div>
+    </section>
   );
 };
 
