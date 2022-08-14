@@ -9,14 +9,27 @@ import { updateProfile } from "../../api/settings";
 import { toast } from "react-toastify";
 import { get_my_profile } from "../../api/auth";
 import Loader from "../Loader";
+import Input from "../Input";
+import { parseError } from "../../util/helpers";
 
 const Profile = () => {
   const { loginUserInfo, setLoginUserInfo } = useUserInfoContext();
+  const [password, setPassword] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [expandBox, setExpandBox] = useState(false);
+  const [changePasswordBox, setChangePasswordBox] = useState(false);
   const [localUserInfo, setLocalUserInfo] = useState();
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(false);
   const [imageLoader, setImageLoader] = useState(false);
+  const [passwordLoader, setPasswordLoader] = useState(false);
+
+  const handlePasswordChange = (e) => {
+    setPassword({ ...password, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     setLocalUserInfo(loginUserInfo);
@@ -37,6 +50,33 @@ const Profile = () => {
     }
   };
 
+  const uploadPassword = async (e) => {
+    if (password.newPassword !== password.confirmPassword) {
+      toast.error("Password do not match!", {
+        autoClose: 1000,
+      });
+      return;
+    }
+    try {
+      setPasswordLoader(true);
+      await updateProfile({
+        currentPassword: password.oldPassword,
+        newPassword: password.newPassword,
+      });
+      setPassword({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordLoader(false);
+      toast.success("Password has been updated!", { autoClose: 1000 });
+    } catch (e) {
+      const error = parseError(e);
+      toast.error(error, { autoClose: 2000 });
+      setPasswordLoader(false);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLocalUserInfo({ ...localUserInfo, [name]: value });
@@ -53,8 +93,7 @@ const Profile = () => {
       const { data } = await get_my_profile();
       setLoginUserInfo(data.user);
       setImageLoader(false);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
       setImageLoader(false);
     }
   };
@@ -174,7 +213,49 @@ const Profile = () => {
 
           <div className="bg-white p-3 mt-3 rounded-md">
             <h6 className="text-[#7088A1] text-base font-bold">Password</h6>
-            <Button text>Change password</Button>
+
+            {!changePasswordBox ? (
+              <Button onClick={() => setChangePasswordBox(true)} text>
+                Change password
+              </Button>
+            ) : (
+              <div className="w-[450px] bg-white rounded-md mt-5">
+                <Input
+                  title="Old Password"
+                  value={password?.oldPassword}
+                  name="oldPassword"
+                  onChange={handlePasswordChange}
+                  className="mb-3"
+                />
+                <Input
+                  title="New Password"
+                  value={password?.newPassword}
+                  name="newPassword"
+                  onChange={handlePasswordChange}
+                  className="mb-3"
+                />
+                <Input
+                  title="Confirm Password"
+                  value={password?.confirmPassword}
+                  name="confirmPassword"
+                  onChange={handlePasswordChange}
+                  className="mb-3"
+                />
+                <div className="flex mt-5">
+                  <Button loading={passwordLoader} onClick={uploadPassword}>
+                    Update
+                  </Button>
+                  <Button
+                    text
+                    loading={loading}
+                    onClick={() => setChangePasswordBox(false)}
+                    className="ml-3"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="bg-white p-3 rounded-md">

@@ -26,3 +26,12 @@ export const getBase64Image = (file) => {
     reader.onerror = (error) => reject(error);
   });
 };
+
+export const parseError = (error) => {
+  const errorObj = error.response.data;
+  if (errorObj?.issue) {
+    return Object.values(errorObj?.issue)[0];
+  } else {
+    return errorObj?.message;
+  }
+};

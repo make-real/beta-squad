@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FaLessThan, FaGreaterThan } from 'react-icons/fa';
 import { useStyleContext } from '../context/StyleContext';
 import { month, oneDayTimes } from '../constant/data';

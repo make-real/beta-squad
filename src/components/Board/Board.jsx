@@ -1,6 +1,5 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
 import { useStyleContext } from '../../context/StyleContext';
-import { addBoardList, getBoardLists } from '../../hooks/useFetch';
+import { addBoardList } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
