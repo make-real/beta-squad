@@ -1,12 +1,12 @@
 import axios from "axios";
 
 
-const net = axios.create({
+const useAxios = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
 });
 
 
-net.interceptors.request.use(
+useAxios.interceptors.request.use(
 
   function (config) {
     const token = JSON.parse(localStorage.getItem('jwt'))
@@ -31,7 +31,7 @@ net.interceptors.request.use(
 );
 
 
-net.interceptors.response.use(
+useAxios.interceptors.response.use(
 
   (response) => {
     return response;
@@ -50,4 +50,4 @@ net.interceptors.response.use(
 );
 
 
-export default net;
+export default useAxios;

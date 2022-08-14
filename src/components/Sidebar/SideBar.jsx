@@ -1,25 +1,42 @@
 import {
-  ArrowLeft, ArrowRight, Bell, CloseMenuBtn, DotsDouble, Eye, Folder,
-  OpenMenuBtn, OverWatch, Plus, Search, SMS, SpaceLogo, SpaceLogoLock, Task,
+  ArrowLeft,
+  ArrowRight,
+  Bell,
+  CloseMenuBtn,
+  DotsDouble,
+  Eye,
+  Folder,
+  OpenMenuBtn,
+  OverWatch,
+  Plus,
+  Search,
+  SMS,
+  SpaceLogo,
+  SpaceLogoLock,
+  Task,
 } from "../../assets/icons";
 import {
-  UserSettingsDropDown, NotificationBell, NotificationSMS,
-  ModalWorkSpaceCreate, ModalSpaceCreate, ModalSearchSpace
+  UserSettingsDropDown,
+  NotificationBell,
+  NotificationSMS,
+  ModalWorkSpaceCreate,
+  ModalSpaceCreate,
+  ModalSearchSpace,
 } from ".";
-import { addWorkSpace, setSelectedWorkSpaceId } from '../../store/slice/workspace';
-import { addSpace, setSelectedSpaceId } from '../../store/slice/space';
+import {
+  addWorkSpace,
+  setSelectedWorkSpaceId,
+} from "../../store/slice/workspace";
+import { addSpace, setSelectedSpaceId } from "../../store/slice/space";
 import { useStyleContext } from "../../context/StyleContext";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
-import axios from "../../net";
 import "tippy.js/dist/tippy.css";
-
-
+import { get_space_data, get_workspace_data } from "../../api/workSpace";
 
 const SideBar = () => {
-
   const { margin, setMargin } = useStyleContext();
   const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
@@ -33,27 +50,23 @@ const SideBar = () => {
   const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
 
   // For All Space
-  const allSpace = useSelector(state => state.space.allSpaces);
+  const allSpace = useSelector((state) => state.space.allSpaces);
   // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
   
   const dispatch = useDispatch();
 
-
   // re-render for Work-Space
   useEffect(() => {
-
     // 🟨🟨🟨 GET request for Work-Spaces data...
     const getWorkSpaceData = async () => {
-
       try {
-        const { data } = await axios.get('/workspaces');
+        const { data } = await get_workspace_data();
 
         // get all Work-Space data & send into redux store...
         dispatch(addWorkSpace(data.workspaces));
 
         // by default select 1st Work-Space ID
         dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
-
       } catch (error) {
         console.log(error);
       }
@@ -69,21 +82,18 @@ const SideBar = () => {
 
   // re-render for space's under specific workSpace
   useEffect(() => {
-
     // 🟨🟨🟨 GET request for all Spaces data...
     const getSpaceData = async () => {
-
       try {
-        const { data } = await axios.get(`/spaces`, { params: { workspaceId: userSelectedWorkSpaceId } });
+        const { data } = await get_space_data(userSelectedWorkSpaceId);
 
-        // get all Space data 
+        // get all Space data
         dispatch(addSpace(data.spaces));
 
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
-
       } catch (error) {
-        console.log('space selection ==> ', error);
+        console.log("space selection ==> ", error);
       }
 
     }
@@ -91,17 +101,12 @@ const SideBar = () => {
     // call this function...
     getSpaceData();
 
-    // when id workSpace ID change, 
+    // when id workSpace ID change,
     // re-fetch all space's under this specific workSpace ID...
   }, [dispatch, userSelectedWorkSpaceId]);
 
-
-
-
   return (
     <section className={`fixed top-0 bottom-0 bg-gray-800 flex z-20`}>
-
-
       {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
       <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2 z-20">
         {
@@ -127,89 +132,106 @@ const SideBar = () => {
                           alt="searchIcon"
                           className="rounded-[4px]"
                         /> */}
-                        <div
-                          // onClick={() => setNewWorkShop(true)}
-                          className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold">
-                          {workSpace.name.charAt(0)}
-                        </div>
-
+                      <div
+                        // onClick={() => setNewWorkShop(true)}
+                        className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
+                      >
+                        {workSpace.name.charAt(0)}
                       </div>
-                    </Tippy>
-                  ))
+                    </div>
+                  </Tippy>
+                ))
+              }
+            </div>
+
+            {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
+            <div
+              onClick={() => setNewWorkSpace(true)}
+              className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group"
+            >
+              <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
+            </div>
+          </>
+        ) : (
+          <>
+            <OpenMenuBtn
+              width={28}
+              height={28}
+              onClick={() => setMargin(true)}
+              className="cursor-pointer text-gray-400 hover:text-gray-50"
+            />
+
+            {/* sidebar mene open command, but css disturb me :( */}
+            {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
+
+            <div className="mt-3 mb-2">
+              <img
+                alt="userImage"
+                src={
+                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
-              </div>
-
-
-              {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
-              <div
-                onClick={() => setNewWorkSpace(true)}
-                className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group">
-                <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
-              </div>
-
-            </>
-          ) : (
-            <>
-              <OpenMenuBtn
-                width={28}
-                height={28}
-                onClick={() => setMargin(true)}
-                className="cursor-pointer text-gray-400 hover:text-gray-50"
+                className="w-8 h-8 rounded-full cursor-pointer"
               />
+            </div>
 
-              {/* sidebar mene open command, but css disturb me :( */}
-              {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
+            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <Search />
+            </div>
 
-              <div className="mt-3 mb-2">
-                <img
-                  alt="userImage"
-                  src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
-                  className="w-8 h-8 rounded-full cursor-pointer"
-                />
-              </div>
+            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <Task />
+            </div>
 
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-                <Search />
-              </div>
-
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-                <Task />
-              </div>
-
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-                <OverWatch />
-              </div>
-            </>
-          )
-        }
+            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <OverWatch />
+            </div>
+          </>
+        )}
       </div>
 
-
-
       {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
-      <div className={`${!margin ? "hidden" : "w-[275px]"} bg-[#202F3E] duration-200`}>
-
+      <div
+        className={`${
+          !margin ? "hidden" : "w-[275px]"
+        } bg-[#202F3E] duration-200`}
+      >
         <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
           <div className="flex items-center space-x-4">
             <div
               className="mt-3 mb-2"
-              onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: false })); setUserNotificationBell(false); setUserNotificationSMS(false) }}
+              onClick={() => {
+                setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: false }));
+                setUserNotificationBell(false);
+                setUserNotificationSMS(false);
+              }}
             >
               <img
                 alt="userImage"
-                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
+                src={
+                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                }
                 className="w-6 h-6 rounded-full cursor-pointer"
               />
             </div>
 
-            <div className=" cursor-pointer flex justify-center items-center"
-              onClick={() => { setUserNotificationSMS(pre => !pre); setUserNotificationBell(false); setUserMenu(false) }}
+            <div
+              className=" cursor-pointer flex justify-center items-center"
+              onClick={() => {
+                setUserNotificationSMS((pre) => !pre);
+                setUserNotificationBell(false);
+                setUserMenu(false);
+              }}
             >
               <SMS className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
 
-            <div className=" cursor-pointer flex justify-center items-center"
-              onClick={() => { setUserNotificationBell(pre => !pre); setUserNotificationSMS(false); setUserMenu(false) }}
+            <div
+              className=" cursor-pointer flex justify-center items-center"
+              onClick={() => {
+                setUserNotificationBell((pre) => !pre);
+                setUserNotificationSMS(false);
+                setUserMenu(false);
+              }}
             >
               <Bell className="text-[#1F2E3D] hover:text-gray-200" />
             </div>
@@ -236,7 +258,8 @@ const SideBar = () => {
 
         <div className="flex items-center w-full m-3 space-x-4">
           <div className="w-[60%] hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 mt-[2px] cursor-pointer rounded-lg mr-2 ">
-            <Search /> <p className="text-sideBarTextColor font-bold">Search...</p>
+            <Search />{" "}
+            <p className="text-sideBarTextColor font-bold">Search...</p>
           </div>
 
           <div className="w-[20%] flex justify-between">
@@ -247,22 +270,27 @@ const SideBar = () => {
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <Task />
-          <p className="uppercase text-sideBarTextColor font-bold line-through">My Tasks</p>
+          <p className="uppercase text-sideBarTextColor font-bold line-through">
+            My Tasks
+          </p>
         </div>
 
         <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
           <OverWatch />
-          <p className="uppercase text-sideBarTextColor font-bold line-through">OverWatch</p>
+          <p className="uppercase text-sideBarTextColor font-bold line-through">
+            OverWatch
+          </p>
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">
-
           <div
             // 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎
             className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
             onClick={() => setSpaceSearchModal(true)}
           >
-            <p className="text-sideBarTextColor font-bold w-full">YOUR SPACES</p>
+            <p className="text-sideBarTextColor font-bold w-full">
+              YOUR SPACES
+            </p>
             <Search />
           </div>
 
@@ -272,7 +300,6 @@ const SideBar = () => {
           >
             <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor" />
           </div>
-
         </div>
 
         {/* 🟨🟨🟨 Folder Creation 🟨🟨🟨 */}
@@ -283,30 +310,32 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
         <div className="my-10">
-          {
-            allSpace?.map((space, i) =>
-              <div className="flex space-x-3 px-2 items-center group" key={i}
-                // onClick={() => { console.log(space) }}
-                onClick={() => { dispatch(setSelectedSpaceId(space._id)) }}
-              >
-                <DotsDouble className="invisible group-hover:visible cursor-grab" />
-                <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
-                  {
-                    space.privacy.includes('private')
-                      ? <SpaceLogoLock color={space.color || '#57BEC7'} />
-                      : <SpaceLogo color={space.color || '#57BEC7'} />
-                  }
-                  <p className=" text-sideBarTextColor font-bold">{space.name}</p>
-
-                </div>
+          {allSpace?.map((space, i) => (
+            <div
+              className="flex space-x-3 px-2 items-center group"
+              key={i}
+              // onClick={() => { console.log(space) }}
+              onClick={() => {
+                dispatch(setSelectedSpaceId(space._id));
+              }}
+            >
+              <DotsDouble className="invisible group-hover:visible cursor-grab" />
+              <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
+                {space.privacy.includes("private") ? (
+                  <SpaceLogoLock color={space.color || "#57BEC7"} />
+                ) : (
+                  <SpaceLogo color={space.color || "#57BEC7"} />
+                )}
+                <p className=" text-sideBarTextColor font-bold">{space.name}</p>
               </div>
-            )
-          }
+            </div>
+          ))}
         </div>
 
         <div className="flex w-full items-center m-3 justify-between pr-4 mt-8">
           <div className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full ">
-            <p className="text-sideBarTextColor font-bold w-full">CHATS</p> <Search />
+            <p className="text-sideBarTextColor font-bold w-full">CHATS</p>{" "}
+            <Search />
           </div>
 
           <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200">
@@ -319,11 +348,15 @@ const SideBar = () => {
           <div className="flex items-center justify-between p-2.5 mr-2 ml-2 hover:bg-[#344453] cursor-pointer rounded-lg group">
             <div className="flex items-center space-x-4">
               <img
-                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
+                src={
+                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                }
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
-              <p className="capitalize text-sideBarTextColor font-bold">Mahbub</p>
+              <p className="capitalize text-sideBarTextColor font-bold">
+                Mahbub
+              </p>
             </div>
             <Eye className="invisible group-hover:visible" />
           </div>
@@ -335,7 +368,9 @@ const SideBar = () => {
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
-              <p className="capitalize text-sideBarTextColor font-bold">Hey Bot</p>
+              <p className="capitalize text-sideBarTextColor font-bold">
+                Hey Bot
+              </p>
             </div>
             <Eye className="invisible group-hover:visible" />
           </div>
@@ -343,7 +378,9 @@ const SideBar = () => {
           <div className="flex items-center justify-between p-2.5 mr-2 ml-2 hover:bg-[#344453] cursor-pointer rounded-lg group">
             <div className="flex items-center space-x-4">
               <img
-                src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'}
+                src={
+                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                }
                 className="w-8 h-8 rounded-full cursor-pointer ring-4 ring-green-400"
                 alt="userImage"
               />
@@ -352,9 +389,7 @@ const SideBar = () => {
             <Eye className="invisible group-hover:visible" />
           </div>
         </div>
-
       </div>
-
 
       {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
       <UserSettingsDropDown userMenu={userMenu} />
@@ -365,29 +400,29 @@ const SideBar = () => {
 
       {
         // 🟨🟨🟨 ➕➕➕ Create New WorkSpace Modal Open / Popup 🟨🟨🟨
-        newWorkSpace && <ModalWorkSpaceCreate setNewWorkSpace={setNewWorkSpace} />
+        newWorkSpace && (
+          <ModalWorkSpaceCreate setNewWorkSpace={setNewWorkSpace} />
+        )
       }
 
       {
         // 🟨🟨🟨 🔎🔎🔎 Space Searching Modal Open / Popup 🟨🟨🟨
-        spaceSearchModal &&
-        <ModalSearchSpace
-          allSpace={allSpace}
-          setSpaceSearchModal={setSpaceSearchModal}
-          setCreateSpaceModal={setCreateSpaceModal}
-
-        />
+        spaceSearchModal && (
+          <ModalSearchSpace
+            allSpace={allSpace}
+            setSpaceSearchModal={setSpaceSearchModal}
+            setCreateSpaceModal={setCreateSpaceModal}
+          />
+        )
       }
 
       {
         // 🟨🟨🟨 ➕➕➕ Create Space Modal Open / Popup 🟨🟨🟨
-        createSpaceModal &&
-        <ModalSpaceCreate
-          setCreateSpaceModal={setCreateSpaceModal}
-        />
+        createSpaceModal && (
+          <ModalSpaceCreate setCreateSpaceModal={setCreateSpaceModal} />
+        )
       }
-
-    </section >
+    </section>
   );
 };
 

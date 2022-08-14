@@ -4,7 +4,7 @@ import { addBoardList, getBoardLists } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
-import axios from '../../net'
+import useAxios from '../../api/index';
 
 
 const Board = ({ selectedSpaceId }) => {
@@ -17,7 +17,7 @@ const Board = ({ selectedSpaceId }) => {
         const fetchData = async () => {
             try {
                 // GET Method ==> (Board) List --- under specific Space reference ID
-                const { data } = await axios.get(`/spaces/${selectedSpaceId}/board?getCards=true`);
+                const { data } = await useAxios.get(`/spaces/${selectedSpaceId}/board?getCards=true`);
                 setAllLists(data.lists);
             } catch (error) {
                 console.log(error);

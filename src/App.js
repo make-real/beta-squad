@@ -8,25 +8,14 @@ import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
-
 const ProtectedRoute = ({ children }) => {
-
   const jwt = fetchUserToken() || false;
-
-  // if no token present... redirect user into login page...
   if (!jwt) return <Navigate to="/" />;
-
   return children;
 };
 
-
-
 const App = () => {
-
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-
 
   return (
     <main className="overflow-hidden">
