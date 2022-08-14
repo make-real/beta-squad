@@ -37,7 +37,7 @@ api.interceptors.request.use(req => {
 
 const useFetch = (endPoint) => {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false);
 
@@ -48,8 +48,9 @@ const useFetch = (endPoint) => {
 
             setLoading(true);
             try {
-                const { data: { result } } = await api.get(endPoint);
-                setData(result);
+                // const { data: { result } } = await api.get(endPoint);
+                const { data } = await api.get(endPoint);
+                setData(data);
             } catch (error) {
                 setError(error);
             }
@@ -62,28 +63,6 @@ const useFetch = (endPoint) => {
 
     return { data, loading, error };
 }
-
-
-// const useFetchObject = async (endPoint) => {
-
-//     const [data, setData] = useState({});
-//     const [loading, setLoading] = useState(true)
-//     const [error, setError] = useState(false);
-
-//     console.log('useFetch call...');
-
-//     try {
-//         setLoading(true);
-//         const { data: { result } } = await api.get(endPoint);
-//         setData(result);
-//         setLoading(false);
-//     } catch (error) {
-//         setError(error);
-//     }
-
-//     return { data, loading, error };
-// }
-
 
 
 
@@ -104,8 +83,8 @@ export const accountVerification = code => api.post('/user-auth/account-verifica
 
 
 // GET Methods
-export const getUserProfileInfo = userId => useFetch(`/users/profile/${userId}`);
-export const getUserBySearch = userQuery => useFetch(`/users?search=${userQuery}`);
+// export const getUserProfileInfo = userId => useFetch(`/users/profile/${userId}`);
+// export const getUserBySearch = userQuery => useFetch(`/users?search=${userQuery}`);
 
 
 // POST ==> Work-Space Create 
@@ -114,3 +93,14 @@ export const workspaceCreation = newWorkSpaceObj => api.post('/workspaces', newW
 
 // POST ==> Space Create --- under specific Work-Space reference ID
 export const spaceCreation = newSpaceObj => api.post('/spaces', newSpaceObj);
+
+
+// 🟨🟨🟨 Board List 🟨🟨🟨
+// POST ==> (Board) List Create --- under specific Space reference ID
+export const addBoardList = (spaceId, newBoardList) => api.post(`/spaces/${spaceId}/board`, newBoardList);
+
+// GET ==> (Board) List --- under specific Space reference ID
+export const getBoardLists = spaceId => useFetch(`/spaces/${spaceId}/board?getCards=true`);
+
+// POST ==> Card Create --- under specific Space reference ID + Board List ID
+export const addCard = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);

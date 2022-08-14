@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import axios from '../net'
+
 
 const UserInfo = createContext();
 
@@ -8,6 +10,18 @@ export const UserInfoContext = ({ children }) => {
     const [loginUserInfo, setLoginUserInfo] = useState({} || JSON.parse(localStorage.getItem('userInfo')));
 
 
+    const userId = JSON.parse(localStorage.getItem('userId'));
+
+    useEffect(() => {
+        const getUserInfo = async () => {
+            const { data } = await axios.get(`users/profile/${userId}`);
+            setLoginUserInfo(data.user);
+        }
+
+        getUserInfo();
+    }, []);
+
+    
     // set login user info at localStorage 
     useEffect(() => localStorage.setItem('userInfo', JSON.stringify(loginUserInfo)), [loginUserInfo])
 

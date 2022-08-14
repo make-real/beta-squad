@@ -20,24 +20,24 @@ const Calender = () => {
         setAddCard(true)
     }
 
-    const DayUI = ({ margin }) => (
-        <div className='flex'>
-            <div className='flex-grow'>
+    const DayUI = () => (
+        <div className='grid grid-cols-12'>
+            <div className=''>
                 {
                     oneDayTimes.map(time =>
-                        <p key={time} className='w-24 h-10 border-t border-t-white text-gray-400 leading-10 '>
+                        <p key={time} className='w-24 h-10 border-t border-t-white text-gray-400 leading-10'>
                             {time}
                         </p>
                     )
                 }
             </div>
-            <div className='border-gray-300 border-r border-l border-b flex-grow'>
+            <div className='border-gray-300 border-r border-l border-b col-span-11'>
                 {
                     oneDayTimes.map(time =>
                         <p
                             key={time}
                             onClick={addCardVisibility}
-                            className={`${margin ? 'w-[67vw]' : 'w-[85vw]'} h-10 bg-sky-50 border-t border-gray-300`}
+                            className={`h-10 bg-sky-50 border-t border-gray-300`}
                         ></p>
                     )
                 }
@@ -45,52 +45,33 @@ const Calender = () => {
         </div>
     )
 
+
     const WeekUI = ({ margin }) => (
-        <div className='flex'>
-            <div className='mt-6'>
+        <div className='grid grid-cols-customCol -z-40'>
+            <div className='mt-6 -z-40'>
                 {
                     oneDayTimes.map(time =>
-                        <p key={time} className='w-24 h-10 border-t border-t-white text-gray-400 leading-10 '>
+                        <p key={time} className={`w-24 h-10  text-gray-400 leading-10 relative after:absolute  after:h-[1px] after:bg-gray-300 after:-z-40 ${margin ? 'after:right-[-1450px] after:w-[1450px]' : 'after:right-[-1725px] after:w-[1725px]'}`}>
                             {time}
                         </p>
                     )
                 }
             </div>
 
-            <div className='flex-grow'>
-                <div className='flex justify-around items-center'>
-                    <p>19 Sun</p>
-                    <p>20 Mon</p>
-                    <p>21 Tue</p>
-                    <p>22 Wed</p>
-                    <p>23 Thu</p>
-                    <p>24 Fri</p>
-                    <p>25 Sat</p>
-                </div>
-                {
-                    oneDayTimes.map(time =>
-                        <div
-                            key={time}
-                            onClick={addCardVisibility}
-                            className={`${margin ? 'w-[67vw]' : 'w-[85vw]'} h-10 border-t flex justify-evenly items-center`}
-                        >
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                            <p className='border-l border-r border-b w-full h-full border-gray-300'></p>
-                        </div>
-                    )
-                }
-            </div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>19 Sun</div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>20 Mon</div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>21 Tue</div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>22 Wed</div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>23 Thu</div>
+            <div className='border-l border-b w-full h-full border-gray-300 text-center'>24 Fri</div>
+            <div className='border-l border-r border-b w-full h-full border-gray-300 text-center'>25 Sat</div>
+
         </div>
     )
 
 
     return (
-        <section className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} pt-[90px] duration-200 `}>
+        <section className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} pt-[90px] duration-200`}>
 
             {/* 🟨🟨🟨 Header Section 🟨🟨🟨 */}
             <div className='flex items-center justify-between text-gray-400 px-2'>
@@ -121,7 +102,7 @@ const Calender = () => {
 
 
             {/* 🟨🟨🟨 Body Section 🟨🟨🟨 */}
-            <div className='p-8 '>
+            <div className='p-4'>
 
                 <div className={`absolute top-42 right-8`}>
                     {
@@ -184,24 +165,4 @@ const Calender = () => {
     )
 }
 
-export default Calender
-
-// <div className='grid grid-cols-8'>
-
-// <div className='mt-6'>
-//     {
-//         oneDayTimes.map(time =>
-//             <p key={time} className='w-24 h-10 border-r border-r-gray-200 text-gray-400 leading-10 '>
-//                 {time}
-//             </p>
-//         )
-//     }
-// </div>
-// <p className='border-b border-r border-gray-200 text-center'>19 Sun</p>
-// <p className='border-b border-r border-gray-200 text-center'>20 Mon</p>
-// <p className='border-b border-r border-gray-200 text-center'>21 Tue</p>
-// <p className='border-b border-r border-gray-200 text-center'>22 Wed</p>
-// <p className='border-b border-r border-gray-200 text-center'>23 Thu</p>
-// <p className='border-b border-r border-gray-200 text-center'>24 Fri</p>
-// <p className='border-b border-r border-gray-200 text-center'>25 Sat</p>
-// </div>
+export default Calender;

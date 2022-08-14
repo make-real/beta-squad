@@ -1,7 +1,7 @@
 import { DotsSingle, Plus, RightOK, Smile, UserPlus } from '../../assets/icons';
+import { useBoardCardContext } from '../../context/BoardCardContext';
 import { CardModal, CardSettingDropDown, CardChip } from '.';
 import { useEffect, useRef, useState } from 'react'
-import { useBoardCardContext } from '../../context/BoardCardContext';
 
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
@@ -10,7 +10,7 @@ const Card = ({ card, listID }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
     const { handleDragEnd, handleDragEnter } = useBoardCardContext();
-    const [boardModal, setBoardModal] = useState(false);
+    const [cardModal, setCardModal] = useState(false);
     const [noteDone, setNoteDone] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -31,12 +31,12 @@ const Card = ({ card, listID }) => {
         <div
             draggable
             ref={dropDownRef}
-            onClick={() => setBoardModal(true)}
+            onClick={() => setCardModal(true)}
             onMouseEnter={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
             onDragEnd={() => handleDragEnd(listID, card.id)}
             onDragEnter={() => handleDragEnter(listID, card.id)}
-            className='relative w-[275px] bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200'>
+            className='relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200 '>
 
             {
                 noteDone &&
@@ -55,9 +55,15 @@ const Card = ({ card, listID }) => {
 
 
             {/* For Tag's / Card Chip's */}
-            <div className='p-1 text-white flex gap-2'>
+            <div className='p-1 text-white flex gap-2 flex-wrap'>
                 <CardChip tag='Done' bgColor='bg-green-500' />
                 <CardChip tag='Warning' bgColor='bg-orange-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
+                <CardChip tag='Active' bgColor='bg-red-500' />
                 <CardChip tag='Active' bgColor='bg-red-500' />
             </div>
 
@@ -77,24 +83,46 @@ const Card = ({ card, listID }) => {
                     cardID={card.id}
                     listID={listID}
                     noteDone={noteDone}
+                    cardModal={cardModal}
                     setNoteDone={setNoteDone}
                     setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />
             }
 
 
-            <div className='absolute bottom-4 right-6 flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'>
-                <Plus width="12" height="12" className='mr-[2px]' />
-                <Smile />
+            {/* ➕🙂 plus smile face emoji ➕🙂 */}
+
+
+            <div className=' flex items-center justify-end '>
+
+                <div className='mr-1 bg-slate-200/50 rounded-md py-[2px] px-1 border border-teal-500'>
+                    👍 <span className='text-black'>1</span>
+                </div>
+
+                <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
+                    onClick={()=>{}}
+                >
+                    <Plus width="12" height="12" className='mr-[2px]' />
+                    <Smile />
+
+                    <div className='flex gap-2 items-center'>
+                        {/* 👍❤👎🎉 */}
+                    </div>
+                </div>
             </div>
+
+
+
+
 
 
             {
                 // When Task Click >>> then Modal Open
-                boardModal &&
+                cardModal &&
                 <CardModal
+                    card={card}
                     noteDone={noteDone}
-                    setBoardModal={setBoardModal}
+                    setBoardModal={setCardModal}
                     setNoteDone={setNoteDone}
                 />
             }

@@ -287,7 +287,8 @@ const SideBar = () => {
           {
             allSpace?.map((space, i) =>
               <div className="flex space-x-3 px-2 items-center group" key={i}
-
+                // onClick={() => { console.log(space) }}
+                onClick={() => { dispatch(setSelectedSpaceId(space._id)) }}
               >
                 <DotsDouble className="invisible group-hover:visible cursor-grab" />
                 <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">

@@ -11,7 +11,10 @@ export const BoardCardContext = ({ children }) => {
     const [boardLists, setBoardList] = useState(JSON.parse(localStorage.getItem('kanban')) || []);
    
 
-    const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
+    // const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
+    // const addBoardList = name => {
+
+    // };
 
 
     const removeBoardList = bid => setBoardList(pre => pre.filter(({ id }) => id !== bid))
@@ -112,7 +115,7 @@ export const BoardCardContext = ({ children }) => {
     return (
         <BoardCardItem.Provider value={{
             boardLists,
-            addBoardList,
+            // addBoardList,
             removeBoardList,
             addCard,
             updateCard,

@@ -5,20 +5,27 @@ import {
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
 import { ToastContainer } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+
+
+
+
+const ProtectedRoute = ({ children }) => {
+
+  const jwt = fetchUserToken() || false;
+
+  // if no token present... redirect user into login page...
+  if (!jwt) return <Navigate to="/" />;
+
+  return children;
+};
+
 
 
 const App = () => {
 
-  const ProtectedRoute = ({ children }) => {
-
-    const jwt = fetchUserToken() || false;
-
-    // if no token present... redirect user into login page...
-    if (!jwt) return <Navigate to="/" />;
-
-    return children;
-  };
+  const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
 
   return (
@@ -40,11 +47,12 @@ const App = () => {
 
         <Route path="projects" element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
-          <Route path="kanban" element={<ProtectedRoute> <Board /> </ProtectedRoute>} />
+          <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="list" element={<ProtectedRoute> <List /> </ProtectedRoute>} />
           <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
         </Route>
+
 
         <Route path="*" element={<PageNotFound />} />
 

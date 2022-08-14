@@ -1,20 +1,25 @@
 import { Copy, Delete, LinkingChain, RightOK } from '../../assets/icons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ConfirmDialog from './ConfirmDialog';
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropDownToggle, cardID, listID }) => {
+const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropDownToggle, cardID, listID, cardModal }) => {
 
 
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
 
+    // if cardModal Open by user click, then hide this Card-Setting-DropDown-Toggle window 
+    if (cardModal === true) setCardSettingDropDownToggle(false);
+
+
     return (
         <div
             onClick={e => { e.stopPropagation(); setCardSettingDropDownToggle(false) }}
-            className={`w-[210px] absolute top-[65px] 
-            ${right ? 'right-[-10px]' : 'right-[0px]'} bg-white p-2 rounded-lg shadow-xl z-[999999999999999999] 
+            className={`w-[210px] absolute top-[65px]
+            ${right ? 'right-[-5px]' : 'right-1'} 
+            bg-white p-2 rounded-lg shadow-xl z-30 
             after:content-[""] 
             after:w-8 
             after:h-8 
@@ -23,7 +28,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
             after:rotate-45 
             after:z-[-10]
             after:top-[-10px] 
-            ${right ? 'after:right-[8%] after:translate-x-[8%] ' : 'after:right-[-5px]'} `}
+            ${right ? 'after:right-[4%] after:translate-x-[8%] ' : 'after:right-[38px]'} `}
         >
 
             <div className='boardActionDropDown group line-through relative'>
