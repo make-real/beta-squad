@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { CgBox } from "react-icons/cg";
 import { BsTag } from "react-icons/bs";
 import images from "../../assets";
-
+import { useUserInfoContext } from "../../context/UserInfoContext";
 
 const UserSettings = () => {
-
+  const { loginUserInfo } = useUserInfoContext();
 
   return (
     <section className="w-[325px] text-sm fixed top-0 bottom-0 text-[#9FB4C3] bg-[#23313F] rounded-r-lg p-3">
@@ -17,7 +17,13 @@ const UserSettings = () => {
         className="text-white mt-4 font-bold flex bg-[#253443] p-1.5 rounded-sm border-b-2 border-[#2d4154]"
       >
         <div className="w-11 h-11 rounded-full overflow-hidden">
-          <img src={'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'} alt="" />
+          <img
+            src={
+              loginUserInfo.avatar ||
+              "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+            }
+            alt=""
+          />
         </div>
         <h6 className="my-auto  pl-6">Profile Settings</h6>
       </Link>
