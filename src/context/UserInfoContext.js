@@ -10,6 +10,7 @@ export const UserInfoContext = ({ children }) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
+      if (!JSON.parse(localStorage.getItem("jwt"))) return;
       const { data } = await get_my_profile();
       setLoginUserInfo(data.user);
     };

@@ -40,7 +40,7 @@ useAxios.interceptors.response.use(
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
-        // DO anything if token is not valid
+        localStorage.clear();
         window.location.href = "/";
       }
     }

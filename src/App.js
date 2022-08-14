@@ -14,6 +14,12 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+const AuthRoute = ({ children }) => {
+  const jwt = fetchUserToken() || false;
+  if (jwt) return <Navigate to="/projects" />;
+  return children;
+};
+
 const App = () => {
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
@@ -22,8 +28,8 @@ const App = () => {
       <Routes>
 
         <Route path="/" />
-        <Route index element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route index element={<AuthRoute><Login /></AuthRoute>} />
+        <Route path="register" element={<AuthRoute><Register /></AuthRoute>} />
 
 
         <Route path="settings" element={<ProtectedRoute> <UserSettingLayout /> </ProtectedRoute>}>

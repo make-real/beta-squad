@@ -6,22 +6,18 @@ import React, { useState } from "react";
 import images from "../../assets";
 import Loader from "../Loader";
 
-
 const Login = () => {
-
   const navigate = useNavigate();
   const { setLoginUserInfo } = useUserInfoContext();
   const [loader, setLoader] = useState(false);
   const [userInput, setUserInput] = useState({ email: "", password: "" });
   const [errorInfo, setErrorInfo] = useState({ email: "", password: "" });
 
-
   // collect all user input data from UI
   const handleUserInput = (e) => {
     const { name, value } = e.target;
     setUserInput((prev) => ({ ...prev, [name]: value }));
   };
-
 
   // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
   // User Info send to backend for registration...
@@ -32,12 +28,12 @@ const Login = () => {
       setLoader(true);
       const { data } = await userSignIn(userInput);
 
-      // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
-      setLoginUserInfo(data.loggedUser);
-
       // store user (JWT token) + (user ID) into local storage...
       localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
       localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
+
+      // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
+      setLoginUserInfo(data.loggedUser);
 
       // navigate user into user profile page...
       navigate("/projects");
@@ -45,11 +41,16 @@ const Login = () => {
     } catch (error) {
       setLoader(false);
       // console.log(error);
-      setErrorInfo((pre) => ({ ...pre, email: error.response.data?.issue?.email }));
-      setErrorInfo((pre) => ({ ...pre, password: error.response.data?.issue?.password }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        email: error.response.data?.issue?.email,
+      }));
+      setErrorInfo((pre) => ({
+        ...pre,
+        password: error.response.data?.issue?.password,
+      }));
     }
   };
-
 
   return (
     <section className="flex">
@@ -121,8 +122,9 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="email@company.com"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.email && "border-red-500"
-                  }`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.email && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
               {errorInfo.email && (
@@ -141,8 +143,9 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.password && "border-red-500"
-                  }`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.password && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
               {errorInfo.password && (
