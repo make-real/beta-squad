@@ -29,13 +29,13 @@ const SideBar = () => {
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
 
   // For Work-Spaces
-  const data = useSelector(state => state.workspace.workspaces);
+  const allWorkSpaces = useSelector(state => state.workspace.workspaces);
   const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
-  console.log(data);
+
   // For All Space
   const allSpace = useSelector(state => state.space.allSpaces);
   // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-
+  
   const dispatch = useDispatch();
 
 
@@ -60,12 +60,11 @@ const SideBar = () => {
 
     }
 
-
     // call this function...
     getWorkSpaceData();
 
     // when new work-space add, re-render this component...
-  }, []);
+  }, [dispatch, allWorkSpaces?.length]);
 
 
   // re-render for space's under specific workSpace
@@ -89,7 +88,6 @@ const SideBar = () => {
 
     }
 
-
     // call this function...
     getSpaceData();
 
@@ -112,7 +110,7 @@ const SideBar = () => {
               <div className="space-y-1">
                 {
                   // 🟨🟨🟨 all work-Space loop here...
-                  data.map(workSpace => (
+                  allWorkSpaces?.map(workSpace => (
                     <Tippy
                       key={workSpace?._id}
                       placement="right"

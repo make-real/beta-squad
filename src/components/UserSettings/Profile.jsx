@@ -9,11 +9,10 @@ import { useState } from "react";
 
 const Profile = () => {
 
-  
+
   const { loginUserInfo } = useUserInfoContext();
   const [expandBox, setExpandBox] = useState(false);
-  const [localUserInfo, setLocalUserInfo] = useState(loginUserInfo);
-
+  const [localUserInfo, setLocalUserInfo] = useState(loginUserInfo || JSON.parse(localStorage.getItem('userInfo')));
 
 
 

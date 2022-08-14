@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { getUserProfileInfo } from "../hooks/useFetch";
 import axios from '../net'
 
 
@@ -9,21 +10,14 @@ export const UserInfoContext = ({ children }) => {
     // get login user info from server OR localStorage 
     const [loginUserInfo, setLoginUserInfo] = useState({} || JSON.parse(localStorage.getItem('userInfo')));
 
-
     const userId = JSON.parse(localStorage.getItem('userId'));
+    const { data } = getUserProfileInfo(userId)
 
-    // useEffect(() => {
-    //     const getUserInfo = async () => {
-    //         const { data } = await axios.get(`users/profile/${userId}`);
-    //         setLoginUserInfo(data.user);
-    //     }
+    useEffect(() => setLoginUserInfo(data?.user), [data]);
 
-    //     // getUserInfo();
-    // }, [userId, loginUserInfo]);
 
-    
     // set login user info at localStorage 
-    // useEffect(() => localStorage.setItem('userInfo', JSON.stringify(loginUserInfo)), [loginUserInfo])
+    useEffect(() => localStorage.setItem('userInfo', JSON.stringify(loginUserInfo)), [loginUserInfo])
 
 
     return (

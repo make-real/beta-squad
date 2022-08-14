@@ -29,7 +29,7 @@ const App = () => {
 
 
   return (
-    <main>
+    <main className="overflow-hidden">
       <Routes>
 
         <Route path="/" />
