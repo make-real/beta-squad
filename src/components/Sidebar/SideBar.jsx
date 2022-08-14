@@ -46,15 +46,13 @@ const SideBar = () => {
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
 
   // For Work-Spaces
-  const data = useSelector((state) => state.workspace.workspaces);
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+  const allWorkSpaces = useSelector(state => state.workspace.workspaces);
+  const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
 
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
   // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-
+  
   const dispatch = useDispatch();
 
   // re-render for Work-Space
@@ -64,7 +62,7 @@ const SideBar = () => {
       try {
         const { data } = await get_workspace_data();
 
-        // get all Work-Space data
+        // get all Work-Space data & send into redux store...
         dispatch(addWorkSpace(data.workspaces));
 
         // by default select 1st Work-Space ID
@@ -72,11 +70,15 @@ const SideBar = () => {
       } catch (error) {
         console.log(error);
       }
-    };
+
+    }
 
     // call this function...
     getWorkSpaceData();
-  }, [dispatch]);
+
+    // when new work-space add, re-render this component...
+  }, [dispatch, allWorkSpaces?.length]);
+
 
   // re-render for space's under specific workSpace
   useEffect(() => {
@@ -93,7 +95,8 @@ const SideBar = () => {
       } catch (error) {
         console.log("space selection ==> ", error);
       }
-    };
+
+    }
 
     // call this function...
     getSpaceData();
@@ -106,31 +109,25 @@ const SideBar = () => {
     <section className={`fixed top-0 bottom-0 bg-gray-800 flex z-20`}>
       {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
       <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2 z-20">
-        {margin ? (
-          <>
-            <div className="space-y-1">
-              {
-                // 🟨🟨🟨 all work-Space loop here...
-                data.map((workSpace) => (
-                  <Tippy
-                    key={workSpace?._id}
-                    placement="right"
-                    content={workSpace?.name}
-                    className="bg-gray-600/70 text-[10px] w-40"
-                  >
-                    {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
-                    <div
-                      className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${
-                        userSelectedWorkSpaceId === workSpace?._id
-                          ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        dispatch(setSelectedWorkSpaceId(workSpace?._id))
-                      }
+        {
+          margin ? (
+            <>
+              <div className="space-y-1">
+                {
+                  // 🟨🟨🟨 all work-Space loop here...
+                  allWorkSpaces?.map(workSpace => (
+                    <Tippy
+                      key={workSpace?._id}
+                      placement="right"
+                      content={workSpace?.name}
+                      className="bg-gray-600/70 text-[10px] w-40"
                     >
-                      {/* <img
+                      {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
+                      <div className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
+                      ${userSelectedWorkSpaceId === workSpace?._id ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md" : ''}`}
+                        onClick={() => dispatch(setSelectedWorkSpaceId(workSpace?._id))}
+                      >
+                        {/* <img
                           src={asserts.makeReal}
                           alt="searchIcon"
                           className="rounded-[4px]"

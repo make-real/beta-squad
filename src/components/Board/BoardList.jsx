@@ -22,16 +22,15 @@ const BoardList = ({ boardList }) => {
         return () => document.removeEventListener('click', handleClick);
     }, []);
 
-    // addCard
 
     return (
         // ${boardList.cards.length  >= 4  ? 'h-full' : 'h-fit'}
 
-        <div className={`w-[300px] h-full rounded-lg mb-2 mr-3 flex flex-col`}>
+        <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>
 
             {/* Board List Header + Its needful drop down settings */}
-            <div className='bg-gray-100 relative flex items-center justify-between p-4 rounded-t-lg' ref={dropDownRef}>
-                <p className='text-gray-500 text-lg'>{boardList?.name || 'New List'} - {boardList?.cards.length}</p>
+            <div className='overflow-hidden bg-gray-100 relative flex items-center justify-between p-4 rounded-t-lg' ref={dropDownRef}>
+                <p className='text-gray-500 text-lg'>{boardList?.name || 'New List'} - {boardList?.cards?.length || 0}</p>
                 <DotsSingle
                     className='text-gray-500 cursor-grab w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200'
                     onClick={() => setBoardListSettingDropDownToggle(true)}
@@ -41,7 +40,7 @@ const BoardList = ({ boardList }) => {
                     // List drop down settings...
                     boardListSettingDropDownToggle &&
                     <BoardListSettingDropDown
-                        boardListID={boardList.id}
+                        boardListID={boardList?.id}
                         setBoardListSettingDropDownToggle={setBoardListSettingDropDownToggle}
                     />
                 }
@@ -51,7 +50,7 @@ const BoardList = ({ boardList }) => {
             <div className='bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll'>
                 {
                     // all card's inside a list, are printed at UI by this loop...
-                    boardList.cards.map(card => <Card key={card.id} card={card} listID={boardList.id} />)
+                    boardList?.cards?.map(card => <Card key={card.id} card={card} listID={boardList?.id} />)
                 }
             </div>
 
@@ -59,7 +58,7 @@ const BoardList = ({ boardList }) => {
             <AddBtn
                 placeHolder='Add card name...'
                 btnText='card'
-                onSubmit={cardName => addCard(cardName, boardList.id)}
+                onSubmit={cardName => addCard(cardName, boardList?.id)}
             />
 
         </div>

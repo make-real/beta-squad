@@ -18,7 +18,7 @@ const App = () => {
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
   return (
-    <main>
+    <main className="overflow-hidden">
       <Routes>
 
         <Route path="/" />

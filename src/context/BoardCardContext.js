@@ -109,7 +109,7 @@ export const BoardCardContext = ({ children }) => {
 
 
     // store all data in local storage
-    useEffect(() => localStorage.setItem('kanban', JSON.stringify(boardLists)), [boardLists]);
+    // useEffect(() => localStorage.setItem('kanban', JSON.stringify(boardLists)), [boardLists]);
 
 
     return (

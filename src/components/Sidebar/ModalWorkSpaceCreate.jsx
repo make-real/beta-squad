@@ -1,13 +1,15 @@
+import { addWorkSpace } from '../../store/slice/workspace';
 import { workspaceCreation } from '../../hooks/useFetch';
 import { useEffect, useState } from 'react';
 import { Close } from '../../assets/icons';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 
 const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
 
+    const dispatch = useDispatch();
     const [workSpaceName, setWorkSpaceName] = useState('');
-
 
     // user esc key press Event Listener for closing modal... 
     useEffect(() => {
@@ -21,6 +23,7 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
 
 
     // work space create...
+    // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -28,15 +31,13 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
             // its a POST method | object send into backend/server
             const { data } = await workspaceCreation({ name: workSpaceName });
 
+            // get all Work-Space data & send into redux store...
+            // for live re-fetching/load data at SideBar for navigation... 
+            dispatch(addWorkSpace(data.workspaces));
+
             // display a success notification for user...
             toast.success(`${data?.workspace?.name} : work space create successfully`, { autoClose: 3000 });
-            // {
-            //     "workspace": {
-            //         "_id": "62dd4e9e4cd94215aec5d19f",
-            //         "name": "WorkSpace 1",
-            //         "initialSpaceId": "62dd4e9e4cd94215aec5d1a2"
-            //     }
-            // }
+
         } catch (error) {
             // display error notification for developers...
             console.log(error?.response?.data?.issue);
