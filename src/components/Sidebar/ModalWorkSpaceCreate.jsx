@@ -23,6 +23,7 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
 
 
     // work space create...
+    // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -30,12 +31,13 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
             // its a POST method | object send into backend/server
             const { data } = await workspaceCreation({ name: workSpaceName });
 
+            // get all Work-Space data & send into redux store...
+            // for live re-fetching/load data at SideBar for navigation... 
+            dispatch(addWorkSpace(data.workspaces));
+
             // display a success notification for user...
             toast.success(`${data?.workspace?.name} : work space create successfully`, { autoClose: 3000 });
 
-            // get all Work-Space data & send into redux store...
-            dispatch(addWorkSpace(data.workspaces));
-            
         } catch (error) {
             // display error notification for developers...
             console.log(error?.response?.data?.issue);

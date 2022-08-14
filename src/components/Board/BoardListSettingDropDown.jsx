@@ -10,7 +10,7 @@ const BoardListSettingDropDown = ({ boardListID, setBoardListSettingDropDownTogg
 
 
     return (
-        <div className='absolute top-[60px] left-[128px] w-[280px] p-3 rounded-lg shadow-2xl z-20 bg-white
+        <div className='absolute top-[60px] left-[128px] w-[280px] min-h-fit p-3 rounded-lg shadow-2xl z-50 bg-white
                             before:content-[""] before:w-8 before:h-8 before:bg-white before:absolute before:top-[-8px] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:z-[-10]'>
 
             <p className='text-center pb-2'>More Options</p>
