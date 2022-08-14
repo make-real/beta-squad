@@ -12,18 +12,18 @@ export const UserInfoContext = ({ children }) => {
 
     const userId = JSON.parse(localStorage.getItem('userId'));
 
-    useEffect(() => {
-        const getUserInfo = async () => {
-            const { data } = await axios.get(`users/profile/${userId}`);
-            setLoginUserInfo(data.user);
-        }
+    // useEffect(() => {
+    //     const getUserInfo = async () => {
+    //         const { data } = await axios.get(`users/profile/${userId}`);
+    //         setLoginUserInfo(data.user);
+    //     }
 
-        getUserInfo();
-    }, []);
+    //     // getUserInfo();
+    // }, [userId, loginUserInfo]);
 
     
     // set login user info at localStorage 
-    useEffect(() => localStorage.setItem('userInfo', JSON.stringify(loginUserInfo)), [loginUserInfo])
+    // useEffect(() => localStorage.setItem('userInfo', JSON.stringify(loginUserInfo)), [loginUserInfo])
 
 
     return (

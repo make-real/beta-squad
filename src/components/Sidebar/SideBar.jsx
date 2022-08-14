@@ -31,7 +31,7 @@ const SideBar = () => {
   // For Work-Spaces
   const data = useSelector(state => state.workspace.workspaces);
   const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
-
+  console.log(data);
   // For All Space
   const allSpace = useSelector(state => state.space.allSpaces);
   // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
@@ -48,7 +48,7 @@ const SideBar = () => {
       try {
         const { data } = await axios.get('/workspaces');
 
-        // get all Work-Space data 
+        // get all Work-Space data & send into redux store...
         dispatch(addWorkSpace(data.workspaces));
 
         // by default select 1st Work-Space ID
@@ -64,7 +64,8 @@ const SideBar = () => {
     // call this function...
     getWorkSpaceData();
 
-  }, [dispatch]);
+    // when new work-space add, re-render this component...
+  }, []);
 
 
   // re-render for space's under specific workSpace
