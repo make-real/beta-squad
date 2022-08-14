@@ -37,6 +37,7 @@ const Login = () => {
 
       // navigate user into user profile page...
       navigate("/projects");
+      
       setLoader(false);
     } catch (error) {
       setLoader(false);

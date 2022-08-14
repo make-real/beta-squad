@@ -45,6 +45,8 @@ const SideBar = () => {
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
 
+  const dispatch = useDispatch();
+
   // For Work-Spaces
   const allWorkSpaces = useSelector(state => state.workspace.workspaces);
   const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
@@ -52,8 +54,10 @@ const SideBar = () => {
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
   // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+
+  // get user img from user info, which store at local storage...
+  const userImg = JSON.parse(localStorage.getItem('userInfo')).avatar;
   
-  const dispatch = useDispatch();
 
   // re-render for Work-Space
   useEffect(() => {
@@ -132,68 +136,67 @@ const SideBar = () => {
                           alt="searchIcon"
                           className="rounded-[4px]"
                         /> */}
-                      <div
-                        // onClick={() => setNewWorkShop(true)}
-                        className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
-                      >
-                        {workSpace.name.charAt(0)}
+                        <div
+                          // onClick={() => setNewWorkShop(true)}
+                          className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
+                        >
+                          {workSpace.name.charAt(0)}
+                        </div>
                       </div>
-                    </div>
-                  </Tippy>
-                ))
-              }
-            </div>
-
-            {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
-            <div
-              onClick={() => setNewWorkSpace(true)}
-              className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group"
-            >
-              <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
-            </div>
-          </>
-        ) : (
-          <>
-            <OpenMenuBtn
-              width={28}
-              height={28}
-              onClick={() => setMargin(true)}
-              className="cursor-pointer text-gray-400 hover:text-gray-50"
-            />
-
-            {/* sidebar mene open command, but css disturb me :( */}
-            {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
-
-            <div className="mt-3 mb-2">
-              <img
-                alt="userImage"
-                src={
-                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                    </Tippy>
+                  ))
                 }
-                className="w-8 h-8 rounded-full cursor-pointer"
+              </div>
+
+              {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
+              <div
+                onClick={() => setNewWorkSpace(true)}
+                className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group"
+              >
+                <Plus className="text-white duration-200 group-hover:text-purple-300 hover:z-10" />
+              </div>
+            </>
+          ) : (
+            <>
+              <OpenMenuBtn
+                width={28}
+                height={28}
+                onClick={() => setMargin(true)}
+                className="cursor-pointer text-gray-400 hover:text-gray-50"
               />
-            </div>
 
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <Search />
-            </div>
+              {/* sidebar mene open command, but css disturb me :( */}
+              {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
 
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <Task />
-            </div>
+              <div className="mt-3 mb-2">
+                <img
+                  alt="userImage"
+                  src={
+                    userImg ? userImg : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  }
+                  className="w-8 h-8 rounded-full cursor-pointer"
+                />
+              </div>
 
-            <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
-              <OverWatch />
-            </div>
-          </>
-        )}
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <Search />
+              </div>
+
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <Task />
+              </div>
+
+              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+                <OverWatch />
+              </div>
+            </>
+          )}
       </div>
 
       {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
       <div
-        className={`${
-          !margin ? "hidden" : "w-[275px]"
-        } bg-[#202F3E] duration-200`}
+        className={`${!margin ? "hidden" : "w-[275px]"
+          } bg-[#202F3E] duration-200`}
       >
         <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
           <div className="flex items-center space-x-4">
@@ -208,7 +211,7 @@ const SideBar = () => {
               <img
                 alt="userImage"
                 src={
-                  "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  userImg ? userImg : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 className="w-6 h-6 rounded-full cursor-pointer"
               />

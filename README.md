@@ -15,9 +15,10 @@
 | 7| yarn add `react-toastify`          | [Popup Toast Notification][tostDoc]   |
 | 8| yarn add `react-redux`             | globally data/state management        |
 | 9| yarn add `@reduxjs-toolkit`        | globally data/state management        |
-| 10| yarn add `lodash`        | Javascript helper methods       |
-| 11| yarn add `date-fns`        | Date manager        |
-| 12| yarn add `reactjs-popup`        | Managing popups        |
+|10| yarn add `lodash`                  | Javascript helper methods             |
+|11| yarn add `date-fns`                | Date manager                          |
+|12| yarn add `reactjs-popup`           | Managing popups                       |
+
 
 
 
