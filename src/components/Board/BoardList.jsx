@@ -2,7 +2,7 @@ import { useBoardCardContext } from "../../context/BoardCardContext";
 import { AddBtn, Card, BoardListSettingDropDown } from ".";
 import { useRef } from "react";
 import { DotsSingle } from "../../assets/icons";
-import Dropdown from "../dropdown";
+import Dropdown from "../Dropdown";
 
 const BoardList = ({ boardList }) => {
   const dropDownRef = useRef();
