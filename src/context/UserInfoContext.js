@@ -13,7 +13,14 @@ export const UserInfoContext = ({ children }) => {
       const { data } = await get_my_profile();
       setLoginUserInfo(data.user);
     };
-    getUserInfo();
+
+    // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+    // this logic re-call it-self again & again at login screen...
+    // please re-factor this logic... & delete this comment...
+    // thank you... 🤗
+
+    // getUserInfo();
+    // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
   }, []);
 
   useEffect(
