@@ -1,68 +1,42 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
-import { AddBtn, Card, BoardListSettingDropDown } from '.';
-import { useEffect, useRef, useState } from 'react';
-import { DotsSingle } from '../../assets/icons';
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { AddBtn, Card, BoardListSettingDropDown } from ".";
+import { useRef } from "react";
+import { DotsSingle } from "../../assets/icons";
+import Dropdown from "../Dropdown";
 
-
-// This <Component /> called by 🟨🟨🟨 Board.jsx 🟨🟨🟨
 const BoardList = ({ boardList }) => {
+  const dropDownRef = useRef();
+  const { addCard } = useBoardCardContext();
 
-    const dropDownRef = useRef();
-    const { addCard } = useBoardCardContext();
-    const [boardListSettingDropDownToggle, setBoardListSettingDropDownToggle] = useState(false);
+  return (
+    <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>
+      <div
+        className="overflow-hidden bg-gray-100 flex items-center justify-between p-4 rounded-t-lg"
+        ref={dropDownRef}
+      >
+        <p className="text-gray-500 text-lg">
+          {boardList?.name || "New List"} - {boardList?.cards?.length || 0}
+        </p>
+        <Dropdown
+          button={
+            <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200" />
+          }
+        >
+          <BoardListSettingDropDown boardListID={boardList?.id} />
+        </Dropdown>
+      </div>
+      <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
+        {boardList?.cards?.map((card) => (
+          <Card key={card.id} card={card} listID={boardList?.id} />
+        ))}
+      </div>
+      <AddBtn
+        placeHolder="Add card name..."
+        btnText="card"
+        onSubmit={(cardName) => addCard(cardName, boardList?.id)}
+      />
+    </div>
+  );
+};
 
-
-    const handleClick = e => {
-        // track out-side of click... & close setting drop down div...
-        if (!dropDownRef?.current?.contains(e.target)) setBoardListSettingDropDownToggle(false);
-    }
-
-    useEffect(() => {
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, []);
-
-
-    return (
-        // ${boardList.cards.length  >= 4  ? 'h-full' : 'h-fit'}
-
-        <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>
-
-            {/* Board List Header + Its needful drop down settings */}
-            <div className='overflow-hidden bg-gray-100 relative flex items-center justify-between p-4 rounded-t-lg' ref={dropDownRef}>
-                <p className='text-gray-500 text-lg'>{boardList?.name || 'New List'} - {boardList?.cards?.length || 0}</p>
-                <DotsSingle
-                    className='text-gray-500 cursor-grab w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200'
-                    onClick={() => setBoardListSettingDropDownToggle(true)}
-                />
-
-                {
-                    // List drop down settings...
-                    boardListSettingDropDownToggle &&
-                    <BoardListSettingDropDown
-                        boardListID={boardList?.id}
-                        setBoardListSettingDropDownToggle={setBoardListSettingDropDownToggle}
-                    />
-                }
-            </div>
-
-
-            <div className='bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll'>
-                {
-                    // all card's inside a list, are printed at UI by this loop...
-                    boardList?.cards?.map(card => <Card key={card.id} card={card} listID={boardList?.id} />)
-                }
-            </div>
-
-
-            <AddBtn
-                placeHolder='Add card name...'
-                btnText='card'
-                onSubmit={cardName => addCard(cardName, boardList?.id)}
-            />
-
-        </div>
-    )
-}
-
-export default BoardList
+export default BoardList;

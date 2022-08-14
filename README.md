@@ -17,6 +17,8 @@
 | 9| yarn add `@reduxjs-toolkit`        | globally data/state management        |
 |10| yarn add `lodash`                  | Javascript helper methods             |
 |11| yarn add `date-fns`                | Date manager                          |
+|12| yarn add `reactjs-popup`           | Managing popups                       |
+
 
 
 
@@ -127,6 +129,8 @@
     │   │   ├───List.jsx
     │   │   ├───PageNotFound.jsx
     │   │   ├───Timeline.jsx
+    │   │   ├───Button.jsx
+    │   │   ├───Dropdown.jsx
     │   │   │
     │   │   ├───Board
     │   │   │   ├───AddBtn.jsx
@@ -192,6 +196,8 @@
     │   │   └───index.css
     │   │
     │   └───util
+    │       ├───date.js
+    │       ├───helpers.js
     │       └───fetchUserToken.js
     │
     ├───.gitignore

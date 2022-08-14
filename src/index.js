@@ -8,7 +8,7 @@ import store from "./store";
 import React from "react";
 import App from "./App";
 import "./style/index.css";
-
+import 'reactjs-popup/dist/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
