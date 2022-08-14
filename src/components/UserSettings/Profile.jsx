@@ -6,32 +6,16 @@ import { ImSwitch } from "react-icons/im";
 import { useState } from "react";
 
 
+
 const Profile = () => {
 
-  const [expandBox, setExpandBox] = useState(false);
-
+  
   const { loginUserInfo } = useUserInfoContext();
-
+  const [expandBox, setExpandBox] = useState(false);
   const [localUserInfo, setLocalUserInfo] = useState(loginUserInfo);
-  console.log(localUserInfo);
-
-  // useEffect(() => {
 
 
-  //   // const fetchData = async () => {
 
-  //   //   try {
-
-  //   //     const { data } = getUserProfileInfo()
-  //   //       setUserInfo(data);
-  //   //   } catch (error) {
-  //   //     console.log(error);
-  //   //   }
-  //   // }
-
-  //   // fetchData();
-
-  // }, [])
 
   return (
     <div className=" min-h-screen  w-[820px] p-5 space-y-4 h-screen ">
@@ -111,6 +95,7 @@ const Profile = () => {
                     <ImSwitch className="text-sm mr-2 my-auto " />
                     <h6>import from Gravatar</h6>
                   </div>
+
 
                   <div className="flex px-4 py-2 text-gray-400 text-[13px] hover:bg-[#eceded]">
                     <div className="w-4 h-4 border my-auto mr-2 bg-zinc-800 rounded-full"></div>

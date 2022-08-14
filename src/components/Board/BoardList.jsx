@@ -22,7 +22,7 @@ const BoardList = ({ boardList }) => {
         return () => document.removeEventListener('click', handleClick);
     }, []);
 
-
+    // addCard
 
     return (
         // ${boardList.cards.length  >= 4  ? 'h-full' : 'h-fit'}

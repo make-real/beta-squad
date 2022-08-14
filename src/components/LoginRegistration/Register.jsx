@@ -1,18 +1,24 @@
 import { accountVerification, userSignUp } from "../../hooks/useFetch";
+import { getUserId, getUserToken } from "../../store/slice/userInfo";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useState } from "react";
 import images from "../../assets";
 import Loader from "../Loader";
 
+
 const Register = () => {
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [userVerificationStatus, setUserVerificationStatus] = useState("");
-  const [userVerificationErrorStatus, setUserVerificationErrorStatus] =
-    useState("");
+  const [userVerificationErrorStatus, setUserVerificationErrorStatus] = useState("");
   const [activationCode, setActivationCode] = useState("");
   const [loader, setLoader] = useState(false);
-  const [userId, setUserId] = useState(""); // || JSON.parse(localStorage.getItem('userId'))
+  const [userId, setUserId] = useState("" || JSON.parse(localStorage.getItem('userId')));
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     email: "",
@@ -23,70 +29,87 @@ const Register = () => {
 
   // error info catch object...
   const [errorInfo, setErrorInfo] = useState({
+    fullName: "",
     email: "",
     password: "",
     phone: "",
   });
 
-  // console.log(errorInfo);
+
 
   // collect all user input data from UI
-  const handleUserInput = (e) => {
+  const handleUserInput = e => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  // User Info send to backend for registration...
+
+
+  // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
+  // User Info send to backend for registration... 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setLoader(true);
       const { data } = await userSignUp(userInfo);
+
+      // store this userId, for creating an object to account verification process...
       setUserId(data.userId);
 
       // store user id at local storage for future reference
       localStorage.setItem("userId", JSON.stringify(data.userId));
+
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      // console.log(error);
-      // get error info...
-      setErrorInfo((pre) => ({
-        ...pre,
-        email: error.response.data?.issue?.email,
-      }));
-      setErrorInfo((pre) => ({
-        ...pre,
-        password: error.response.data?.issue?.password,
-      }));
-      setErrorInfo((pre) => ({
-        ...pre,
-        phone: error.response.data?.issue?.phone,
-      }));
+      // get error info to display user, for Form validation...
+      setErrorInfo((pre) => ({ ...pre, fullName: error.response.data?.issue?.fullName, }));
+      setErrorInfo((pre) => ({ ...pre, email: error.response.data?.issue?.email, }));
+      setErrorInfo((pre) => ({ ...pre, password: error.response.data?.issue?.password, }));
+      setErrorInfo((pre) => ({ ...pre, phone: error.response.data?.issue?.phone, }));
     }
   };
 
-  // user account activation by CODE verification process
+
+  // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
+  // user account activation by CODE verification process +
+  // without login - user direct enter into dashboard...
   const handleAccountActivation = async (e) => {
     e.preventDefault();
 
     try {
       setLoader(true);
+
+      // user id + user given activation code, for authentication...
       const userIdActive = { userId, code: activationCode };
+
+      //send activation cose into backend 
       const { data } = await accountVerification(userIdActive);
+
+      // store user (JWT token) + (user ID) into local storage...
+      localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
+      localStorage.setItem("userId", JSON.stringify(data.loggedUser));
+
+      // display notification for user...
+      toast.success(data?.message, { autoClose: 2000 });
+
       setUserVerificationStatus(data?.message);
       setUserVerificationErrorStatus("");
       setLoader(false);
+
       // after 2 second auto redirect user into this route...
       setTimeout(() => navigate("/projects"), 2000);
     } catch (error) {
       setLoader(false);
+
       // console.log(error.response.data.issue?.message);
       setUserVerificationErrorStatus(error.response.data.issue?.message);
       setUserVerificationStatus("");
     }
   };
+
+
 
   return (
     <section className="flex">
@@ -173,11 +196,10 @@ const Register = () => {
               <button
                 onClick={handleAccountActivation}
                 disabled={!(activationCode.length === 5)}
-                className={`py-2 w-full ${
-                  activationCode.length === 5
-                    ? "bg-[#C595C6] cursor-pointer"
-                    : "bg-gray-300 cursor-not-allowed"
-                } text-yellow-50 rounded-lg`}
+                className={`py-2 w-full ${activationCode.length === 5
+                  ? "bg-[#C595C6] cursor-pointer"
+                  : "bg-gray-300 cursor-not-allowed"
+                  } text-yellow-50 rounded-lg`}
               >
                 {loader ? <Loader dark /> : "Active Account"}
               </button>
@@ -195,7 +217,8 @@ const Register = () => {
             </div>
           ) : (
             <form className="space-y-6 mt-5" onSubmit={handleSubmit}>
-              <div className="text-sm">
+
+              <div className="text-sm relative">
                 <label htmlFor="name" className="text-gray-700">
                   Full Name :
                 </label>
@@ -208,6 +231,11 @@ const Register = () => {
                   className="w-full border rounded-xl py-1.5 px-2 outline-blue-100"
                   onChange={handleUserInput}
                 />
+                {errorInfo.fullName && (
+                  <span className="absolute top-[102%] right-0 text-red-500">
+                    {errorInfo.fullName}
+                  </span>
+                )}
               </div>
 
               <div className="text-sm relative">
@@ -300,9 +328,8 @@ const Register = () => {
                 <button
                   disabled={!userInfo.agreeTerm}
                   type="submit"
-                  className={`py-2 w-full ${
-                    userInfo.agreeTerm ? "bg-[#C595C6]" : "bg-gray-300"
-                  } text-yellow-50 rounded-lg`}
+                  className={`py-2 w-full ${userInfo.agreeTerm ? "bg-[#C595C6]" : "bg-gray-300"
+                    } text-yellow-50 rounded-lg`}
                 >
                   {loader ? <Loader dark /> : "Get started now"}
                 </button>

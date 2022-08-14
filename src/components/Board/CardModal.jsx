@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
+const CardModal = ({ setBoardModal, noteDone, setNoteDone, card }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
     const [showTags, setShowTags] = useState(false);
     const [setTags, setSetTags] = useState([]);
-    const [tagContext, setTagContext] = useState(['done', 'Important', 'ON Going...', 'api ready', 'Improvement', 'easy']);
+    const [tagContext, setTagContext] = useState(['done', 'Important', 'ON Going...', 'api ready', 'Improvement', 'easy', 'good']);
     const tagColor = [
         'bg-red-500',
         'bg-orange-500',
@@ -19,6 +19,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
         'bg-gray-500',
     ]
 
+
+    console.log(card);
 
     // user esc key press Event Listener for closing modal... 
     useEffect(() => {
@@ -42,13 +44,21 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
     }
 
 
+    // assignee: []
+    // attachments: []
+    // checkList: []
+    // id: 1660414745825.4255
+    // name: "sdfsdfdsf"
+    // progress: 0
+    // tags: []
+
     return (
         <section
-            className='fixed top-0 right-0 left-0 bottom-0 z-40 bg-black/30 grid place-items-center'
+            className='fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center'
             onClick={() => setBoardModal(false)}
         >
 
-            <div className='bg-gray-50 w-[95%] h-[90vh] rounded-2xl' onClick={e => e.stopPropagation()}>
+            <div className='bg-gray-50 w-[60%] rounded-2xl' onClick={e => e.stopPropagation()}>
 
 
 
@@ -113,155 +123,111 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 
 
 
+                {/* 🟨🟨🟨 Section 2 ||| Middle area 🟨🟨🟨 */}
+                <div className='flex flex-col border-b border-gray-300'>
 
-
-
-
-
-
-
-                {/* 🟨🟨🟨 Section 2 🟨🟨🟨 */}
-                <div className='flex border-b border-gray-300'>
-
-                    <div className='w-1/2 border-r border-gray-300 h-[70vh]'>
-
-                        <div className='flex items-center justify-between p-4 text-gray-400 '>
-                            <div className='flex items-center space-x-4'>
-                                <span className='text-xs font-bold cursor-pointer hover:text-teal-500'>Space Clone</span>
-                                <ArrowRight />
-                                <span className='text-xs font-bold cursor-pointer hover:text-teal-500'>Taiseen Vai</span>
-                            </div>
-
-                            <div className='text-xs font-bold cursor-pointer hover:text-teal-500'>
-                                MOVE TO NEXT LIST
-                            </div>
+                    <div className='flex items-center justify-between p-4 text-gray-400 '>
+                        <div className='flex items-center space-x-4'>
+                            <span className='text-xs font-bold cursor-pointer hover:text-teal-500'>Space Clone</span>
+                            <ArrowRight />
+                            <span className='text-xs font-bold cursor-pointer hover:text-teal-500'>Taiseen Vai</span>
                         </div>
 
-                        <div className='p-3'>
-                            <input type="text" className='w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50' />
+                        <div className='text-xs font-bold cursor-pointer hover:text-teal-500'>
+                            MOVE TO NEXT LIST
+                        </div>
+                    </div>
+
+
+                    <div className='p-3'>
+                        <input
+                            type="text"
+                            defaultValue={card?.name}
+                            className='w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50'
+                        />
+                    </div>
+
+
+                    <div className='p-3 flex relative'>
+                        <div
+                            className='ml-2 w-10 h-10 grid place-items-center cursor-pointer hover:bg-gray-100 rounded-md duration-200 group'
+                            onClick={() => setShowTags(pre => !pre)}
+                        >
+                            <Tag className='text-[#B9C3CE] group-hover:text-teal-400' />
                         </div>
 
-                        <div className='p-3 flex relative'>
-                            <div
-                                className='w-10 h-10 grid place-items-center cursor-pointer hover:bg-gray-100 rounded-md duration-200'
-                                onClick={() => setShowTags(pre => !pre)}
-                            >
-                                <Tag className='text-[#B9C3CE] hover:text-teal-400' />
-                            </div>
-
-                            <div className='flex items-center flex-wrap gap-1'>
-                                {
-                                    // 🟨🟨🟨 Just Tag Display
-                                    setTags.map((data, i) => (
-                                        <span className={`px-2 py-1 ${tagColor[i]} text-white cursor-pointer rounded-full`}
-                                            onClick={() => handleDeleteTags(data)}
-                                        >{data}</span>
-                                    ))
-                                }
-                                {
-                                    tagContext.length > 0
-                                        ? <input type="text" placeholder='Add a tag...' className='ml-2 px-2 outline-none  bg-gray-50' onClick={() => setShowTags(true)} />
-                                        : null
-                                }
-                            </div>
-
-
+                        <div className='flex items-center flex-wrap gap-2 border border-transparent w-full rounded-md px-2 hover:border-gray-300 customScroll'>
                             {
-                                // 🟨🟨🟨 all tags 🟨🟨🟨
-                                showTags &&
-                                <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white'>
-                                    {
-                                        tagContext.map((data, i) => (
-                                            <div
-                                                key={data}
-                                                onClick={() => { setShowTags(false); handleAddTags(data) }}
-                                                className='pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer'
-                                            >
-                                                <span className={`px-2 py-1 ${tagColor[i]} w-fit rounded-full`}>{data}</span>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                                // 🟨🟨🟨 Just Tag Display
+                                setTags.map((data, i) => (
+                                    <span className={`px-2 py-1 ${tagColor[i]} text-white cursor-pointer rounded-full`}
+                                        onClick={() => handleDeleteTags(data)}
+                                    >{data}</span>
+                                ))
+                            }
+                            {
+                                tagContext.length > 0
+                                    ? <input type="text" placeholder='Add a tag...' className='ml-2 py-2 outline-none bg-gray-50' onClick={() => setShowTags(true)} />
+                                    : null
                             }
                         </div>
 
 
-                        <div className='mt-8 ml-4 '>
-                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-                                <Description className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Description</span>
+                        {
+                            // 🟨🟨🟨 all tags 🟨🟨🟨
+                            showTags &&
+                            <div className='max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white '>
+                                {
+                                    tagContext.map((data, i) => (
+                                        <div
+                                            key={data}
+                                            onClick={() => { setShowTags(false); handleAddTags(data) }}
+                                            className='pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer'
+                                        >
+                                            <span className={`px-2 py-1 ${tagColor[i]} w-fit rounded-full`}>{data}</span>
+                                        </div>
+                                    ))
+                                }
                             </div>
-
-                            <input type="text" className='w-[90%] h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer' />
-                        </div>
-
-
-
-                        <div className='mt-8 ml-4 '>
-                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-                                <CheckList className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Checklist</span>
-                            </div>
-                        </div>
-
-
-
-                        <div className='mt-8 ml-4 '>
-                            <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-
-                                <Attachment className='text-[#B9C3CE] group-hover:text-teal-400' />
-                                <label htmlFor="file">Attachments</label>
-                                <input type="file" id="file" className='hidden' />
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    {/* 
-                    <div className='w-1/2 text-gray-400 px-4 py-3  text-center'>
-                        Chatting area
-                    </div> */}
-
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-                {/* 🟨🟨🟨 Section 3 🟨🟨🟨 */}
-                <div className='flex h-[10vh]'>
-
-                    <div className='w-1/2 border-r border-gray-300 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150'>
-                        <span>Drop files here or </span>
-                        <label htmlFor="file" className='text-teal-600 cursor-pointer hover:text-teal-700 duration-150'>browse</label>
-                        <input type="file" id="file" className='hidden' />
+                        }
                     </div>
 
 
-
-                    <div className='w-1/2 grid place-items-center'>
-
-                        <div className='px-6 py-2 border border-gray-400 rounded-xl w-[95%] flex items-center gap-2'>
-
-                            <input type="text" className='w-[80%] outline-none p-1 bg-gray-50' />
-
-                            <div className='flex items-center gap-3 text-[#B9C3CE] '>
-                                <Attachment className='hover:text-teal-500 cursor-pointer duration-200' />
-                                <AtTheRate className='hover:text-teal-500 cursor-pointer duration-200' />
-                                <Smile className='hover:text-teal-500 cursor-pointer duration-200' />
-                                <GIF className='hover:text-teal-500 cursor-pointer duration-200' />
-                            </div>
+                    <div className='mt-8 ml-4 '>
+                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+                            <Description className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Description</span>
                         </div>
 
+                        <input type="text" className='w-[95%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md' />
+                    </div>
+
+
+                    <div className='mt-8 ml-4 '>
+                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+                            <CheckList className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Checklist</span>
+                        </div>
+                    </div>
+
+
+                    <div className='my-8 ml-4 '>
+                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
+                            <Attachment className='text-[#B9C3CE] group-hover:text-teal-400' />
+                            <label htmlFor="file">Attachments</label>
+                            <input type="file" id="file" className='hidden' />
+                        </div>
                     </div>
 
                 </div>
 
+
+
+
+                {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
+                <div className=' py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150'>
+                    <span>Drop files here or </span>
+                    <label htmlFor="file" className='text-teal-600 cursor-pointer hover:text-teal-700 duration-150'>browse</label>
+                    <input type="file" id="file" className='hidden' />
+                </div>
 
 
             </div>
@@ -270,3 +236,16 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone }) => {
 }
 
 export default CardModal
+
+
+
+// {
+//     // confirm dialog open for delete operation...
+//     confirmModalOpen &&
+//     <ConfirmDialog
+//         listID={listID}
+//         cardID={cardID}
+//         setConfirmModalOpen={setConfirmModalOpen}
+//         setCardSettingDropDownToggle={setCardSettingDropDownToggle}
+//     />
+// }
