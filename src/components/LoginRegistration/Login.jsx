@@ -4,7 +4,7 @@ import { userSignIn } from "../../hooks/useFetch";
 import { FcGoogle } from "react-icons/fc";
 import React, { useState } from "react";
 import images from "../../assets";
-import Loader from "../Loader";
+import {Loader} from "../Loader";
 
 const Login = () => {
   const navigate = useNavigate();

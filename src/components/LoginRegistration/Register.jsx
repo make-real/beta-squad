@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify';
 import { useState } from "react";
 import images from "../../assets";
-import Loader from "../Loader";
+import {Loader} from "../Loader";
 
 
 const Register = () => {

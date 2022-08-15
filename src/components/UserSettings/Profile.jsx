@@ -1,14 +1,11 @@
 import { useUserInfoContext } from "../../context/UserInfoContext";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { AiOutlineSetting } from "react-icons/ai";
-import { RiAttachment2 } from "react-icons/ri";
-import { ImSwitch } from "react-icons/im";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import { updateProfile } from "../../api/settings";
 import { toast } from "react-toastify";
 import { get_my_profile } from "../../api/auth";
-import Loader from "../Loader";
+import {Loader} from "../Loader";
 import Input from "../Input";
 import { parseError } from "../../util/helpers";
 
@@ -19,7 +16,6 @@ const Profile = () => {
     newPassword: "",
     confirmPassword: "",
   });
-  const [expandBox, setExpandBox] = useState(false);
   const [changePasswordBox, setChangePasswordBox] = useState(false);
   const [localUserInfo, setLocalUserInfo] = useState();
   const [image, setImage] = useState();
@@ -85,7 +81,6 @@ const Profile = () => {
   const handleImageChange = async (e) => {
     try {
       setImageLoader(true);
-      setExpandBox(false);
       const file = e.target.files[0];
       await updateProfile({
         avatar: file,
@@ -172,37 +167,9 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className="bg-[#C595C6] cursor-pointer relative w-fit mx-auto mt-3 flex px-6 py-2 text-sm text-white rounded-lg hover:bg-[#d2a6d3] ">
-                <div className="flex" onClick={() => setExpandBox(!expandBox)}>
-                  Update your avatar{" "}
-                  {expandBox ? (
-                    <IoIosArrowUp className="my-auto ml-2" />
-                  ) : (
-                    <IoIosArrowDown className="my-auto ml-2" />
-                  )}
-                </div>
-                {expandBox && (
-                  <div className="absolute left-0 top-9 bg-[#F8F9F9] border   w-full">
-                    <label
-                      htmlFor="fileInput"
-                      className="flex px-4 py-2 text-gray-400 text-[13px] hover:bg-[#eceded]"
-                    >
-                      <RiAttachment2 className="text-sm mr-2 my-auto " />
-                      <h6>Upload Photo</h6>
-                    </label>
-
-                    <div className="flex px-4 py-2 text-gray-400 text-[13px] hover:bg-[#eceded] line-through">
-                      <ImSwitch className="text-sm mr-2 my-auto " />
-                      <h6>import from Gravatar</h6>
-                    </div>
-
-                    <div className="flex px-4 py-2 text-gray-400 text-[13px] hover:bg-[#eceded] line-through">
-                      <div className="w-4 h-4 border my-auto mr-2 bg-zinc-800 rounded-full"></div>
-                      <h6>Initials (no avatar)</h6>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <label htmlFor="fileInput">
+                <Button className="mx-auto">Update your avatar</Button>
+              </label>
             </div>
           </div>
 

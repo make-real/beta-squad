@@ -35,3 +35,17 @@ export const parseError = (error) => {
     return errorObj?.message;
   }
 };
+
+export const sortByAlphabet = (data, sortKey) => {
+  const alphabets = "abcdefghijklmnopqrstuvwxyz";
+  const sortedData = {};
+  alphabets.split("").forEach((alphabet) => {
+    const sortData = data.filter((item) =>
+      sortKey(item).toLowerCase().startsWith(alphabet)
+    );
+    if (sortData.length) {
+      sortedData[alphabet] = sortData;
+    }
+  });
+  return sortedData;
+};

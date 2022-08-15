@@ -17,7 +17,6 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-
         <BoardCardContext>
           <UserInfoContext>
             <StyleContext>
@@ -25,7 +24,6 @@ root.render(
             </StyleContext>
           </UserInfoContext>
         </BoardCardContext>
-
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

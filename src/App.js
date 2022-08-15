@@ -7,6 +7,7 @@ import { fetchUserToken } from './util/fetchUserToken';
 import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+import Tags from "./components/UserSettings/Tags";
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
@@ -37,6 +38,7 @@ const App = () => {
           <Route path="manage-workspace" element={<ProtectedRoute> <ManageWorkspace /> </ProtectedRoute>} />
           <Route path="developer" element={<ProtectedRoute> <DeveloperConsole /> </ProtectedRoute>} />
           <Route path="preferences" element={<ProtectedRoute> <Preferences /> </ProtectedRoute>} />
+          <Route path="tags" element={<ProtectedRoute> <Tags /> </ProtectedRoute>} />
         </Route>
 
 

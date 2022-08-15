@@ -1,4 +1,4 @@
-import Loader from "./Loader";
+import { Loader } from "./Loader";
 
 const Button = ({ children, text, className, loading, ...res }) => {
   let styleClasses = `
@@ -17,9 +17,9 @@ const Button = ({ children, text, className, loading, ...res }) => {
    ${" " + className}
   `;
   return (
-    <div {...res} className={styleClasses}>
-      {loading ? <Loader dark/> : <h6>{children}</h6>}
-    </div>
+    <button disabled={loading} {...res} className={styleClasses}>
+      {loading ? <Loader dark /> : <h6>{children}</h6>}
+    </button>
   );
 };
 

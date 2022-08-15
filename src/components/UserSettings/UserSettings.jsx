@@ -2,7 +2,6 @@ import { AiOutlineArrowLeft, AiOutlineSetting } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { CgBox } from "react-icons/cg";
 import { BsTag } from "react-icons/bs";
 import images from "../../assets";
 import { useUserInfoContext } from "../../context/UserInfoContext";
@@ -61,17 +60,16 @@ const UserSettings = () => {
             <AiOutlineSetting className="my-auto mr-2" /> <h6> Preferences</h6>
           </Link>
 
-          <Link to="" className="flex p-2.5 rounded-md hover:bg-[#293C4F]">
-            <CgBox className="my-auto mr-2" /> <h6> Subscription</h6>
+          <Link
+            to="/settings/tags"
+            className="flex p-2.5 rounded-md hover:bg-[#293C4F]"
+          >
+            <BsTag className="my-auto mr-2" /> <h6> Tags</h6>
           </Link>
 
-          <Link to="" className="flex p-2.5 rounded-md hover:bg-[#293C4F]">
-            <BsTag className="my-auto mr-2" /> <h6> Preferences</h6>
-          </Link>
-
-          <Link to="" className="flex p-2.5 rounded-md hover:bg-[#293C4F]">
+          <div className="flex p-2.5 rounded-md hover:bg-[#293C4F] line-through">
             <FiShoppingBag className="my-auto mr-2" /> <h6> Preferences</h6>
-          </Link>
+          </div>
         </div>
       </div>
 
