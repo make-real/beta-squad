@@ -3,6 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { BsTag } from "react-icons/bs";
+import { BiWrench } from "react-icons/bi";
 import images from "../../assets";
 import { useUserInfoContext } from "../../context/UserInfoContext";
 
@@ -54,8 +55,14 @@ const UserSettings = () => {
 
         <div className="m-4 space-y-1.5 ">
           <Link
+            to="/settings/workspace-settings"
+            className="flex p-2.5 rounded-md hover:bg-[#293C4F]"
+          >
+            <BiWrench className="my-auto mr-2" /> <h6> Workspace settings</h6>
+          </Link>
+          <Link
             to="/settings/preferences"
-            className="flex p-2.5 rounded-md hover:bg-[#293C4F] bg-[#111F2D]"
+            className="flex p-2.5 rounded-md hover:bg-[#293C4F]"
           >
             <AiOutlineSetting className="my-auto mr-2" /> <h6> Preferences</h6>
           </Link>

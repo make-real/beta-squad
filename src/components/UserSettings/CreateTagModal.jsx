@@ -39,10 +39,7 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
 
   return (
     <section className="fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center z-50 duration-700">
-      <form
-        className="relative bg-white rounded-xl shadow-2xl"
-        onSubmit={handleSpaceCreation}
-      >
+      <div className="relative bg-white rounded-xl shadow-2xl">
         <div
           className="absolute top-2 right-2 w-8 h-8 rounded-lg group hover:bg-gray-200 grid place-items-center cursor-pointer duration-200"
           onClick={() => setCreateSpaceModal(false)}
@@ -56,7 +53,7 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
 
         <div className="p-5 py-7 text-gray-600">
           <p className="text-sm text-themeColor font-bold uppercase mb-4 text-center">
-            {tag.tagId ? "Update Tag":"Create New Tag"}
+            {tag.tagId ? "Update Tag" : "Create New Tag"}
           </p>
           <hr />
           <div className="mt-5 text-sm">
@@ -104,11 +101,15 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
               ))}
             </div>
           </div>
-          <Button loading={loading} className="mt-7 mx-auto flex" type="submit">
+          <Button
+            loading={loading}
+            className="mt-7 mx-auto flex"
+            onClick={handleSpaceCreation}
+          >
             {tag.tagId ? "Update" : "Create"}
           </Button>
         </div>
-      </form>
+      </div>
     </section>
   );
 };

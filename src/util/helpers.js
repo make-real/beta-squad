@@ -28,11 +28,10 @@ export const getBase64Image = (file) => {
 };
 
 export const parseError = (error) => {
-  const errorObj = error.response.data;
-  if (errorObj?.issue) {
-    return Object.values(errorObj?.issue)[0];
+  if (error?.issue?.message) {
+    return error?.issue?.message;
   } else {
-    return errorObj?.message;
+    return Object.values(error?.issue)[0];
   }
 };
 

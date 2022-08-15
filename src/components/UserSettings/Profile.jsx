@@ -168,7 +168,7 @@ const Profile = () => {
               </div>
 
               <label htmlFor="fileInput">
-                <Button className="mx-auto">Update your avatar</Button>
+                <Button className="flex mx-auto">Update your avatar</Button>
               </label>
             </div>
           </div>
