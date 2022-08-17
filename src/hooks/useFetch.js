@@ -100,7 +100,16 @@ export const spaceCreation = newSpaceObj => api.post('/spaces', newSpaceObj);
 export const addBoardList = (spaceId, newBoardList) => api.post(`/spaces/${spaceId}/board`, newBoardList);
 
 // GET ==> (Board) List --- under specific Space reference ID
-export const getBoardLists = spaceId => useFetch(`/spaces/${spaceId}/board?getCards=true`);
+// export const getBoardLists = spaceId => useFetch(`/spaces/${spaceId}/board?getCards=true`);
 
+// DELETE ==> (Board) List --- under specific Space reference ID
+export const boardListDelete = (spaceId, listId) => api.delete(`/spaces/${spaceId}/board/${listId}`);
+
+
+// 🟨🟨🟨 Card 🟨🟨🟨
 // POST ==> Card Create --- under specific Space reference ID + Board List ID
-export const addCard = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
+export const addCardIntoBoardList = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
+
+export const cardDelete = (spaceId, listId, cardId) => api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/delete`);
+
+

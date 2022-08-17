@@ -44,7 +44,7 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-
+  const [selectedSpaceName, setSelectedSpaceName] = useState('');
   const dispatch = useDispatch();
 
   // For Work-Spaces
@@ -53,11 +53,12 @@ const SideBar = () => {
 
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
-  // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+  const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+  
 
   // get user img from user info, which store at local storage...
   const userImg = JSON.parse(localStorage.getItem('userInfo')).avatar;
-  
+
 
   // re-render for Work-Space
   useEffect(() => {
@@ -97,7 +98,7 @@ const SideBar = () => {
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
       } catch (error) {
-        console.log("space selection ==> ", error);
+        // console.log("space selection ==> ", error);
       }
 
     }
@@ -315,20 +316,27 @@ const SideBar = () => {
         <div className="my-10">
           {allSpace?.map((space, i) => (
             <div
-              className="flex space-x-3 px-2 items-center group"
+              className="flex space-x-3 px-2 mt-1 items-center group"
               key={i}
               // onClick={() => { console.log(space) }}
               onClick={() => {
                 dispatch(setSelectedSpaceId(space._id));
+
               }}
             >
               <DotsDouble className="invisible group-hover:visible cursor-grab" />
-              <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
+              <div
+                className={`w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg 
+                ${space.name === selectedSpaceName ? 'bg-slate-700' : ''} `}
+                onClick={() => setSelectedSpaceName(space.name)}
+              >
+
                 {space.privacy.includes("private") ? (
                   <SpaceLogoLock color={space.color || "#57BEC7"} />
                 ) : (
                   <SpaceLogo color={space.color || "#57BEC7"} />
                 )}
+
                 <p className=" text-sideBarTextColor font-bold">{space.name}</p>
               </div>
             </div>

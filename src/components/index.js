@@ -16,6 +16,7 @@ export { default as Layout } from "./Layout/Layout";
 export { default as Calender } from "./Calender";
 export { default as Timeline } from "./Timeline";
 export { default as Board } from "./Board/Board";
+export { default as Dropdown } from "./Dropdown";
 export { default as AddCard } from "./AddCard";
 export { default as Chat } from "./Chat/Chat";
 export { default as GIF } from "./Chat/GIF";
