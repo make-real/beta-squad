@@ -6,11 +6,17 @@ import Picker from "emoji-picker-react";
 import users from "../../constant/users";
 // import { AiOutlineGif } from "react-icons/ai";
 // import GIF from "./GIF";
+import { send_message } from "../../api/message";
+import { useDispatch, useSelector } from "react-redux";
+import { addSingleMessage } from "../../store/slice/message";
 
 const MessageBox = () => {
   const [input, setInput] = useState("");
   const [mentionModal, setMentionModal] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
+  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+  const dispatch = useDispatch();
+
   // const [attachFile, setAttachFile] = useState(false);
   // const [showGif, setShowGif] = useState(false);
 
@@ -46,8 +52,24 @@ const MessageBox = () => {
   //   setShowGif((prev) => !prev);
   // };
 
-  const handleSendMessage = () => {
-    setInput("");
+  const handleSendMessage = async () => {
+    try {
+      const text = String(input).trim();
+
+      if (text === "") {
+        return;
+      }
+
+      setInput("");
+
+      const { data } = await send_message(selectedSpaceId, {
+        textMessage: text,
+      });
+
+      dispatch(addSingleMessage(data?.message));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
