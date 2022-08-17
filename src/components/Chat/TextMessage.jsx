@@ -6,9 +6,18 @@ import {
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
 import asserts from "../../assets";
-
+import { useSocket } from "../../context/SocketContext";
+import { useEffect } from "react";
 
 const TextMessage = () => {
+  const socket = useSocket();
+
+  useEffect(() => {
+    socket.on("NEW_SPACE_MESSAGE_RECEIVED", (data) => {
+      console.log(data);
+    });
+  }, [socket]);
+
   return (
     <div>
       <div className="flex py-3.5">
