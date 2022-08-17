@@ -1,15 +1,24 @@
-import Loader from "./Loader";
+import { Loader } from "./Loader";
 
-const Button = ({ children, text, className, loading, ...res }) => {
+const Button = ({
+  children,
+  text,
+  className,
+  disabled,
+  loading,
+  block,
+  onClick,
+  ...res
+}) => {
   let styleClasses = `
     ${!text && "bg-[#C595C6]"}
     ${text && "text-gray-400 hover:text-[#C595C6]"}
     cursor-pointer
     relative
-    w-fit
+    ${block ? "w-full" : "w-fit"}
     mt-3
     px-6
-    py-2
+    ${loading ? "py-1" : "py-2"}
     text-sm
     text-white
     rounded-lg
@@ -17,8 +26,12 @@ const Button = ({ children, text, className, loading, ...res }) => {
    ${" " + className}
   `;
   return (
-    <div {...res} className={styleClasses}>
-      {loading ? <Loader dark/> : <h6>{children}</h6>}
+    <div
+      {...res}
+      onClick={!loading && !disabled && onClick}
+      className={styleClasses}
+    >
+      {loading ? <Loader dark /> : <h6 className="text-center">{children}</h6>}
     </div>
   );
 };

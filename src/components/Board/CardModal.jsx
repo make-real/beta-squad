@@ -1,4 +1,4 @@
-import { ArrowRight, Attachment, AtTheRate, CheckList, Close, Description, DotsSingle, EyeOpen, GIF, RightOK, Smile, Tag, UserPlus } from '../../assets/icons';
+import { ArrowRight, Attachment, CheckList, Close, Description, DotsSingle, EyeOpen, RightOK, Tag, UserPlus } from '../../assets/icons';
 import { CardSettingDropDown } from '.';
 import { useState, useEffect } from 'react';
 

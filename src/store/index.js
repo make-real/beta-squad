@@ -3,7 +3,8 @@ import workspace from "./slice/workspace";
 import space from "./slice/space";
 import userInfo from './slice/userInfo';
 import boardListsCards from './slice/boardListsCards';
-// import boardLists from './slice/boardLists';
+import message from './slice/message';
+
 
 
 const rootReducer = combineReducers({
@@ -11,11 +12,13 @@ const rootReducer = combineReducers({
   space,
   userInfo,
   boardListsCards,
+  message
 });
 
 
 const store = configureStore({
   reducer: rootReducer,
+  devTools: true
 });
 
 

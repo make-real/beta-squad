@@ -1,15 +1,12 @@
 import axios from "axios";
 
-
 const useAxios = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
 });
 
-
 useAxios.interceptors.request.use(
-
   function (config) {
-    const token = JSON.parse(localStorage.getItem('jwt'))
+    const token = JSON.parse(localStorage.getItem("jwt"));
 
     if (token) {
       config = {
@@ -27,12 +24,9 @@ useAxios.interceptors.request.use(
   function (error) {
     return Promise.reject(error);
   }
-
 );
 
-
 useAxios.interceptors.response.use(
-
   (response) => {
     return response;
   },
@@ -45,9 +39,8 @@ useAxios.interceptors.response.use(
       }
     }
 
-    return Promise.reject(error);
+    return Promise.reject(error?.response?.data?.issue);
   }
 );
-
 
 export default useAxios;

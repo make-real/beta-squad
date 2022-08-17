@@ -138,7 +138,7 @@ const NavBar = () => {
               <h2>filter</h2>
             </div>
           ) : navIcons === "setting" ? (
-            <div className="h-full overflow-y-auto">
+            <div className="z-10 h-full overflow-y-auto">
               <Setting />
             </div>
           ) : navIcons === "add-member" ? (

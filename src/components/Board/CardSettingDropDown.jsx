@@ -1,5 +1,5 @@
 import { Copy, Delete, LinkingChain, RightOK } from '../../assets/icons'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog';
 
 

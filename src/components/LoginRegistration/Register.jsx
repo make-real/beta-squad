@@ -1,18 +1,15 @@
 import { accountVerification, userSignUp } from "../../hooks/useFetch";
-import { getUserId, getUserToken } from "../../store/slice/userInfo";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useState } from "react";
 import images from "../../assets";
-import Loader from "../Loader";
+import {Loader} from "../Loader";
 
 
 const Register = () => {
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [userVerificationStatus, setUserVerificationStatus] = useState("");
   const [userVerificationErrorStatus, setUserVerificationErrorStatus] = useState("");

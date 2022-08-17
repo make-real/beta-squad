@@ -58,6 +58,7 @@
     ├───src
     │   ├───App.js
     │   ├───index.js
+    │   ├───colors.json
     │   ├───assets
     │   │   ├───icons
     │   │   │   ├───svg
@@ -131,6 +132,8 @@
     │   │   ├───Timeline.jsx
     │   │   ├───Button.jsx
     │   │   ├───Dropdown.jsx
+    │   │   ├───Input.jsx
+    │   │   ├───Loader.jsx
     │   │   │
     │   │   ├───Board
     │   │   │   ├───AddBtn.jsx
@@ -179,6 +182,9 @@
     │   │       ├───ManageWorkspace.jsx
     │   │       ├───Preferences.jsx
     │   │       ├───Profile.jsx
+    │   │       ├───Tag.jsx
+    │   │       ├───CreateTagModal.jsx
+    │   │       ├───DeleteTagModal.jsx
     │   │       └───UserSettings.jsx
     │   │
     │   ├───constant

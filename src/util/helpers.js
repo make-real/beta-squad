@@ -26,3 +26,25 @@ export const getBase64Image = (file) => {
     reader.onerror = (error) => reject(error);
   });
 };
+
+export const parseError = (error) => {
+  if (error?.issue?.message) {
+    return error?.issue?.message;
+  } else {
+    return Object.values(error?.issue)[0];
+  }
+};
+
+export const sortByAlphabet = (data, sortKey) => {
+  const alphabets = "abcdefghijklmnopqrstuvwxyz";
+  const sortedData = {};
+  alphabets.split("").forEach((alphabet) => {
+    const sortData = data.filter((item) =>
+      sortKey(item).toLowerCase().startsWith(alphabet)
+    );
+    if (sortData.length) {
+      sortedData[alphabet] = sortData;
+    }
+  });
+  return sortedData;
+};
