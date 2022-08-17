@@ -5,6 +5,10 @@ export const get_workspace_data = () => {
   return useAxios.get("/workspaces");
 };
 
+export const get_single_workspace_data = (id) => {
+  return useAxios.get(`/workspaces/${id}`);
+};
+
 export const create_workspace = (data) => {
   return useAxios.post("/workspaces", data);
 };

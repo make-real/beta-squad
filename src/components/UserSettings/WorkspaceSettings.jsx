@@ -4,7 +4,11 @@ import Input from "../Input";
 import { AiOutlineSetting } from "react-icons/ai";
 import { Loader } from "../Loader";
 import { useSelector } from "react-redux";
-import { add_workspace_member, update_workspace } from "../../api/workSpace";
+import {
+  add_workspace_member,
+  get_single_workspace_data,
+  update_workspace,
+} from "../../api/workSpace";
 import { toast } from "react-toastify";
 
 const WorkspaceSettings = () => {
@@ -18,9 +22,17 @@ const WorkspaceSettings = () => {
   const [inviteLoader, setInviteLoader] = useState(false);
 
   useEffect(() => {
-    const thisWorkspace = workspaces.find((w) => w._id === selectedWorkspace);
-    setWorkspace(thisWorkspace);
-  }, []);
+    getWorkspaceData();
+  }, [selectedWorkspace]);
+
+  const getWorkspaceData = async () => {
+    try {
+      const { data } = await get_single_workspace_data(selectedWorkspace);
+      setWorkspace(data.workspace);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleInputChange = (e) => {
     setWorkspace({ ...workspace, [e.target.name]: e.target.value });
@@ -50,13 +62,14 @@ const WorkspaceSettings = () => {
       setNameLoading(false);
     }
   };
-
+  
   const uploadLogo = async (e) => {
     console.log("upload logo");
     try {
       setImageLoading(true);
       const file = e.target.files[0];
       await update_workspace(workspace._id, { ...workspace, logo: file });
+      getWorkspaceData();
       setImageLoading(false);
       toast.success("Workspace logo has been updated!", { autoClose: 1000 });
     } catch (error) {

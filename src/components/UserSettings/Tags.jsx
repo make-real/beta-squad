@@ -38,7 +38,7 @@ const Tags = () => {
 
   React.useEffect(() => {
     getTags();
-  }, []);
+  }, [userSelectedWorkSpaceId]);
 
   const getTags = async () => {
     try {
