@@ -40,7 +40,7 @@ const UserSettings = () => {
   };
 
   const getSelectedSpace = () => {
-    const selectedSpace = workspaces.find((e) => e._id === selectedWorkspace);
+    const selectedSpace = workspaces?.find((e) => e._id === selectedWorkspace);
     return selectedSpace;
   };
 
@@ -78,6 +78,7 @@ const UserSettings = () => {
 
       <div className="border-b-2 border-[#293C4F] ">
         <Dropdown
+        width={280}
           button={
             <div className=" font-bold mt-3 flex w-full  bg-[#293C4F] p-2.5 rounded-md ">
               <div className="w-12 h-12 rounded-md overflow-hidden">
@@ -90,20 +91,22 @@ const UserSettings = () => {
             </div>
           }
         >
-          {workspaces.map((item) => (
-            <>
-              <div
-                onClick={select(item._id)}
-                className="cursor-pointer font-bold flex w-full p-2.5 rounded-md hover:bg-slate-100"
-              >
-                <div className="flex h-12 align-middle justify-center rounded-md">
-                  <img src={item.logo || images.logo} alt="" />
-                  <h6 className="my-auto ml-3">{item.name}</h6>
+          <div className="max-h-[300px] overflow-auto m-[-10px] p-1">
+            {workspaces?.map((item) => (
+              <>
+                <div
+                  onClick={select(item._id)}
+                  className="cursor-pointer font-bold flex w-full p-2.5 rounded-md hover:bg-slate-100"
+                >
+                  <div className="flex h-12 align-middle justify-center rounded-md">
+                    <img src={item.logo || images.logo} alt="" />
+                    <h6 className="my-auto ml-3">{item.name}</h6>
+                  </div>
                 </div>
-              </div>
-              <hr />
-            </>
-          ))}
+                <hr />
+              </>
+            ))}
+          </div>
         </Dropdown>
 
         <div className="m-4 space-y-1.5 ">
