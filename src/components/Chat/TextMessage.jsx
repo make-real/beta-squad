@@ -6,9 +6,50 @@ import {
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
 import asserts from "../../assets";
-
+import { useSocket } from "../../context/SocketContext";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { get_messages } from "../../api/message";
+import {
+  addBulkMessage,
+  addSingleMessage,
+  resetMessages,
+} from "../../store/slice/message";
 
 const TextMessage = () => {
+  const socket = useSocket();
+
+  const dispatch = useDispatch();
+
+  const messages = useSelector((state) => state.message.messages);
+  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
+  const loadMessages = async () => {
+    try {
+      const { data } = await get_messages(selectedSpaceId);
+      dispatch(addBulkMessage(data.messages));
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const newMessageListner = () => {
+    socket.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
+      if (msg.to === selectedSpaceId) {
+        dispatch(addSingleMessage(msg));
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (Boolean(selectedSpaceId)) {
+      dispatch(resetMessages());
+      loadMessages();
+
+      newMessageListner();
+    }
+  }, [selectedSpaceId]);
+
   return (
     <div>
       <div className="flex py-3.5">
@@ -27,80 +68,50 @@ const TextMessage = () => {
         </p>
       </div>
 
-      <div className="flex py-2.5 hover:bg-slate-50 relative user-box">
-        <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
-          <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
-            MA
-          </h6>
-        </div>
-        <div className="pl-4 ">
-          <h6 className="text-xs text-sky-900	pb-2">Mousumi Mitu</h6>
-          <p className="text-sm text-gray-900		">Hi....Welcome to make real</p>
-        </div>
-        <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
-          <div className="px-1 hover:text-teal-400 tooltip-box">
-            <BsArrow90DegRight />
-            <p className="tooltip-text">Convert the task</p>
+      {messages.map((msg, idx) => (
+        <div
+          key={idx}
+          className="flex py-2.5 hover:bg-slate-50 relative user-box"
+        >
+          <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
+            <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
+              {msg?.sender?.fullName.slice(0, 1)}
+            </h6>
           </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <BsEmojiSmile />
-            <p className="tooltip-text">Add a reaction</p>
+          <div className="pl-4 ">
+            <h6 className="text-xs text-sky-900	pb-2">
+              {msg?.sender?.fullName}
+            </h6>
+            <p className="text-sm text-gray-900		">{msg?.content?.text}</p>
           </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <VscCommentDiscussion />
-            <p className="tooltip-text">Respond to this message</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <MdModeEditOutline />
-            <p className="tooltip-text">Edit message</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <MdClose />
-            <p className="tooltip-text">Delete</p>
-          </div>
-          <div className="px-1 hover:text-teal-400 tooltip-box">
-            <BsThreeDotsVertical />
-            <p className="tooltip-text">Add as a quote</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex py-2.5 hover:bg-slate-50 relative user-box">
-        <div className="w-10 h-10 border-slate-700	border-4 rounded-full  relative	">
-          <img src={asserts.user} alt="user" className="rounded-full" />
-        </div>
-        <div className="pl-4 ">
-          <h6 className="text-xs text-sky-900	pb-2">Mitu Mousumi</h6>
-          <p className="text-sm text-gray-900		">Hi....Welcome to make real</p>
-        </div>
-
-        <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
-          <div className="px-1 hover:text-teal-400 tooltip-box">
-            <BsArrow90DegRight />
-            <p className="tooltip-text">Convert the task</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <BsEmojiSmile />
-            <p className="tooltip-text">Add a reaction</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <VscCommentDiscussion />
-            <p className="tooltip-text">Respond to this message</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <MdModeEditOutline />
-            <p className="tooltip-text">Edit message</p>
-          </div>
-          <div className="px-1.5 hover:text-teal-400 tooltip-box">
-            <MdClose />
-            <p className="tooltip-text">Delete</p>
-          </div>
-          <div className="px-1 hover:text-teal-400 tooltip-box">
-            <BsThreeDotsVertical />
-            <p className="tooltip-text">Add as a quote</p>
+          <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
+            <div className="px-1 hover:text-teal-400 tooltip-box">
+              <BsArrow90DegRight />
+              <p className="tooltip-text">Convert the task</p>
+            </div>
+            <div className="px-1.5 hover:text-teal-400 tooltip-box">
+              <BsEmojiSmile />
+              <p className="tooltip-text">Add a reaction</p>
+            </div>
+            <div className="px-1.5 hover:text-teal-400 tooltip-box">
+              <VscCommentDiscussion />
+              <p className="tooltip-text">Respond to this message</p>
+            </div>
+            <div className="px-1.5 hover:text-teal-400 tooltip-box">
+              <MdModeEditOutline />
+              <p className="tooltip-text">Edit message</p>
+            </div>
+            <div className="px-1.5 hover:text-teal-400 tooltip-box">
+              <MdClose />
+              <p className="tooltip-text">Delete</p>
+            </div>
+            <div className="px-1 hover:text-teal-400 tooltip-box">
+              <BsThreeDotsVertical />
+              <p className="tooltip-text">Add as a quote</p>
+            </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };
