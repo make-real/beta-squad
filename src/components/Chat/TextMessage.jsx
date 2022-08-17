@@ -10,7 +10,11 @@ import { useSocket } from "../../context/SocketContext";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
-import { addBulkMessage, addSingleMessage, resetMessages } from "../../store/slice/message";
+import {
+  addBulkMessage,
+  addSingleMessage,
+  resetMessages,
+} from "../../store/slice/message";
 
 const TextMessage = () => {
   const socket = useSocket();
@@ -20,32 +24,31 @@ const TextMessage = () => {
   const messages = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-
-
   const loadMessages = async () => {
     try {
       const { data } = await get_messages(selectedSpaceId);
-
       dispatch(addBulkMessage(data.messages));
     } catch (error) {
       alert(error.message);
     }
   };
 
-  useEffect(() => {
-    if (Boolean(selectedSpaceId)) {
-      dispatch(resetMessages())
-      loadMessages();
-    }
-  }, [selectedSpaceId]);
-
-  useEffect(() => {
+  const newMessageListner = () => {
     socket.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
       if (msg.to === selectedSpaceId) {
         dispatch(addSingleMessage(msg));
       }
     });
-  }, [socket]);
+  };
+
+  useEffect(() => {
+    if (Boolean(selectedSpaceId)) {
+      dispatch(resetMessages());
+      loadMessages();
+
+      newMessageListner();
+    }
+  }, [selectedSpaceId]);
 
   return (
     <div>

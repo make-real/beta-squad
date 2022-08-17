@@ -62,11 +62,9 @@ const MessageBox = () => {
 
       setInput("");
 
-      const { data } = await send_message(selectedSpaceId, {
+      await send_message(selectedSpaceId, {
         textMessage: text,
       });
-
-      dispatch(addSingleMessage(data?.message));
     } catch (error) {
       console.log(error);
     }
