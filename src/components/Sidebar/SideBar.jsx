@@ -44,7 +44,7 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-
+  const [selectedSpaceName, setSelectedSpaceName] = useState('');
   const dispatch = useDispatch();
 
   // For Work-Spaces
@@ -53,12 +53,15 @@ const SideBar = () => {
     (state) => state.workspace.selectedWorkspace
   );
 
+
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
-  // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-
+  const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+  
+  
   // get user img from user info, which store at local storage...
   const userImg = JSON.parse(localStorage.getItem("userInfo")).avatar;
+
 
   // re-render for Work-Space
   useEffect(() => {
@@ -96,7 +99,7 @@ const SideBar = () => {
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
       } catch (error) {
-        console.log("space selection ==> ", error);
+        // console.log("space selection ==> ", error);
       }
     };
 
@@ -292,17 +295,45 @@ const SideBar = () => {
             OverWatch
           </p>
         </div>
+        
         <div className="overflow-y-auto h-full">
+        
           <div className="flex w-full items-center m-3 justify-between pr-4">
+          
             <div
-              // 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎
-              className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
-              onClick={() => setSpaceSearchModal(true)}
+              className="flex space-x-3 px-2 mt-1 items-center group"
+              key={i}
+              // onClick={() => { console.log(space) }}
+              onClick={() => {
+              dispatch(setSelectedSpaceId(space._id));
+              }}
             >
+              <DotsDouble className="invisible group-hover:visible cursor-grab" />
+              <div
+                className={`w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg 
+                ${space.name === selectedSpaceName ? 'bg-slate-700' : ''} `}
+                onClick={() => setSelectedSpaceName(space.name)}
+              >
+
+                {space.privacy.includes("private") ? (
+                  <SpaceLogoLock color={space.color || "#57BEC7"} />
+                ) : (
+                  <SpaceLogo color={space.color || "#57BEC7"} />
+                )}
+
+                <p className=" text-sideBarTextColor font-bold">{space.name}</p>
+              </div>
+
+              // 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎
+              <div
+                className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
+                onClick={() => setSpaceSearchModal(true)}
+              >
               <p className="text-sideBarTextColor font-bold w-full text-sm">
                 YOUR SPACES
               </p>
               <Search />
+
             </div>
 
             <div
@@ -310,6 +341,8 @@ const SideBar = () => {
               onClick={() => setCreateSpaceModal(true)}
             >
               <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor" />
+            </div>
+            
             </div>
           </div>
 

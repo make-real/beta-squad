@@ -5,10 +5,8 @@ import ConfirmDialog from './ConfirmDialog';
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropDownToggle, cardID, listID, cardModal }) => {
-
-
+    
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-
 
     // if cardModal Open by user click, then hide this Card-Setting-DropDown-Toggle window 
     if (cardModal === true) setCardSettingDropDownToggle(false);
@@ -51,7 +49,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
                 className='boardActionDropDown group'
                 onClick={(e) => { e.stopPropagation(); setConfirmModalOpen(true) }}
             >
-                <Delete className='group-hover:text-teal-500' /> <span>Archive Card</span>
+                <Delete className='group-hover:text-teal-500' /> <span>Delete Card</span>
             </div>
 
             {

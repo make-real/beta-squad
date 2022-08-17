@@ -34,8 +34,8 @@ const Card = ({ card, listID }) => {
             onClick={() => setCardModal(true)}
             onMouseEnter={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
-            onDragEnd={() => handleDragEnd(listID, card.id)}
-            onDragEnter={() => handleDragEnter(listID, card.id)}
+            onDragEnd={() => handleDragEnd(listID, card._id)}
+            onDragEnter={() => handleDragEnter(listID, card._id)}
             className='relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200 '>
 
             {
@@ -59,12 +59,6 @@ const Card = ({ card, listID }) => {
                 <CardChip tag='Done' bgColor='bg-green-500' />
                 <CardChip tag='Warning' bgColor='bg-orange-500' />
                 <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
-                <CardChip tag='Active' bgColor='bg-red-500' />
             </div>
 
             {
@@ -80,7 +74,7 @@ const Card = ({ card, listID }) => {
                 cardSettingDropDownToggle &&
                 <CardSettingDropDown
                     right={true}
-                    cardID={card.id}
+                    cardID={card._id}
                     listID={listID}
                     noteDone={noteDone}
                     cardModal={cardModal}
@@ -95,12 +89,12 @@ const Card = ({ card, listID }) => {
 
             <div className=' flex items-center justify-end '>
 
-                <div className='mr-1 bg-slate-200/50 rounded-md py-[2px] px-1 border border-teal-500'>
+                {/* <div className='mr-1 bg-slate-200/50 rounded-md py-[2px] px-1 border border-teal-500'>
                     👍 <span className='text-black'>1</span>
-                </div>
+                </div> */}
 
                 <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
-                    onClick={()=>{}}
+                    onClick={() => { }}
                 >
                     <Plus width="12" height="12" className='mr-[2px]' />
                     <Smile />
@@ -110,8 +104,6 @@ const Card = ({ card, listID }) => {
                     </div>
                 </div>
             </div>
-
-
 
 
 
