@@ -35,17 +35,21 @@ const DeleteTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
           DELETE TAG
         </p>
         <p>Are you sure you want to delete this tag? This cannot be undone.</p>
-        <Button loading={loading} onClick={onDelete}>
-          Delete
-        </Button>
-        {!loading && <Button
-          className="ml-2"
-          text
-          loading={loading}
-          onClick={() => setCreateSpaceModal(false)}
-        >
-          Cancel
-        </Button>}
+        <div className="flex">
+          <Button loading={loading} onClick={onDelete}>
+            Delete
+          </Button>
+          {!loading && (
+            <Button
+              className="ml-2"
+              text
+              loading={loading}
+              onClick={() => setCreateSpaceModal(false)}
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   );

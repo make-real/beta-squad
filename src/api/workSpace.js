@@ -9,6 +9,14 @@ export const get_single_workspace_data = (id) => {
   return useAxios.get(`/workspaces/${id}`);
 };
 
+export const leave_workspace = (id) => {
+  return useAxios.post(`/workspaces/${id}/leave`);
+};
+
+export const archive_workspace = (id) => {
+  return useAxios.post(`/workspaces/${id}/archive`);
+};
+
 export const create_workspace = (data) => {
   return useAxios.post("/workspaces", data);
 };

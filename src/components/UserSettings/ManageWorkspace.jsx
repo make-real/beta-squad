@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { get_workspace_data } from "../../api/workSpace";
+import {
+  archive_workspace,
+  get_workspace_data,
+  leave_workspace,
+} from "../../api/workSpace";
 import images from "../../assets";
 import { BiDotsVertical } from "react-icons/bi";
-import { useUserInfoContext } from "../../context/UserInfoContext";
 import {
   addWorkSpace,
   setSelectedWorkSpaceId,
@@ -13,12 +16,15 @@ import {
 import Dropdown from "../Dropdown";
 import Button from "../Button";
 import ModalWorkSpaceCreate from "../Sidebar/ModalWorkSpaceCreate";
+import { toast } from "react-toastify";
 
 const ManageWorkspace = () => {
   const [extraExpandBox, setExtraExpandBox] = useState(true);
   const [createWorkSpaceModal, setCreateWorkSpaceModal] = useState(false);
   const dispatch = useDispatch();
-  const { workspaces } = useSelector((state) => state.workspace);
+  const { workspaces, selectedWorkspace } = useSelector(
+    (state) => state.workspace
+  );
 
   useEffect(() => {
     fetchData();
@@ -37,6 +43,26 @@ const ManageWorkspace = () => {
   const onCreateWorkSpace = () => {
     setCreateWorkSpaceModal(false);
     fetchData();
+  };
+
+  const leaveWorkspace = (id) => async () => {
+    try {
+      await leave_workspace(id);
+      fetchData();
+    } catch (error) {
+      toast.error(error.response?.data?.issue?.message);
+      console.log(error);
+    }
+  };
+
+  const archiveWorkspace = (id) => async () => {
+    try {
+      await archive_workspace(id);
+      fetchData();
+    } catch (error) {
+      toast.error(error.response?.data?.issue?.message);
+      console.log(error);
+    }
   };
 
   return (
@@ -88,10 +114,10 @@ const ManageWorkspace = () => {
                   </div>
                   <div className="my-auto">
                     <Dropdown width={150} button={<BiDotsVertical />}>
-                      <Button block text>
+                      <Button onClick={leaveWorkspace(item._id)} block text>
                         Leave
                       </Button>
-                      <Button block text>
+                      <Button onClick={archiveWorkspace(item._id)} block text>
                         Archive
                       </Button>
                     </Dropdown>

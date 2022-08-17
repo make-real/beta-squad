@@ -38,7 +38,7 @@ const UserSettingsDropDown = ({ userMenu }) => {
 
         //   🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨
         <div
-            className={`${margin && userMenu.isOpen ? "fixed" : "hidden"} top-12  left-0 z-50  w-[235px]  h-[345px]  bg-white  rounded-md  before:content-['']  before:w-8  before:h-8  before:bg-white  before:absolute  before:top-[-4px]  before:left-[66px]  before:rotate-45  before:z-[-10]`}
+            className={`${margin && userMenu.isOpen ? "fixed" : "hidden"} top-12  left-7 z-50  w-[235px]  h-[345px]  bg-white  rounded-md  before:content-['']  before:w-8  before:h-8  before:bg-white  before:absolute  before:top-[-4px]  before:left-[38px]  before:rotate-45  before:z-[-10]`}
         >
             <nav className="py-4 px-3">
 
