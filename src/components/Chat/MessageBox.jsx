@@ -3,20 +3,20 @@ import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
-import users from "../../constant/users";
 // import { AiOutlineGif } from "react-icons/ai";
 // import GIF from "./GIF";
 import { get_mentionable_users, send_message } from "../../api/message";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
-import classNames from "./example.module.css";
+import classNames from "./mention.module.css";
+import { useRef } from "react";
 
 const MessageBox = () => {
   const [input, setInput] = useState("");
-  const [mentionModal, setMentionModal] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
+  const inputRef = useRef();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -50,7 +50,6 @@ const MessageBox = () => {
 
   const handleAttach = () => {
     setShowEmojis(false);
-    setMentionModal(false);
     // setShowGif(false);
     // setAttachFile((prev) => !prev);
   };
@@ -58,14 +57,13 @@ const MessageBox = () => {
   const handleEmoji = () => {
     // setShowGif(false);
     // setAttachFile(false);
-    setMentionModal(false);
     setShowEmojis((prev) => !prev);
   };
 
   const handleMention = () => {
     setShowEmojis(false);
-    setMentionModal((prev) => !prev);
     setInput((prev) => prev + "@");
+    inputRef.current.focus();
     // setAttachFile(false);
     // setShowGif(false);
   };
@@ -111,6 +109,8 @@ const MessageBox = () => {
             </div>
           )}
           allowSuggestionsAboveCursor={true}
+          inputRef={inputRef}
+          autoFocus
         >
           <Mention
             className={classNames.mentions__mention}
@@ -136,14 +136,6 @@ const MessageBox = () => {
           />
         </MentionsInput>
 
-        {/* <input
-          type="text"
-          placeholder="Message Space Clone"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          highlightedDisplay={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
-          className="w-full input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-[120px]"
-        /> */}
         <div className="text-gray-400 flex absolute right-[30px] bottom-1/2  translate-y-1/2">
           <label
             className="px-1.5 cursor-pointer relative"

@@ -3,18 +3,14 @@
     width: 100%;
     color: black;
     outline: none;
-    border: 3px solid silver;
+    border: 3px solid #c2c1c1;
     border-radius: 1rem;
   }
   
   .mentions--singleLine .mentions__control {
-    display: inline-block;
-    width: 130px;
+    width: 1300px;
   }
-  .mentions--singleLine .mentions__highlighter {
-    padding: 1px;
-    border: 2px inset transparent;
-  }
+
   .mentions--singleLine .mentions__input {
     padding: 1px;
     outline: none;
@@ -30,22 +26,14 @@
     min-height: 63px;
   }
   .mentions--multiLine .mentions__input {
-    padding: 9px;
-    /* border: 1px solid silver;
-    padding: 9px;
-    outline: 0; */
+    padding: 10px;
     outline: none;
     border: none;
   }  
   
   .mentions__suggestions__list {
-   
     font-size: 10pt;
   }
-  
-  /* .mentions__suggestions__item {
-    padding: 5px 15px;
-  } */
   
   .mentions__suggestions__item--focused {
     background-color: #ddd;
@@ -57,8 +45,6 @@
     left: 0;
     z-index: 1;
     color: blue;
-    /* text-shadow: 1px 1px 1px white, 1px -1px 1px white, -1px 1px 1px white,
-      -1px -1px 1px white; */
-    text-decoration: underline;
+    text-decoration: none;
     pointer-events: none;
   }

@@ -9,6 +9,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
+import { populateUsers } from "../../util/helpers";
 
 const TextMessage = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,9 @@ const TextMessage = () => {
         try {
           const { data } = await get_messages(selectedSpaceId);
           dispatch(addBulkMessage(data.messages.reverse()));
+
+          console.log(data.messages);
+
           scrollToBottom();
         } catch (error) {
           alert(error.message);
@@ -45,21 +49,7 @@ const TextMessage = () => {
 
   return (
     <div className="overflow-auto mt-[10px] h-[calc(100vh-150px)] overflow-x-hidden px-5 pt-5">
-      {/* <div className="flex py-3.5">
-        <div className="w-7 h-7">
-          <img src={asserts.haySpace} alt="logo" />
-        </div>
-        <p className="my-auto pl-3 text-gray-600">
-          This is the beginning of conversation in space:{" "}
-          <span className="text-zinc-900">Space Clone</span>
-        </p>
-      </div>
-
-      <div className="border-b mb-4 relative border">
-        <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-48 p-1.5 text-xs text-gray-800 text-center rounded-2xl bg-white">
-          Yesterday, June 21st
-        </p>
-      </div> */}
+     
       {messages.map((msg, idx) => (
         <div
           key={idx}
@@ -74,7 +64,12 @@ const TextMessage = () => {
             <h6 className="text-xs text-sky-900	pb-2">
               {msg?.sender?.fullName}
             </h6>
-            <p className="text-sm text-gray-900		">{msg?.content?.text}</p>
+            <p
+              className="text-sm text-gray-900"
+              dangerouslySetInnerHTML={{
+                __html: populateUsers(msg?.content),
+              }}
+            ></p>
           </div>
           <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
             <div className="px-1 hover:text-teal-400 tooltip-box">
