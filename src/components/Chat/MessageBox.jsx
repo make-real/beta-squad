@@ -71,17 +71,17 @@ const MessageBox = () => {
   };
 
   return (
-    <div className="py-3  text-gray-300 relative pb-5">
-      <div className="relative h-full">
+    <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
+      <div className="w-full h-full flex justify-center align-middle">
         <input
           type="text"
           placeholder="Message Space Clone"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
-          className="w-full input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-36"
+          className="w-full input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-[120px]"
         />
-        <div className="text-gray-400 flex absolute right-2.5 bottom-1/2  translate-y-1/2">
+        <div className="text-gray-400 flex absolute right-[30px] bottom-1/2  translate-y-1/2">
           <label
             className="px-1.5 cursor-pointer relative"
             htmlFor="userInputFile"
@@ -135,11 +135,11 @@ const MessageBox = () => {
           </div> */}
         </div>
 
-        <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
+        {/* <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
           <small className="text-gray-500">#bold*</small>
           <small className="px-1 italic">_italic_</small>
           <small>~strikethrough~</small>
-        </div>
+        </div> */}
       </div>
 
       {mentionModal && (

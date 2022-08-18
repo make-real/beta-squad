@@ -7,7 +7,7 @@ import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
 import asserts from "../../assets";
 import { useSocket } from "../../context/SocketContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
 import {
@@ -20,6 +20,7 @@ const TextMessage = () => {
   const socket = useSocket();
 
   const dispatch = useDispatch();
+  const messagesEndRef = useRef();
 
   const messages = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -27,7 +28,8 @@ const TextMessage = () => {
   const loadMessages = async () => {
     try {
       const { data } = await get_messages(selectedSpaceId);
-      dispatch(addBulkMessage(data.messages));
+      dispatch(addBulkMessage(data.messages.reverse()));
+      scrollToBottom();
     } catch (error) {
       alert(error.message);
     }
@@ -37,6 +39,7 @@ const TextMessage = () => {
     socket.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
       if (msg.to === selectedSpaceId) {
         dispatch(addSingleMessage(msg));
+        scrollToBottom();
       }
     });
   };
@@ -50,9 +53,15 @@ const TextMessage = () => {
     }
   }, [selectedSpaceId]);
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   return (
-    <div>
-      <div className="flex py-3.5">
+    <div className="overflow-auto mt-[10px] h-[calc(100vh-150px)] overflow-x-hidden px-5 pt-5">
+      {/* <div className="flex py-3.5">
         <div className="w-7 h-7">
           <img src={asserts.haySpace} alt="logo" />
         </div>
@@ -66,8 +75,7 @@ const TextMessage = () => {
         <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-48 p-1.5 text-xs text-gray-800 text-center rounded-2xl bg-white">
           Yesterday, June 21st
         </p>
-      </div>
-
+      </div> */}
       {messages.map((msg, idx) => (
         <div
           key={idx}
@@ -112,6 +120,7 @@ const TextMessage = () => {
           </div>
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
