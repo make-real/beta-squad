@@ -48,3 +48,32 @@ export const sortByAlphabet = (data, sortKey) => {
   });
   return sortedData;
 };
+
+const splitSpecificParts = (str, startChar, endChar) => {
+  const targetParts = [];
+  const splitWithStartChar = str.split(startChar);
+
+  for (let arrItem of splitWithStartChar) {
+    if (arrItem.indexOf(endChar) > -1) {
+      const splitEndIndex = arrItem.indexOf(endChar);
+      const item = arrItem.substring(0, splitEndIndex);
+      targetParts.push(item);
+    }
+  }
+
+  return targetParts;
+};
+
+export const populateUsers = (content) => {
+  let target = String(content.text);
+  let replaceArray = splitSpecificParts(target, "{{", "}}");
+
+  for (var i = 0; i < content.mentionedUsers.length; i++) {
+    target = target.replace(
+      new RegExp("{{" + replaceArray[i] + "}}", "gi"),
+      `<b style="color: blue;">${content.mentionedUsers[i].fullName}</b>`
+    );
+  }
+
+  return target;
+};
