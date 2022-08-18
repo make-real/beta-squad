@@ -8,6 +8,7 @@ const Button = ({
   loading,
   block,
   onClick,
+  sm,
   ...res
 }) => {
   let styleClasses = `
@@ -17,7 +18,7 @@ const Button = ({
     relative
     ${block ? "w-full" : "w-fit"}
     mt-3
-    px-6
+    px-${sm ? "2" : "6"}
     ${loading ? "py-1" : "py-2"}
     text-sm
     text-white
@@ -28,10 +29,14 @@ const Button = ({
   return (
     <div
       {...res}
-      onClick={!loading && !disabled && onClick}
+      onClick={!loading || !disabled ? onClick : () => {}}
       className={styleClasses}
     >
-      {loading ? <Loader dark /> : <h6 className="text-center">{children}</h6>}
+      {loading ? (
+        <Loader dark={!text} />
+      ) : (
+        <h6 className={`text-center ${sm && "text-xs"}`}>{children}</h6>
+      )}
     </div>
   );
 };

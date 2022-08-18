@@ -107,7 +107,7 @@ const SideBar = () => {
   }, [dispatch, userSelectedWorkSpaceId]);
 
   return (
-    <section className={`fixed top-0 bottom-0 bg-gray-800 flex z-20`}>
+    <section className={`fixed top-0 bottom-0 bg-gray-800 flex`}>
       {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
       <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2 z-20">
         {margin ? (

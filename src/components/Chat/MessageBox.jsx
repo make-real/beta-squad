@@ -71,7 +71,7 @@ const MessageBox = () => {
   };
 
   return (
-    <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
+    <div className="px-3 mt-[10px] z-[1] relative text-gray-300 flex w-full">
       <div className="w-full h-full flex justify-center align-middle">
         <input
           type="text"

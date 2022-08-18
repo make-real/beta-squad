@@ -9,7 +9,7 @@ const Chat = () => {
     <div
       className={`${
         margin ? "ml-[325px]" : "ml-[50px]"
-      } z-[-1]  pt-[60px] duration-200`}
+      } pt-[60px] duration-200`}
     >
       <TextMessage />
       <MessageBox />

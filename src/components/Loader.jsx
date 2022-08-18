@@ -5,7 +5,7 @@ import colors from "../colors.json";
 
 export const Loader = ({ dark, className }) => {
   return (
-    <div className={className || "mt-1"}>
+    <div className={"flex justify-center " + className || "mt-1"}>
       <ClipLoader color={dark ? "white" : "black"} size="20px" />
     </div>
   );
@@ -14,7 +14,11 @@ export const Loader = ({ dark, className }) => {
 export const PageLoader = ({ dark, className }) => {
   return (
     <div className="flex w-full h-full my-auto justify-center align-middle text-red">
-      <BeatLoader style={{margin: 'auto'}} color={colors.themeColor} size="20px" />
+      <BeatLoader
+        style={{ margin: "auto" }}
+        color={colors.themeColor}
+        size="20px"
+      />
     </div>
   );
 };

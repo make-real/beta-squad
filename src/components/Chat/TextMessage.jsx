@@ -90,7 +90,7 @@ const TextMessage = () => {
             <h6 className="text-xs text-sky-900	pb-2">
               {msg?.sender?.fullName}
             </h6>
-            <p className="text-sm text-gray-900		">{msg?.content?.text}</p>
+            <p className="text-sm text-gray-900">{msg?.content?.text}</p>
           </div>
           <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
             <div className="px-1 hover:text-teal-400 tooltip-box">

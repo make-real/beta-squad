@@ -34,7 +34,7 @@ const NavBar = () => {
   return (
     <header
       className={`${margin ? "ml-[325px]" : "ml-[50px]"
-        } fixed top-0 left-0 right-0 -z-0  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+        } fixed top-0 left-0 right-0 z-10  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
 
       {/* 🟨🟨🟨 Left Side */}
@@ -138,7 +138,7 @@ const NavBar = () => {
               <h2>filter</h2>
             </div>
           ) : navIcons === "setting" ? (
-            <div className="z-10 h-full overflow-y-auto">
+            <div className="h-full overflow-y-auto">
               <Setting />
             </div>
           ) : navIcons === "add-member" ? (
