@@ -4,7 +4,7 @@ import ConfirmDialog from "./ConfirmDialog";
 
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const BoardListSettingDropDown = ({ boardListID, setBoardListSettingDropDownToggle }) => {
+const BoardListSettingDropDown = ({ boardListID }) => {
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
@@ -54,7 +54,6 @@ const BoardListSettingDropDown = ({ boardListID, setBoardListSettingDropDownTogg
           <ConfirmDialog
             listID={boardListID}
             setConfirmModalOpen={setConfirmModalOpen}
-            // setBoardListSettingDropDownToggle={setBoardListSettingDropDownToggle}
           />
         )
       }

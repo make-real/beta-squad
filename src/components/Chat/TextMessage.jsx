@@ -34,7 +34,7 @@ const TextMessage = () => {
   };
 
   const newMessageListner = () => {
-    socket.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
+    socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
       if (msg.to === selectedSpaceId) {
         dispatch(addSingleMessage(msg));
       }

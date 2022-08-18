@@ -1,7 +1,6 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { boardListDelete, cardDelete } from '../../hooks/useFetch';
-import { deleteList } from '../../store/slice/boardListsCards';
-import { useSelector, useDispatch } from "react-redux";
+import { boardListDelete, cardDeleteApiCall } from '../../hooks/useFetch';
+import { useSelector} from "react-redux";
 import { Close } from '../../assets/icons'
 import { toast } from 'react-toastify';
 
@@ -13,9 +12,8 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
   const { removeBoardList, removeCard } = useBoardCardContext();
 
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-  const dispatch = useDispatch();
 
-
+  
 
   //🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
   const handleCancel = (e) => {
@@ -47,19 +45,19 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
         const { data } = await boardListDelete(selectedSpaceId, listID);
 
         // list delete
-        // removeBoardList(listID);
-        
-        dispatch(deleteList(listID));
+        removeBoardList(listID);
+
+        // dispatch(deleteList(listID));
 
         // display a notification for user
         toast.success(`${data?.message}`, { autoClose: 3000 });
       } else {
 
-        const { data } = await cardDelete(selectedSpaceId, listID, cardID);
+        const { data } = await cardDeleteApiCall(selectedSpaceId, listID, cardID);
 
         // card delete
         removeCard(listID, cardID);
-
+        // dispatch(deleteCard({ listID, cardID }));
 
         // display a notification for user
         toast.success(`${data?.message}`, { autoClose: 3000 });

@@ -1,29 +1,33 @@
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import { AddBtn, Card, BoardListSettingDropDown } from ".";
+import { addCardIntoBoardList } from "../../hooks/useFetch";
 import { DotsSingle } from "../../assets/icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 import Dropdown from "../Dropdown";
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
-import { addCardIntoBoardList } from "../../hooks/useFetch";
-import { useSelector } from "react-redux";
 import useAxios from "../../api";
+import "tippy.js/dist/tippy.css";
 
 
 const BoardList = ({ boardList }) => {
 
-  const dropDownRef = useRef();  
+  const dropDownRef = useRef();
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-  const [allCards, setAllCards] = useState([]);
+
+  const { addCard } = useBoardCardContext();
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         // GET Method ==> Card --- under specific Space reference ID + board list reference
         const { data } = await useAxios.get(`/spaces/${selectedSpaceId}/board/${boardList?._id}/card`);
-        setAllCards(data.cards);
+
+        // get updated card all the time...
+        // console.log(data)
       } catch (error) {
         console.log(error);
       }
@@ -44,14 +48,14 @@ const BoardList = ({ boardList }) => {
       const { data } = await addCardIntoBoardList(selectedSpaceId, boardList?._id, cardObject);
 
       // update user UI...
-      setAllCards(pre => [...pre, data?.card]);
+      await addCard(data?.card, boardList?._id);
 
       // display a notification for user
       toast.success(`${data?.card?.name} - card created`, { autoClose: 3000 });
 
     } catch (error) {
       // error for developer for deBugging...
-      console.log(error.response.data);
+      console.log(error);
 
       // error for user at notification...
       toast.error(error?.response?.data?.issue?.message, { autoClose: 3000 });
@@ -89,8 +93,8 @@ const BoardList = ({ boardList }) => {
 
       <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
         {
-          // boardList?.cards?.map((card) => (
-          allCards?.map((card) => (
+          boardList?.cards?.map((card) => (
+            // allCards?.map((card) => (
             <Card key={card._id} card={card} listID={boardList?._id} />
           ))
         }
