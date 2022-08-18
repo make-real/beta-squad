@@ -11,6 +11,7 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
+import { addSingleMessage } from "./store/slice/message";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -24,6 +25,14 @@ if (token) {
     auth: {
       socketAuthToken: token,
     },
+  });
+
+  socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
+    const { space } = store.getState();
+
+    if (msg.to === space.selectedSpace) {
+      store.dispatch(addSingleMessage(msg));
+    }
   });
 }
 
