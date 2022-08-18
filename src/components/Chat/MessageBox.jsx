@@ -1,19 +1,45 @@
 import { ImAttachment } from "react-icons/im";
 import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 import users from "../../constant/users";
 // import { AiOutlineGif } from "react-icons/ai";
 // import GIF from "./GIF";
-import { send_message } from "../../api/message";
+import { get_mentionable_users, send_message } from "../../api/message";
 import { useSelector } from "react-redux";
+import { MentionsInput, Mention } from "react-mentions";
+import classNames from "./example.module.css";
 
 const MessageBox = () => {
   const [input, setInput] = useState("");
   const [mentionModal, setMentionModal] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    if (Boolean(selectedSpaceId)) {
+      const loadUsers = async () => {
+        try {
+          const { data } = await get_mentionable_users(selectedSpaceId);
+
+          const arr = data?.users?.map((user) => ({
+            id: user._id,
+            display: user.fullName,
+          }));
+
+          console.log(arr);
+          setUsers(arr);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      loadUsers();
+    }
+  }, [selectedSpaceId]);
 
   // const [attachFile, setAttachFile] = useState(false);
   // const [showGif, setShowGif] = useState(false);
@@ -39,6 +65,7 @@ const MessageBox = () => {
   const handleMention = () => {
     setShowEmojis(false);
     setMentionModal((prev) => !prev);
+    setInput((prev) => prev + "@");
     // setAttachFile(false);
     // setShowGif(false);
   };
@@ -63,22 +90,60 @@ const MessageBox = () => {
       await send_message(selectedSpaceId, {
         textMessage: text,
       });
+
+      setInput("");
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
-    <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
+    <div className="position-relative px-3 mt-[10px] relative text-gray-300 flex w-full">
       <div className="w-full h-full flex justify-center align-middle">
-        <input
+        <MentionsInput
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
+          // className="outline-0 w-full p-5 relative input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-[120px]"
+          classNames={classNames}
+          customSuggestionsContainer={(children) => (
+            <div className="bg-[#f1f1f1] p-2 absolute bottom-5 w-[300px]">
+              {children}
+            </div>
+          )}
+          allowSuggestionsAboveCursor={true}
+        >
+          <Mention
+            className={classNames.mentions__mention}
+            trigger="@"
+            data={users}
+            markup="{{__id__}}"
+            renderSuggestion={(
+              entry,
+              search,
+              highlightedDisplay,
+              index,
+              focused
+            ) => {
+              return (
+                <h1 className={focused ? "bg-[#ddd] p-2" : "bg-[#f1f1f1] p-2"}>
+                  {entry.display}
+                </h1>
+              );
+            }}
+            displayTransform={(id) =>
+              users.find((user) => user.id === id).display
+            }
+          />
+        </MentionsInput>
+
+        {/* <input
           type="text"
           placeholder="Message Space Clone"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
+          highlightedDisplay={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
           className="w-full input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-[120px]"
-        />
+        /> */}
         <div className="text-gray-400 flex absolute right-[30px] bottom-1/2  translate-y-1/2">
           <label
             className="px-1.5 cursor-pointer relative"
@@ -91,18 +156,6 @@ const MessageBox = () => {
             />
 
             <input type="file" id="userInputFile" className="hidden" />
-
-            {/* {attachFile && (
-              <div className="attach-box">
-                <h6 className="duration-300  hover:text-teal-400">
-                  From computer
-                </h6>
-                <h6 className="py-2 duration-300  hover:text-teal-400">
-                  Google drive
-                </h6>
-                <h6 className="duration-300  hover:text-teal-400">Dropbox</h6>
-              </div>
-            )} */}
           </label>
 
           <div className="px-2 cursor-pointer relative">
@@ -140,7 +193,7 @@ const MessageBox = () => {
         </div> */}
       </div>
 
-      {mentionModal && (
+      {/* {mentionModal && (
         <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
           <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
             <p>@channel Notifies everyone in space</p>
@@ -166,7 +219,7 @@ const MessageBox = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
