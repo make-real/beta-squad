@@ -5,7 +5,7 @@ import { NavBar, SideBar } from "../";
 const Layout = () => {
   return (
     <div>
-      <div>{<Outlet />}</div>
+      <Outlet />
       <NavBar />
       <SideBar />
     </div>

@@ -13,22 +13,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
 
 
     return (
-        <div
-            onClick={e => { e.stopPropagation(); setCardSettingDropDownToggle(false) }}
-            className={`w-[210px] absolute top-[65px]
-            ${right ? 'right-[-5px]' : 'right-1'} 
-            bg-white p-2 rounded-lg shadow-xl   
-            after:content-[""] 
-            after:w-8 
-            after:h-8 
-            after:bg-white 
-            after:absolute 
-            after:rotate-45 
-            after:z-[-10]
-            after:top-[-10px] 
-            ${right ? 'after:right-[4%] after:translate-x-[8%] ' : 'after:right-[38px]'} `}
-        >
-
+        <div>
             <div className='boardActionDropDown group line-through relative'>
                 <Copy className='group-hover:text-teal-500' /> <span>Copy Card</span>
             </div>

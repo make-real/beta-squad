@@ -71,7 +71,7 @@ export const populateUsers = (content) => {
   for (var i = 0; i < content.mentionedUsers.length; i++) {
     target = target.replace(
       new RegExp("{{" + replaceArray[i] + "}}", "gi"),
-      `<b style="color: blue;">${content.mentionedUsers[i].fullName}</b>`
+      `<b style="color: #1b9ed6;">${content.mentionedUsers[i].fullName}</b>`
     );
   }
 

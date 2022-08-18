@@ -54,7 +54,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card }) => {
 
     return (
         <section
-            className='fixed top-0 right-0 left-0 bottom-0 bg-black/30 grid place-items-center'
+            className='fixed z-10 top-0 right-0 left-0 bottom-0 bg-black/30 grid place-items-center'
             onClick={() => setBoardModal(false)}
         >
 

@@ -1,9 +1,9 @@
 .mentions {
     width: 100%;
     color: black;
-    outline: none;
+    /* outline: none;
     border: 3px solid #c2c1c1;
-    border-radius: 1rem;
+    border-radius: 1rem; */
   }
   
   .mentions--singleLine .mentions__control {
@@ -43,7 +43,7 @@
     top: 0;
     left: 0;
     z-index: 1;
-    color: blue;
+    color: #1b9ed6;
     text-decoration: none;
     pointer-events: none;
   }
