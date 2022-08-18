@@ -7,15 +7,13 @@ import users from "../../constant/users";
 // import { AiOutlineGif } from "react-icons/ai";
 // import GIF from "./GIF";
 import { send_message } from "../../api/message";
-import { useDispatch, useSelector } from "react-redux";
-import { addSingleMessage } from "../../store/slice/message";
+import { useSelector } from "react-redux";
 
 const MessageBox = () => {
   const [input, setInput] = useState("");
   const [mentionModal, setMentionModal] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-  const dispatch = useDispatch();
 
   // const [attachFile, setAttachFile] = useState(false);
   // const [showGif, setShowGif] = useState(false);

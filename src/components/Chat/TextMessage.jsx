@@ -5,53 +5,37 @@ import {
 } from "react-icons/bs";
 import { VscCommentDiscussion } from "react-icons/vsc";
 import { MdClose, MdModeEditOutline } from "react-icons/md";
-import asserts from "../../assets";
-import { useSocket } from "../../context/SocketContext";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
-import {
-  addBulkMessage,
-  addSingleMessage,
-  resetMessages,
-} from "../../store/slice/message";
+import { addBulkMessage } from "../../store/slice/message";
 
 const TextMessage = () => {
-  const socket = useSocket();
-
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
 
   const messages = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-  const loadMessages = async () => {
-    try {
-      const { data } = await get_messages(selectedSpaceId);
-      dispatch(addBulkMessage(data.messages.reverse()));
-      scrollToBottom();
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  const newMessageListner = () => {
-    socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
-      if (msg.to === selectedSpaceId) {
-        dispatch(addSingleMessage(msg));
-        scrollToBottom();
-      }
-    });
-  };
-
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
-      dispatch(resetMessages());
-      loadMessages();
+      const loadMessages = async () => {
+        try {
+          const { data } = await get_messages(selectedSpaceId);
+          dispatch(addBulkMessage(data.messages.reverse()));
+          scrollToBottom();
+        } catch (error) {
+          alert(error.message);
+        }
+      };
 
-      newMessageListner();
+      loadMessages();
     }
-  }, [selectedSpaceId]);
+  }, [selectedSpaceId, dispatch]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const scrollToBottom = () => {
     setTimeout(() => {

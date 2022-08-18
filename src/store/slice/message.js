@@ -13,13 +13,10 @@ export const messageSlice = createSlice({
     },
     addSingleMessage: (state, { payload }) => {
       state.messages.push(payload);
-    },
-    resetMessages: (state) => {
-      state = initialState;
-    },
+    }
   },
 });
 
-export const { addBulkMessage, resetMessages, addSingleMessage } = messageSlice.actions;
+export const { addBulkMessage, addSingleMessage } = messageSlice.actions;
 
 export default messageSlice.reducer;
