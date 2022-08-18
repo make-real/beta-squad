@@ -8,61 +8,41 @@ export const BoardCardContext = ({ children }) => {
 
     const [target, setTarget] = useState({ bid: '', cid: '' });
 
-    const [boardLists, setBoardList] = useState(JSON.parse(localStorage.getItem('kanban')) || []);
-   
-
-    // const addBoardList = name => setBoardList(pre => [...pre, { id: Date.now() + Math.random(), name, cards: [] }]);
-    // const addBoardList = name => {
-
-    // };
+    const [boardLists, setBoardList] = useState([]);
 
 
-    const removeBoardList = bid => setBoardList(pre => pre.filter(({ id }) => id !== bid))
+    // 🟨🟨🟨 For List's
+    const addBoardList = newListObj => setBoardList(pre => [...pre, newListObj]);
+
+    const removeBoardList = bid => setBoardList(pre => pre.filter(({ _id }) => _id !== bid))
 
 
-    const addCard = (name, bid) => {
+    // 🟨🟨🟨 For Card's
+    const addCard = (cardObj, bid) => {
 
-        // 🟩🟩🟩 1st coming data from user ==> Create a new card
-        const card = {
-            id: Date.now() + Math.random(),
-            name,
-            progress: 0,
-            tags: [],
-            attachments: [],
-            assignee: [],
-            checkList: [],
-        }
-
-
-        // 🟩🟩🟩 2nd Find 🔎 that specific Board index, for enter ==> the Newly Created Card. 
-        const boardIndex = boardLists.findIndex(({ id }) => id === bid);
+        // 🟩🟩🟩 1st Find 🔎 that specific Board index, for enter ==> the Newly Created Card. 
+        const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
         if (boardIndex < 0) return; // IF no board found, return nothing...
 
-
-        // 🟩🟩🟩 3rd update the Card inside a specific Board
+        // 🟩🟩🟩 2nd update the Card inside a specific Board
         const tempBoard = [...boardLists];              // copy ==> total old board 
-        tempBoard[boardIndex].cards.push(card);         // add  ==> new card into that copied board
+        tempBoard[boardIndex].cards.push(cardObj);      // add  ==> new card into that copied board
         setBoardList(tempBoard);                        // update ==> exiting board by this new copied board
     }
 
-
     const removeCard = (bid, cid) => {
 
-        // 🟥🟥🟥 1st ==> 🔎 Find the Board index
-        const boardIndex = boardLists.findIndex(({ id }) => id === bid);
-        if (boardIndex < 0) return; // IF no board found, return nothing...
+        const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
+        if (boardIndex < 0) return;
 
-        // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
-        const cardIndex = boardLists[boardIndex].cards.findIndex(({ id }) => id === cid);
-        if (cardIndex < 0) return; // IF no card found, return nothing...
+        const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
+        if (cardIndex < 0) return;
 
-        // 🟥🟥🟥 3rd ==> remove tha specific Card from a specific Board + Update Board
-        // setBoards(pre => pre[boardIndex].cards.filter(({ id }) => id !== bid));
-        const tempBoard = [...boardLists];                  // copy 
-        tempBoard[boardIndex].cards.splice(cardIndex, 1);   // delete
-        setBoardList(tempBoard);                            // update 
+        const tempBoard = [...boardLists];
+        tempBoard[boardIndex].cards.splice(cardIndex, 1);
+
+        setBoardList(tempBoard);
     }
-
 
     const updateCard = (bid, cid, card) => {
 
@@ -80,6 +60,7 @@ export const BoardCardContext = ({ children }) => {
     }
 
 
+    // 🟨🟨🟨 For Card's D-&-D
     const handleDragEnter = (bid, cid) => setTarget({ bid, cid });
 
 
@@ -115,7 +96,8 @@ export const BoardCardContext = ({ children }) => {
     return (
         <BoardCardItem.Provider value={{
             boardLists,
-            // addBoardList,
+            setBoardList,
+            addBoardList,
             removeBoardList,
             addCard,
             updateCard,

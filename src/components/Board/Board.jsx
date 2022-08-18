@@ -1,21 +1,16 @@
-import { addNewList, getAllList } from '../../store/slice/boardListsCards';
+import { useBoardCardContext } from '../../context/BoardCardContext';
 import { useStyleContext } from '../../context/StyleContext';
-import { useDispatch, useSelector } from "react-redux";
-import { addBoardList } from '../../hooks/useFetch';
+import { addBoardListApiCall } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import useAxios from '../../api/index';
 
 
-
 const Board = ({ selectedSpaceId }) => {
 
-
-    // Redux Store | Read + Write Operation For Board Section
-    const allList = useSelector(state => state.boardListsCards.allList);
-    const dispatch = useDispatch();
-
+    // ContextAPI | Read + Write Operation For Board Section
+    const { boardLists, setBoardList, addBoardList } = useBoardCardContext();
 
     // Globally Left side margin maintain
     const { margin } = useStyleContext();
@@ -25,14 +20,15 @@ const Board = ({ selectedSpaceId }) => {
         const fetchData = async () => {
             try {
 
-                // GET Method ==> for all Board List --- under specific Space reference ID
-                const { data } = await useAxios.get(`/spaces/${selectedSpaceId}/board?getCards=true`);
+                if (selectedSpaceId) {
+                    // GET Method ==> for all Board List --- under specific Space reference ID
+                    const { data } = await useAxios.get(`/spaces/${selectedSpaceId}/board?getCards=true`);
 
-                // update Redux Store for UI 
-                dispatch(getAllList(data.lists));
-
+                    // update Context API for UI 
+                    setBoardList(data.lists)
+                }
             } catch (error) {
-                console.log(error?.response?.data?.issue);
+                console.log(error);
             }
         }
         fetchData();
@@ -48,10 +44,10 @@ const Board = ({ selectedSpaceId }) => {
 
         try {
             // its a POST method | object send into backend/server
-            const { data } = await addBoardList(selectedSpaceId, listObject);
+            const { data } = await addBoardListApiCall(selectedSpaceId, listObject);
 
-            // update user UI... by Redux Store
-            dispatch(addNewList(data.list))
+            // update user UI... by ContextAPI
+            addBoardList(data.list)
 
             // display a notification for user
             toast.success(`${data?.list?.name} - list create successfully`, { autoClose: 3000 });
@@ -72,7 +68,7 @@ const Board = ({ selectedSpaceId }) => {
             <div className='pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]'>
                 {
                     // all board list print at UI by this loop...
-                    allList?.map((boardList, i) => <BoardList key={i} boardList={boardList} />)
+                    boardLists?.slice(0)?.reverse()?.map((boardList, i) => <BoardList key={i} boardList={boardList} />)
                 }
 
                 {/*  + Add a list | Button UI */}
