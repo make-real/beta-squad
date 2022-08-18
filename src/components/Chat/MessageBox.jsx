@@ -71,7 +71,7 @@ const MessageBox = () => {
   };
 
   return (
-    <div className="px-3 mt-[10px] z-[1] relative text-gray-300 flex w-full">
+    <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
       <div className="w-full h-full flex justify-center align-middle">
         <input
           type="text"
@@ -143,7 +143,7 @@ const MessageBox = () => {
       </div>
 
       {mentionModal && (
-        <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
+        <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white   rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
           <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
             <p>@channel Notifies everyone in space</p>
           </div>

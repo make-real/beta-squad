@@ -64,7 +64,7 @@ const Login = () => {
             <img
               src={images.signIn1}
               alt="bg"
-              className="w-52 absolute bottom-36 right-14 z-10"
+              className="w-52 absolute bottom-36 right-14  "
             />
             <img
               src={images.signIn2}

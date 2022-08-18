@@ -63,7 +63,7 @@ const Timeline = () => {
                 </button>
 
                 {timeDropDown && (
-                  <div className="z-10 w-32 absolute left-0 top-[50px] bg-slate-100	 divide-y divide-gray-100 rounded shadow  dark:bg-gray-700">
+                  <div className="  w-32 absolute left-0 top-[50px] bg-slate-100	 divide-y divide-gray-100 rounded shadow  dark:bg-gray-700">
                     <ul
                       className="py-1 text-sm text-gray-500 dark:text-gray-200 cursor-pointer"
                       aria-labelledby="dropdownDefault"
@@ -207,7 +207,7 @@ const Timeline = () => {
 
         {/* space filter box  */}
         {spaceFilter && (
-          <div className="absolute right-0 top-[100px] w-[320px] h-[450px] rounded-lg z-50  bg-zinc-200	overflow-y-auto pb-4">
+          <div className="absolute right-0 top-[100px] w-[320px] h-[450px] rounded-lg    bg-zinc-200	overflow-y-auto pb-4">
             <div
               className="py-2 px-1.5 flex justify-end cursor-pointer hover:text-teal-400"
               onClick={() => setSpaceFilter(false)}

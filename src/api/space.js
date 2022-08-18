@@ -15,7 +15,7 @@ export const remove_space_members = (spaceId, memberId) => {
   });
 };
 export const update_space = (spaceId, data) => {
-  return useAxios.patch(`/spaces/${spaceId}/members`, {
+  return useAxios.patch(`/spaces/${spaceId}`, {
     name: data.name,
     description: data.description,
     color: data.color,

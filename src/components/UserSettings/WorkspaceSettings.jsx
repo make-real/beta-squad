@@ -3,19 +3,26 @@ import Button from "../Button";
 import Input from "../Input";
 import { AiOutlineSetting } from "react-icons/ai";
 import { Loader } from "../Loader";
+import Dropdown from "../Dropdown";
 import { useSelector } from "react-redux";
 import {
   add_workspace_member,
+  change_workspace_member_role,
   get_single_workspace_data,
+  get_workspace_member,
   update_workspace,
 } from "../../api/workSpace";
 import { toast } from "react-toastify";
+import { WORKSPACE_ROLE } from "../../constant/enums";
 
 const WorkspaceSettings = () => {
   const { workspaces, selectedWorkspace } = useSelector(
     (state) => state.workspace
   );
   const [workspace, setWorkspace] = useState(selectedWorkspace);
+  const [workspaceMembers, setWorkspaceMembers] = useState([]);
+  const [changingRoll, setChangingRoll] = useState("");
+  const [blocking, setBlocking] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [nameLoading, setNameLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
@@ -23,12 +30,22 @@ const WorkspaceSettings = () => {
 
   useEffect(() => {
     getWorkspaceData();
+    getWorkspaceMembers();
   }, [selectedWorkspace]);
 
   const getWorkspaceData = async () => {
     try {
       const { data } = await get_single_workspace_data(selectedWorkspace);
       setWorkspace(data.workspace);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getWorkspaceMembers = async () => {
+    try {
+      const { data } = await get_workspace_member(selectedWorkspace);
+      setWorkspaceMembers(data.teamMembers);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +79,7 @@ const WorkspaceSettings = () => {
       setNameLoading(false);
     }
   };
-  
+
   const uploadLogo = async (e) => {
     console.log("upload logo");
     try {
@@ -77,8 +94,41 @@ const WorkspaceSettings = () => {
       setImageLoading(false);
     }
   };
+
+  const changeUserRoll = (id, role) => async () => {
+    try {
+      setChangingRoll(id);
+      await change_workspace_member_role(selectedWorkspace, {
+        id,
+        role,
+      });
+      setChangingRoll("");
+      getWorkspaceMembers();
+    } catch (error) {
+      toast.error(error.message, { autoClose: 1000 });
+      setChangingRoll("");
+    }
+  };
+
+  const blockUser = (id, roll) => async () => {
+    try {
+      setBlocking(id);
+      await change_workspace_member_role(selectedWorkspace, {
+        id,
+        roll,
+      });
+      setBlocking("");
+      getWorkspaceMembers();
+    } catch (error) {
+      setBlocking("");
+    }
+  };
+
+  const isChangingRoll = (id) => id === changingRoll;
+  const isBlockingUser = (id) => id === changingRoll;
+
   return (
-    <div className="min-h-screen  w-[820px] p-5 space-y-4 h-screen">
+    <div className="min-h-screen overflow-auto w-[820px] p-5 space-y-4 h-screen">
       <div className="text-[#7088A1] text-lg font-bold flex ">
         <AiOutlineSetting className="my-auto mr-2" />
         <h6>Workspace Settings</h6>
@@ -144,26 +194,75 @@ const WorkspaceSettings = () => {
             </Button>
           </div>
         </div>
-        <hr className="mt-5 mb-10" />
-        <div className="flex align-middle justify-between mt-4">
-          <div className="flex align-middle">
-            <img
-              className="w-10 h-10 rounded-full border"
-              src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              alt="user"
-            />
-            <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
-              <p>User Name</p>
-              <p>example@gmail.com</p>
+        <hr className="my-5" />
+        {workspaceMembers?.map((user, i) => (
+          <>
+            <div key={i} className="flex align-middle justify-between mt-4">
+              <div className="flex align-middle w-[150px]">
+                <img
+                  className="w-10 h-10 rounded-full border"
+                  src={
+                    user?.image ||
+                    "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  }
+                  alt="user"
+                />
+                <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
+                  <p>{user?.fullName}</p>
+                  <p>{user?.email}</p>
+                </div>
+              </div>
+              {user?.role !== "owner" ? (
+                <>
+                  <Dropdown
+                    width={120}
+                    button={
+                      <Button
+                        loading={isChangingRoll(user?._id)}
+                        className="mt-0"
+                        text
+                      >
+                        {user?.role}
+                      </Button>
+                    }
+                  >
+                    {Object.values(WORKSPACE_ROLE)
+                      .filter(
+                        (role) =>
+                          role.toLocaleLowerCase() !==
+                          user?.role.toLocaleLowerCase()
+                      )
+                      .map((roll) => (
+                        <Button
+                          onClick={changeUserRoll(
+                            user?._id,
+                            roll.toLocaleLowerCase()
+                          )}
+                          className="mx-auto mt-0"
+                          text
+                        >
+                          {roll}
+                        </Button>
+                      ))}
+                  </Dropdown>
+                  <Button
+                    loading={isBlockingUser(user?._id)}
+                    onClick={blockUser(user?._id, "member")}
+                    className="mt-0"
+                    text
+                  >
+                    Remove
+                  </Button>
+                </>
+              ) : (
+                <h4 className="text-[#7088A1] font-bold mr-4 my-auto">
+                  Workspace owner
+                </h4>
+              )}
             </div>
-          </div>
-          <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
-            <p>Workspace owner</p>
-          </div>
-          <Button className="mt-0" text>
-            Block
-          </Button>
-        </div>
+            {user?.role === "owner" && <hr className="mt-3" />}
+          </>
+        ))}
       </div>
       <input
         className="hidden"

@@ -8,7 +8,7 @@ const NotificationBell = ({ userNotificationBell }) => {
 
 
     return (
-        <section className={`w-[465px] h-[495px] bg-white shadow-2xl ${margin && userNotificationBell ? 'fixed' : 'hidden'} top-[60px] left-[135px] p-3 z-50   before:content-[""] before:w-8 before:h-8 before:absolute before:top-[-10px] before:left-2 before:rotate-45 before:-z-10 before:bg-white`}>
+        <section className={`w-[465px] h-[495px] bg-white shadow-2xl ${margin && userNotificationBell ? 'fixed' : 'hidden'} top-[60px] left-[135px] p-3     before:content-[""] before:w-8 before:h-8 before:absolute before:top-[-10px] before:left-2 before:rotate-45 before:-  before:bg-white`}>
 
             <div className="flex justify-between text-sm text-gray-500">
                 <span className="px-3 py-2 hover:bg-gray-300 duration-200 rounded-lg hover:text-fuchsia-600 cursor-pointer font-bold">

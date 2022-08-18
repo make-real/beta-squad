@@ -32,6 +32,10 @@ export const add_workspace_member = (id, email) => {
   });
 };
 
+export const get_workspace_member = (id) => {
+  return useAxios.get(`workspaces/${id}/team-members`);
+};
+
 export const change_workspace_member_role = (spaceId, { id, role }) => {
   return useAxios.put(`workspaces/${spaceId}/member-role`, {
     memberId: id,

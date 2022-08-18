@@ -34,7 +34,7 @@ const NavBar = () => {
   return (
     <header
       className={`${margin ? "ml-[325px]" : "ml-[50px]"
-        } fixed top-0 left-0 right-0 z-10  bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+        } fixed top-0 left-0 right-0 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
 
       {/* 🟨🟨🟨 Left Side */}
@@ -125,7 +125,7 @@ const NavBar = () => {
       </div>
 
       {sidePanel && (
-        <div className="fixed border right-0 top-[66px] h-full w-[310px] z-50 bg-gray-100 p-1">
+        <div className="fixed border right-0 top-[66px] h-full w-[310px]   bg-gray-100 p-1">
           <div
             className="flex justify-end cursor-pointer text-lg hover:text-teal-500"
             onClick={() => setSidePanel(false)}

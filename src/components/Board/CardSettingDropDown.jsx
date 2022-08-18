@@ -17,7 +17,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
             onClick={e => { e.stopPropagation(); setCardSettingDropDownToggle(false) }}
             className={`w-[210px] absolute top-[65px]
             ${right ? 'right-[-5px]' : 'right-1'} 
-            bg-white p-2 rounded-lg shadow-xl z-30 
+            bg-white p-2 rounded-lg shadow-xl   
             after:content-[""] 
             after:w-8 
             after:h-8 

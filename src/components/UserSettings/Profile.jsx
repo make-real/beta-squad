@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Button from "../Button";
 import { updateProfile } from "../../api/settings";
 import { toast } from "react-toastify";
-import { get_my_profile } from "../../api/auth";
-import {Loader} from "../Loader";
+import { delete_my_account, get_my_profile } from "../../api/auth";
+import { Loader } from "../Loader";
 import Input from "../Input";
 import { parseError } from "../../util/helpers";
+import ConfirmModal from "../ConfirmModal";
 
 const Profile = () => {
   const { loginUserInfo, setLoginUserInfo } = useUserInfoContext();
@@ -17,6 +18,7 @@ const Profile = () => {
     confirmPassword: "",
   });
   const [changePasswordBox, setChangePasswordBox] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [localUserInfo, setLocalUserInfo] = useState();
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(false);
@@ -234,7 +236,7 @@ const Profile = () => {
               chats etc. Please notice thet your account will be permanently
               removed.
             </p>
-            <Button text>Delete Account</Button>
+            <Button onClick={() => setDeleteModal(true)} text>Delete Account</Button>
           </div>
         </div>
       </div>
@@ -243,6 +245,17 @@ const Profile = () => {
         id="fileInput"
         type="file"
         onChange={handleImageChange}
+      />
+      <ConfirmModal
+        title="Delete account"
+        description="Are you sure you want to delete your account? This cannot be undone."
+        isVisible={deleteModal}
+        setVisibility={setDeleteModal}
+        api={() => delete_my_account()}
+        onComplete={() => {
+          localStorage.clear();
+          window.location.href = "/";
+        }}
       />
     </>
   );

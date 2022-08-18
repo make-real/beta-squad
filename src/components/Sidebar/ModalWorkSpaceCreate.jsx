@@ -55,7 +55,7 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
 
 
     return (
-        <section className='fixed top-0 left-0 right-0 bottom-0 z-30 bg-black/70 grid place-items-center'>
+        <section className='fixed top-0 left-0 right-0 bottom-0   bg-black/70 grid place-items-center'>
 
             <div className='relative bg-white w-[620px] h-[300px] rounded-2xl p-3 '>
 
