@@ -2,12 +2,12 @@ import { Copy, Delete, EyeOpen, Plus, RightArrow } from "../../assets/icons";
 import { useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 
+
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const BoardListSettingDropDown = ({
-  boardListID,
-  setBoardListSettingDropDownToggle,
-}) => {
+const BoardListSettingDropDown = ({ boardListID }) => {
+
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
   return (
     <div>
       <p className="text-center pb-2">More Options</p>
@@ -15,7 +15,7 @@ const BoardListSettingDropDown = ({
       <div className="border-b border-t border-gray-300 py-2 text-gray-400">
         <div
           className="p-1.5 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group line-through"
-          onClick={() => {}}
+          onClick={() => { }}
         >
           <Plus /> <span className="group-hover:text-teal-500">Add Card</span>
         </div>
@@ -40,11 +40,11 @@ const BoardListSettingDropDown = ({
           }}
         >
           <Delete />{" "}
-          <span className="group-hover:text-teal-500">Archive list</span>
+          <span className="group-hover:text-teal-500">Delete list</span>
         </div>
       </div>
 
-      <div className="p-1.5 mt-1 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group line-through">
+      <div className="p-1.5 mt-1 flex items-center space-x-3 text-gray-400 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group line-through">
         <EyeOpen /> <span className="group-hover:text-teal-500">Follow</span>
       </div>
 
@@ -54,9 +54,6 @@ const BoardListSettingDropDown = ({
           <ConfirmDialog
             listID={boardListID}
             setConfirmModalOpen={setConfirmModalOpen}
-            setBoardListSettingDropDownToggle={
-              setBoardListSettingDropDownToggle
-            }
           />
         )
       }

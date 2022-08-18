@@ -21,11 +21,8 @@ api.interceptors.request.use(req => {
         // & we can see it by at browser Network Console
         req.headers.authorization = `Bearer ${serverSendToken}`;
 
-        // console.log(serverSendToken)
-
     } else {
         // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
-
         // console.log('No Token Found, Please Re-Connect Internet');
     }
 
@@ -87,20 +84,28 @@ export const getUserProfileInfo = userId => useFetch(`/users/profile/${userId}`)
 export const getUserBySearch = userQuery => useFetch(`/users?search=${userQuery}`);
 
 
+// 🟨🟨🟨 Work-Space
 // POST ==> Work-Space Create 
 export const workspaceCreation = newWorkSpaceObj => api.post('/workspaces', newWorkSpaceObj);
 
 
+// 🟨🟨🟨 Space
 // POST ==> Space Create --- under specific Work-Space reference ID
 export const spaceCreation = newSpaceObj => api.post('/spaces', newSpaceObj);
 
 
-// 🟨🟨🟨 Board List 🟨🟨🟨
+// 🟨🟨🟨 Board List
 // POST ==> (Board) List Create --- under specific Space reference ID
-export const addBoardList = (spaceId, newBoardList) => api.post(`/spaces/${spaceId}/board`, newBoardList);
+export const addBoardListApiCall = (spaceId, newBoardList) => api.post(`/spaces/${spaceId}/board`, newBoardList);
 
-// GET ==> (Board) List --- under specific Space reference ID
-export const getBoardLists = spaceId => useFetch(`/spaces/${spaceId}/board?getCards=true`);
+// DELETE ==> (Board) List --- under specific Space reference ID
+export const boardListDelete = (spaceId, listId) => api.delete(`/spaces/${spaceId}/board/${listId}`);
 
+
+// 🟨🟨🟨 Card
 // POST ==> Card Create --- under specific Space reference ID + Board List ID
-export const addCard = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
+export const addCardIntoBoardList = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
+
+export const cardDeleteApiCall = (spaceId, listId, cardId) => api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/delete`);
+
+

@@ -5,7 +5,6 @@ import {
   CloseMenuBtn,
   DotsDouble,
   Eye,
-  Folder,
   OpenMenuBtn,
   OverWatch,
   Plus,
@@ -44,21 +43,21 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-
+  const [selectedSpaceName, setSelectedSpaceName] = useState('');
   const dispatch = useDispatch();
 
   // For Work-Spaces
-  const allWorkSpaces = useSelector((state) => state.workspace.workspaces);
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+  const allWorkSpaces = useSelector(state => state.workspace.workspaces);
+  const userSelectedWorkSpaceId = useSelector(state => state.workspace.selectedWorkspace);
 
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
-  // const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+  const selectedSpaceId = useSelector(state => state.space.selectedSpace);
+
 
   // get user img from user info, which store at local storage...
-  const userImg = JSON.parse(localStorage.getItem("userInfo")).avatar;
+  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
+
 
   // re-render for Work-Space
   useEffect(() => {
@@ -96,7 +95,7 @@ const SideBar = () => {
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
       } catch (error) {
-        console.log("space selection ==> ", error);
+        // console.log("space selection ==> ", error);
       }
     };
 
@@ -126,31 +125,31 @@ const SideBar = () => {
                     {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                     <div
                       className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${
-                        userSelectedWorkSpaceId === workSpace?._id
+                      ${userSelectedWorkSpaceId === workSpace?._id
                           ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
                           : ""
-                      }`}
+                        }`}
                       onClick={() =>
                         dispatch(setSelectedWorkSpaceId(workSpace?._id))
                       }
                     >
-                      {/* <img
-                          src={asserts.makeReal}
-                          alt="searchIcon"
-                          className="rounded-[4px]"
-                        /> */}
-                      <div
-                        // onClick={() => setNewWorkShop(true)}
-                        className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
-                      >
-                        {workSpace.name.charAt(0)}
-                      </div>
+                      {
+                        workSpace.logo
+                          ? <img src={workSpace.logo} alt="searchIcon" className="rounded-[4px]" />
+                          : <div
+                            // onClick={() => setNewWorkShop(true)}
+                            className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
+                          >
+                            {workSpace.name.charAt(0)}
+                          </div>
+
+                      }
                     </div>
                   </Tippy>
                 ))
               }
             </div>
+
 
             {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
             <div
@@ -201,9 +200,8 @@ const SideBar = () => {
 
       {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
       <div
-        className={`${
-          !margin ? "hidden" : "w-[275px]"
-        } bg-[#202F3E] duration-200`}
+        className={`${!margin ? "hidden" : "w-[275px]"
+          } bg-[#202F3E] duration-200`}
       >
         <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
           <div className="flex items-center space-x-4">
@@ -292,10 +290,12 @@ const SideBar = () => {
             OverWatch
           </p>
         </div>
-        <div className="overflow-y-auto h-full">
+
+        <div className="overflow-y-auto h-full my-8">
+
           <div className="flex w-full items-center m-3 justify-between pr-4">
+            {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
             <div
-              // 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎
               className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
               onClick={() => setSpaceSearchModal(true)}
             >
@@ -303,6 +303,7 @@ const SideBar = () => {
                 YOUR SPACES
               </p>
               <Search />
+
             </div>
 
             <div
@@ -313,6 +314,7 @@ const SideBar = () => {
             </div>
           </div>
 
+
           {/* 🟨🟨🟨 Folder Creation 🟨🟨🟨 */}
           {/* <div className="hover:bg-[#344453] duration-200 flex items-center p-2 cursor-pointer rounded-lg mr-2 ml-6 w-fit">
             <Folder className="text-[#3f5266] text-sm" />
@@ -321,19 +323,22 @@ const SideBar = () => {
             </p>
           </div> */}
 
+
           {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
           <div className="my-0">
-            {allSpace?.map((space, i) => (
+            {allSpace?.map(space => (
               <div
+                key={space._id}
                 className="flex pr-2 items-center group"
-                key={i}
-                // onClick={() => { console.log(space) }}
-                onClick={() => {
-                  dispatch(setSelectedSpaceId(space._id));
-                }}
+                onClick={() => dispatch(setSelectedSpaceId(space._id))}
               >
+
                 <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
-                <div className="w-full flex items-center px-2.5 py-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg active:bg-slate-800">
+
+                <div
+                  className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpaceId === space._id ? 'bg-gray-600' : ''} `}
+                  onClick={() => setSelectedSpaceName(space.name)}
+                >
                   {space.privacy.includes("private") ? (
                     <SpaceLogoLock color={space.color || "#57BEC7"} />
                   ) : (
@@ -343,9 +348,11 @@ const SideBar = () => {
                     {space.name}
                   </p>
                 </div>
+
               </div>
             ))}
           </div>
+
 
           <div className="flex w-full items-center m-3 justify-between pr-4">
             <div className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full ">
