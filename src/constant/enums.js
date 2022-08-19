@@ -3,3 +3,8 @@ export const WORKSPACE_ROLE = {
   ADMIN: "Admin",
   USER: "User",
 };
+
+export const PRIVACY = {
+  PUBLIC: "public",
+  PRIVATE: "private",
+};
