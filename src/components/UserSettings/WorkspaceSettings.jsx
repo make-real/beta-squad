@@ -95,7 +95,7 @@ const WorkspaceSettings = () => {
     }
   };
 
-  const changeUserRoll = (id, role) => async () => {
+  const changeUserRoll = async(id, role) => {
     try {
       setChangingRoll(id);
       await change_workspace_member_role(selectedWorkspace, {
@@ -225,26 +225,30 @@ const WorkspaceSettings = () => {
                         {user?.role}
                       </Button>
                     }
-                  >
-                    {Object.values(WORKSPACE_ROLE)
-                      .filter(
-                        (role) =>
-                          role.toLocaleLowerCase() !==
-                          user?.role.toLocaleLowerCase()
-                      )
-                      .map((roll) => (
-                        <Button
-                          onClick={changeUserRoll(
-                            user?._id,
-                            roll.toLocaleLowerCase()
-                          )}
-                          className="mx-auto mt-0"
-                          text
-                        >
-                          {roll}
-                        </Button>
-                      ))}
-                  </Dropdown>
+                    menu={({ closePopup }) =>
+                      Object.values(WORKSPACE_ROLE)
+                        .filter(
+                          (role) =>
+                            role.toLocaleLowerCase() !==
+                            user?.role.toLocaleLowerCase()
+                        )
+                        .map((roll) => (
+                          <Button
+                            onClick={() => {
+                              changeUserRoll(
+                                user?._id,
+                                roll.toLocaleLowerCase()
+                              );
+                              closePopup();
+                            }}
+                            className="mx-auto mt-0"
+                            text
+                          >
+                            {roll}
+                          </Button>
+                        ))
+                    }
+                  />
                   <Button
                     loading={isBlockingUser(user?._id)}
                     onClick={blockUser(user?._id, "member")}

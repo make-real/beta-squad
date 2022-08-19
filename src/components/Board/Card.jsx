@@ -72,17 +72,19 @@ const Card = ({ card, listID }) => {
                     className={`cursor-pointer py-1.5 w-6 h-8 rounded-lg hover:bg-gray-300 duration-200 text-gray-400 active:bg-gray-300`}
                   />
                 }
-              >
-                <CardSettingDropDown
-                  right={true}
-                  cardID={card._id}
-                  listID={listID}
-                  noteDone={noteDone}
-                  cardModal={cardModal}
-                  setNoteDone={setNoteDone}
-                  setCardSettingDropDownToggle={setCardSettingDropDownToggle}
-                />
-              </Dropdown>
+                menu={({ closePopup }) => (
+                  <CardSettingDropDown
+                    close={closePopup}
+                    right={true}
+                    cardID={card._id}
+                    listID={listID}
+                    noteDone={noteDone}
+                    cardModal={cardModal}
+                    setNoteDone={setNoteDone}
+                    setCardSettingDropDownToggle={setCardSettingDropDownToggle}
+                  />
+                )}
+              />
             )
           }
         </div>

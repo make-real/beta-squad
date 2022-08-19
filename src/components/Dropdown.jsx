@@ -1,8 +1,11 @@
+import { useRef } from "react";
 import Popup from "reactjs-popup";
 
-const Dropdown = ({ children, button, width, disabled }) => {
+const Dropdown = ({ menu, button, width, disabled }) => {
+  const ref = useRef(null);
   return (
     <Popup
+      ref={ref}
       contentStyle={{
         border: "none",
         padding: 10,
@@ -12,7 +15,7 @@ const Dropdown = ({ children, button, width, disabled }) => {
       trigger={<div>{button}</div>}
       disabled={disabled}
     >
-      {children}
+      {menu({ closePopup: () => ref.current?.close() })}
     </Popup>
   );
 };
