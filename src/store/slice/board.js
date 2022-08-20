@@ -65,9 +65,22 @@ export const boardSlice = createSlice({
     setBoardFilter: (state, { payload }) => {
       state.filter = payload;
     },
+    setAssignedFilter: (state, { payload }) => {
+      const index = state.filterObject.findIndex(
+        (item) => item.parent === "assignee"
+      );
+      state.filterObject[index].options = payload.map((user) => ({
+        label: user.fullName,
+        value: user._id,
+      }));
+      state.filterObject[index].options.push({
+        label: "Unassigned",
+        value: "unassigned",
+      });
+    },
   },
 });
 
-export const { setBoardFilter } = boardSlice.actions;
+export const { setBoardFilter, setAssignedFilter } = boardSlice.actions;
 
 export default boardSlice.reducer;

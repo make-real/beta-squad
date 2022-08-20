@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TbFilter } from "react-icons/tb";
 import { capitalize } from "lodash";
 import color from "../../colors.json";
 import Button from "../Button";
 import { useDispatch, useSelector } from "react-redux";
-import { setBoardFilter } from "../../store/slice/board";
+import { setBoardFilter, setAssignedFilter } from "../../store/slice/board";
+import { get_space_members } from "../../api/space";
+import { Loader, PageLoader } from "../Loader";
 
 const Option = ({
   value,
@@ -61,12 +63,26 @@ const Option = ({
 };
 
 const Filter = () => {
-  //   const [filterOptions, setFilterOptions] = useState({
-  //     status: "all",
-  //     assignee: [],
-  //     tag: [],
-  //   });
   const { filterObject } = useSelector((state) => state.board);
+  const { selectedSpace } = useSelector((state) => state.space);
+  const [loader, setLoader] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getMembers();
+  }, [selectedSpace]);
+  const getMembers = async () => {
+    try {
+      setLoader(true);
+      const { data } = await get_space_members(selectedSpace);
+      dispatch(setAssignedFilter(data.members));
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
   return (
     <section className="p-2 pb-[100px]">
       <div className="flex justify-between">
@@ -78,24 +94,28 @@ const Filter = () => {
           Clear filters
         </Button>
       </div>
-      {filterObject.map((item) => (
-        <div className="my-5 bg-white p-3.5 rounded-md">
-          <h6 className="font-bold text-gray-500 ">
-            {capitalize(item.parent)}
-          </h6>
-          <div className="py-3">
-            {item.options.map((option) => (
-              <Option
-                multiselect={item.multiselect}
-                background={option.tag?.color}
-                label={option.tag?.name || option.label}
-                value={option.value}
-                parent={item.parent}
-              />
-            ))}
+      {loader ? (
+        <PageLoader size={15} className="mt-10" />
+      ) : (
+        filterObject.map((item) => (
+          <div className="my-5 bg-white p-3.5 rounded-md">
+            <h6 className="font-bold text-gray-500 ">
+              {capitalize(item.parent)}
+            </h6>
+            <div className="py-3">
+              {item.options.map((option) => (
+                <Option
+                  multiselect={item.multiselect}
+                  background={option.tag?.color}
+                  label={option.tag?.name || option.label}
+                  value={option.value}
+                  parent={item.parent}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </section>
   );
 };
