@@ -192,14 +192,12 @@ const MessageBox = () => {
       alert(
         "Microphone permission is required. Go to site settings and give microphone permission for this site."
       );
-    } else if (permission.state === "granted") {
+    } else {
       setAudioSent(false);
       setRecording(true);
 
       clearBlobUrl();
       startRecording();
-    } else {
-      permission.onchange = handleStartRecording;
     }
   };
 
