@@ -1,25 +1,25 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Button from "../../Button";
+import { BsMic, BsMicFill } from "react-icons/bs";
 
 let recorder;
 let gumStream;
 
 const AudioRender = ({ setAudioURL }) => {
+  const [recorderState, setRecorderState] = useState(false);
+
   function toggleRecording() {
     if (recorder && recorder.state === "recording") {
+      setRecorderState(false);
       recorder.stop();
       gumStream.getAudioTracks()[0].stop();
     } else {
+      setRecorderState(true);
       navigator.mediaDevices
         .getUserMedia({
           audio: true,
         })
         .then(function (stream) {
-          let oldPreviewElm;
-          oldPreviewElm = document.getElementById("preview");
-          if (oldPreviewElm.hasChildNodes()) {
-            oldPreviewElm.removeChild(oldPreviewElm.childNodes[0]);
-          }
           gumStream = stream;
           recorder = new MediaRecorder(stream);
           recorder.ondataavailable = function (e) {
@@ -32,15 +32,28 @@ const AudioRender = ({ setAudioURL }) => {
   }
   return (
     <Fragment>
-      <Button
+      {/* <Button
         id="recordButton"
         onClick={() => {
           toggleRecording();
         }}
       >
         Record
-      </Button>
-      <div id="preview" />
+      </Button> */}
+      {recorderState ? (
+        <BsMicFill
+          size={20}
+          className="text-red-500 animate-pulse"
+          onClick={() => toggleRecording()}
+        />
+      ) : (
+        <BsMic
+          size={20}
+          className="duration-300 hover:text-teal-400"
+          onClick={() => toggleRecording()}
+        />
+      )}
+      {/* <div id="preview" /> */}
     </Fragment>
   );
 };
