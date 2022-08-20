@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "./mention.module.css";
 import { useRef } from "react";
+import api from "../../api";
 import AudioInput from "./Audio/Input";
 import AudioRender from "./Audio/Render";
 
@@ -20,6 +21,7 @@ const MessageBox = () => {
   const [audio, setAudio] = useState(null);
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
+  const [uploadParcantage, setUploadParcentage] = useState(0);
 
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
@@ -64,7 +66,7 @@ const MessageBox = () => {
 
   const handleMention = () => {
     setShowEmojis(false);
-    setInput((prev) => prev + "@");
+    setInput((prev) => (prev ? prev + " @" : "@"));
     inputRef.current.focus();
     // setAttachFile(false);
     // setShowGif(false);
@@ -96,10 +98,53 @@ const MessageBox = () => {
       console.log(error);
     }
   };
+
+  const onMediaFilePicked = async (e) => {
+    try {
+      const formData = new FormData();
+
+      for (const file of e.target.files) {
+        formData.append("attachments", file);
+      }
+
+      let config = {
+        method: "post",
+        url: `spaces/${selectedSpaceId}/chat/send-messages`,
+        data: formData,
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        onUploadProgress: function (progressEvent) {
+          // setTotalUploadSize((progressEvent.total / (1024 * 1024)).toFixed(2));
+
+          let UpPer = parseInt(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+
+          setUploadParcentage(UpPer);
+        },
+      };
+
+      await api(config);
+
+      setUploadParcentage(0)
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      {audio && <AudioRender url={audio} />}
-      <AudioInput setAudioURL={setAudio} />
+      <div
+        style={{
+          background: "rgb(107, 199, 220)",
+          width: `${uploadParcantage}%`,
+          height: "2px",
+          transition: "1s all",
+        }}
+      ></div>
+
       <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
         <div className="w-full h-full flex justify-center align-middle">
           <div className="w-full relative border rounded-md p-3 mt-2 pr-[130px]">
@@ -153,7 +198,13 @@ const MessageBox = () => {
                 onClick={() => handleAttach()}
               />
 
-              <input type="file" id="userInputFile" className="hidden" />
+              <input
+                type="file"
+                id="userInputFile"
+                className="hidden"
+                multiple
+                onChange={onMediaFilePicked}
+              />
             </label>
 
             <div className="px-2 cursor-pointer relative">
@@ -172,30 +223,30 @@ const MessageBox = () => {
             </div>
 
             {/* <div className="px-2  ">
-      <AiOutlineGif
-        className="duration-300 cursor-pointer hover:text-teal-400"
-        onClick={handleGif}
-      />
-      {showGif && (
-        <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
-          <GIF />
-        </div>
-      )}
-    </div> */}
+            <AiOutlineGif
+              className="duration-300 cursor-pointer hover:text-teal-400"
+              onClick={handleGif}
+            />
+            {showGif && (
+              <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
+                <GIF />
+              </div>
+            )}
+          </div> */}
           </div>
 
           {/* <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
-      <small className="text-gray-500">#bold*</small>
-      <small className="px-1 italic">_italic_</small>
-      <small>~strikethrough~</small>
-    </div> */}
+          <small className="text-gray-500">#bold*</small>
+          <small className="px-1 italic">_italic_</small>
+          <small>~strikethrough~</small>
+        </div> */}
         </div>
 
         {/* {mentionModal && (
-      <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
-        <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
-          <p>@channel Notifies everyone in space</p>
-        </div>
+        <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
+          <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
+            <p>@channel Notifies everyone in space</p>
+          </div>
 
         <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
           <p>@space Notifies everyone in space</p>
@@ -205,19 +256,19 @@ const MessageBox = () => {
           <p>@here Notifies everyone in space</p>
         </div>
 
-        {users.map((item) => (
-          <div
-            className="flex py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500"
-            key={item.id}
-          >
-            <div className="w-8 h-8 border-slate-700	border-4 rounded-full">
-              <img src={item.img} alt="user" className="rounded-full" />
+          {users.map((item) => (
+            <div
+              className="flex py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500"
+              key={item.id}
+            >
+              <div className="w-8 h-8 border-slate-700	border-4 rounded-full">
+                <img src={item.img} alt="user" className="rounded-full" />
+              </div>
+              <h6 className="my-auto pl-2">{item.name}</h6>
             </div>
-            <h6 className="my-auto pl-2">{item.name}</h6>
-          </div>
-        ))}
-      </div>
-    )} */}
+          ))}
+        </div>
+      )} */}
       </div>
     </>
   );

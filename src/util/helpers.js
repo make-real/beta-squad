@@ -66,6 +66,11 @@ const splitSpecificParts = (str, startChar, endChar) => {
 
 export const populateUsers = (content) => {
   let target = String(content.text);
+
+  if (target === 'undefined') {
+    return undefined;
+  }
+
   let replaceArray = splitSpecificParts(target, "{{", "}}");
 
   for (var i = 0; i < content.mentionedUsers.length; i++) {
