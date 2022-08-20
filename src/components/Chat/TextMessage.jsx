@@ -63,9 +63,13 @@ const TextMessage = () => {
           </div>
           <div className="pl-4 ">
             <h6 className="text-xs text-sky-900	pb-2">
-              {msg?.sender?.fullName} <small className="text-black">{moment(msg.createdAt).fromNow()}</small>
+              {msg?.sender?.fullName}{" "}
+              <small className="text-black">
+                {moment(msg.createdAt).fromNow()}
+              </small>
             </h6>
-            {msg.content?.attachments?.map((src, idx) => {
+
+            {msg?.content?.attachments?.map((src, idx) => {
               const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
 
               if (
@@ -81,6 +85,14 @@ const TextMessage = () => {
                     alt="Image"
                     className="max-w-[500px] mb-2"
                   />
+                );
+              } else if (extension === "wav") {
+                return (
+                  <div>
+                    <audio controls>
+                      <source src={src} type="audio/wav" />
+                    </audio>
+                  </div>
                 );
               } else {
                 return (
