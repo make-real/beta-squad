@@ -11,6 +11,8 @@ import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers } from "../../util/helpers";
 
+import moment from "moment";
+
 const TextMessage = () => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
@@ -61,12 +63,43 @@ const TextMessage = () => {
           </div>
           <div className="pl-4 ">
             <h6 className="text-xs text-sky-900	pb-2">
-              {msg?.sender?.fullName}
+              {msg?.sender?.fullName} <small className="text-black">{moment(msg.createdAt).fromNow()}</small>
             </h6>
+            {msg.content?.attachments?.map((src, idx) => {
+              const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+
+              if (
+                ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(
+                  extension
+                )
+              ) {
+                return (
+                  <img
+                    onLoad={scrollToBottom}
+                    key={idx}
+                    src={src}
+                    alt="Image"
+                    className="max-w-[500px] mb-2"
+                  />
+                );
+              } else {
+                return (
+                  <div className="mb-2">
+                    <a
+                      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                      target="_blank"
+                      href={src}
+                    >
+                      {src}
+                    </a>
+                  </div>
+                );
+              }
+            })}
             <p
-              className="text-sm text-gray-900		"
+              className="text-sm text-gray-900"
               dangerouslySetInnerHTML={{
-                __html: populateUsers(msg?.content)
+                __html: populateUsers(msg?.content),
               }}
             ></p>
           </div>
