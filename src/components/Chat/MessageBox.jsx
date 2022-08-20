@@ -108,12 +108,12 @@ const MessageBox = () => {
     try {
       const formData = new FormData();
 
-      let blob = await fetch(url).then(r => r.blob());
+      let blob = await fetch(url).then((r) => r.blob());
 
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
 
       formData.append("attachments", wavefilefromblob);
-      
+
       let config = {
         method: "post",
         url: `spaces/${selectedSpaceId}/chat/send-messages`,
@@ -175,21 +175,37 @@ const MessageBox = () => {
   };
 
   const {
-    status,
     startRecording,
     stopRecording,
     mediaBlobUrl,
     clearBlobUrl,
-    pauseRecording,
   } = useReactMediaRecorder({ audio: true });
 
-  console.log(mediaBlobUrl, status);
+  const handleStartRecording = async () => {
+    const permission = await window.navigator.permissions.query({
+      name: "microphone",
+    });
+
+    if (permission.state === "denied") {
+      alert(
+        "Microphone permission is required. Go to site settings and give microphone permission for this site."
+      );
+    } else if (permission.state === "granted") {
+      setAudioSent(false);
+      setRecording(true);
+
+      clearBlobUrl();
+      startRecording();
+    } else {
+      permission.onchange = handleStartRecording;
+    }
+  };
 
   useEffect(() => {
     if (Boolean(mediaBlobUrl) && audioSent) {
       // upload audio
 
-      uploadAudioFile(mediaBlobUrl)
+      uploadAudioFile(mediaBlobUrl);
       console.log("Uploading...");
     }
   }, [mediaBlobUrl]);
@@ -281,12 +297,7 @@ const MessageBox = () => {
               <div className="px-2 cursor-pointer relative">
                 <BiMicrophone
                   className="duration-300  hover:text-teal-400"
-                  onClick={() => {
-                    startRecording();
-                    setAudioSent(false);
-                    clearBlobUrl();
-                    setRecording(true);
-                  }}
+                  onClick={handleStartRecording}
                 />
               </div>
             )}
