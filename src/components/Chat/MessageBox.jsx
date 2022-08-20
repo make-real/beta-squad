@@ -1,6 +1,8 @@
 import { ImAttachment } from "react-icons/im";
 import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
+import { BiMicrophone, BiSend } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 // import { AiOutlineGif } from "react-icons/ai";
@@ -12,6 +14,8 @@ import classNames from "./mention.module.css";
 import { useRef } from "react";
 import api from "../../api";
 
+import { useReactMediaRecorder } from "react-media-recorder";
+
 const MessageBox = () => {
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
@@ -20,6 +24,9 @@ const MessageBox = () => {
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
   const [uploadParcantage, setUploadParcentage] = useState(0);
+
+  const [isRecording, setRecording] = useState(false);
+  const [audioSent, setAudioSent] = useState(false);
 
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
@@ -97,6 +104,42 @@ const MessageBox = () => {
     }
   };
 
+  const uploadAudioFile = async (url) => {
+    try {
+      const formData = new FormData();
+
+      let blob = await fetch(url).then(r => r.blob());
+
+      var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
+
+      formData.append("attachments", wavefilefromblob);
+      
+      let config = {
+        method: "post",
+        url: `spaces/${selectedSpaceId}/chat/send-messages`,
+        data: formData,
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        onUploadProgress: function (progressEvent) {
+          // setTotalUploadSize((progressEvent.total / (1024 * 1024)).toFixed(2));
+
+          let UpPer = parseInt(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+
+          setUploadParcentage(UpPer);
+        },
+      };
+
+      await api(config);
+
+      setUploadParcentage(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onMediaFilePicked = async (e) => {
     try {
       const formData = new FormData();
@@ -125,12 +168,31 @@ const MessageBox = () => {
 
       await api(config);
 
-      setUploadParcentage(0)
-
+      setUploadParcentage(0);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const {
+    status,
+    startRecording,
+    stopRecording,
+    mediaBlobUrl,
+    clearBlobUrl,
+    pauseRecording,
+  } = useReactMediaRecorder({ audio: true });
+
+  console.log(mediaBlobUrl, status);
+
+  useEffect(() => {
+    if (Boolean(mediaBlobUrl) && audioSent) {
+      // upload audio
+
+      uploadAudioFile(mediaBlobUrl)
+      console.log("Uploading...");
+    }
+  }, [mediaBlobUrl]);
 
   return (
     <>
@@ -186,6 +248,49 @@ const MessageBox = () => {
           </div>
 
           <div className="text-gray-400 flex absolute right-[30px] bottom-1/2  translate-y-1/2 pt-2">
+            {isRecording ? (
+              <>
+                <div className="px-2 cursor-pointer relative">
+                  <MdDeleteOutline
+                    className="duration-300 text-[red]  hover:text-teal-400"
+                    onClick={() => {
+                      setRecording(false);
+                      setAudioSent(false);
+
+                      stopRecording();
+                    }}
+                  />
+                </div>
+
+                <div className="px-2 cursor-pointer relative">
+                  <span className="text-xs "> Recording...</span>
+                </div>
+
+                <div className="px-2 cursor-pointer relative">
+                  <BiSend
+                    className="duration-300 text-teal-400  hover:text-teal-500"
+                    onClick={() => {
+                      setRecording(false);
+                      setAudioSent(true);
+                      stopRecording();
+                    }}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="px-2 cursor-pointer relative">
+                <BiMicrophone
+                  className="duration-300  hover:text-teal-400"
+                  onClick={() => {
+                    startRecording();
+                    setAudioSent(false);
+                    clearBlobUrl();
+                    setRecording(true);
+                  }}
+                />
+              </div>
+            )}
+
             <label
               className="px-1.5 cursor-pointer relative"
               htmlFor="userInputFile"
@@ -204,7 +309,6 @@ const MessageBox = () => {
                 onChange={onMediaFilePicked}
               />
             </label>
-
             <div className="px-2 cursor-pointer relative">
               <GoMention
                 className="duration-300  hover:text-teal-400"
@@ -219,7 +323,6 @@ const MessageBox = () => {
                 </div>
               )}
             </div>
-
             {/* <div className="px-2  ">
             <AiOutlineGif
               className="duration-300 cursor-pointer hover:text-teal-400"
