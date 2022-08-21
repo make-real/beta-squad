@@ -4,7 +4,7 @@ import { AiOutlinePlayCircle, AiOutlinePauseCircle } from "react-icons/ai";
 // import audio from "./audio.mp3";
 import color from "../../../colors.json";
 
-const AudioInput = ({ url }) => {
+const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
   const waveform = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -14,8 +14,9 @@ const AudioInput = ({ url }) => {
       // Create a wavesurfer object
       // More info about options here https://wavesurfer-js.org/docs/options.html
       waveform.current = Wavesurfer.create({
-        container: "#waveform",
-        width: 200,
+        container: `#waveform_${rendomID}`,
+        width: 100,
+        height: 50,
         waveColor: color.themeColor,
         barGap: 2,
         barWidth: 3,
@@ -27,6 +28,12 @@ const AudioInput = ({ url }) => {
           // WaveSurfer.microphone.create()
         ],
       });
+
+      waveform.current.on("finish", () => {
+        setIsPlaying(false);
+        waveform.current.seekTo(0);
+      });
+
       url && waveform.current.load(url);
     }
   }, [url]);
@@ -47,17 +54,23 @@ const AudioInput = ({ url }) => {
       {isPlaying ? (
         <AiOutlinePauseCircle
           size={30}
-          className="text-red-500 animate-pulse my-auto"
+          className="text-red-500 animate-pulse my-auto mr-2"
           onClick={playAudio}
         />
       ) : (
         <AiOutlinePlayCircle
           size={30}
-          className="text-secondary my-auto"
+          className="text-secondary my-auto mr-2"
           onClick={playAudio}
         />
       )}
-      <div id="waveform" />
+
+      <div
+        id={`waveform_${rendomID}`}
+        style={{
+          width: "150px",
+        }}
+      />
     </div>
   );
 };

@@ -184,15 +184,23 @@ const MessageBox = () => {
   } = useReactMediaRecorder({ audio: true });
 
   const handleStartRecording = async () => {
-    const permission = await window.navigator.permissions.query({
-      name: "microphone",
-    });
-
-    if (permission.state === "denied") {
-      alert(
-        "Microphone permission is required. Go to site settings and give microphone permission for this site."
-      );
-    } else {
+    try {
+      const permission = await window?.navigator?.permissions?.query({
+        name: "microphone",
+      });
+  
+      if (permission?.state === "denied") {
+        alert(
+          "Microphone permission is required. Go to site settings and give microphone permission for this site."
+        );
+      } else {
+        setAudioSent(false);
+        setRecording(true);
+  
+        clearBlobUrl();
+        startRecording();
+      }
+    } catch (error) {
       setAudioSent(false);
       setRecording(true);
 

@@ -12,6 +12,7 @@ import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers } from "../../util/helpers";
 
 import moment from "moment";
+import AudioInput from "./Audio/Render";
 
 const TextMessage = () => {
   const dispatch = useDispatch();
@@ -89,9 +90,7 @@ const TextMessage = () => {
               } else if (extension === "wav") {
                 return (
                   <div>
-                    <audio controls>
-                      <source src={src} type="audio/wav" />
-                    </audio>
+                    <AudioInput url={src} />
                   </div>
                 );
               } else {
