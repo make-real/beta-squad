@@ -12,11 +12,14 @@ import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
 import { addSingleMessage } from "./store/slice/message";
+import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // Init Sockeßt connection
 const token = JSON.parse(localStorage.getItem("jwt"));
+
+requestNotificationPermission();
 
 let socket;
 
@@ -32,6 +35,8 @@ if (token) {
 
     if (msg.to === space.selectedSpace) {
       store.dispatch(addSingleMessage(msg));
+    } else {
+      sentLocalNotification("New message recived.")
     }
   });
 }
