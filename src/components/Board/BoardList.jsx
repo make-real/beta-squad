@@ -84,14 +84,16 @@ const BoardList = ({ boardList }) => {
           }
           width={260}
           menu={({ closePopup }) => (
-            <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
+            <BoardListSettingDropDown
+              close={closePopup}
+              boardListID={boardList?._id}
+            />
           )}
         />
-
       </div>
 
       <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
-        {boardList?.cards?.map(card => (
+        {boardList?.cards?.map((card) => (
           <Card key={card._id} card={card} listID={boardList?._id} />
         ))}
       </div>
@@ -106,7 +108,6 @@ const BoardList = ({ boardList }) => {
 };
 
 export default BoardList;
-
 
 // menu={({closePopup}) => (
 //   <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
