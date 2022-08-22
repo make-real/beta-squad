@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardModal = ({ setBoardModal, noteDone, setNoteDone, card }) => {
+const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
     const [showTags, setShowTags] = useState(false);
@@ -19,8 +19,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card }) => {
         'bg-gray-500',
     ]
 
-
-    console.log(card);
+    // console.log(card);
 
     // user esc key press Event Listener for closing modal... 
     useEffect(() => {
@@ -111,6 +110,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card }) => {
                             // Little Action Menu for Board Modal 
                             modalActionToggling &&
                             <CardSettingDropDown
+                                cardID={card._id}
+                                listID={listID}
                                 noteDone={noteDone}
                                 setNoteDone={setNoteDone}
                                 setModalActionToggling={setModalActionToggling}

@@ -113,6 +113,7 @@ const Card = ({ card, listID }) => {
                 cardModal &&
                 <CardModal
                     card={card}
+                    listID={listID}
                     noteDone={noteDone}
                     setBoardModal={setCardModal}
                     setNoteDone={setNoteDone}

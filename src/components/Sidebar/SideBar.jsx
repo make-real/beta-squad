@@ -26,7 +26,7 @@ import {
   addWorkSpace,
   setSelectedWorkSpaceId,
 } from "../../store/slice/workspace";
-import { addSpace, setSelectedSpaceId } from "../../store/slice/space";
+import { addSpace, setSelectedSpaceId, setSelectedSpaceObject } from "../../store/slice/space";
 import { useStyleContext } from "../../context/StyleContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -34,6 +34,7 @@ import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { get_space_data, get_workspace_data } from "../../api/workSpace";
+
 
 const SideBar = () => {
   const { margin, setMargin } = useStyleContext();
@@ -43,7 +44,7 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-  const [selectedSpaceName, setSelectedSpaceName] = useState('');
+  // const [selectedSpaceName, setSelectedSpaceName] = useState('');
   const dispatch = useDispatch();
 
   // For Work-Spaces
@@ -53,7 +54,6 @@ const SideBar = () => {
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
-
 
   // get user img from user info, which store at local storage...
   const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
@@ -94,6 +94,8 @@ const SideBar = () => {
 
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
+        dispatch(setSelectedSpaceObject(data.spaces[0]));
+
       } catch (error) {
         // console.log("space selection ==> ", error);
       }
@@ -330,14 +332,17 @@ const SideBar = () => {
               <div
                 key={space._id}
                 className="flex pr-2 items-center group"
-                onClick={() => dispatch(setSelectedSpaceId(space._id))}
+                onClick={() => {
+                  dispatch(setSelectedSpaceId(space._id));
+                  dispatch(setSelectedSpaceObject(space))
+                }}
               >
 
                 <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
 
                 <div
                   className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpaceId === space._id ? 'bg-gray-600' : ''} `}
-                  onClick={() => setSelectedSpaceName(space.name)}
+                  // onClick={() => setSelectedSpaceName(space.name)}
                 >
                   {space.privacy.includes("private") ? (
                     <SpaceLogoLock color={space.color || "#57BEC7"} />

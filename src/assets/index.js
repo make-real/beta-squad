@@ -10,6 +10,7 @@ import signIn1 from './images/signIn1.png';
 import signIn2 from './images/signIn2.png';
 import timeCamp from './images/timeCamp.png';
 import userLogin from './images/userLogin.png';
+import chattingStart from './images/chattingStart.png';
 
 
 const images = {
@@ -25,6 +26,7 @@ const images = {
     signIn2,
     timeCamp,
     userLogin,
+    chattingStart,
 }
 
 export default images;

@@ -86,6 +86,7 @@ const BoardList = ({ boardList }) => {
           button={
             <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200" />
           }
+          width={260}
         >
           <BoardListSettingDropDown boardListID={boardList?._id} />
         </Dropdown>
