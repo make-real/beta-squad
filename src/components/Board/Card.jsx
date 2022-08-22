@@ -8,8 +8,7 @@ import ConfirmDialog from "./ConfirmDialog";
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
   const dropDownRef = useRef();
-  const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
-    useState(false);
+  const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
   const { handleDragEnd, handleDragEnter } = useBoardCardContext();
   const [cardModal, setCardModal] = useState(false);
   const [noteDone, setNoteDone] = useState(false);
@@ -96,28 +95,31 @@ const Card = ({ card, listID }) => {
                     👍 <span className='text-black'>1</span>
                 </div> */}
 
-          <div
-            className="flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200"
-            onClick={() => {}}
-          >
-            <Plus width="12" height="12" className="mr-[2px]" />
-            <Smile />
+                <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
+                    onClick={() => { }}
+                >
+                    <Plus width="12" height="12" className='mr-[2px]' />
+                    <Smile />
 
-            <div className="flex gap-2 items-center">{/* 👍❤👎🎉 */}</div>
-          </div>
-        </div>
-      </div>
-      {
-        // When Task Click >>> then Modal Open
-        cardModal && (
-          <CardModal
-            card={card}
-            noteDone={noteDone}
-            setBoardModal={setCardModal}
-            setNoteDone={setNoteDone}
-          />
-        )
-      }
+                    <div className='flex gap-2 items-center'>
+                        {/* 👍❤👎🎉 */}
+                    </div>
+                </div>
+         </div>
+
+            {
+                // When Task Click >>> then Modal Open
+                cardModal &&
+                <CardModal
+                    card={card}
+                    listID={listID}
+                    noteDone={noteDone}
+                    setBoardModal={setCardModal}
+                    setNoteDone={setNoteDone}
+                />
+            }
+
+         
       {/* <ConfirmDialog
         listID={"boardListID"}
         setConfirmModalOpen={"setConfirmModalOpen"}

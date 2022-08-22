@@ -82,10 +82,12 @@ const BoardList = ({ boardList }) => {
           button={
             <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200" />
           }
-          menu={({closePopup}) => (
-            <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
-          )}
-        />
+          width={260}
+        >
+                  
+          <BoardListSettingDropDown boardListID={boardList?._id} />
+        </Dropdown>
+
       </div>
 
       <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
@@ -105,3 +107,8 @@ const BoardList = ({ boardList }) => {
 };
 
 export default BoardList;
+
+
+// menu={({closePopup}) => (
+//   <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
+// )}

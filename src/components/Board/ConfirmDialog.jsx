@@ -1,6 +1,6 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
 import { boardListDelete, cardDeleteApiCall } from '../../hooks/useFetch';
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { Close } from '../../assets/icons'
 import { toast } from 'react-toastify';
 
@@ -13,7 +13,9 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
 
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
-  
+  console.log('list id =>', listID);
+  console.log('card id =>', cardID);
+
 
   //🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
   const handleCancel = (e) => {

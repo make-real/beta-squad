@@ -1,10 +1,12 @@
 import { HiOutlineUser, HiOutlinePuzzle, HiMenuAlt1 } from "react-icons/hi";
 import { FiVideo, FiSearch, FiSettings } from "react-icons/fi";
+import { SpaceLogoLock, SpaceLogo } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
 import { navLinks } from "../../constant/data";
 import { IoIosClose } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { TbFilter } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import Members from "./Members";
@@ -13,21 +15,24 @@ import Setting from "./Setting";
 import asserts from "../../assets";
 import Filter from "./Filter";
 
+
 const NavBar = () => {
   const { margin } = useStyleContext();
   const [linkClick, setLinkClick] = useState(navLinks[0].name);
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");
-  console.log(linkClick);
+
+  const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
+
 
   const handleSidePanel = (name) => {
     setSidePanel(true);
     setNavIcons(name);
   };
 
+
   const activeLink = "mr-8 py-4 font-bold text-teal-400";
-  const normalLink =
-    "mr-8 py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
+  const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
 
   return (
     <header
@@ -38,12 +43,23 @@ const NavBar = () => {
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
         <div className="w-12 h-12">
-          <img src={asserts.haySpace} alt="logo" />
+          {/* <img src={asserts.haySpace} alt="logo" /> */}
+
+          {selectedSpaceObj.privacy.includes("private") ? (
+            <SpaceLogoLock color={selectedSpaceObj.color || "#57BEC7"} className="w-12 h-12" />
+          ) : (
+            <SpaceLogo color={selectedSpaceObj.color || "#57BEC7"} className="w-12 h-12" />
+          )}
         </div>
 
         <div div="true">
           <div className="flex items-center gap-3">
-            <h2 className="text-teal-500 text-xl font-bold">Space Clone </h2>
+            <h2 className="text-xl font-bold" style={{ color: selectedSpaceObj.color }}>
+              {
+                selectedSpaceObj &&
+                selectedSpaceObj.name
+              }
+            </h2>
             <p className="text-[12px] text-gray-300 font-light">
               Project purpose...
             </p>
@@ -56,6 +72,7 @@ const NavBar = () => {
                 to={path}
                 onClick={() => setLinkClick(name)}
                 className={name === linkClick ? activeLink : normalLink}
+                style={{ color: selectedSpaceObj.color }}
               >
                 {name}
               </Link>
