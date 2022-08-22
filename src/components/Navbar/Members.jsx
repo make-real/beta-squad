@@ -11,7 +11,8 @@ import Avatar from "../Avatar";
 import Button from "../Button";
 import users from "../../constant/users";
 import { toast } from "react-toastify";
-import LeavingSpaceModal from "./LeavingSpaceModal";
+import { get_workspace_member } from "../../api/workSpace";
+import ConfirmModal from "../ConfirmModal";
 
 const Members = () => {
   const [members, setMembers] = React.useState();
@@ -22,23 +23,26 @@ const Members = () => {
   const [leavingLoader, setLeavingLoader] = React.useState(false);
   const [leavingModal, setLeavingModal] = React.useState(false);
   const { selectedSpace } = useSelector((state) => state.space);
+  const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [search, setSearch] = React.useState("");
 
   useEffect(() => {
     getSpaceMember();
     getWorkspaceMember();
   }, []);
+
   const getWorkspaceMember = async () => {
     try {
       setLoading(true);
-      const { data } = await get_space_members(selectedSpace);
-      setAllMembers(data.members);
+      const { data } = await get_workspace_member(selectedWorkspace);
+      setAllMembers(data.teamMembers);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
+
   const getSpaceMember = async () => {
     try {
       setLoading(true);
@@ -104,7 +108,7 @@ const Members = () => {
           <div className="mt-2">
             <input
               type="text"
-              placeholder="Message Space Clone"
+              placeholder="Search member"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full input-style rounded-full border-[3px] outline-none	border-gray-300 text-slate-600 py-2	px-4"
@@ -139,26 +143,34 @@ const Members = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-white mt-2 first-letter:mt-2 p-2">
-            {loading ? (
-              <Loader />
-            ) : (
-              members?.map((item) => (
-                <div
-                  className="flex py-2 hover:bg-slate-50 cursor-pointer"
-                  key={item._id}
-                >
-                  <div className="my-auto">
-                    <Avatar user={item} />
+          <>
+            <div className="bg-white mt-2 first-letter:mt-2 p-2">
+              {loading ? (
+                <Loader />
+              ) : (
+                members?.map((item) => (
+                  <div
+                    className="flex py-2 hover:bg-slate-50 cursor-pointer"
+                    key={item._id}
+                  >
+                    <div className="my-auto">
+                      <Avatar user={item} />
+                    </div>
+                    <div className="pl-4 ">
+                      <h6 className="text-sm text-sky-900">{item.fullName}</h6>
+                      <p className="text-xs text-gray-400">{item.role}</p>
+                    </div>
                   </div>
-                  <div className="pl-4 ">
-                    <h6 className="text-sm text-sky-900">{item.fullName}</h6>
-                    <p className="text-xs text-gray-400">{item.role}</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
+            <Button
+              onClick={() => setLeavingModal(true)}
+              loading={leavingLoader}
+            >
+              Leave space
+            </Button>
+          </>
         )}
 
         {/* <div className="flex justify-between mt-4">
@@ -171,17 +183,15 @@ const Members = () => {
         <h6 className="text-sm ">Add quest</h6>
       </div>
     </div> */}
-        <Button onClick={() => setLeavingModal(true)} loading={leavingLoader}>
-          Leave space
-        </Button>
       </section>
-      {leavingModal && (
-        <LeavingSpaceModal
-          setModal={setLeavingModal}
-          id={selectedSpace}
-          onUpdate={leaveSpace}
-        />
-      )}
+      <ConfirmModal
+        title="Leave space"
+        description="Are you sure you want to leave space?"
+        isVisible={leavingModal}
+        setVisibility={setLeavingModal}
+        api={() => leave_space(selectedSpace)}
+        onComplete={leaveSpace}
+      />
     </>
   );
 };

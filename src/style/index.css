@@ -25,6 +25,9 @@
   .radioButton{
     @apply relative appearance-none w-5 h-5 rounded-full cursor-pointer bg-white border-2 border-themeColor before:absolute before:w-3 before:h-3 before:content-[''] before:bg-white before:left-[50%] before:top-[50%] before:translate-y-[-50%] before:translate-x-[-50%] before:rounded-full checked:before:bg-themeColor/50
   }
+  .checkBox{
+    @apply relative appearance-none w-5 h-5 rounded-sm cursor-pointer bg-white border-2 border-themeColor before:absolute before:w-3 before:h-3 before:content-[''] before:bg-white before:left-[50%] before:top-[50%] before:translate-y-[-50%] before:translate-x-[-50%] before:rounded-sm checked:before:bg-themeColor/50
+  }
 }
 
 body {

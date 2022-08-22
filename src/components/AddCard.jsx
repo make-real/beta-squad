@@ -12,7 +12,7 @@ const AddCard = ({ setAddCard }) => {
 
     return (
         <div
-            className='fixed top-0 bottom-0 left-0 right-0 w-screen min-h-screen bg-gray-500/60 flex items-center justify-center z-50 overflow-hidden'
+            className='fixed top-0 bottom-0 left-0 right-0 w-screen min-h-screen bg-gray-500/60 flex items-center justify-center overflow-hidden'
             onClick={() => setAddCard(false)}
         >
             <div className='w-[500px] bg-white rounded-[16px] px-5 py-3 relative'>

@@ -48,11 +48,11 @@ const Calender = () => {
 
 
     const WeekUI = ({ margin }) => (
-        <div className='grid grid-cols-customCol -z-40'>
-            <div className='mt-6 -z-40'>
+        <div className='grid grid-cols-customCol '>
+            <div className='mt-6 '>
                 {
                     oneDayTimes.map(time =>
-                        <p key={time} className={`w-24 h-10  text-gray-400 leading-10 relative after:absolute  after:h-[1px] after:bg-gray-300 after:-z-40 ${margin ? 'after:right-[-1450px] after:w-[1450px]' : 'after:right-[-1725px] after:w-[1725px]'}`}>
+                        <p key={time} className={`w-24 h-10  text-gray-400 leading-10 relative after:absolute  after:h-[1px] after:bg-gray-300 after:-  ${margin ? 'after:right-[-1450px] after:w-[1450px]' : 'after:right-[-1725px] after:w-[1725px]'}`}>
                             {time}
                         </p>
                     )

@@ -64,7 +64,7 @@ const ModalSpaceCreate = ({ setCreateSpaceModal }) => {
   };
 
   return (
-    <section className="fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center z-50 duration-700">
+    <section className="fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center duration-700">
       <form
         className="relative w-[670px] h-[520px] bg-white rounded-xl shadow-2xl p-3 "
         onSubmit={handleSpaceCreation}

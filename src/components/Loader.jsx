@@ -11,13 +11,13 @@ export const Loader = ({ dark, className }) => {
   );
 };
 
-export const PageLoader = ({ dark, className }) => {
+export const PageLoader = ({ dark, className, size }) => {
   return (
-    <div className="flex w-full h-full my-auto justify-center align-middle text-red">
+    <div className={"flex w-full h-full my-auto justify-center align-middle text-red "+className}>
       <BeatLoader
         style={{ margin: "auto" }}
         color={colors.themeColor}
-        size="20px"
+        size={`${size || 20}px`}
       />
     </div>
   );

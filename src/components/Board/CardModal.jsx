@@ -1,7 +1,18 @@
-import { ArrowRight, Attachment, CheckList, Close, Description, DotsSingle, EyeOpen, RightOK, Tag, UserPlus } from '../../assets/icons';
-import { CardSettingDropDown } from '.';
-import { useState, useEffect } from 'react';
-
+import {
+  ArrowRight,
+  Attachment,
+  CheckList,
+  Close,
+  Description,
+  DotsSingle,
+  EyeOpen,
+  RightOK,
+  Tag,
+  UserPlus,
+} from "../../assets/icons";
+import { CardSettingDropDown } from ".";
+import { useState, useEffect } from "react";
+import Dropdown from "../Dropdown";
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
@@ -58,8 +69,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
         >
 
             <div className='bg-gray-50 w-[60%] rounded-2xl' onClick={e => e.stopPropagation()}>
-
-
 
                 {/* 🟨🟨🟨 Section 1 🟨🟨🟨 */}
                 <div className='flex items-center justify-between border-b border-gray-300 p-2'>
@@ -194,51 +203,51 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
                     </div>
 
 
-                    <div className='mt-8 ml-4 '>
-                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-                            <Description className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Description</span>
-                        </div>
-
-                        <input type="text" className='w-[95%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md' />
-                    </div>
-
-
-                    <div className='mt-8 ml-4 '>
-                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-                            <CheckList className='text-[#B9C3CE] group-hover:text-teal-400' /> <span>Checklist</span>
-                        </div>
-                    </div>
-
-
-                    <div className='my-8 ml-4 '>
-                        <div className='flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group'>
-                            <Attachment className='text-[#B9C3CE] group-hover:text-teal-400' />
-                            <label htmlFor="file">Attachments</label>
-                            <input type="file" id="file" className='hidden' />
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-
-                {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
-                <div className=' py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150'>
-                    <span>Drop files here or </span>
-                    <label htmlFor="file" className='text-teal-600 cursor-pointer hover:text-teal-700 duration-150'>browse</label>
-                    <input type="file" id="file" className='hidden' />
-                </div>
-
-
+          <div className="mt-8 ml-4 ">
+            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+              <Description className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
+              <span>Description</span>
             </div>
-        </section >
-    )
-}
 
-export default CardModal
+            <input
+              type="text"
+              className="w-[95%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md"
+            />
+          </div>
 
+          <div className="mt-8 ml-4 ">
+            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+              <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
+              <span>Checklist</span>
+            </div>
+          </div>
 
+          <div className="my-8 ml-4 ">
+            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+              <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
+              <label htmlFor="file">Attachments</label>
+              <input type="file" id="file" className="hidden" />
+            </div>
+          </div>
+        </div>
+
+        {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
+        <div className=" py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150">
+          <span>Drop files here or </span>
+          <label
+            htmlFor="file"
+            className="text-teal-600 cursor-pointer hover:text-teal-700 duration-150"
+          >
+            browse
+          </label>
+          <input type="file" id="file" className="hidden" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CardModal;
 
 // {
 //     // confirm dialog open for delete operation...

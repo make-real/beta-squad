@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
     selectedSpace: null,
     selectedSpaceObj: {},
     allSpaces: [],
 };
-
 
 export const spaceSlice = createSlice({
     name: "space",
@@ -24,10 +22,15 @@ export const spaceSlice = createSlice({
         addNewSpace: (state, { payload }) => {
             state.allSpaces = [...state.allSpaces, payload];
         },
+        updateSpace: (state, { payload }) => {
+          const index = state.allSpaces.findIndex(
+            (space) => space.id === payload.id
+          );
+          state.allSpaces[index] = payload;
+        },        
     },
 });
 
-
-export const { addSpace, setSelectedSpaceId, addNewSpace, setSelectedSpaceObject } = spaceSlice.actions;
+export const { addSpace, setSelectedSpaceId, addNewSpace, setSelectedSpaceObject, updateSpace } = spaceSlice.actions;
 
 export default spaceSlice.reducer;

@@ -45,7 +45,7 @@ const ManageWorkspace = () => {
     fetchData();
   };
 
-  const leaveWorkspace = (id) => async () => {
+  const leaveWorkspace = async(id) => {
     try {
       await leave_workspace(id);
       fetchData();
@@ -55,7 +55,7 @@ const ManageWorkspace = () => {
     }
   };
 
-  const archiveWorkspace = (id) => async () => {
+  const archiveWorkspace = async(id) => {
     try {
       await archive_workspace(id);
       fetchData();
@@ -113,14 +113,34 @@ const ManageWorkspace = () => {
                     </h6>
                   </div>
                   <div className="my-auto">
-                    <Dropdown width={150} button={<BiDotsVertical />}>
-                      <Button onClick={leaveWorkspace(item._id)} block text>
-                        Leave
-                      </Button>
-                      <Button onClick={archiveWorkspace(item._id)} block text>
-                        Archive
-                      </Button>
-                    </Dropdown>
+                    <Dropdown
+                      width={150}
+                      button={<BiDotsVertical />}
+                      menu={({ closePopup }) => (
+                        <>
+                          <Button
+                            onClick={() => {
+                              leaveWorkspace(item._id);
+                              closePopup();
+                            }}
+                            block
+                            text
+                          >
+                            Leave
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              archiveWorkspace(item._id);
+                              closePopup();
+                            }}
+                            block
+                            text
+                          >
+                            Archive
+                          </Button>
+                        </>
+                      )}
+                    />
                   </div>
                 </div>
               ))}

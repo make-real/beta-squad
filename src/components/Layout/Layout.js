@@ -5,9 +5,9 @@ import { NavBar, SideBar } from "../";
 const Layout = () => {
   return (
     <div>
-      <SideBar />
+      <Outlet />
       <NavBar />
-      <div className="">{<Outlet />}</div>
+      <SideBar />
     </div>
   );
 };

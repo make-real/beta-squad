@@ -38,7 +38,7 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
   };
 
   return (
-    <section className="fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center z-50 duration-700">
+    <section className="fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center   duration-700">
       <div className="relative bg-white rounded-xl shadow-2xl">
         <div
           className="absolute top-2 right-2 w-8 h-8 rounded-lg group hover:bg-gray-200 grid place-items-center cursor-pointer duration-200"

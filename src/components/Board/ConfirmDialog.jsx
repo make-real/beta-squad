@@ -75,7 +75,7 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
   return (
     <div
       onClick={e => e.stopPropagation()}
-      className='fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 grid place-items-center cursor-default'
+      className='fixed top-0 left-0 right-0 bottom-0   bg-black/50 grid place-items-center cursor-default'
     >
 
       <div className='bg-white rounded-lg p-4 space-y-2 relative'>

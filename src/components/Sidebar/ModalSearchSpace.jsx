@@ -20,7 +20,7 @@ const ModalSearchSpace = ({ setSpaceSearchModal, allSpace, setCreateSpaceModal }
 
 
     return (
-        <section className='fixed top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center z-50'>
+        <section className='fixed z-10 top-0 right-0 left-0 bottom-0 bg-black/70 grid place-items-center  '>
 
             <form className='relative w-[670px] h-fit bg-white rounded-xl shadow-2xl p-3 '  >
 
