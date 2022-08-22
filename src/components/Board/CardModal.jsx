@@ -15,6 +15,8 @@ import { useState, useEffect } from "react";
 import Dropdown from "../Dropdown";
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import { useSelector } from "react-redux";
+import { cardUpdateApiCall } from "../../hooks/useFetch";
+import { get_tags } from "../../api/tags";
 
 const Progress = ({ progress, setProgress }) => {
   const [previewProgess, setPreviewProgress] = useState(0);
@@ -60,37 +62,28 @@ const Progress = ({ progress, setProgress }) => {
 const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
   const { updateCard } = useBoardCardContext();
   const [values, setValues] = useState({ ...card });
+  const [progress, setProgress] = useState(0);
 
   const userSelectedWorkSpaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
-  console.log(userSelectedWorkSpaceId);
+  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
+  // console.log('workSpace =>',userSelectedWorkSpaceId)
+  // console.log('space =>',selectedSpaceId)
 
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [showTags, setShowTags] = useState(false);
-  const [setTags, setSetTags] = useState([]);
-  const [tagContext, setTagContext] = useState([
-    "done",
-    "Important",
-    "ON Going...",
-    "api ready",
-    "Improvement",
-    "easy",
-    "good",
-  ]);
-  const [progress, setProgress] = useState(0);
-  const tagColor = [
-    "bg-red-500",
-    "bg-orange-500",
-    "bg-green-500",
-    "bg-pink-500",
-    "bg-blue-500",
-    "bg-gray-500",
-  ];
-
+  const [tagsFromAPI, setTagsFromAPI] = useState([]);
+  const [setTagsIntoCard, setSetTagsIntoCard] = useState([]);
+  const [createNewTag, setCreateNewTag] = useState({
+    name: "",
+    color: "",
+  });
+  // console.log(setTags);
   // console.log(card);
   // console.log(card.progress);
-  console.log(card.tags);
+  // console.log(card);
 
   // user esc key press Event Listener for closing modal...
   useEffect(() => {
@@ -108,25 +101,42 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
     [listID, card._id, values]
   );
 
-  const handleAddTags = (tag) => {
-    setSetTags((pre) => [...pre, tag]);
-    setTagContext((pre) => pre.filter((data) => data !== tag));
-    setValues();
+  useEffect(() => {
+    const getTags = async () => {
+      try {
+        const { data } = await get_tags(userSelectedWorkSpaceId);
+        setTagsFromAPI(data?.tags);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTags();
+  }, [userSelectedWorkSpaceId]);
+
+  const handleAddTags = async (tag) => {
+    setSetTagsIntoCard((pre) => [...pre, tag]);
+    setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
   };
 
   const handleDeleteTags = (tag) => {
-    setSetTags((pre) => pre.filter((item) => item !== tag));
-    setTagContext((pre) => [...pre, tag]);
-    setValues();
+    setSetTagsIntoCard((pre) => pre.filter((data) => data?._id !== tag?._id));
+    setTagsFromAPI((pre) => [...pre, tag]);
   };
 
-  // assignee: []
-  // attachments: []
-  // checkList: []
-  // id: 1660414745825.4255
-  // name: "sdfsdfdsf"
-  // progress: 0
-  // tags: []
+  const handleNewTagCreation = (e) => {
+    e.preventDefault();
+
+    // close drop down tag container...
+    setShowTags(false);
+
+    // setCreateNewTag(e => e.target.value)
+
+    console.log(createNewTag);
+
+    // clear input field
+    setCreateNewTag((pre) => ({ ...pre, name: "" }));
+  };
 
   return (
     <section
@@ -229,43 +239,55 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
 
             <div className="flex items-center flex-wrap gap-2 border border-transparent w-full rounded-md px-2 hover:border-gray-300 customScroll">
               {
-                // 🟨🟨🟨 Just Tag Display
-                setTags.map((data, i) => (
+                // 🟨🟨🟨 Just Tag Display at Capsule Formate...
+                setTagsIntoCard.map((tag, i) => (
                   <span
-                    className={`px-2 py-1 ${tagColor[i]} text-white cursor-pointer rounded-full`}
-                    onClick={() => handleDeleteTags(data)}
+                    key={tag?._id}
+                    style={{ backgroundColor: tag.color }}
+                    className={`px-2 py-1 text-white cursor-pointer rounded-full`}
+                    onClick={() => handleDeleteTags(tag)}
                   >
-                    {data}
+                    {tag.name}
                   </span>
                 ))
               }
-              {tagContext.length > 0 ? (
-                <input
-                  type="text"
-                  placeholder="Add a tag..."
-                  className="ml-2 py-2 outline-none bg-gray-50"
-                  onClick={() => setShowTags(true)}
-                />
+              {tagsFromAPI.length > 0 ? (
+                <form onSubmit={handleNewTagCreation}>
+                  <input
+                    type="text"
+                    placeholder="Add a tag..."
+                    className="ml-2 py-2 outline-none bg-gray-50"
+                    value={createNewTag.name}
+                    onChange={(e) =>
+                      setCreateNewTag((pre) => ({
+                        ...pre,
+                        name: e.target.value,
+                      }))
+                    }
+                    onClick={() => setShowTags(true)}
+                  />
+                </form>
               ) : null}
             </div>
 
             {
               // 🟨🟨🟨 all tags 🟨🟨🟨
               showTags && (
-                <div className="max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white ">
-                  {tagContext.map((data, i) => (
+                <div className="max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white customScroll">
+                  {tagsFromAPI.map((tag, i) => (
                     <div
-                      key={data}
+                      key={tag?._id}
                       onClick={() => {
                         setShowTags(false);
-                        handleAddTags(data);
+                        handleAddTags(tag);
                       }}
                       className="pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer"
                     >
                       <span
-                        className={`px-2 py-1 ${tagColor[i]} w-fit rounded-full`}
+                        className={`px-2 py-1 w-fit rounded-full`}
+                        style={{ backgroundColor: tag.color }}
                       >
-                        {data}
+                        {tag?.name}
                       </span>
                     </div>
                   ))}
@@ -319,14 +341,3 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
 };
 
 export default CardModal;
-
-// {
-//     // confirm dialog open for delete operation...
-//     confirmModalOpen &&
-//     <ConfirmDialog
-//         listID={listID}
-//         cardID={cardID}
-//         setConfirmModalOpen={setConfirmModalOpen}
-//         setCardSettingDropDownToggle={setCardSettingDropDownToggle}
-//     />
-// }
