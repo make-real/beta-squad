@@ -57,8 +57,8 @@ const Card = ({ card, listID }) => {
         {/* For Tag's / Card Chip's */}
         <div className="p-1 text-white flex gap-2 flex-wrap">
           {
-            card.tags.length
-              ? card.tags.map(tag => <CardChip tag={tag} bgColor="bg-green-500" />)
+            card?.tags?.length
+              ? card?.tags?.map(tag => <CardChip tag={tag} bgColor="bg-green-500" />)
               : null
           }
         </div>

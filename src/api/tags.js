@@ -1,23 +1,23 @@
 import useAxios from ".";
 
-export const get_tags = (spaceId) => {
-  return useAxios.get(`workspaces/${spaceId}/tags`);
+export const get_tags = (workSpaceId) => {
+  return useAxios.get(`workspaces/${workSpaceId}/tags`);
 };
 
-export const create_tag = ({ spaceId, name, color }) => {
-  return useAxios.post(`workspaces/${spaceId}/tags`, {
+export const create_tag = ({ workSpaceId, name, color }) => {
+  return useAxios.post(`workspaces/${workSpaceId}/tags`, {
     name,
     color,
   });
 };
 
-export const edit_tag = ({ spaceId, tagId, name, color }) => {
-  return useAxios.patch(`workspaces/${spaceId}/tags/${tagId}`, {
+export const edit_tag = ({ workSpaceId, tagId, name, color }) => {
+  return useAxios.patch(`workspaces/${workSpaceId}/tags/${tagId}`, {
     name,
     color,
   });
 };
 
-export const delete_tag = ({ spaceId, tagId }) => {
-  return useAxios.delete(`workspaces/${spaceId}/tags/${tagId}`);
+export const delete_tag = ({ workSpaceId, tagId }) => {
+  return useAxios.delete(`workspaces/${workSpaceId}/tags/${tagId}`);
 };
