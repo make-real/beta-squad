@@ -1,21 +1,29 @@
 import {
-  ArrowRight,
-  Attachment,
-  CheckList,
-  Close,
-  Description,
-  DotsSingle,
-  EyeOpen,
-  RightOK,
-  Tag,
-  UserPlus,
+    ArrowRight,
+    Attachment,
+    CheckList,
+    Close,
+    Description,
+    DotsSingle,
+    EyeOpen,
+    RightOK,
+    Tag,
+    UserPlus,
 } from "../../assets/icons";
 import { CardSettingDropDown } from ".";
 import { useState, useEffect } from "react";
 import Dropdown from "../Dropdown";
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { useSelector } from "react-redux";
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
+
+    const { updateCard } = useBoardCardContext();
+    const [values, setValues] = useState({ ...card });
+
+    const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+    console.log(userSelectedWorkSpaceId)
 
     const [modalActionToggling, setModalActionToggling] = useState(false);
     const [showTags, setShowTags] = useState(false);
@@ -31,6 +39,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
     ]
 
     // console.log(card);
+    // console.log(card.progress);
+    console.log(card.tags);
 
     // user esc key press Event Listener for closing modal... 
     useEffect(() => {
@@ -42,15 +52,20 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
         return () => document.removeEventListener('keydown', handleEscapeKeyPress);
     }, [setBoardModal]);
 
+    // CardInfo Modal Data Update when user input new data...
+    useEffect(() => updateCard(listID, card._id, values), [listID, card._id, values]);
+
 
     const handleAddTags = (tag) => {
         setSetTags(pre => [...pre, tag]);
         setTagContext(pre => pre.filter(data => data !== tag));
+        setValues()
     }
 
     const handleDeleteTags = (tag) => {
         setSetTags(pre => pre.filter(item => item !== tag));
         setTagContext(pre => [...pre, tag]);
+        setValues()
     }
 
 
@@ -73,7 +88,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
                 {/* 🟨🟨🟨 Section 1 🟨🟨🟨 */}
                 <div className='flex items-center justify-between border-b border-gray-300 p-2'>
 
-                    <div className='flex items-center pl-4 text-gray-400 text-sm'>
+                    <div className='flex flex-wrap items-center pl-4 text-gray-400 text-sm'>
 
                         <div
                             className='flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200'>
@@ -203,48 +218,51 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
                     </div>
 
 
-          <div className="mt-8 ml-4 ">
-            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
-              <Description className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
-              <span>Description</span>
+                    <div className="mt-8 ml-4 w-full">
+
+                        <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+                            <Description className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
+                            <span>Description</span>
+                        </div>
+
+                        <input
+                            type="text"
+                            className="w-[85%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md"
+                        />
+
+                    </div>
+
+
+                    <div className="mt-8 ml-4 ">
+                        <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+                            <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
+                            <span>Checklist</span>
+                        </div>
+                    </div>
+
+                    <div className="my-8 ml-4 ">
+                        <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+                            <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
+                            <label htmlFor="file">Attachments</label>
+                            <input type="file" id="file" className="hidden" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
+                <div className=" py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150">
+                    <span>Drop files here or </span>
+                    <label
+                        htmlFor="file"
+                        className="text-teal-600 cursor-pointer hover:text-teal-700 duration-150"
+                    >
+                        browse
+                    </label>
+                    <input type="file" id="file" className="hidden" />
+                </div>
             </div>
-
-            <input
-              type="text"
-              className="w-[95%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md"
-            />
-          </div>
-
-          <div className="mt-8 ml-4 ">
-            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
-              <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
-              <span>Checklist</span>
-            </div>
-          </div>
-
-          <div className="my-8 ml-4 ">
-            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
-              <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
-              <label htmlFor="file">Attachments</label>
-              <input type="file" id="file" className="hidden" />
-            </div>
-          </div>
-        </div>
-
-        {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
-        <div className=" py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150">
-          <span>Drop files here or </span>
-          <label
-            htmlFor="file"
-            className="text-teal-600 cursor-pointer hover:text-teal-700 duration-150"
-          >
-            browse
-          </label>
-          <input type="file" id="file" className="hidden" />
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default CardModal;

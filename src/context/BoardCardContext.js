@@ -12,7 +12,7 @@ export const BoardCardContext = ({ children }) => {
 
 
     // 🟨🟨🟨 For List's
-    const addBoardList = newListObj => setBoardList(pre => [...pre, newListObj]);
+    const addBoardList = newListObj => setBoardList(pre => [newListObj, ...pre]);
 
     const removeBoardList = bid => setBoardList(pre => pre.filter(({ _id }) => _id !== bid))
 
@@ -25,19 +25,22 @@ export const BoardCardContext = ({ children }) => {
         if (boardIndex < 0) return; // IF no board found, return nothing...
 
         // 🟩🟩🟩 2nd update the Card inside a specific Board
-        const tempBoard = [...boardLists];              // copy ==> total old board 
-        tempBoard[boardIndex].cards.push(cardObj);      // add  ==> new card into that copied board
-        setBoardList(tempBoard);                        // update ==> exiting board by this new copied board
+        const tempBoard = [...boardLists];               // copy ==> total old board 
+        tempBoard[boardIndex].cards?.push(cardObj);      // add  ==> new card into that copied board
+        setBoardList(tempBoard);                         // update ==> exiting board by this new copied board
     }
 
     const removeCard = (bid, cid) => {
 
+        // 🟥🟥🟥 1st ==> 🔎 Find the Board index
         const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
         if (boardIndex < 0) return;
 
+        // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
         const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
         if (cardIndex < 0) return;
 
+        // 🟥🟥🟥 3rd ==> 🔎 Remove the Card index from board
         const tempBoard = [...boardLists];
         tempBoard[boardIndex].cards.splice(cardIndex, 1);
 
@@ -46,11 +49,11 @@ export const BoardCardContext = ({ children }) => {
 
     const updateCard = (bid, cid, card) => {
 
-        // 🟥🟥🟥 1st ==> 🔎 Find the Board index
+        // 🟧🟧🟧 1st ==> 🔎 Find the Board index
         const boardIndex = boardLists.findIndex(({ id }) => id === bid);
         if (boardIndex < 0) return; // IF no card found, return nothing...
 
-        // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
+        // 🟧🟧🟧 2nd ==> 🔎 Find the Card index
         const cardIndex = boardLists[boardIndex].cards.findIndex(({ id }) => id === cid);
         if (cardIndex < 0) return; // IF no card found, return nothing...
 

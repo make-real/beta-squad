@@ -33,7 +33,7 @@ const NavBar = () => {
 
 
   const activeLink = "mr-8 py-4 font-bold text-teal-400";
-  const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-400 hover:underline";
+  const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-600 hover:underline";
 
   return (
     <header
@@ -73,7 +73,7 @@ const NavBar = () => {
                 to={path}
                 onClick={() => setLinkClick(name)}
                 className={name === linkClick ? activeLink : normalLink}
-                style={{ color: selectedSpaceObj.color }}
+                style={ name === linkClick ? { color: selectedSpaceObj.color } : { color : '#cbd5e0'}}
               >
                 {name}
               </Link>

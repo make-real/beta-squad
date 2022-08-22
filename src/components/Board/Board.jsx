@@ -21,7 +21,6 @@ const Board = ({ selectedSpaceId }) => {
           const { data } = await useAxios.get(
             `/spaces/${selectedSpaceId}/board?getCards=true`
           );
-          // console.log({ bord: data });
 
           // update Context API for UI
           setBoardList(data.lists);
@@ -60,9 +59,8 @@ const Board = ({ selectedSpaceId }) => {
 
   return (
     <section
-      className={`${
-        margin ? "ml-[325px]" : "ml-[50px]"
-      } duration-200 w-full overflow-x-auto customScroll`}
+      className={`${margin ? "ml-[325px]" : "ml-[50px]"
+        } duration-200 w-full overflow-x-auto customScroll`}
     >
       <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]">
         {
@@ -70,8 +68,8 @@ const Board = ({ selectedSpaceId }) => {
           boardLists
             ?.slice(0)
             ?.reverse()
-            ?.map((boardList, i) => (
-              <BoardList key={i} boardList={boardList} />
+            ?.map(boardList => (
+              <BoardList key={boardList._id} boardList={boardList} />
             ))
         }
 

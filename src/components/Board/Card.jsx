@@ -56,10 +56,13 @@ const Card = ({ card, listID }) => {
 
         {/* For Tag's / Card Chip's */}
         <div className="p-1 text-white flex gap-2 flex-wrap">
-          <CardChip tag="Done" bgColor="bg-green-500" />
-          <CardChip tag="Warning" bgColor="bg-orange-500" />
-          <CardChip tag="Active" bgColor="bg-red-500" />
+          {
+            card.tags.length
+              ? card.tags.map(tag => <CardChip tag={tag} bgColor="bg-green-500" />)
+              : null
+          }
         </div>
+
         <div className="absolute top-4 right-3">
           {
             // ⚪⚪⚪ For 3 Dots, Menu toggling...

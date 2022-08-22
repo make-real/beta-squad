@@ -47,7 +47,7 @@ const BoardList = ({ boardList }) => {
       );
 
       // update user UI...
-      await addCard(data?.card, boardList?._id);
+      addCard(data?.card, boardList?._id);
 
       // display a notification for user
       toast.success(`${data?.card?.name} - card created`, { autoClose: 3000 });
@@ -88,14 +88,10 @@ const BoardList = ({ boardList }) => {
           )}
         />
 
-          {/* <BoardListSettingDropDown boardListID={boardList?._id} />
-        </Dropdown> */}
-
       </div>
 
       <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
-        {boardList?.cards?.map((card) => (
-          // allCards?.map((card) => (
+        {boardList?.cards?.map(card => (
           <Card key={card._id} card={card} listID={boardList?._id} />
         ))}
       </div>
