@@ -40,9 +40,8 @@ const Card = ({ card, listID }) => {
         {noteDone && (
           <div className="px-1 pb-2">
             <div
-              className={`w-8 h-8 grid place-items-center rounded-md cursor-pointer hover:bg-gray-300 hover:text-teal-400 text-[#B9C3CE]  ${
-                visible ? "visible" : "invisible"
-              }`}
+              className={`w-8 h-8 grid place-items-center rounded-md cursor-pointer hover:bg-gray-300 hover:text-teal-400 text-[#B9C3CE]  ${visible ? "visible" : "invisible"
+                }`}
             >
               <UserPlus />
             </div>
@@ -95,31 +94,31 @@ const Card = ({ card, listID }) => {
                     👍 <span className='text-black'>1</span>
                 </div> */}
 
-                <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
-                    onClick={() => { }}
-                >
-                    <Plus width="12" height="12" className='mr-[2px]' />
-                    <Smile />
+          <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
+            onClick={() => { }}
+          >
+            <Plus width="12" height="12" className='mr-[2px]' />
+            <Smile />
 
-                    <div className='flex gap-2 items-center'>
-                        {/* 👍❤👎🎉 */}
-                    </div>
-                </div>
-         </div>
+            <div className='flex gap-2 items-center'>
+              {/* 👍❤👎🎉 */}
+            </div>
+          </div>
+        </div>
 
-            {
-                // When Task Click >>> then Modal Open
-                cardModal &&
-                <CardModal
-                    card={card}
-                    listID={listID}
-                    noteDone={noteDone}
-                    setBoardModal={setCardModal}
-                    setNoteDone={setNoteDone}
-                />
-            }
+        {
+          // When Task Click >>> then Modal Open
+          cardModal &&
+          <CardModal
+            card={card}
+            listID={listID}
+            noteDone={noteDone}
+            setBoardModal={setCardModal}
+            setNoteDone={setNoteDone}
+          />
+        }
 
-         
+      </div>
       {/* <ConfirmDialog
         listID={"boardListID"}
         setConfirmModalOpen={"setConfirmModalOpen"}

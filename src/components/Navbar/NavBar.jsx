@@ -24,6 +24,7 @@ const NavBar = () => {
 
   const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
 
+  // console.log(selectedSpaceObj);
 
   const handleSidePanel = (name) => {
     setSidePanel(true);
@@ -45,19 +46,19 @@ const NavBar = () => {
         <div className="w-12 h-12">
           {/* <img src={asserts.haySpace} alt="logo" /> */}
 
-          {selectedSpaceObj.privacy.includes("private") ? (
-            <SpaceLogoLock color={selectedSpaceObj.color || "#57BEC7"} className="w-12 h-12" />
+          {selectedSpaceObj?.privacy?.includes("private") ? (
+            <SpaceLogoLock color={selectedSpaceObj?.color || "#57BEC7"} className="w-12 h-12" />
           ) : (
-            <SpaceLogo color={selectedSpaceObj.color || "#57BEC7"} className="w-12 h-12" />
+            <SpaceLogo color={selectedSpaceObj?.color || "#57BEC7"} className="w-12 h-12" />
           )}
         </div>
 
         <div div="true">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold" style={{ color: selectedSpaceObj.color }}>
+            <h2 className="text-xl font-bold" style={{ color: selectedSpaceObj?.color }}>
               {
                 selectedSpaceObj &&
-                selectedSpaceObj.name
+                selectedSpaceObj?.name
               }
             </h2>
             <p className="text-[12px] text-gray-300 font-light">

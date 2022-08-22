@@ -21,7 +21,7 @@ const Board = ({ selectedSpaceId }) => {
           const { data } = await useAxios.get(
             `/spaces/${selectedSpaceId}/board?getCards=true`
           );
-          console.log({ bord: data });
+          // console.log({ bord: data });
 
           // update Context API for UI
           setBoardList(data.lists);
