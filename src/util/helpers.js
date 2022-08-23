@@ -6,7 +6,7 @@ export const debounce = (func, delay) => {
 
 export const sliceText = (text, sliceNumber = 14) => {
   if (!text) return null;
-  if (text?.length < sliceNumber) return text;
+  if (text.length < sliceNumber) return text;
   return text?.slice(0, sliceNumber) + "...";
 };
 

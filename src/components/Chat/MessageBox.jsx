@@ -14,6 +14,7 @@ import { useRef } from "react";
 import api from "../../api";
 
 import { useReactMediaRecorder } from "react-media-recorder";
+import { sliceText } from "../../util/helpers";
 
 const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   const [input, setInput] = useState("");
@@ -70,19 +71,17 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   };
 
   const handleSendMessage = async () => {
+    setMessageToRespond();
     try {
       const text = String(input).trim();
-
       if (text === "") {
         return;
       }
-
       setInput("");
-
       await send_message(selectedSpaceId, {
         textMessage: text,
+        replayOf: messageToRespond?._id,
       });
-
       setInput("");
     } catch (error) {
       console.log(error);
@@ -90,15 +89,12 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   };
 
   const uploadAudioFile = async (url) => {
+    setMessageToRespond();
     try {
       const formData = new FormData();
-
       let blob = await fetch(url).then((r) => r.blob());
-
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
-
       formData.append("attachments", wavefilefromblob);
-
       let config = {
         method: "post",
         url: `spaces/${selectedSpaceId}/chat/send-messages`,
@@ -110,13 +106,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
-
           setUploadParcentage(UpPer);
         },
       };
-
       await api(config);
-
       setUploadParcentage(0);
     } catch (error) {
       console.log(error);
@@ -124,13 +117,12 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   };
 
   const onMediaFilePicked = async (e) => {
+    setMessageToRespond();
     try {
       const formData = new FormData();
-
       for (const file of e.target.files) {
         formData.append("attachments", file);
       }
-
       let config = {
         method: "post",
         url: `spaces/${selectedSpaceId}/chat/send-messages`,
@@ -142,13 +134,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
-
           setUploadParcentage(UpPer);
         },
       };
-
       await api(config);
-
       setUploadParcentage(0);
     } catch (error) {
       console.log(error);
@@ -215,8 +204,13 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
             {messageToRespond && (
               <div className="flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
                 <div>
-                  <p className="text-bold text-themeColor text-sm mb-1">{messageToRespond?.sender?.fullName}</p>
-                  <p className="text-sm">{messageToRespond?.content?.text || "Attachments"}</p>
+                  <p className="text-bold text-themeColor text-sm mb-1">
+                    {messageToRespond?.sender?.fullName}
+                  </p>
+                  <p className="text-sm">
+                    {sliceText( messageToRespond?.content?.text, 100) ||
+                      "Attachment"}
+                  </p>
                 </div>
                 <div
                   className="cursor-pointer"

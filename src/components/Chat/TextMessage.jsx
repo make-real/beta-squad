@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
-import { populateUsers } from "../../util/helpers";
+import { populateUsers, sliceText } from "../../util/helpers";
 import images from "../../assets";
 
 import moment from "moment";
@@ -55,7 +55,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
   return (
     <div
       className={`overflow-auto mt-3 h-[calc(100vh-${
-        messageToRespond ? "230px" : "150px"
+        messageToRespond ? "250px" : "150px"
       })] overflow-x-hidden px-5 pt-5 customScroll`}
     >
       {messages.length ? (
@@ -69,13 +69,26 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
                 {msg?.sender?.fullName.slice(0, 1)}
               </h6>
             </div>
-            <div className="pl-4 ">
-              <h6 className="text-xs text-sky-900	pb-2">
-                {msg?.sender?.fullName}{" "}
-                <small className="text-black">
+            <div className="bg-slate-100 p-3 rounded-lg ml-3 shadow-md max-w-[900px]">
+              <div className="flex justify-between text-xs text-sky-900	pb-2">
+                <h6 className="font-bold">{msg?.sender?.fullName}</h6>
+                <small className="text-neutral-600 ml-5">
                   {moment(msg.createdAt).fromNow()}
                 </small>
-              </h6>
+              </div>
+
+              {msg.replayOf && (
+                <div className="mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
+                  <p className="text-bold text-themeColor text-sm mb-1">
+                    {msg.replayOf.sender?.fullName}
+                  </p>
+                  <p className="text-sm">
+                    {msg.replayOf.content.text
+                      ? sliceText(msg.replayOf.content?.text, 100)
+                      : "Attachment"}
+                  </p>
+                </div>
+              )}
 
               {msg?.content?.attachments?.map((src, idx) => {
                 const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
@@ -121,7 +134,6 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
                 }}
               ></p>
             </div>
-
             <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
               <div className="px-1 hover:text-teal-400 tooltip-box">
                 <BsArrow90DegRight />

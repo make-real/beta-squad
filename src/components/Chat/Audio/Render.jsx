@@ -1,6 +1,7 @@
 import Wavesurfer from "wavesurfer.js";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlayCircle, AiOutlinePauseCircle } from "react-icons/ai";
+import {BsPlayFill, BsPauseFill} from "react-icons/bs"
 // import audio from "./audio.mp3";
 import color from "../../../colors.json";
 
@@ -17,13 +18,10 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
         container: `#waveform_${rendomID}`,
         width: 200,
         height: 50,
-        waveColor: color.themeColor,
         barGap: 2,
         barWidth: 3,
         barRadius: 3,
         cursorWidth: 3,
-        cursorHeight: 3,
-        cursorColor: color.secondary,
         plugins: [
           // WaveSurfer.microphone.create()
         ],
@@ -52,15 +50,15 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
   return (
     <div className="flex">
       {isPlaying ? (
-        <AiOutlinePauseCircle
+        <BsPauseFill
           size={30}
-          className="text-red-500 animate-pulse my-auto mr-2"
+          className="animate-pulse my-auto mr-2"
           onClick={playAudio}
         />
       ) : (
-        <AiOutlinePlayCircle
+        <BsPlayFill
           size={30}
-          className="text-secondary my-auto mr-2"
+          className="my-auto mr-2"
           onClick={playAudio}
         />
       )}
