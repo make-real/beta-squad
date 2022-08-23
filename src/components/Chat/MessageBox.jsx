@@ -3,22 +3,19 @@ import { GoMention } from "react-icons/go";
 import { BsEmojiSmile } from "react-icons/bs";
 import { BiMicrophone, BiSend } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
-// import { AiOutlineGif } from "react-icons/ai";
-// import GIF from "./GIF";
 import { get_mentionable_users, send_message } from "../../api/message";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "./mention.module.css";
 import { useRef } from "react";
 import api from "../../api";
-import AudioInput from "./Audio/Input";
-import AudioRender from "./Audio/Render";
 
 import { useReactMediaRecorder } from "react-media-recorder";
 
-const MessageBox = () => {
+const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -29,6 +26,8 @@ const MessageBox = () => {
 
   const [isRecording, setRecording] = useState(false);
   const [audioSent, setAudioSent] = useState(false);
+
+  // console.log(messageToRespond);
 
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
@@ -52,22 +51,15 @@ const MessageBox = () => {
     }
   }, [selectedSpaceId]);
 
-  // const [attachFile, setAttachFile] = useState(false);
-  // const [showGif, setShowGif] = useState(false);
-
   const onEmojiClick = (e, emojiObject) => {
     setInput((prevInput) => prevInput + emojiObject.emoji);
   };
 
   const handleAttach = () => {
     setShowEmojis(false);
-    // setShowGif(false);
-    // setAttachFile((prev) => !prev);
   };
 
   const handleEmoji = () => {
-    // setShowGif(false);
-    // setAttachFile(false);
     setShowEmojis((prev) => !prev);
   };
 
@@ -75,16 +67,7 @@ const MessageBox = () => {
     setShowEmojis(false);
     setInput((prev) => (prev ? prev + " @" : "@"));
     inputRef.current.focus();
-    // setAttachFile(false);
-    // setShowGif(false);
   };
-
-  // const handleGif = () => {
-  //   setAttachFile(false);
-  //   setShowEmojis(false);
-  //   setMentionModal(false);
-  //   setShowGif((prev) => !prev);
-  // };
 
   const handleSendMessage = async () => {
     try {
@@ -124,8 +107,6 @@ const MessageBox = () => {
           "content-type": "multipart/form-data",
         },
         onUploadProgress: function (progressEvent) {
-          // setTotalUploadSize((progressEvent.total / (1024 * 1024)).toFixed(2));
-
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
@@ -158,8 +139,6 @@ const MessageBox = () => {
           "content-type": "multipart/form-data",
         },
         onUploadProgress: function (progressEvent) {
-          // setTotalUploadSize((progressEvent.total / (1024 * 1024)).toFixed(2));
-
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
@@ -176,19 +155,15 @@ const MessageBox = () => {
     }
   };
 
-  const {
-    startRecording,
-    stopRecording,
-    mediaBlobUrl,
-    clearBlobUrl,
-  } = useReactMediaRecorder({ audio: true });
+  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } =
+    useReactMediaRecorder({ audio: true });
 
   const handleStartRecording = async () => {
     try {
       const permission = await window?.navigator?.permissions?.query({
         name: "microphone",
       });
-  
+
       if (permission?.state === "denied") {
         alert(
           "Microphone permission is required. Go to site settings and give microphone permission for this site."
@@ -196,7 +171,7 @@ const MessageBox = () => {
       } else {
         setAudioSent(false);
         setRecording(true);
-  
+
         clearBlobUrl();
         startRecording();
       }
@@ -231,164 +206,141 @@ const MessageBox = () => {
 
       <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
         <div className="w-full h-full flex justify-center align-middle">
-          <div className="w-full relative border rounded-md p-3 mt-2 pr-[130px]">
-            <MentionsInput
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              singleLine={true}
-              onKeyDown={(e) =>
-                e.key === "Enter" ? handleSendMessage() : null
-              }
-              // className="outline-0 w-full p-5 relative input-style rounded-3xl border-[3px] outline-none	border-gray-300 text-slate-600	 py-3.5	pl-9 pr-[120px]"
-              classNames={classNames}
-              customSuggestionsContainer={(children) => (
-                <div className="bg-[#f1f1f1] absolute bottom-5 w-[300px]">
-                  {children}
+          <div
+            className={`w-full ${
+              messageToRespond &&
+              "border-[0.5px] border-[#2d4154] p-3 rounded-md"
+            }`}
+          >
+            {messageToRespond && (
+              <div className="flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
+                <div>
+                  <p className="text-bold text-themeColor text-sm mb-1">{messageToRespond?.sender?.fullName}</p>
+                  <p className="text-sm">{messageToRespond?.content?.text || "Attachments"}</p>
                 </div>
-              )}
-              allowSuggestionsAboveCursor={true}
-              inputRef={inputRef}
-              autoFocus
-            >
-              <Mention
-                className={classNames.mentions__mention}
-                trigger="@"
-                data={users}
-                markup="{{__id__}}"
-                renderSuggestion={(entry, focused) => {
-                  return (
-                    <h1
-                      className={focused ? "bg-[#ddd] p-2" : "bg-[#f1f1f1] p-2"}
-                    >
-                      {entry.display}
-                    </h1>
-                  );
-                }}
-                displayTransform={(id) =>
-                  users.find((user) => user.id === id).display
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setMessageToRespond()}
+                >
+                  <MdClose />
+                </div>
+              </div>
+            )}
+            <div className="w-full flex relative border rounded-md p-3">
+              <MentionsInput
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                singleLine={true}
+                onKeyDown={(e) =>
+                  e.key === "Enter" ? handleSendMessage() : null
                 }
-              />
-            </MentionsInput>
-          </div>
-
-          <div className="text-gray-400 flex absolute right-[30px] bottom-1/2  translate-y-1/2 pt-2">
-            {isRecording ? (
-              <>
-                <div className="px-2 cursor-pointer relative">
-                  <MdDeleteOutline
-                    className="duration-300 text-[red]  hover:text-teal-400"
-                    onClick={() => {
-                      setRecording(false);
-                      setAudioSent(false);
-
-                      stopRecording();
-                    }}
-                  />
-                </div>
-
-                <div className="px-2 cursor-pointer relative">
-                  <span className="text-xs "> Recording...</span>
-                </div>
-
-                <div className="px-2 cursor-pointer relative">
-                  <BiSend
-                    className="duration-300 text-teal-400  hover:text-teal-500"
-                    onClick={() => {
-                      setRecording(false);
-                      setAudioSent(true);
-                      stopRecording();
-                    }}
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="px-2 cursor-pointer relative">
-                <BiMicrophone
-                  className="duration-300  hover:text-teal-400"
-                  onClick={handleStartRecording}
+                classNames={classNames}
+                customSuggestionsContainer={(children) => (
+                  <div className="bg-[#f1f1f1] absolute bottom-5 w-[300px]">
+                    {children}
+                  </div>
+                )}
+                allowSuggestionsAboveCursor={true}
+                inputRef={inputRef}
+                autoFocus
+              >
+                <Mention
+                  className={classNames.mentions__mention}
+                  trigger="@"
+                  data={users}
+                  markup="{{__id__}}"
+                  renderSuggestion={(entry, focused) => {
+                    return (
+                      <h1
+                        className={
+                          focused ? "bg-[#ddd] p-2" : "bg-[#f1f1f1] p-2"
+                        }
+                      >
+                        {entry.display}
+                      </h1>
+                    );
+                  }}
+                  displayTransform={(id) =>
+                    users.find((user) => user.id === id).display
+                  }
                 />
-              </div>
-            )}
+              </MentionsInput>
+              <div className="text-gray-400 flex mt-[5px]">
+                {isRecording ? (
+                  <>
+                    <div className="px-2 cursor-pointer relative">
+                      <MdDeleteOutline
+                        className="duration-300 text-[red]  hover:text-teal-400"
+                        onClick={() => {
+                          setRecording(false);
+                          setAudioSent(false);
 
-            <label
-              className="px-1.5 cursor-pointer relative"
-              htmlFor="userInputFile"
-              onClick={() => handleAttach()}
-            >
-              <ImAttachment
-                className="duration-300  hover:text-teal-400 "
-                onClick={() => handleAttach()}
-              />
+                          stopRecording();
+                        }}
+                      />
+                    </div>
 
-              <input
-                type="file"
-                id="userInputFile"
-                className="hidden"
-                multiple
-                onChange={onMediaFilePicked}
-              />
-            </label>
-            <div className="px-2 cursor-pointer relative">
-              <GoMention
-                className="duration-300  hover:text-teal-400"
-                onClick={handleMention}
-              />
-            </div>
-            <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
-              <BsEmojiSmile onClick={() => handleEmoji()} />
-              {showEmojis && (
-                <div className="absolute  right-0 bottom-8">
-                  <Picker onEmojiClick={onEmojiClick} />
+                    <div className="px-2 cursor-pointer relative">
+                      <span className="text-xs "> Recording...</span>
+                    </div>
+
+                    <div className="px-2 cursor-pointer relative">
+                      <BiSend
+                        className="duration-300 text-teal-400  hover:text-teal-500"
+                        onClick={() => {
+                          setRecording(false);
+                          setAudioSent(true);
+                          stopRecording();
+                        }}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="px-2 cursor-pointer relative">
+                    <BiMicrophone
+                      size={20}
+                      className="duration-300  hover:text-teal-400 mt-[-2px]"
+                      onClick={handleStartRecording}
+                    />
+                  </div>
+                )}
+
+                <label
+                  className="px-1.5 cursor-pointer relative"
+                  htmlFor="userInputFile"
+                  onClick={() => handleAttach()}
+                >
+                  <ImAttachment
+                    className="duration-300  hover:text-teal-400 "
+                    onClick={() => handleAttach()}
+                  />
+
+                  <input
+                    type="file"
+                    id="userInputFile"
+                    className="hidden"
+                    multiple
+                    onChange={onMediaFilePicked}
+                  />
+                </label>
+                <div className="px-2 cursor-pointer relative">
+                  <GoMention
+                    className="duration-300  hover:text-teal-400"
+                    onClick={handleMention}
+                  />
                 </div>
-              )}
-            </div>
-            {/* <div className="px-2  ">
-            <AiOutlineGif
-              className="duration-300 cursor-pointer hover:text-teal-400"
-              onClick={handleGif}
-            />
-            {showGif && (
-              <div className="absolute right-0 bottom-8 w-[600px] bg-white drop-shadow-xl p-2.5 h-[400px]">
-                <GIF />
+                <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
+                  <BsEmojiSmile onClick={() => handleEmoji()} />
+                  {showEmojis && (
+                    <div className="absolute  right-0 bottom-8">
+                      <Picker onEmojiClick={onEmojiClick} />
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div> */}
-          </div>
-
-          {/* <div className="text-slate-400 absolute right-0 -bottom-[21px] text-sm	">
-          <small className="text-gray-500">#bold*</small>
-          <small className="px-1 italic">_italic_</small>
-          <small>~strikethrough~</small>
-        </div> */}
-        </div>
-
-        {/* {mentionModal && (
-        <div className="w-full border overflow-auto	 absolute left-0 bottom-[90px] bg-white z-50 rounded-xl p-1.5 h-[450px] shadow-lg shadow-gray-300	">
-          <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
-            <p>@channel Notifies everyone in space</p>
-          </div>
-
-        <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
-          <p>@space Notifies everyone in space</p>
-        </div>
-
-        <div className="py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500">
-          <p>@here Notifies everyone in space</p>
-        </div>
-
-          {users.map((item) => (
-            <div
-              className="flex py-2 px-3.5 rounded-lg text-gray-500 hover:bg-slate-50 hover:text-teal-500"
-              key={item.id}
-            >
-              <div className="w-8 h-8 border-slate-700	border-4 rounded-full">
-                <img src={item.img} alt="user" className="rounded-full" />
-              </div>
-              <h6 className="my-auto pl-2">{item.name}</h6>
             </div>
-          ))}
+          </div>
         </div>
-      )} */}
       </div>
     </>
   );

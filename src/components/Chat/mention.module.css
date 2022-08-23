@@ -7,7 +7,7 @@
   }
   
   .mentions--singleLine .mentions__control {
-    width: 1300px;
+    width: 100%;
   }
 
   .mentions--singleLine .mentions__input {

@@ -15,7 +15,7 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
       // More info about options here https://wavesurfer-js.org/docs/options.html
       waveform.current = Wavesurfer.create({
         container: `#waveform_${rendomID}`,
-        width: 100,
+        width: 200,
         height: 50,
         waveColor: color.themeColor,
         barGap: 2,
@@ -68,7 +68,7 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
       <div
         id={`waveform_${rendomID}`}
         style={{
-          width: "150px",
+          width: "300px",
         }}
       />
     </div>
