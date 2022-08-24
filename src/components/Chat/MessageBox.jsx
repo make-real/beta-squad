@@ -208,7 +208,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                     {messageToRespond?.sender?.fullName}
                   </p>
                   <p className="text-sm">
-                    {sliceText( messageToRespond?.content?.text, 100) ||
+                    {sliceText(messageToRespond?.content?.text, 100) ||
                       "Attachment"}
                   </p>
                 </div>
@@ -230,7 +230,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                 }
                 classNames={classNames}
                 customSuggestionsContainer={(children) => (
-                  <div className="bg-[#f1f1f1] absolute bottom-5 w-[300px]">
+                  <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm">
                     {children}
                   </div>
                 )}
@@ -243,11 +243,11 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                   trigger="@"
                   data={users}
                   markup="{{__id__}}"
-                  renderSuggestion={(entry, focused) => {
+                  renderSuggestion={(entry) => {
                     return (
                       <h1
                         className={
-                          focused ? "bg-[#ddd] p-2" : "bg-[#f1f1f1] p-2"
+                          "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
                         }
                       >
                         {entry.display}

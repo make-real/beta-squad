@@ -53,11 +53,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
   };
 
   return (
-    <div
-      className={`overflow-auto mt-3 h-[calc(100vh-${
-        messageToRespond ? "250px" : "150px"
-      })] overflow-x-hidden px-5 pt-5 customScroll`}
-    >
+    <>
       {messages.length ? (
         messages.map((msg, idx) => (
           <div
@@ -179,7 +175,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
       )}
 
       <div ref={messagesEndRef} />
-    </div>
+    </>
   );
 };
 
