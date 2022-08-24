@@ -15,6 +15,43 @@ import images from "../../assets";
 import moment from "moment";
 import AudioInput from "./Audio/Render";
 
+const RenderMessage = ({ message, scrollToBottom }) =>
+  message?.content?.attachments?.map((src, idx) => {
+    const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+
+    if (
+      ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)
+    ) {
+      return (
+        <img
+          onLoad={scrollToBottom}
+          key={idx}
+          src={src}
+          alt="Image"
+          className="max-w-[500px] mb-2"
+        />
+      );
+    } else if (extension === "wav") {
+      return (
+        <div>
+          <AudioInput url={src} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="mb-2">
+          <a
+            className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+            target="_blank"
+            href={src}
+          >
+            {src}
+          </a>
+        </div>
+      );
+    }
+  });
+
 const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
@@ -58,7 +95,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
         messages.map((msg, idx) => (
           <div
             key={idx}
-            className="flex py-2.5 hover:bg-slate-50 relative user-box"
+            className="flex pb-5 hover:bg-slate-50 relative user-box"
           >
             <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
               <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
@@ -75,54 +112,19 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
 
               {msg.replayOf && (
                 <div className="mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
-                  <p className="text-bold text-themeColor text-sm mb-1">
-                    {msg.replayOf.sender?.fullName}
-                  </p>
-                  <p className="text-sm">
-                    {msg.replayOf.content.text
-                      ? sliceText(msg.replayOf.content?.text, 100)
-                      : "Attachment"}
-                  </p>
+                  <RenderMessage
+                    message={msg.replayOf}
+                    scrollToBottom={scrollToBottom}
+                  />
+                  <p
+                    className="text-sm text-gray-900"
+                    dangerouslySetInnerHTML={{
+                      __html: populateUsers(msg.replayOf.content),
+                    }}
+                  ></p>
                 </div>
               )}
-
-              {msg?.content?.attachments?.map((src, idx) => {
-                const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
-
-                if (
-                  ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(
-                    extension
-                  )
-                ) {
-                  return (
-                    <img
-                      onLoad={scrollToBottom}
-                      key={idx}
-                      src={src}
-                      alt="Image"
-                      className="max-w-[500px] mb-2"
-                    />
-                  );
-                } else if (extension === "wav") {
-                  return (
-                    <div>
-                      <AudioInput url={src} />
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div className="mb-2">
-                      <a
-                        className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
-                        target="_blank"
-                        href={src}
-                      >
-                        {src}
-                      </a>
-                    </div>
-                  );
-                }
-              })}
+              <RenderMessage message={msg} scrollToBottom={scrollToBottom} />
               <p
                 className="text-sm text-gray-900"
                 dangerouslySetInnerHTML={{

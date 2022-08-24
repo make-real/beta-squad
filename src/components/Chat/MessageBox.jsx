@@ -14,7 +14,7 @@ import { useRef } from "react";
 import api from "../../api";
 
 import { useReactMediaRecorder } from "react-media-recorder";
-import { sliceText } from "../../util/helpers";
+import { populateUsers, sliceText } from "../../util/helpers";
 
 const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   const [input, setInput] = useState("");
@@ -207,10 +207,20 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                   <p className="text-bold text-themeColor text-sm mb-1">
                     {messageToRespond?.sender?.fullName}
                   </p>
-                  <p className="text-sm">
-                    {sliceText(messageToRespond?.content?.text, 100) ||
-                      "Attachment"}
-                  </p>
+                  {messageToRespond?.content?.text ? (
+                    <p
+                      className="text-sm text-gray-900"
+                      dangerouslySetInnerHTML={{
+                        __html: populateUsers(messageToRespond?.content),
+                      }}
+                    ></p>
+                  ) : messageToRespond?.content?.attachments.some((i) =>
+                      i.includes("wav")
+                    ) ? (
+                    <p className="text-sm">Voice</p>
+                  ) : (
+                    <p className="text-sm">Image</p>
+                  )}
                 </div>
                 <div
                   className="cursor-pointer"
@@ -220,7 +230,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                 </div>
               </div>
             )}
-            <div className="w-full flex relative border rounded-md p-3">
+            <div className="w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3">
               <MentionsInput
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
