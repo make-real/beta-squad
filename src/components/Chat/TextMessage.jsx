@@ -27,7 +27,7 @@ const RenderMessage = ({ message, scrollToBottom }) =>
           onLoad={scrollToBottom}
           key={idx}
           src={src}
-          alt="Image"
+          alt=""
           className="max-w-[500px] mb-2"
         />
       );
@@ -43,6 +43,7 @@ const RenderMessage = ({ message, scrollToBottom }) =>
           <a
             className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
             target="_blank"
+            rel="noreferrer"
             href={src}
           >
             {src}
@@ -59,6 +60,8 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
   const messages = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
+  // console.log(messages)
+
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
       const loadMessages = async () => {
@@ -66,7 +69,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
           const { data } = await get_messages(selectedSpaceId);
           dispatch(addBulkMessage(data.messages.reverse()));
 
-          console.log(data.messages);
+          // console.log(data.messages);
 
           scrollToBottom();
         } catch (error) {
@@ -80,7 +83,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
 
   useEffect(() => {
     scrollToBottom();
-    console.log(messageToRespond);
+    // console.log(messageToRespond);
   }, [messages, messageToRespond]);
 
   const scrollToBottom = () => {
@@ -98,9 +101,13 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
             className="flex pb-5 hover:bg-slate-50 relative user-box"
           >
             <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
-              <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
-                {msg?.sender?.fullName.slice(0, 1)}
-              </h6>
+              {
+                msg.sender.avatar
+                  ? <img src={msg?.sender?.avatar} alt="" className="rounded-full" />
+                  : <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
+                    {msg?.sender?.fullName.slice(0, 1)}
+                  </h6>
+              }
             </div>
             <div className="bg-slate-100 p-3 rounded-lg ml-3 shadow-md max-w-[900px]">
               <div className="flex justify-between text-xs text-sky-900	pb-2">
@@ -177,6 +184,23 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
       )}
 
       <div ref={messagesEndRef} />
+
+      <div className="text-gray-400 text-xs flex justify-between">
+        <div>
+          {
+            messages?.length &&
+            messages[messages?.length - 1]?.seen?.length + ' seen'
+          }
+        </div>
+
+        <div className="">
+          {
+            messages[messages?.length - 1]?.seen.map(data =>
+              <img src={data?.avatar} alt="" className="w-4 h-4 rounded-full mb-2 tooltip-box"  />
+            )
+          }
+        </div>
+      </div>
     </>
   );
 };

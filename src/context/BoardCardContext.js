@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 const BoardCardItem = createContext();
 
 export const BoardCardContext = ({ children }) => {
+
   const [target, setTarget] = useState({ bid: "", cid: "" });
 
   const [boardLists, setBoardList] = useState([]);
@@ -18,17 +19,19 @@ export const BoardCardContext = ({ children }) => {
   const addCard = (cardObj, bid) => {
     // 🟩🟩🟩 1st Find 🔎 that specific Board index, for enter ==> the Newly Created Card.
     const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
-    console.log(boardIndex);
+
     if (boardIndex < 0) return; // IF no board found, return nothing...
 
     // 🟩🟩🟩 2nd update the Card inside a specific Board
     setBoardList((prev) => {
       const tempBoard = [...prev];
-      console.log(tempBoard);
+
       if (!tempBoard[boardIndex].cards) {
         tempBoard[boardIndex].cards = [];
       }
+
       tempBoard[boardIndex].cards.push(cardObj);
+
       return tempBoard;
     });
   };
@@ -39,9 +42,7 @@ export const BoardCardContext = ({ children }) => {
     if (boardIndex < 0) return;
 
     // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex].cards.findIndex(
-      ({ _id }) => _id === cid
-    );
+    const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
     if (cardIndex < 0) return;
 
     // 🟥🟥🟥 3rd ==> 🔎 Remove the Card index from board
@@ -53,13 +54,11 @@ export const BoardCardContext = ({ children }) => {
 
   const updateCard = (bid, cid, card) => {
     // 🟧🟧🟧 1st ==> 🔎 Find the Board index
-    const boardIndex = boardLists.findIndex(({ id }) => id === bid);
+    const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
     if (boardIndex < 0) return; // IF no card found, return nothing...
 
     // 🟧🟧🟧 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex].cards.findIndex(
-      ({ id }) => id === cid
-    );
+    const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
     if (cardIndex < 0) return; // IF no card found, return nothing...
 
     const tempBoard = [...boardLists]; // copy

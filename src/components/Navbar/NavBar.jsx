@@ -1,9 +1,9 @@
 import { HiOutlineUser, HiOutlinePuzzle, HiMenuAlt1 } from "react-icons/hi";
-import { FiVideo, FiSearch, FiSettings } from "react-icons/fi";
 import { SpaceLogoLock, SpaceLogo } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
 import { navLinks } from "../../constant/data";
 import { IoIosClose } from "react-icons/io";
+import { FiSettings } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { TbFilter } from "react-icons/tb";
 import { Link } from "react-router-dom";
@@ -12,19 +12,22 @@ import { useState } from "react";
 import Members from "./Members";
 import AddOn from "./AddOn";
 import Setting from "./Setting";
-import asserts from "../../assets";
 import Filter from "./Filter";
 
 
 const NavBar = () => {
+
   const { margin } = useStyleContext();
-  const [linkClick, setLinkClick] = useState(navLinks[0].name);
+  const lastActiveLink = JSON.parse(localStorage.getItem('activeLink'));
+
+  const [linkClick, setLinkClick] = useState(lastActiveLink || navLinks[0].name);
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");
 
-  const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
+  // at refreshing time, persistence selected Link  
+  localStorage.setItem('activeLink', JSON.stringify(linkClick));
 
-  // console.log(selectedSpaceObj);
+  const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
 
   const handleSidePanel = (name) => {
     setSidePanel(true);
@@ -37,9 +40,8 @@ const NavBar = () => {
 
   return (
     <header
-      className={`${
-        margin ? "ml-[325px]" : "ml-[50px]"
-      } fixed top-0 left-0 right-0 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+      className={`${margin ? "ml-[325px]" : "ml-[50px]"
+        } fixed top-0 left-0 right-0 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
@@ -73,7 +75,7 @@ const NavBar = () => {
                 to={path}
                 onClick={() => setLinkClick(name)}
                 className={name === linkClick ? activeLink : normalLink}
-                style={ name === linkClick ? { color: selectedSpaceObj.color } : { color : '#cbd5e0'}}
+                style={name === linkClick ? { color: selectedSpaceObj.color } : { color: '#cbd5e0' }}
               >
                 {name}
               </Link>
@@ -102,9 +104,8 @@ const NavBar = () => {
         </div> */}
 
         <div
-          className={`${
-            linkClick === "kanban" ? "block" : "hidden"
-          } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
+          className={`${linkClick === "kanban" ? "block" : "hidden"
+            } p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400`}
         >
           <FaPlus className="text-xl font-bold" />
         </div>

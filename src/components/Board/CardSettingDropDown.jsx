@@ -4,12 +4,32 @@ import ConfirmDialog from './ConfirmDialog';
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropDownToggle, cardID, listID, cardModal }) => {
-    
+const CardSettingDropDown = ({ right, progress, setProgress, noteDone, setNoteDone, setCardSettingDropDownToggle, cardID, listID, cardModal }) => {
+
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
     // if cardModal Open by user click, then hide this Card-Setting-DropDown-Toggle window 
     if (cardModal === true) setCardSettingDropDownToggle(false);
+
+
+    const handleActionDropDownClick = (e) => {
+        e.stopPropagation();
+
+
+        setNoteDone(pre => {
+
+            if (pre) {
+                setProgress(4)
+            } else {
+                setProgress(0)
+
+            }
+
+            return !pre
+        });
+
+        setCardSettingDropDownToggle(false)
+    }
 
 
     return (
@@ -22,11 +42,7 @@ const CardSettingDropDown = ({ right, noteDone, setNoteDone, setCardSettingDropD
                 <LinkingChain className='group-hover:text-teal-500' /> <span>Copy Card link</span>
             </div>
 
-            <div className='boardActionDropDown group' onClick={(e) => {
-                e.stopPropagation();
-                setNoteDone(pre => !pre);
-                setCardSettingDropDownToggle(false)
-            }}>
+            <div className='boardActionDropDown group' onClick={handleActionDropDownClick}>
                 <RightOK className='group-hover:text-teal-500' /> <span>Make as {noteDone ? 'not' : ''} done</span>
             </div>
 

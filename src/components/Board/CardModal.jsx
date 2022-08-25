@@ -10,16 +10,18 @@ import {
   Tag,
   UserPlus,
 } from "../../assets/icons";
-import { CardSettingDropDown } from ".";
-import { useState, useEffect } from "react";
-import Dropdown from "../Dropdown";
 import { useBoardCardContext } from "../../context/BoardCardContext";
+import { create_tag, get_tags } from "../../api/tags";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { CardSettingDropDown } from ".";
+import Dropdown from "../Dropdown";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
-import { get_tags } from "../../api/tags";
+
 
 const Progress = ({ progress, setProgress }) => {
-  const [previewProgess, setPreviewProgress] = useState(0);
+
+  const [previewProgress, setPreviewProgress] = useState(0);
 
   const handleProgressChange = (v) => () => setProgress(v);
   const handlePreviewProgressChange = (v) => () => setPreviewProgress(v);
@@ -28,6 +30,7 @@ const Progress = ({ progress, setProgress }) => {
     <>
       {[...Array(5).keys()].map((itemIndex) => (
         <div
+          key={itemIndex}
           onMouseOver={handlePreviewProgressChange(itemIndex)}
           onClick={handleProgressChange(itemIndex)}
           onMouseOut={handlePreviewProgressChange(0)}
@@ -40,50 +43,42 @@ const Progress = ({ progress, setProgress }) => {
   );
 
   function getStatusClassName(itemIndex) {
-    return `p-2 duration-300 ${
-      progress >= itemIndex || previewProgess >= itemIndex
-        ? "bg-teal-500"
-        : "bg-gray-200"
-    } rounded-lg cursor-pointer ${
-      progress >= itemIndex || previewProgess >= itemIndex
+    return `p-2 duration-300 ${progress >= itemIndex || previewProgress >= itemIndex
+      ? "bg-teal-500"
+      : "bg-gray-200"
+      } rounded-lg cursor-pointer ${progress >= itemIndex || previewProgress >= itemIndex
         ? "text-white"
         : "bg-gray-200"
-    } ${
-      itemIndex === 0
+      } ${itemIndex === 0
         ? "rounded-tl-3xl rounded-bl-3xl"
         : itemIndex === 4
-        ? "rounded-tr-3xl rounded-br-3xl"
-        : ""
-    }`;
+          ? "rounded-tr-3xl rounded-br-3xl"
+          : ""
+      }`;
   }
 };
 
+
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
+const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress }) => {
+
   const { updateCard } = useBoardCardContext();
   const [values, setValues] = useState({ ...card });
-  const [progress, setProgress] = useState(0);
-
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
 
-  // console.log('workSpace =>',userSelectedWorkSpaceId)
-  // console.log('space =>',selectedSpaceId)
-
-  const [modalActionToggling, setModalActionToggling] = useState(false);
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
   const [setTagsIntoCard, setSetTagsIntoCard] = useState([]);
+  const [modalActionToggling, setModalActionToggling] = useState(false);
   const [createNewTag, setCreateNewTag] = useState({
     name: "",
-    color: "",
+    color: "#47b9ea",
   });
-  // console.log(setTags);
-  // console.log(card);
-  // console.log(card.progress);
-  // console.log(card);
+
+  // console.log(card)
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   // user esc key press Event Listener for closing modal...
   useEffect(() => {
@@ -95,15 +90,20 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
     return () => document.removeEventListener("keydown", handleEscapeKeyPress);
   }, [setBoardModal]);
 
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
   // CardInfo Modal Data Update when user input new data...
   useEffect(
     () => updateCard(listID, card._id, values),
     [listID, card._id, values]
   );
 
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
   useEffect(() => {
     const getTags = async () => {
       try {
+        // GET Method || For fetching all tag's under specific workShop
         const { data } = await get_tags(userSelectedWorkSpaceId);
         setTagsFromAPI(data?.tags);
       } catch (error) {
@@ -112,31 +112,59 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID }) => {
     };
 
     getTags();
-  }, [userSelectedWorkSpaceId]);
+  }, [userSelectedWorkSpaceId, createNewTag]);
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   const handleAddTags = async (tag) => {
+    // add for display at UI
     setSetTagsIntoCard((pre) => [...pre, tag]);
+
+    // remove from drop-down ui of tag's list
     setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
+
+    const cardTagObject = { ...card, tags: [...card.tags, tag] }
+
+    try {
+      // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
+      console.log(data);
+    } catch (error) {
+      console.log(error?.response?.data?.issue);
+    }
+    updateCard(listID, card._id, cardTagObject);
+
   };
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   const handleDeleteTags = (tag) => {
     setSetTagsIntoCard((pre) => pre.filter((data) => data?._id !== tag?._id));
     setTagsFromAPI((pre) => [...pre, tag]);
   };
 
-  const handleNewTagCreation = (e) => {
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+  const handleNewTagCreation = async (e) => {
     e.preventDefault();
+
+    try {
+      // POST Method for creating tag's inside a specific workSpace
+      const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
+      setSetTagsIntoCard((pre) => [...pre, data.tag]);
+      setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
+    } catch (error) {
+      console.log(error)
+    }
 
     // close drop down tag container...
     setShowTags(false);
 
-    // setCreateNewTag(e => e.target.value)
-
-    console.log(createNewTag);
-
     // clear input field
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
   };
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
 
   return (
     <section

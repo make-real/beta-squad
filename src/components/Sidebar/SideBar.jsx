@@ -111,6 +111,7 @@ const SideBar = () => {
     // re-fetch all space's under this specific workSpace ID...
   }, [dispatch, userSelectedWorkSpaceId]);
 
+
   return (
     <>
       <section className={`fixed top-0 bottom-0 bg-gray-800 flex`}>
@@ -131,11 +132,10 @@ const SideBar = () => {
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div
                         className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${
-                        userSelectedWorkSpaceId === workSpace?._id
-                          ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
-                          : ""
-                      }`}
+                      ${userSelectedWorkSpaceId === workSpace?._id
+                            ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
+                            : ""
+                          }`}
                         onClick={() =>
                           dispatch(setSelectedWorkSpaceId(workSpace?._id))
                         }
@@ -209,9 +209,8 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
         <div
-          className={`${
-            !margin ? "hidden" : "w-[275px]"
-          } bg-[#202F3E] duration-200`}
+          className={`${!margin ? "hidden" : "w-[275px]"
+            } bg-[#202F3E] duration-200`}
         >
           <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
             <div className="flex items-center space-x-4">
@@ -334,22 +333,22 @@ const SideBar = () => {
           </div> */}
 
 
-          {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
-          <div className="my-0">
-            {allSpace?.map(space => (
-              <div
-                key={space._id}
-                className="flex pr-2 items-center group"
-                onClick={() => {
-                  dispatch(setSelectedSpaceId(space._id));
-                  dispatch(setSelectedSpaceObject(space))
-                }}
-              >
-
-                <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
-
+            {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
+            <div className="my-0">
+              {allSpace?.map(space => (
                 <div
-                  className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpaceId === space._id ? 'bg-gray-600' : ''} `}
+                  key={space._id}
+                  className="flex pr-2 items-center group"
+                  onClick={() => {
+                    dispatch(setSelectedSpaceId(space._id));
+                    dispatch(setSelectedSpaceObject(space))
+                  }}
+                >
+
+                  <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
+
+                  <div
+                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpaceId === space._id ? 'bg-gray-600' : ''} `}
                   // onClick={() => setSelectedSpaceName(space.name)}
                   >
                     {space.privacy.includes("private") ? (
@@ -426,7 +425,7 @@ const SideBar = () => {
                 <Eye className="invisible group-hover:visible" />
               </div>
             </div>
-            
+
           </div>
         </div>
 

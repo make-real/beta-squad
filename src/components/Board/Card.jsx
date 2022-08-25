@@ -13,6 +13,25 @@ const Card = ({ card, listID }) => {
   const [cardModal, setCardModal] = useState(false);
   const [noteDone, setNoteDone] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const progressStatus = (progress) => {
+    switch (progress) {
+      case 4:
+        return 100;
+      case 3:
+        return 75;
+      case 2:
+        return 50;
+      case 1:
+        return 25;
+      default:
+        return 0;
+    }
+  }
+
+  console.log(progressStatus(progress));
+
 
   const handleClick = (e) => {
     // track out-side of click... & close setting drop down div...
@@ -24,6 +43,8 @@ const Card = ({ card, listID }) => {
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
   }, []);
+
+
 
   return (
     <>
@@ -37,7 +58,7 @@ const Card = ({ card, listID }) => {
         onDragEnter={() => handleDragEnter(listID, card._id)}
         className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200 "
       >
-        {noteDone && (
+        {(noteDone || progressStatus(progress) !== 0) && (
           <div className="px-1 pb-2">
             <div
               className={`w-8 h-8 grid place-items-center rounded-md cursor-pointer hover:bg-gray-300 hover:text-teal-400 text-[#B9C3CE]  ${visible ? "visible" : "invisible"
@@ -46,8 +67,16 @@ const Card = ({ card, listID }) => {
               <UserPlus />
             </div>
 
-            <div className="absolute top-4 right-8 flex items-center justify-center w-8 h-8 bg-teal-400 rounded-full text-white">
-              <RightOK />
+
+            <div
+              className={`absolute top-4 right-10 flex items-center justify-center w-8 h-8 rounded-full text-white
+              ${progressStatus(progress) === 100 ? 'bg-teal-400' : ' bg-gray-400'}`}
+            >
+              {
+                progressStatus(progress) === 100
+                  ? <RightOK />
+                  : <span className="text-xs text-center">{progressStatus(progress)}%</span>
+              }
             </div>
           </div>
         )}
@@ -58,7 +87,7 @@ const Card = ({ card, listID }) => {
         <div className="p-1 text-white flex gap-2 flex-wrap">
           {
             card?.tags?.length
-              ? card?.tags?.map(tag => <CardChip tag={tag} bgColor="bg-green-500" />)
+              ? card?.tags?.map(tag => <CardChip tag={tag} key={tag?.name} />)
               : null
           }
         </div>
@@ -79,6 +108,8 @@ const Card = ({ card, listID }) => {
                     right={true}
                     cardID={card._id}
                     listID={listID}
+                    progress={progress}
+                    setProgress={setProgress}
                     noteDone={noteDone}
                     cardModal={cardModal}
                     setNoteDone={setNoteDone}
@@ -116,6 +147,8 @@ const Card = ({ card, listID }) => {
             card={card}
             listID={listID}
             noteDone={noteDone}
+            progress={progress}
+            setProgress={setProgress}
             setBoardModal={setCardModal}
             setNoteDone={setNoteDone}
           />

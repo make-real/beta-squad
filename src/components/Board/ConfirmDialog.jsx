@@ -13,8 +13,8 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
 
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
-  console.log('list id =>', listID);
-  console.log('card id =>', cardID);
+  // console.log('list id =>', listID);
+  // console.log('card id =>', cardID);
 
 
   //🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
