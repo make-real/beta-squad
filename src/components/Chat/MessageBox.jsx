@@ -23,7 +23,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   const [audio, setAudio] = useState(null);
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
-  const [uploadParcantage, setUploadParcentage] = useState(0);
+  const [uploadPercentage, setUploadPercentage] = useState(0);
 
   const [isRecording, setRecording] = useState(false);
   const [audioSent, setAudioSent] = useState(false);
@@ -106,11 +106,11 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
-          setUploadParcentage(UpPer);
+          setUploadPercentage(UpPer);
         },
       };
       await api(config);
-      setUploadParcentage(0);
+      setUploadPercentage(0);
     } catch (error) {
       console.log(error);
     }
@@ -134,11 +134,11 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
           let UpPer = parseInt(
             (progressEvent.loaded * 100) / progressEvent.total
           );
-          setUploadParcentage(UpPer);
+          setUploadPercentage(UpPer);
         },
       };
       await api(config);
-      setUploadParcentage(0);
+      setUploadPercentage(0);
     } catch (error) {
       console.log(error);
     }
@@ -187,7 +187,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
       <div
         style={{
           background: "rgb(107, 199, 220)",
-          width: `${uploadParcantage}%`,
+          width: `${uploadPercentage}%`,
           height: "2px",
           transition: "1s all",
         }}
