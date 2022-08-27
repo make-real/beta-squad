@@ -13,6 +13,7 @@ const Card = ({ card, listID }) => {
   const [cardModal, setCardModal] = useState(false);
   const [noteDone, setNoteDone] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const progressStatus = (progress) => {
@@ -30,7 +31,6 @@ const Card = ({ card, listID }) => {
     }
   }
 
-  console.log(progressStatus(progress));
 
 
   const handleClick = (e) => {
@@ -123,21 +123,26 @@ const Card = ({ card, listID }) => {
 
         {/* ➕🙂 plus smile face emoji ➕🙂 */}
 
-        <div className=" flex items-center justify-end ">
+        <div className="relative flex items-center justify-end">
           {/* <div className='mr-1 bg-slate-200/50 rounded-md py-[2px] px-1 border border-teal-500'>
                     👍 <span className='text-black'>1</span>
                 </div> */}
 
-          <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
-            onClick={() => { }}
-          >
+          <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200' onClick={e => { e.stopPropagation(); setShowEmoji(pre => !pre) }}>
+
             <Plus width="12" height="12" className='mr-[2px]' />
             <Smile />
-
-            <div className='flex gap-2 items-center'>
-              {/* 👍❤👎🎉 */}
-            </div>
           </div>
+
+          {
+            showEmoji &&
+            <div className="z-20 absolute top-10 right-[-2px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 ">
+              <p className="p-1 bg-gray-100 rounded-md">👍</p>
+              <p className="p-1 bg-gray-100 rounded-md">😊</p>
+              <p className="p-1 bg-gray-100 rounded-md">👎</p>
+              <p className="p-1 bg-gray-100 rounded-md">😎</p>
+            </div>
+          }
         </div>
 
         {

@@ -430,7 +430,7 @@ const SideBar = () => {
         </div>
 
         {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
-        <UserSettingsDropDown userMenu={userMenu} />
+        <UserSettingsDropDown userMenu={userMenu} setUserMenu={setUserMenu} />
 
         <NotificationSMS userNotificationSMS={userNotificationSMS} />
 

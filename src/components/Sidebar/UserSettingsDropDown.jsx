@@ -11,10 +11,12 @@ import {
 } from "../../assets/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogOut } from "../../hooks/useFetch";
+import { useEffect, useRef } from "react";
 
 
-const UserSettingsDropDown = ({ userMenu }) => {
+const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
 
+    const dropDownRef = useRef();
     const navigate = useNavigate();
     const { margin } = useStyleContext();
 
@@ -32,13 +34,36 @@ const UserSettingsDropDown = ({ userMenu }) => {
         navigate('/');
     }
 
+
+    // for closing drop down, have no button, so for auto close, need this mechanism 
+    // when we click outside or drop down little window, then drop down will be close.
+    // so that outer click listen by this handleClick function
+    const handleClick = e => {
+        // 🧐🧐🧐 track out-side of click... & ❌❌❌ close this div...
+        if (!dropDownRef?.current?.contains(e.target)) {
+            // setUserMenu(pre => ({ ...pre, isOpen: false }))
+            setUserMenu({ ...userMenu, isOpen: false })
+        };
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClick);
+        // unMounting time, remove this eventListener
+        return () => document.removeEventListener('click', handleClick);
+    }, []);
+
+
+
+
+
     return (
 
         // ${userMenu.isOpen && userMenu.sideBar ? "fixed left-14 top-11 shadow-md bg-gray-100 before:left-[-8px] before:top-[10px] before:w-5 before:h-5 before:bg-gray-100 z-[150] " : null} 
 
         //   🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨
         <div
-            className={`${margin && userMenu.isOpen ? "fixed" : "hidden"} top-12  left-7    w-[235px]  h-[345px]  bg-white  rounded-md  before:content-['']  before:w-8  before:h-8  before:bg-white  before:absolute  before:top-[-4px]  before:left-[38px]  before:rotate-45  before:z-[-10]`}
+            ref={dropDownRef}
+            className={`${margin && userMenu.isOpen ? "fixed" : "hidden"} top-12 left-7 w-[235px]  h-[345px]  bg-white  rounded-md  before:content-['']  before:w-8  before:h-8  before:bg-white  before:absolute  before:top-[-4px]  before:left-[38px]  before:rotate-45  before:z-[-10]`}
         >
             <nav className="py-4 px-3">
 

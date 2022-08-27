@@ -147,6 +147,15 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
               <div className="px-1.5 hover:text-teal-400 tooltip-box">
                 <BsEmojiSmile />
                 <p className="tooltip-text">Add a reaction</p>
+
+                {
+                  <div className="z-20 absolute top-9 right-[-4px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 ">
+                    <p className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400">👍</p>
+                    <p className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400">😊</p>
+                    <p className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400">👎</p>
+                    <p className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400">😎</p>
+                  </div>
+                }
               </div>
               <div
                 onClick={() => setMessageToRespond(msg)}
@@ -185,6 +194,8 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
 
       <div ref={messagesEndRef} />
 
+
+      {/* Seen SMS */}
       <div className="text-gray-400 text-xs flex justify-between">
         <div>
           {
@@ -196,7 +207,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
         <div className="">
           {
             messages[messages?.length - 1]?.seen.map(data =>
-              <img src={data?.avatar} alt="" className="w-4 h-4 rounded-full mb-2 tooltip-box"  />
+              <img src={data?.avatar} alt="" className="w-4 h-4 rounded-full mb-2 tooltip-box" />
             )
           }
         </div>
