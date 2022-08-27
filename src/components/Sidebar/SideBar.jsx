@@ -26,7 +26,11 @@ import {
   addWorkSpace,
   setSelectedWorkSpaceId,
 } from "../../store/slice/workspace";
-import { addSpace, setSelectedSpaceId, setSelectedSpaceObject } from "../../store/slice/space";
+import {
+  addSpace,
+  setSelectedSpaceId,
+  setSelectedSpaceObject,
+} from "../../store/slice/space";
 import { useStyleContext } from "../../context/StyleContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -34,7 +38,7 @@ import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { get_space_data, get_workspace_data } from "../../api/workSpace";
-
+import Dropdown from "../../components/Dropdown";
 
 const SideBar = () => {
   const { margin, setMargin } = useStyleContext();
@@ -57,7 +61,6 @@ const SideBar = () => {
   // For All Space
   const allSpace = useSelector((state) => state.space.allSpaces);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-
 
   // get user img from user info, which store at local storage...
   const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
@@ -98,7 +101,6 @@ const SideBar = () => {
         // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
         dispatch(setSelectedSpaceObject(data.spaces[0]));
-
       } catch (error) {
         // console.log("space selection ==> ", error);
       }
@@ -110,7 +112,6 @@ const SideBar = () => {
     // when id workSpace ID change,
     // re-fetch all space's under this specific workSpace ID...
   }, [dispatch, userSelectedWorkSpaceId]);
-
 
   return (
     <>
@@ -132,10 +133,11 @@ const SideBar = () => {
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div
                         className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${userSelectedWorkSpaceId === workSpace?._id
-                            ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
-                            : ""
-                          }`}
+                      ${
+                        userSelectedWorkSpaceId === workSpace?._id
+                          ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
+                          : ""
+                      }`}
                         onClick={() =>
                           dispatch(setSelectedWorkSpaceId(workSpace?._id))
                         }
@@ -209,34 +211,63 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
         <div
-          className={`${!margin ? "hidden" : "w-[275px]"
-            } bg-[#202F3E] duration-200`}
+          className={`${
+            !margin ? "hidden" : "w-[275px]"
+          } bg-[#202F3E] duration-200`}
         >
           <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
-            <div className="flex items-center space-x-4">
-              <div
-                className="mt-3 mb-2"
-                onClick={() => {
-                  setUserMenu((pre) => ({
-                    isOpen: !pre.isOpen,
-                    sideBar: false,
-                  }));
-                  setUserNotificationBell(false);
-                  setUserNotificationSMS(false);
-                }}
-              >
-                <img
-                  alt="userImage"
-                  src={
-                    userImg
-                      ? userImg
-                      : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                  }
-                  className="w-6 h-6 rounded-full cursor-pointer"
-                />
-              </div>
+            <div className="flex items-center space-x-4 relative">
+              <Dropdown
+                position="bottom left"
+                width={230}
+                button={
+                  <div className="mt-3 mb-2">
+                    <img
+                      alt="userImage"
+                      src={
+                        userImg
+                          ? userImg
+                          : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                      }
+                      className="w-6 h-6 rounded-full cursor-pointer"
+                    />
+                  </div>
+                }
+                menu={() => (
+                  <UserSettingsDropDown
+                    userMenu={userMenu}
+                    setUserMenu={setUserMenu}
+                  />
+                )}
+              />
+              <Dropdown
+                position="bottom left"
+                width={500}
+                button={
+                  <div className=" cursor-pointer flex justify-center items-center">
+                    <SMS className="text-[#1F2E3D] hover:text-gray-200" />
+                  </div>
+                }
+                menu={() => (
+                  <NotificationSMS userNotificationSMS={userNotificationSMS} />
+                )}
+              />
+              <Dropdown
+                position="bottom left"
+                width={450}
+                button={
+                  <div className=" cursor-pointer flex justify-center items-center">
+                    <Bell className="text-[#1F2E3D] hover:text-gray-200" />
+                  </div>
+                }
+                menu={() => (
+                  <NotificationBell
+                    userNotificationBell={userNotificationBell}
+                  />
+                )}
+              />
 
-              <div
+              {/* <div
                 className=" cursor-pointer flex justify-center items-center"
                 onClick={() => {
                   setUserNotificationSMS((pre) => !pre);
@@ -254,9 +285,7 @@ const SideBar = () => {
                   setUserNotificationSMS(false);
                   setUserMenu(false);
                 }}
-              >
-                <Bell className="text-[#1F2E3D] hover:text-gray-200" />
-              </div>
+              ></div> */}
             </div>
 
             <p className="capitalize text-gray-500 text-sm">make real</p>
@@ -332,24 +361,24 @@ const SideBar = () => {
             </p>
           </div> */}
 
-
             {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
             <div className="my-0">
-              {allSpace?.map(space => (
+              {allSpace?.map((space) => (
                 <div
                   key={space._id}
                   className="flex pr-2 items-center group"
                   onClick={() => {
                     dispatch(setSelectedSpaceId(space._id));
-                    dispatch(setSelectedSpaceObject(space))
+                    dispatch(setSelectedSpaceObject(space));
                   }}
                 >
-
                   <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
 
                   <div
-                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpaceId === space._id ? 'bg-gray-600' : ''} `}
-                  // onClick={() => setSelectedSpaceName(space.name)}
+                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${
+                      selectedSpaceId === space._id ? "bg-gray-600" : ""
+                    } `}
+                    // onClick={() => setSelectedSpaceName(space.name)}
                   >
                     {space.privacy.includes("private") ? (
                       <SpaceLogoLock color={space.color || "#57BEC7"} />
@@ -425,16 +454,8 @@ const SideBar = () => {
                 <Eye className="invisible group-hover:visible" />
               </div>
             </div>
-
           </div>
         </div>
-
-        {/* 🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨 */}
-        <UserSettingsDropDown userMenu={userMenu} setUserMenu={setUserMenu} />
-
-        <NotificationSMS userNotificationSMS={userNotificationSMS} />
-
-        <NotificationBell userNotificationBell={userNotificationBell} />
       </section>
       {
         // 🟨🟨🟨 ➕➕➕ Create New WorkSpace Modal Open / Popup 🟨🟨🟨

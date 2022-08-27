@@ -1,121 +1,83 @@
-import { useStyleContext } from "../../context/StyleContext";
 import {
-    Addons,
-    Calendar,
-    LogOut,
-    Mobile,
-    Settings,
-    Smile,
-    SpaceLogo,
-    Subscription,
+  Addons,
+  Calendar,
+  LogOut,
+  Mobile,
+  Settings,
+  Smile,
+  SpaceLogo,
+  Subscription,
 } from "../../assets/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogOut } from "../../hooks/useFetch";
-import { useEffect, useRef } from "react";
-
 
 const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
+  const navigate = useNavigate();
 
-    const dropDownRef = useRef();
-    const navigate = useNavigate();
-    const { margin } = useStyleContext();
-
-
-    // user logout button press...
-    const handleLogOut = async () => {
-
-        try {
-            await userLogOut();
-        } catch (error) {
-            console.log(error)
-        }
-
-        localStorage.clear();
-        navigate('/');
+  const handleLogOut = async () => {
+    try {
+      await userLogOut();
+    } catch (error) {
+      console.log(error);
     }
 
+    localStorage.clear();
+    navigate("/");
+  };
 
-    // for closing drop down, have no button, so for auto close, need this mechanism 
-    // when we click outside or drop down little window, then drop down will be close.
-    // so that outer click listen by this handleClick function
-    const handleClick = e => {
-        // 🧐🧐🧐 track out-side of click... & ❌❌❌ close this div...
-        if (!dropDownRef?.current?.contains(e.target)) {
-            // setUserMenu(pre => ({ ...pre, isOpen: false }))
-            setUserMenu({ ...userMenu, isOpen: false })
-        };
-    }
+  return (
+    <div>
+      <nav>
+        <Link to="/projects" className="userSettings group line-through">
+          <SpaceLogo className="text-[#B9C3CE] group-hover:text-purple-500" />
+          <span>Show Workspace list</span>
+        </Link>
 
-    useEffect(() => {
-        document.addEventListener('click', handleClick);
-        // unMounting time, remove this eventListener
-        return () => document.removeEventListener('click', handleClick);
-    }, []);
+        <Link to="/projects" className="userSettings group line-through">
+          <Smile className="text-[#B9C3CE] group-hover:text-purple-500" />
+          <span>Set your status</span>
+        </Link>
 
+        <div className="border-b border-gray-300 my-2"></div>
 
-
-
-
-    return (
-
-        // ${userMenu.isOpen && userMenu.sideBar ? "fixed left-14 top-11 shadow-md bg-gray-100 before:left-[-8px] before:top-[10px] before:w-5 before:h-5 before:bg-gray-100 z-[150] " : null} 
-
-        //   🟨🟨🟨 For User Settings DropDown Menu 🟨🟨🟨
-        <div
-            ref={dropDownRef}
-            className={`${margin && userMenu.isOpen ? "fixed" : "hidden"} top-12 left-7 w-[235px]  h-[345px]  bg-white  rounded-md  before:content-['']  before:w-8  before:h-8  before:bg-white  before:absolute  before:top-[-4px]  before:left-[38px]  before:rotate-45  before:z-[-10]`}
+        <Link
+          to="/settings"
+          className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
         >
-            <nav className="py-4 px-3">
+          <Settings className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Settings</span>
+        </Link>
 
-                <Link to='/projects' className="userSettings group line-through">
-                    <SpaceLogo className="text-[#B9C3CE] group-hover:text-purple-500" />
-                    <span>Show Workspace list</span>
-                </Link>
+        <Link to="/projects" className="userSettings group line-through">
+          <Subscription className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Subscription</span>
+        </Link>
 
-                <Link to='/projects' className="userSettings group line-through">
-                    <Smile className="text-[#B9C3CE] group-hover:text-purple-500" />
-                    <span>Set your status</span>
-                </Link>
+        <Link to="/projects" className="userSettings group line-through">
+          <Calendar className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Book a demo</span>
+        </Link>
 
-                <div className="border-b border-gray-300 my-2"></div>
+        <Link to="/projects" className="userSettings group line-through">
+          <Addons className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Addons</span>
+        </Link>
 
-                <Link to="/settings" className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm">
-                    <Settings className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Settings</span>
-                </Link>
+        <Link to="/projects" className="userSettings group line-through">
+          <Mobile className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Apps</span>
+        </Link>
 
-                <Link to='/projects' className="userSettings group line-through">
-                    <Subscription className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Subscription</span>
-                </Link>
-
-                <Link to='/projects' className="userSettings group line-through">
-                    <Calendar className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Book a demo</span>
-                </Link>
-
-                <Link to='/projects' className="userSettings group line-through">
-                    <Addons className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Addons</span>
-                </Link>
-
-                <Link to='/projects' className="userSettings group line-through">
-                    <Mobile className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Apps</span>
-                </Link>
-
-                <div
-                    onClick={handleLogOut}
-                    className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
-                >
-                    <LogOut className="text-[#B9C3CE]" />
-                    <span className="group-hover:text-purple-500">Log out</span>
-                </div>
-
-            </nav>
+        <div
+          onClick={handleLogOut}
+          className="flex p-2 mt-[2px] space-x-2 items-center hover:bg-slate-200 cursor-pointer rounded-md text-gray-400 group text-sm"
+        >
+          <LogOut className="text-[#B9C3CE]" />
+          <span className="group-hover:text-purple-500">Log out</span>
         </div>
+      </nav>
+    </div>
+  );
+};
 
-    )
-}
-
-export default UserSettingsDropDown
+export default UserSettingsDropDown;

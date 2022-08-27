@@ -1,10 +1,11 @@
 import { useRef } from "react";
 import Popup from "reactjs-popup";
 
-const Dropdown = ({ menu, button, width, disabled }) => {
+const Dropdown = ({ menu, button, width, disabled, position }) => {
   const ref = useRef(null);
   return (
     <Popup
+      position={position}
       ref={ref}
       contentStyle={{
         border: "none",
