@@ -128,7 +128,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     try {
       // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
-      console.log(data);
+      console.log(data.updatedCard);
     } catch (error) {
       console.log(error?.response?.data?.issue);
     }

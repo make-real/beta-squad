@@ -25,3 +25,7 @@ export const update_space = (spaceId, data) => {
 export const leave_space = (spaceId) => {
   return useAxios.post(`/spaces/${spaceId}/leave`);
 };
+
+export const delete_space = (spaceId) => {
+  return useAxios.delete(`/spaces/${spaceId}`);
+};
