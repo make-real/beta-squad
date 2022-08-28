@@ -195,7 +195,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
       <div ref={messagesEndRef} />
 
 
-      {/* Seen SMS */}
+      {/* 🔘🔘🔘🔘🔘🔘🔘🔘🔘 Seen SMS 🔘🔘🔘🔘🔘🔘🔘🔘🔘 */}
       <div className="text-gray-400 text-xs flex justify-between">
         <div>
           {
@@ -206,8 +206,9 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
 
         <div className="">
           {
-            messages[messages?.length - 1]?.seen.map(data =>
-              <img src={data?.avatar} alt="" className="w-4 h-4 rounded-full mb-2 tooltip-box" />
+            messages[messages?.length - 1]?.seen.map(data => data?.avatar
+              ? <img src={data?.avatar} alt="" className="w-4 h-4 rounded-full mb-2 tooltip-box" />
+              : <p className="w-5 h-5 rounded-full mb-2 tooltip-box bg-gray-300 text-black font-bold grid place-items-center">{data?.fullName.charAt(0)}</p>
             )
           }
         </div>

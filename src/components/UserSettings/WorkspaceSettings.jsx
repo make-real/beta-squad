@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import Dropdown from "../Dropdown";
 import Button from "../Button";
 import Input from "../Input";
+import { WORKSPACE_ROLE } from "../../constant/enums";
 import { AiOutlineSetting } from "react-icons/ai";
-import { Loader } from "../Loader";
-import Dropdown from "../Dropdown";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Loader } from "../Loader";
 import {
   add_workspace_member,
   change_workspace_member_role,
+  delete_workspace,
   get_single_workspace_data,
   get_workspace_member,
   update_workspace,
 } from "../../api/workSpace";
-import { toast } from "react-toastify";
-import { WORKSPACE_ROLE } from "../../constant/enums";
+
 
 const WorkspaceSettings = () => {
+
   const { workspaces, selectedWorkspace } = useSelector(
     (state) => state.workspace
   );
+
   const [workspace, setWorkspace] = useState(selectedWorkspace);
   const [workspaceMembers, setWorkspaceMembers] = useState([]);
   const [changingRoll, setChangingRoll] = useState("");
@@ -27,11 +31,15 @@ const WorkspaceSettings = () => {
   const [nameLoading, setNameLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [inviteLoader, setInviteLoader] = useState(false);
+  const [deletingSpaceModal, setDeletingSpaceModal] = useState(false);
 
   useEffect(() => {
     getWorkspaceData();
     getWorkspaceMembers();
   }, [selectedWorkspace]);
+
+  // get user img from user info, which store at local storage...
+  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
   const getWorkspaceData = async () => {
     try {
@@ -95,7 +103,7 @@ const WorkspaceSettings = () => {
     }
   };
 
-  const changeUserRoll = async(id, role) => {
+  const changeUserRoll = async (id, role) => {
     try {
       setChangingRoll(id);
       await change_workspace_member_role(selectedWorkspace, {
@@ -123,6 +131,16 @@ const WorkspaceSettings = () => {
       setBlocking("");
     }
   };
+
+
+  const handleDeletingSpace = async () => {
+    try {
+      const { data } = await delete_workspace(selectedWorkspace)
+      toast.success(data.message, { autoClose: 1000 });
+    } catch (error) {
+      toast.error(error.workspaceId, { autoClose: 1000 });
+    }
+  }
 
   const isChangingRoll = (id) => id === changingRoll;
   const isBlockingUser = (id) => id === changingRoll;
@@ -198,11 +216,11 @@ const WorkspaceSettings = () => {
         {workspaceMembers?.map((user, i) => (
           <>
             <div key={i} className="flex align-middle justify-between mt-4">
-              <div className="flex align-middle w-[150px]">
+              <div className="flex items-center w-[150px]">
                 <img
                   className="w-10 h-10 rounded-full border"
                   src={
-                    user?.image ||
+                    userImg ||
                     "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                   }
                   alt="user"
@@ -259,9 +277,39 @@ const WorkspaceSettings = () => {
                   </Button>
                 </>
               ) : (
-                <h4 className="text-[#7088A1] font-bold mr-4 my-auto">
-                  Workspace owner
-                </h4>
+                <div className="text-[#7088A1] font-bold space-y-2 text-center">
+                  <h4 className="my-auto">
+                    Workspace owner
+                  </h4>
+                  <h4 className="bg-gray-300 rounded-md px-2 py-1 text-red-400 hover:text-red-600 hover:bg-gray-400 duration-200 cursor-pointer"
+                    onClick={() => setDeletingSpaceModal(true)}
+                  >
+                    Delete this space
+                  </h4>
+
+                  {
+                    deletingSpaceModal &&
+                    <div className="bg-black/70 fixed right-0 top-0 left-0 bottom-0 z-30 grid place-items-center" onClick={() => setDeletingSpaceModal(false)}>
+                      <div className="bg-white p-8 rounded-md text-gray-800">
+                        <h2 className="text-xl">Are you sure to delete this workspace?</h2>
+                        <p className="text-sm text-red-500">By deleting you will lost all of your working data associated with this workspace.</p>
+                        <div className="space-x-4 mt-4">
+
+                          <button className="w-12 py-1 bg-red-400 hover:bg-red-500 rounded-md duration-200 hover:text-gray-900"
+                            onClick={handleDeletingSpace}>
+                            Yes
+                          </button>
+
+                          <button className="w-12 py-1 bg-green-400 hover:bg-green-500 rounded-md duration-200 hover:text-gray-900"
+                            onClick={() => setDeletingSpaceModal(false)}
+                          >No
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+
               )}
             </div>
             {user?.role === "owner" && <hr className="mt-3" />}

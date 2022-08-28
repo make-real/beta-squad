@@ -48,3 +48,7 @@ export const get_space_data = (spaceId) => {
     params: { workspaceId: spaceId },
   });
 };
+
+export const delete_workspace = (workSpaceId) => {
+  return useAxios.delete(`/workspaces/${workSpaceId}`);
+};
