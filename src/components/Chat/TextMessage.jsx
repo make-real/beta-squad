@@ -12,14 +12,12 @@ import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers, sliceText } from "../../util/helpers";
 import images from "../../assets";
 import { add_reaction, delete_message } from "../../api/message";
-import { removeMessage } from "../../store/slice/message";
 
 import moment from "moment";
 import AudioInput from "./Audio/Render";
 
 const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   const [showReactEmojis, setShowReactEmojis] = useState(false);
-  const dispatch = useDispatch();
 
   const userId = JSON.parse(localStorage.getItem("userId"));
 
@@ -38,7 +36,6 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
 
   const handleDelete = async () => {
     try {
-      dispatch(removeMessage(msg._id));
       await delete_message(space, msg._id);
     } catch (error) {
       console.log(error);
@@ -66,7 +63,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
 
         {msg.replayOf && (
           <div className="mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
-            <RenderMessage
+            <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
             />
@@ -78,7 +75,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
             ></p>
           </div>
         )}
-        <RenderMessage message={msg} scrollToBottom={scrollToBottom} />
+        <RenderAttachment message={msg} scrollToBottom={scrollToBottom} />
         <p
           className="text-sm text-gray-900"
           dangerouslySetInnerHTML={{
@@ -178,7 +175,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   );
 };
 
-const RenderMessage = ({ message, scrollToBottom }) =>
+const RenderAttachment = ({ message, scrollToBottom }) =>
   message?.content?.attachments?.map((src, idx) => {
     const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
 

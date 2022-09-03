@@ -95,6 +95,9 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
       let blob = await fetch(url).then((r) => r.blob());
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
       formData.append("attachments", wavefilefromblob);
+      if (messageToRespond?._id) {
+        formData.append("replayOf", messageToRespond?._id);
+      }
       let config = {
         method: "post",
         url: `spaces/${selectedSpaceId}/chat/send-messages`,
@@ -120,6 +123,11 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
     setMessageToRespond();
     try {
       const formData = new FormData();
+
+      if (messageToRespond?._id) {
+        formData.append("replayOf", messageToRespond?._id);
+      }
+
       for (const file of e.target.files) {
         formData.append("attachments", file);
       }
