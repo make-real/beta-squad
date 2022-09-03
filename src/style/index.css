@@ -74,11 +74,17 @@ body {
 }
 
 .user-box:hover .reaction-wrapper {
-  right: 190px;
+  right: 160px;
 }
 
 .user-box:hover .msg-icons {
   opacity: 1;
+}
+
+
+.mentioned-message-wrapper img {
+  width: 50px!important;
+  display: inline-block;
 }
 
 .tooltip-box {

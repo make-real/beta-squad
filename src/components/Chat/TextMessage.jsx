@@ -62,7 +62,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
         </div>
 
         {msg.replayOf && (
-          <div className="mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
+          <div className="mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper">
             <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
