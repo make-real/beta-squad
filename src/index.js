@@ -11,8 +11,11 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
-import { addSingleMessage } from "./store/slice/message";
-import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
+import { addReaction, addSingleMessage } from "./store/slice/message";
+import {
+  requestNotificationPermission,
+  sentLocalNotification,
+} from "./util/helpers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -36,8 +39,12 @@ if (token) {
     if (msg.to === space.selectedSpace) {
       store.dispatch(addSingleMessage(msg));
     } else {
-      sentLocalNotification("New message recived.")
+      sentLocalNotification("New message recived.");
     }
+  });
+
+  socket?.on("NEW_REACTION_RECEIVED", (data) => {
+    store.dispatch(addReaction(data));
   });
 }
 

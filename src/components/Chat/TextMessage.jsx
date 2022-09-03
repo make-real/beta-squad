@@ -19,6 +19,8 @@ import AudioInput from "./Audio/Render";
 const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   const [showReactEmojis, setShowReactEmojis] = useState(false);
 
+  const userId = JSON.parse(localStorage.getItem("userId"));
+
   const handleReact = async (emoji) => {
     try {
       setShowReactEmojis(false);
@@ -27,6 +29,10 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
       console.log(error);
     }
   };
+
+  const reaction = msg.reactions.find(
+    (r) => r?.reactor?._id === userId
+  )?.reaction;
 
   return (
     <div className="flex pb-5 hover:bg-slate-50 relative user-box">
@@ -73,10 +79,15 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
       {Boolean(msg?.reactions.length) && (
         <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 reaction-wrapper">
           {msg?.reactions?.map((data, idx) => (
-            <p key={idx} className="text-xs hover:text-teal-400 tooltip-box">
+            <p
+              key={idx}
+              className="px-1 text-xs hover:text-teal-400 tooltip-box select-none"
+            >
               {data?.reaction}
 
-              <p className="tooltip-text select-none">{data.reactor.fullName}</p>
+              <p className="tooltip-text select-none">
+                {data.reactor.fullName}
+              </p>
             </p>
           ))}
         </div>
@@ -94,25 +105,25 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           {showReactEmojis && (
             <div className="z-20 absolute top-9 right-[-4px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 ">
               <p
-                className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400"
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "👍" ? "bg-gray-400" : ""}`}
                 onClick={() => handleReact("👍")}
               >
                 👍
               </p>
               <p
-                className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400"
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "😊" ? "bg-gray-400" : ""}`}
                 onClick={() => handleReact("😊")}
               >
                 😊
               </p>
               <p
-                className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400"
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "👎" ? "bg-gray-400" : ""}`}
                 onClick={() => handleReact("👎")}
               >
                 👎
               </p>
               <p
-                className="p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400"
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "😎" ? "bg-gray-400" : ""}`}
                 onClick={() => handleReact("😎")}
               >
                 😎
@@ -220,8 +231,6 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
-
-  console.log(messages[13]);
 
   return (
     <>
