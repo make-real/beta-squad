@@ -11,7 +11,11 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
-import { addReaction, addSingleMessage } from "./store/slice/message";
+import {
+  addReaction,
+  addSingleMessage,
+  removeMessage,
+} from "./store/slice/message";
 import {
   requestNotificationPermission,
   sentLocalNotification,
@@ -45,6 +49,10 @@ if (token) {
 
   socket?.on("NEW_REACTION_RECEIVED", (data) => {
     store.dispatch(addReaction(data));
+  });
+
+  socket?.on("ON_MESSAGE_REMOVED", ({ messageId }) => {
+    store.dispatch(removeMessage(messageId));
   });
 }
 

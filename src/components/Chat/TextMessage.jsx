@@ -11,13 +11,15 @@ import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers, sliceText } from "../../util/helpers";
 import images from "../../assets";
-import { add_reaction } from "../../api/message";
+import { add_reaction, delete_message } from "../../api/message";
+import { removeMessage } from "../../store/slice/message";
 
 import moment from "moment";
 import AudioInput from "./Audio/Render";
 
 const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   const [showReactEmojis, setShowReactEmojis] = useState(false);
+  const dispatch = useDispatch();
 
   const userId = JSON.parse(localStorage.getItem("userId"));
 
@@ -33,6 +35,15 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   const reaction = msg.reactions.find(
     (r) => r?.reactor?._id === userId
   )?.reaction;
+
+  const handleDelete = async () => {
+    try {
+      dispatch(removeMessage(msg._id));
+      await delete_message(space, msg._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex pb-5 hover:bg-slate-50 relative user-box">
@@ -105,25 +116,33 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           {showReactEmojis && (
             <div className="z-20 absolute top-9 right-[-4px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 ">
               <p
-                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "👍" ? "bg-gray-400" : ""}`}
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${
+                  reaction === "👍" ? "bg-gray-400" : ""
+                }`}
                 onClick={() => handleReact("👍")}
               >
                 👍
               </p>
               <p
-                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "😊" ? "bg-gray-400" : ""}`}
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${
+                  reaction === "😊" ? "bg-gray-400" : ""
+                }`}
                 onClick={() => handleReact("😊")}
               >
                 😊
               </p>
               <p
-                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "👎" ? "bg-gray-400" : ""}`}
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${
+                  reaction === "👎" ? "bg-gray-400" : ""
+                }`}
                 onClick={() => handleReact("👎")}
               >
                 👎
               </p>
               <p
-                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${reaction === "😎" ? "bg-gray-400" : ""}`}
+                className={`p-1 bg-gray-100 rounded-md cursor-pointer duration-200 hover:bg-gray-400 ${
+                  reaction === "😎" ? "bg-gray-400" : ""
+                }`}
                 onClick={() => handleReact("😎")}
               >
                 😎
@@ -138,14 +157,18 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           <VscCommentDiscussion />
           <p className="tooltip-text">Respond to this message</p>
         </div>
-        <div className="px-1.5 hover:text-teal-400 tooltip-box">
+        {/* <div className="px-1.5 hover:text-teal-400 tooltip-box">
           <MdModeEditOutline />
           <p className="tooltip-text">Edit message</p>
-        </div>
-        <div className="px-1.5 hover:text-teal-400 tooltip-box">
-          <MdClose />
-          <p className="tooltip-text">Delete</p>
-        </div>
+        </div> */}
+
+        {msg.sender._id === userId && (
+          <div className="px-1.5 hover:text-teal-400 tooltip-box">
+            <MdClose onClick={handleDelete} />
+            <p className="tooltip-text">Delete</p>
+          </div>
+        )}
+
         <div className="px-1 hover:text-teal-400 tooltip-box">
           <BsThreeDotsVertical />
           <p className="tooltip-text">Add as a quote</p>

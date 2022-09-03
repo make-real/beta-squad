@@ -15,6 +15,9 @@ export const messageSlice = createSlice({
     addSingleMessage: (state, { payload }) => {
       state.messages.push(payload);
     },
+    removeMessage: (state, { payload }) => {
+      state.messages = state.messages.filter((m) => m._id !== payload);
+    },
     addReaction: (state, { payload }) => {
       state.messages = state.messages.map((m) => {
         if (m._id === payload.messageId) {
@@ -39,7 +42,7 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { addBulkMessage, addSingleMessage, addReaction } =
+export const { addBulkMessage, addSingleMessage, addReaction, removeMessage } =
   messageSlice.actions;
 
 export default messageSlice.reducer;
