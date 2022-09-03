@@ -200,9 +200,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
       <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
         <div className="w-full h-full flex justify-center align-middle">
           <div
-            className={`w-full ${messageToRespond &&
+            className={`w-full ${
+              messageToRespond &&
               "border-[0.5px] border-[#2d4154] p-3 rounded-md"
-              }`}
+            }`}
           >
             {messageToRespond && (
               <div className="flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
@@ -218,8 +219,8 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                       }}
                     ></p>
                   ) : messageToRespond?.content?.attachments.some((i) =>
-                    i.includes("wav")
-                  ) ? (
+                      i.includes("wav")
+                    ) ? (
                     <p className="text-sm">Voice</p>
                   ) : (
                     <p className="text-sm">Image</p>
@@ -233,8 +234,6 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                 </div>
               </div>
             )}
-
-
 
             <div className="w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3">
               <MentionsInput

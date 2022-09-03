@@ -66,6 +66,15 @@ body {
 
 .msg-icons {
   opacity: 0;
+  transition: all .5s;
+}
+
+.reaction-wrapper {
+  transition: all .5s;
+}
+
+.user-box:hover .reaction-wrapper {
+  right: 190px;
 }
 
 .user-box:hover .msg-icons {

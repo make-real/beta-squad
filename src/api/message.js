@@ -12,3 +12,17 @@ export const send_message = (spaceID, data) => {
   const formData = toFormData(data);
   return useAxios.post(`/spaces/${spaceID}/chat/send-messages`, formData);
 };
+
+/**
+ * Add reaction to a message
+ * 
+ * @param {String} spaceID Target Space ID
+ * @param {String} messageID Target Message ID
+ * @param {String} emoji Reaction Emoji
+ * @returns Promise
+ */
+export const add_reaction = (spaceID, messageID, emoji) => {
+  return useAxios.put(`/spaces/${spaceID}/chat/${messageID}`, {
+    reaction: emoji,
+  });
+};
