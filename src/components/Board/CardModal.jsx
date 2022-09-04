@@ -15,8 +15,9 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import Dropdown from "../Dropdown";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
+import { toast } from "react-toastify";
+import Dropdown from "../Dropdown";
 
 
 const Progress = ({ progress, setProgress }) => {
@@ -63,9 +64,11 @@ const Progress = ({ progress, setProgress }) => {
 const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress }) => {
 
   const { updateCard } = useBoardCardContext();
-  const [values, setValues] = useState({ ...card });
+  const [values, setValues] = useState(card);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+
+  // console.log(values);
 
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
@@ -77,6 +80,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   });
 
   // console.log(card)
+  // console.log(tagsFromAPI)
 
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
@@ -118,30 +122,51 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   const handleAddTags = async (tag) => {
     // add for display at UI
-    setSetTagsIntoCard((pre) => [...pre, tag]);
+    // setSetTagsIntoCard((pre) => [...pre, tag]);
+    setValues((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
+    console.log(values)
 
     // remove from drop-down ui of tag's list
     setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
 
-    const cardTagObject = { ...card, tags: [...card.tags, tag] }
-
+    const cardTagObject = { ...values, tagId: tag._id }
+    // console.log(cardTagObject)
     try {
-      // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
-      console.log(data.updatedCard);
+
+      updateCard(listID, card._id, data.updatedCard);
     } catch (error) {
       console.log(error?.response?.data?.issue);
     }
-    updateCard(listID, card._id, cardTagObject);
-
   };
 
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
-  const handleDeleteTags = (tag) => {
-    setSetTagsIntoCard((pre) => pre.filter((data) => data?._id !== tag?._id));
+  const handleDeleteTags = async (tag) => {
+    // setSetTagsIntoCard((pre) => pre.filter((data) => data?._id !== tag?._id));
+    const cardValue = { ...values }
+
+    const cardTagRemoved = { ...cardValue, tags: cardValue.tags.filter(data => data?._id !== tag?._id) }
+    setValues(cardTagRemoved);
+
+    // { ...pre, tags: pre.tags.filter((data) => data?._id !== tag?._id) }
     setTagsFromAPI((pre) => [...pre, tag]);
+
+    // const cardTagObject = { ...values, tagId: tag._id }
+    console.log(cardTagRemoved);
+
+    try {
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagRemoved)
+
+      updateCard(listID, card._id, data.updatedCard);
+    } catch (error) {
+      // error for user at notification...
+      toast.error(error?.response?.data?.issue, { autoClose: 3000 });
+      console.log(error?.response?.data?.issue);
+    }
+
   };
+
 
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
@@ -151,7 +176,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     try {
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
-      setSetTagsIntoCard((pre) => [...pre, data.tag]);
+      // setSetTagsIntoCard((pre) => [...pre, data.tag]);
+      setValues((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
       setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
     } catch (error) {
       console.log(error)
@@ -204,30 +230,44 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           </div>
 
           <div className="flex items-center p-3 relative">
-            <DotsSingle
-              className="text-[#7088A1] cursor-pointer w-8 h-8 p-1 py-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
-              onClick={(e) => {
-                e.stopPropagation();
-                setModalActionToggling((pre) => !pre);
-              }}
+            <Dropdown
+              button={<DotsSingle
+                className="text-[#7088A1] cursor-pointer w-8 h-8 p-1 py-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
+              // onClick={(e) => {
+              //   e.stopPropagation();
+              //   setModalActionToggling((pre) => !pre);
+              // }}
+              />}
+              menu={
+                () => {
+                  return <CardSettingDropDown
+                    cardID={card._id}
+                    listID={listID}
+                    noteDone={noteDone}
+                    setNoteDone={setNoteDone}
+                    setModalActionToggling={setModalActionToggling}
+                  />
+                }
+              }
             />
+
             <Close
               className="text-[#7088A1] cursor-pointer w-8 h-8 p-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
               onClick={() => setBoardModal(false)}
             />
-
+            {/* 
             {
               // Little Action Menu for Board Modal
               modalActionToggling && (
-                <CardSettingDropDown
-                  cardID={card._id}
-                  listID={listID}
-                  noteDone={noteDone}
-                  setNoteDone={setNoteDone}
-                  setModalActionToggling={setModalActionToggling}
-                />
+                // <CardSettingDropDown
+                //   cardID={card._id}
+                //   listID={listID}
+                //   noteDone={noteDone}
+                //   setNoteDone={setNoteDone}
+                //   setModalActionToggling={setModalActionToggling}
+                // />
               )
-            }
+            } */}
           </div>
         </div>
 
@@ -268,7 +308,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             <div className="flex items-center flex-wrap gap-2 border border-transparent w-full rounded-md px-2 hover:border-gray-300 customScroll">
               {
                 // 🟨🟨🟨 Just Tag Display at Capsule Formate...
-                setTagsIntoCard.map((tag, i) => (
+                values?.tags?.map(tag => (
                   <span
                     key={tag?._id}
                     style={{ backgroundColor: tag.color }}

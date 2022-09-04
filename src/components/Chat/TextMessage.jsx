@@ -286,7 +286,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
             messages[messages?.length - 1]?.seen?.length + " seen"}
         </div>
 
-        <div className="">
+        <div className="flex gap-1">
           {messages[messages?.length - 1]?.seen.map((data) =>
             data?.avatar ? (
               <img
