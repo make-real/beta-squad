@@ -4,17 +4,22 @@ import { CardModal, CardSettingDropDown, CardChip } from ".";
 import { useEffect, useRef, useState } from "react";
 import Dropdown from "../Dropdown";
 import ConfirmDialog from "./ConfirmDialog";
+import { useSelector } from "react-redux";
+import { cardUpdateApiCall } from "../../hooks/useFetch";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
-  const { handleDragEnd, handleDragEnter } = useBoardCardContext();
+  const { handleDragEnd, handleDragEnter, updateCard } = useBoardCardContext();
   const [cardModal, setCardModal] = useState(false);
   const [noteDone, setNoteDone] = useState(false);
   const [visible, setVisible] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0 || card.progress);
+  const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
+  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
 
   const progressStatus = (progress) => {
     switch (progress) {
@@ -39,6 +44,22 @@ const Card = ({ card, listID }) => {
       setCardSettingDropDownToggle(false);
   };
 
+
+  useEffect(() => {
+    const cardProgressUpdate = async () => {
+      const cardTagObject = { ...card, progress: progress }
+      try {
+        const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
+        updateCard(listID, card._id, data.updatedCard);
+      } catch (error) {
+        console.log(error?.response?.data?.issue);
+      }
+    }
+    cardProgressUpdate()
+    // when progress change, call this update function... 
+  }, [progress])
+
+
   useEffect(() => {
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
@@ -56,7 +77,9 @@ const Card = ({ card, listID }) => {
         onMouseLeave={() => setVisible(false)}
         onDragEnd={() => handleDragEnd(listID, card._id)}
         onDragEnter={() => handleDragEnter(listID, card._id)}
-        className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 border-teal-600 cursor-grab hover:bg-gray-200 "
+        className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 cursor-grab hover:bg-gray-200 "
+        style={{ borderColor: selectedSpaceObj?.color }}
+
       >
         {(noteDone || progressStatus(progress) !== 0) && (
           <div className="px-1 pb-2">
