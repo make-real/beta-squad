@@ -96,16 +96,27 @@ export const spaceCreation = newSpaceObj => api.post('/spaces', newSpaceObj);
 
 // 🟨🟨🟨 Board List
 // POST ==> (Board) List Create --- under specific Space reference ID
-export const addBoardListApiCall = (spaceId, newBoardList) => api.post(`/spaces/${spaceId}/board`, newBoardList);
+export const addBoardListApiCall = (spaceId, newBoardList) =>
+    api.post(`/spaces/${spaceId}/board`, newBoardList);
 
 // DELETE ==> (Board) List --- under specific Space reference ID
-export const boardListDelete = (spaceId, listId) => api.delete(`/spaces/${spaceId}/board/${listId}`);
+export const boardListDelete = (spaceId, listId) =>
+    api.delete(`/spaces/${spaceId}/board/${listId}`);
 
 
 // 🟨🟨🟨 Card
 // POST ==> Card Create --- under specific Space reference ID + Board List ID
-export const addCardIntoBoardList = (spaceId, listId, newCard) => api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
+export const addCardIntoBoardList = (spaceId, listId, newCard) =>
+    api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
 
-export const cardDeleteApiCall = (spaceId, listId, cardId) => api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/delete`);
 
-export const cardUpdateApiCall = (spaceId, listId, cardId, cardObj) => api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj);
+export const cardDeleteApiCall = (spaceId, listId, cardId) =>
+    api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/delete`);
+
+
+export const cardUpdateApiCall = (spaceId, listId, cardId, cardObj) =>
+    api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj);
+
+
+export const createChecklistItem = (spaceId, listId, cardId, newCard) => 
+    api.post(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist`, newCard);
