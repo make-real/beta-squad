@@ -15,7 +15,7 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardUpdateApiCall } from "../../hooks/useFetch";
+import { cardUpdateApiCall, createChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 
@@ -63,30 +63,34 @@ const Progress = ({ progress, setProgress }) => {
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress }) => {
 
-  const { updateCard } = useBoardCardContext();
-  const [values, setValues] = useState(card);
+  const [localCard, setLocalCard] = useState(card);
+  const { updateCard, boardLists } = useBoardCardContext();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+  const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
-
-  // console.log(values);
+  const nameOfBoardList = boardLists.find(({ _id }) => _id === listID).name;
 
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
-  const [setTagsIntoCard, setSetTagsIntoCard] = useState([]);
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [createNewTag, setCreateNewTag] = useState({
     name: "",
     color: "#47b9ea",
   });
 
-  // console.log(card)
-  // console.log(tagsFromAPI)
+  const [checkListItem, setCheckListItem] = useState({
+    // id: Date.now() + Math.random(),
+    check: false,
+    content: '',
+  })
+
+  const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
 
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   // user esc key press Event Listener for closing modal...
   useEffect(() => {
-    const handleEscapeKeyPress = (e) => {
+    const handleEscapeKeyPress = e => {
       if (e.code === "Escape") setBoardModal(false);
     };
 
@@ -98,8 +102,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   // CardInfo Modal Data Update when user input new data...
   useEffect(
-    () => updateCard(listID, card._id, values),
-    [listID, card._id, values]
+    () => updateCard(listID, card._id, localCard),
+    [listID, card._id, localCard]
   );
 
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
@@ -122,15 +126,13 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   const handleAddTags = async (tag) => {
     // add for display at UI
-    // setSetTagsIntoCard((pre) => [...pre, tag]);
-    setValues((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
-    console.log(values)
+    setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
 
     // remove from drop-down ui of tag's list
     setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
 
-    const cardTagObject = { ...values, tagId: tag._id }
-    // console.log(cardTagObject)
+    const cardTagObject = { ...localCard, tagId: tag._id }
+
     try {
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
 
@@ -143,17 +145,15 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   const handleDeleteTags = async (tag) => {
-    // setSetTagsIntoCard((pre) => pre.filter((data) => data?._id !== tag?._id));
-    const cardValue = { ...values }
 
-    const cardTagRemoved = { ...cardValue, tags: cardValue.tags.filter(data => data?._id !== tag?._id) }
-    setValues(cardTagRemoved);
+    // add for display at UI
+    setLocalCard((pre) => ({ ...pre, tags: pre.tags.filter(({ _id }) => _id !== tag._id) }));
 
-    // { ...pre, tags: pre.tags.filter((data) => data?._id !== tag?._id) }
+    // remove from drop-down ui of tag's list
     setTagsFromAPI((pre) => [...pre, tag]);
 
-    // const cardTagObject = { ...values, tagId: tag._id }
-    console.log(cardTagRemoved);
+    const tempTagObject = { ...localCard }
+    const cardTagRemoved = { ...tempTagObject, removeTagId: tag._id }
 
     try {
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagRemoved)
@@ -167,7 +167,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   };
 
-
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
 
   const handleNewTagCreation = async (e) => {
@@ -177,7 +176,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
       // setSetTagsIntoCard((pre) => [...pre, data.tag]);
-      setValues((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
+      setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
       setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
     } catch (error) {
       console.log(error)
@@ -189,7 +188,93 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     // clear input field
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
   };
+
   // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+
+  const debounceHandler = (fun, delay) => {
+    let timeOutId;
+    return (...arg) => {
+      clearTimeout(timeOutId);
+      timeOutId = setTimeout(() => {
+        fun(...arg)
+      }, delay);
+    }
+  }
+
+  const getCardName = (cardName) => {
+    setLocalCard(pre => ({ ...pre, name: cardName }));
+   
+  }
+
+  const deBounceGetCardName = debounceHandler(getCardName, 1000);
+
+  // handle keyBoard enter button press
+  const handle_card_name_update_enter_btn = async (e) => {
+    if (e.key === 'Enter') {
+      const cardTagObject = { ...localCard, name: localCard.name };
+
+      try {
+        const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
+        if (data.updatedCard._id) {
+          toast.success(`Card name updated`, { autoClose: 2000 });
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.issue);
+      }
+    };
+  }
+
+  const handle_card_description_update_enter_btn = async (e) => {
+    if (e.key === 'Enter') {
+      const cardTagObject = { ...localCard, description: localCard.description };
+
+      try {
+        const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
+        if (data.updatedCard._id) {
+          toast.success(`Description updated`, { autoClose: 2000 });
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.issue);
+      }
+    };
+  }
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+
+  const handleCreateCheckList = () => {
+    setNewCheckListItemJSX(true);
+  }
+
+  const handle_check_list_item_enter_btn = async e => {
+
+    if (e.key === 'Enter') {
+
+      const cardValue = { ...localCard }
+
+      const checkListItemObj = { ...checkListItem }
+
+      const cardCheckList = { ...cardValue, checkList: [...cardValue.checkList, checkListItemObj] }
+
+      setLocalCard(cardCheckList);
+
+      try {
+        await createChecklistItem(selectedSpaceId, listID, card._id, checkListItemObj)
+      } catch (error) {
+        console.log(error.response.data.issue)
+      }
+      setCheckListItem({ check: false, content: '', });
+    }
+
+  }
+
+
+  const handleCheckListChange = e => {
+    const { checked, name, value } = e.target;
+    setCheckListItem(pre => ({ ...pre, [name]: [name].includes('content') ? value : checked }));
+  }
+
+
 
 
   return (
@@ -276,23 +361,26 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           <div className="flex items-center justify-between p-4 text-gray-400 ">
             <div className="flex items-center space-x-4">
               <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
-                Space Clone
+                {selectedSpace.name}
               </span>
               <ArrowRight />
               <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
-                Taiseen Vai
+                {nameOfBoardList}
               </span>
             </div>
 
             <div className="text-xs font-bold cursor-pointer hover:text-teal-500">
-              MOVE TO NEXT LIST
+              {/* MOVE TO NEXT LIST */}
             </div>
           </div>
 
           <div className="p-3">
             <input
               type="text"
-              defaultValue={card?.name}
+              value={card?.name}
+              // onChange={e => deBounceGetCardName(e.target.value)}
+              onChange={e => setLocalCard(pre => ({ ...pre, name: e.target.value }))}
+              onKeyDown={handle_card_name_update_enter_btn}
               className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"
             />
           </div>
@@ -308,7 +396,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             <div className="flex items-center flex-wrap gap-2 border border-transparent w-full rounded-md px-2 hover:border-gray-300 customScroll">
               {
                 // 🟨🟨🟨 Just Tag Display at Capsule Formate...
-                values?.tags?.map(tag => (
+                localCard?.tags?.map(tag => (
                   <span
                     key={tag?._id}
                     style={{ backgroundColor: tag.color }}
@@ -372,7 +460,10 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
             <input
               type="text"
-              className="w-[85%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md"
+              className="w-[85%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md text-gray-600"
+              value={card?.description}
+              onChange={e => setLocalCard(pre => ({ ...pre, description: e.target.value }))}
+              onKeyDown={handle_card_description_update_enter_btn}
             />
           </div>
 
@@ -381,6 +472,69 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
               <span>Checklist</span>
             </div>
+
+            <div className="space-y-2">
+              {
+                localCard?.checkList?.length > 0 &&
+                localCard?.checkList?.map((item, i) => (
+                  <div className="flex items-center justify-between px-8" key={i}>
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 cursor-pointer"
+                      checked={item.check}
+                      onChange={e => setLocalCard(pre => ({
+                        ...pre,
+                        checkList: pre.checkList.map((item, idx) => idx === i
+                          ? { ...item, check: e.target.checked }
+                          : item
+                        )
+                      }))}
+                    />
+                    <input
+                      type="text"
+                      value={item.content}
+                      onChange={e => setLocalCard(pre => ({
+                        ...pre,
+                        checkList: pre.checkList.map((item, idx) => idx === i
+                          ? { ...item, content: e.target.value }
+                          : item
+                        )
+                      }))}
+                      className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                    />
+                    <DotsSingle />
+                  </div>
+                ))
+              }
+
+              {
+                newCheckListItemJSX &&
+                <div className="flex items-center justify-between px-8">
+                  <input
+                    type="checkbox"
+                    name="check"
+                    className="w-4 h-4 cursor-pointer"
+                    checked={checkListItem.check}
+                    onChange={handleCheckListChange}
+                  />
+                  <input
+                    type="text"
+                    name="content"
+                    value={checkListItem.content}
+                    onChange={handleCheckListChange}
+                    onKeyDown={handle_check_list_item_enter_btn}
+                    className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                  />
+                  <DotsSingle />
+                </div>
+              }
+
+
+              <p className="text-[#B9C3CE] px-3 py-2 rounded-md bg-slate-100 inline-block mt-2 ml-4 cursor-pointer hover:bg-slate-200 duration-150" onClick={handleCreateCheckList}>
+                Add item to check ist
+              </p>
+            </div>
+
           </div>
 
           <div className="my-8 ml-4 ">

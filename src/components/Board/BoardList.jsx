@@ -16,6 +16,7 @@ const BoardList = ({ boardList }) => {
 
   const { addCard } = useBoardCardContext();
 
+  console.log(boardList);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,6 +60,7 @@ const BoardList = ({ boardList }) => {
       toast.error(error?.response?.data?.issue?.message, { autoClose: 3000 });
     }
   };
+
 
   return (
     <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>

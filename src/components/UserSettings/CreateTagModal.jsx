@@ -12,6 +12,7 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
   const { setThemeColor } = useStyleContext();
   const [loading, setLoading] = useState(false);
   const [clickColorBox, setClickColorBox] = useState(tag.color);
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
 
   useEffect(() => {
     const handleEscapeKeyPress = (e) => {
@@ -27,12 +28,25 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
 
     try {
       setLoading(true);
-      tag.tagId ? await edit_tag(tag) : await create_tag(tag);
-      onUpdate();
+      // tag.tagId
+      //   ? await edit_tag({ workSpaceId: userSelectedWorkSpaceId, tagId: tag.tagId, name: tag.name, color: tag.color })
+      //   : await create_tag({ workSpaceId: userSelectedWorkSpaceId, name: tag.name, color: tag.color });
+      
       setLoading(false);
+
+      if (tag.tagId) {
+        await edit_tag({ workSpaceId: userSelectedWorkSpaceId, tagId: tag.tagId, name: tag.name, color: tag.color })
+        toast.success('Tag Name Updated...', { autoClose: 2000 });
+      } else {
+        await create_tag({ workSpaceId: userSelectedWorkSpaceId, name: tag.name, color: tag.color });
+        toast.success('New Tag Created...', { autoClose: 2000 });
+      }
+
+      onUpdate();
+
     } catch (error) {
       setLoading(false);
-      toast.error(error?.response?.data?.issue?.name, { autoClose: 3000 });
+      toast.error(error?.message, { autoClose: 2000 });
     }
     setCreateSpaceModal(false);
   };
@@ -80,9 +94,8 @@ const CreateTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
                 <div
                   key={hexColorCode}
                   style={{ backgroundColor: hexColorCode }}
-                  className={`${
-                    clickColorBox === hexColorCode ? "w-12 h-12" : "w-7 h-7"
-                  } transition duration-200 rounded-full cursor-pointer`}
+                  className={`${clickColorBox === hexColorCode ? "w-12 h-12" : "w-7 h-7"
+                    } transition duration-200 rounded-full cursor-pointer`}
                   onClick={() => {
                     setClickColorBox(hexColorCode);
                     setThemeColor(hexColorCode);

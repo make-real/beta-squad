@@ -9,6 +9,7 @@ import { cardUpdateApiCall } from "../../hooks/useFetch";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
+  
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
   const { handleDragEnd, handleDragEnter, updateCard } = useBoardCardContext();
