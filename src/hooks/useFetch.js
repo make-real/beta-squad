@@ -118,5 +118,17 @@ export const cardUpdateApiCall = (spaceId, listId, cardId, cardObj) =>
     api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj);
 
 
-export const createChecklistItem = (spaceId, listId, cardId, newCard) => 
-    api.post(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist`, newCard);
+export const createChecklistItem = (spaceId, listId, cardId, newChecklist) =>
+    api.post(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist`, newChecklist);
+
+
+export const updateChecklistItem = (spaceId, listId, cardId, checklistId, updatedChecklist) =>
+    api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`, updatedChecklist);
+
+
+export const deleteChecklistItem = (spaceId, listId, cardId, checklistId) =>
+    api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`);
+
+
+
+

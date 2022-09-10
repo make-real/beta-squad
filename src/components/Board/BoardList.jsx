@@ -11,12 +11,12 @@ import useAxios from "../../api";
 import "tippy.js/dist/tippy.css";
 
 const BoardList = ({ boardList }) => {
+
   const dropDownRef = useRef();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const { addCard } = useBoardCardContext();
 
-  console.log(boardList);
   useEffect(() => {
     const fetchData = async () => {
       try {
