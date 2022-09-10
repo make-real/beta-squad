@@ -15,7 +15,7 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardUpdateApiCall, createChecklistItem } from "../../hooks/useFetch";
+import { cardUpdateApiCall, createChecklistItem, deleteChecklistItem, updateChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 
@@ -72,22 +72,24 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
+  const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
   const [modalActionToggling, setModalActionToggling] = useState(false);
+  const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
   const [createNewTag, setCreateNewTag] = useState({
     name: "",
     color: "#47b9ea",
   });
 
   const [checkListItem, setCheckListItem] = useState({
-    // id: Date.now() + Math.random(),
-    check: false,
+    checked: false,
     content: '',
   })
 
-  const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+  // get user img from user info, which store at local storage...
+  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
+  // 🟩🟩🟩
   // user esc key press Event Listener for closing modal...
   useEffect(() => {
     const handleEscapeKeyPress = e => {
@@ -98,16 +100,14 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     return () => document.removeEventListener("keydown", handleEscapeKeyPress);
   }, [setBoardModal]);
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // 🟩🟩🟩
   // CardInfo Modal Data Update when user input new data...
   useEffect(
     () => updateCard(listID, card._id, localCard),
     [listID, card._id, localCard]
   );
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // 🟩🟩🟩
   useEffect(() => {
     const getTags = async () => {
       try {
@@ -122,8 +122,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     getTags();
   }, [userSelectedWorkSpaceId, createNewTag]);
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // 🟩🟩🟩
   const handleAddTags = async (tag) => {
     // add for display at UI
     setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
@@ -142,8 +141,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     }
   };
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // 🟥🟥🟥
   const handleDeleteTags = async (tag) => {
 
     // add for display at UI
@@ -167,8 +165,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   };
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // 🟩🟩🟩
   const handleNewTagCreation = async (e) => {
     e.preventDefault();
 
@@ -189,26 +186,26 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
   };
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+  // 🟩🟩🟩
+  // const debounceHandler = (fun, delay) => {
+  //   let timeOutId;
+  //   return (...arg) => {
+  //     clearTimeout(timeOutId);
+  //     timeOutId = setTimeout(() => {
+  //       fun(...arg)
+  //     }, delay);
+  //   }
+  // }
+
+  // const getCardName = (cardName) => {
+  //   setLocalCard(pre => ({ ...pre, name: cardName }));
+
+  // }
+
+  // const deBounceGetCardName = debounceHandler(getCardName, 1000);
 
 
-  const debounceHandler = (fun, delay) => {
-    let timeOutId;
-    return (...arg) => {
-      clearTimeout(timeOutId);
-      timeOutId = setTimeout(() => {
-        fun(...arg)
-      }, delay);
-    }
-  }
-
-  const getCardName = (cardName) => {
-    setLocalCard(pre => ({ ...pre, name: cardName }));
-   
-  }
-
-  const deBounceGetCardName = debounceHandler(getCardName, 1000);
-
+  // 🟩🟩🟩
   // handle keyBoard enter button press
   const handle_card_name_update_enter_btn = async (e) => {
     if (e.key === 'Enter') {
@@ -225,6 +222,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     };
   }
 
+  // 🟩🟩🟩
   const handle_card_description_update_enter_btn = async (e) => {
     if (e.key === 'Enter') {
       const cardTagObject = { ...localCard, description: localCard.description };
@@ -240,12 +238,12 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     };
   }
 
-  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
-
+  // ✅✅✅
   const handleCreateCheckList = () => {
     setNewCheckListItemJSX(true);
   }
 
+  // ✅✅✅
   const handle_check_list_item_enter_btn = async e => {
 
     if (e.key === 'Enter') {
@@ -257,13 +255,15 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       const cardCheckList = { ...cardValue, checkList: [...cardValue.checkList, checkListItemObj] }
 
       setLocalCard(cardCheckList);
-
+      console.log(cardCheckList);
       try {
         await createChecklistItem(selectedSpaceId, listID, card._id, checkListItemObj)
       } catch (error) {
         console.log(error.response.data.issue)
       }
-      setCheckListItem({ check: false, content: '', });
+
+      // const resetCheckListItem = { checked: '', content: '' };
+      setCheckListItem({ checked: '' , content: '' });
     }
 
   }
@@ -274,6 +274,62 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     setCheckListItem(pre => ({ ...pre, [name]: [name].includes('content') ? value : checked }));
   }
 
+  // ✅✅✅
+  const handleCheckListUpdateOnChange = async (e, itemId) => {
+
+    let updatedCheckList;
+    const { type } = e.target;
+    const tempCard = { ...localCard };
+
+    if (type === 'checkbox') {
+      updatedCheckList = {
+        ...tempCard,
+        checkList: tempCard.checkList.map(item => item?._id === itemId
+          ? { ...item, checked: e.target.checked }
+          : item
+        )
+      }
+    } else {
+      updatedCheckList = {
+        ...tempCard,
+        checkList: tempCard.checkList.map(item => item?._id === itemId
+          ? { ...item, content: e.target.value }
+          : item
+        )
+      }
+    }
+
+    setLocalCard(updatedCheckList);
+    const updatedCheckListItemObj = updatedCheckList?.checkList?.find(({ _id }) => _id === itemId)
+
+    console.log(updatedCheckListItemObj);
+
+    try {
+      await updateChecklistItem(selectedSpaceId, listID, card._id, itemId, updatedCheckListItemObj);
+    } catch (error) {
+      console.log(error?.response?.data?.issue?.message);
+    }
+
+  }
+
+  // 🟥🟥🟥
+  const handleRemoveCheckListItem = async (itemId) => {
+    const tempCard = { ...localCard };
+
+    const updatedCheckList = {
+      ...tempCard,
+      checkList: tempCard.checkList.filter(item => item._id !== itemId)
+    }
+    // updating ui...
+    setLocalCard(updatedCheckList);
+
+    try {
+      const { data } = await deleteChecklistItem(selectedSpaceId, listID, card._id, itemId);
+      toast.success(data?.message, { autoClose: 2000 });
+    } catch (error) {
+      console.log(error?.response?.data?.issue?.message);
+    }
+  }
 
 
 
@@ -299,19 +355,46 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               <Progress progress={progress} setProgress={setProgress} />
             </div>
 
-            <div className="flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
-              <UserPlus />
-              <span>Assignee</span>
+            <div className="relative flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
+              <div onClick={() => setOpenAssigneeModal(pre => !pre)} className='flex gap-2'>
+                <UserPlus />
+                <span>Assignee</span>
+              </div>
+
+              {
+                openAssigneeModal &&
+                <div className="absolute top-14 left-[50%] translate-x-[-50%]  w-[450px] h-[500px] bg-gray-200 rounded-md z-50 shadow-lg
+                before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-gray-200 before:w-7 before:h-7"
+                >
+                  <div className="flex py-3 px-4 items-center justify-between text-gray-600">
+                    <p>Assign user to card</p>
+                    <p className="px-2 py-1 cursor-pointer hover:bg-gray-400 duration-300 rounded-md">Assign yourself</p>
+                  </div>
+
+                  <div className="px-4">
+                    <input type="text" name="" id="" className="w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150" />
+                  </div>
+
+                  <div className="mt-2 px-2">
+
+                    <div className="relative flex items-center px-2.5 py-2 hover:bg-gray-100 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2">
+                      <img src={userImg} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                      <span>taiseen</span>
+
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
 
-            <div className="flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl">
+            {/* <div className="flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl">
               <EyeOpen width="22" height="22" />
               <span>Follow</span>
             </div>
 
             <div className="cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl">
               Start - Due
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center p-3 relative">
@@ -475,46 +558,51 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
             <div className="space-y-2">
               {
+                // check list print/display
+                // ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
                 localCard?.checkList?.length > 0 &&
-                localCard?.checkList?.map((item, i) => (
-                  <div className="flex items-center justify-between px-8" key={i}>
+                localCard?.checkList?.map(item => (
+                  <div className="flex items-center justify-between px-8" key={item._id}>
                     <input
                       type="checkbox"
                       className="w-4 h-4 cursor-pointer"
-                      checked={item.check}
-                      onChange={e => setLocalCard(pre => ({
-                        ...pre,
-                        checkList: pre.checkList.map((item, idx) => idx === i
-                          ? { ...item, check: e.target.checked }
-                          : item
-                        )
-                      }))}
+                      // checked={item.checked}
+                      defaultChecked={item.checked}
+                      onChange={(e) => handleCheckListUpdateOnChange(e, item._id)}
                     />
                     <input
                       type="text"
                       value={item.content}
-                      onChange={e => setLocalCard(pre => ({
-                        ...pre,
-                        checkList: pre.checkList.map((item, idx) => idx === i
-                          ? { ...item, content: e.target.value }
-                          : item
-                        )
-                      }))}
+                      onChange={(e) => handleCheckListUpdateOnChange(e, item._id)}
                       className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                     />
-                    <DotsSingle />
+                    <div className="relative group cursor-pointer px-2 hover:text-red-400">
+                      <DotsSingle />
+                      <div className="absolute top-[-22px] left-5 hidden group-hover:block bg-gray-200 px-3 py-1 rounded-md">
+
+                        <p
+                          className="hover:text-red-500 duration-200 hover:underline text-black"
+                          onClick={() => handleRemoveCheckListItem(item._id)}>Delete</p>
+
+                        <p className="text-black">Assign</p>
+
+                      </div>
+                    </div>
                   </div>
                 ))
               }
 
               {
+                // check list input
+                // ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
                 newCheckListItemJSX &&
                 <div className="flex items-center justify-between px-8">
                   <input
                     type="checkbox"
                     name="check"
                     className="w-4 h-4 cursor-pointer"
-                    checked={checkListItem.check}
+                    // value={checkListItem.checked}
+                    checked={checkListItem.checked}
                     onChange={handleCheckListChange}
                   />
                   <input
@@ -525,7 +613,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                     onKeyDown={handle_check_list_item_enter_btn}
                     className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                   />
-                  <DotsSingle />
+                  <div className="px-2 cursor-pointer hover:text-red-400">
+                    <DotsSingle />
+                  </div>
                 </div>
               }
 
@@ -538,11 +628,11 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           </div>
 
           <div className="my-8 ml-4 ">
-            <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+            <label htmlFor="file" className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
-              <label htmlFor="file">Attachments</label>
+              Attachments
               <input type="file" id="file" className="hidden" />
-            </div>
+            </label>
           </div>
         </div>
 
