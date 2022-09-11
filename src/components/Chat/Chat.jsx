@@ -1,7 +1,7 @@
 import { useStyleContext } from "../../context/StyleContext";
 import TextMessage from "./TextMessage";
 import MessageBox from "./MessageBox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Chat = () => {
   const { margin } = useStyleContext();

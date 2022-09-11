@@ -57,7 +57,7 @@ const Card = ({ card, listID }) => {
     }
     cardProgressUpdate()
     // when progress change, call this update function... 
-  }, [progress, selectedSpaceId, listID, card._id, card])
+  }, [progress])
 
 
   useEffect(() => {

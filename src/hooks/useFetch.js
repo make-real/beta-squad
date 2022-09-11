@@ -118,6 +118,10 @@ export const cardUpdateApiCall = (spaceId, listId, cardId, cardObj) =>
     api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj);
 
 
+export const cardAttachmentUpdateApiCall = (spaceId, listId, cardId, cardObj) =>
+    api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj, { headers: { 'Content-Type': 'multipart/form-data' } });
+
+
 export const createChecklistItem = (spaceId, listId, cardId, newChecklist) =>
     api.post(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist`, newChecklist);
 
@@ -129,4 +133,5 @@ export const updateChecklistItem = (spaceId, listId, cardId, checklistId, update
 export const deleteChecklistItem = (spaceId, listId, cardId, checklistId) =>
     api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`);
 
+    
 export const getAllUser = () => api.get('/users');
