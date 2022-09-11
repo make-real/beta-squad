@@ -129,6 +129,4 @@ export const updateChecklistItem = (spaceId, listId, cardId, checklistId, update
 export const deleteChecklistItem = (spaceId, listId, cardId, checklistId) =>
     api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`);
 
-
-
-
+export const getAllUser = () => api.get('/users');

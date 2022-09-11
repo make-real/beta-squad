@@ -9,7 +9,7 @@ import { cardUpdateApiCall } from "../../hooks/useFetch";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
-  
+
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] = useState(false);
   const { handleDragEnd, handleDragEnter, updateCard } = useBoardCardContext();
@@ -38,7 +38,6 @@ const Card = ({ card, listID }) => {
   }
 
 
-
   const handleClick = (e) => {
     // track out-side of click... & close setting drop down div...
     if (!dropDownRef?.current?.contains(e.target))
@@ -58,7 +57,7 @@ const Card = ({ card, listID }) => {
     }
     cardProgressUpdate()
     // when progress change, call this update function... 
-  }, [progress])
+  }, [progress, selectedSpaceId, listID, card._id, card])
 
 
   useEffect(() => {
@@ -152,19 +151,44 @@ const Card = ({ card, listID }) => {
                     👍 <span className='text-black'>1</span>
                 </div> */}
 
-          <div className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200' onClick={e => { e.stopPropagation(); setShowEmoji(pre => !pre) }}>
-
+          <div 
+          className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200' 
+          onClick={e => { e.stopPropagation(); setShowEmoji(pre => !pre) }}
+          >
             <Plus width="12" height="12" className='mr-[2px]' />
             <Smile />
           </div>
 
           {
             showEmoji &&
-            <div className="z-20 absolute top-10 right-[-2px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 ">
-              <p className="p-1 bg-gray-100 rounded-md">👍</p>
-              <p className="p-1 bg-gray-100 rounded-md">😊</p>
-              <p className="p-1 bg-gray-100 rounded-md">👎</p>
-              <p className="p-1 bg-gray-100 rounded-md">😎</p>
+            <div 
+            className="z-20 absolute top-10 right-[-2px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 cursor-pointer" 
+            onClick={e => { e.stopPropagation() }}
+            >
+              <p 
+              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+              onClick={()=>setShowEmoji(false) }
+              >
+                👍
+              </p>
+              <p 
+              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+              onClick={()=>setShowEmoji(false) }
+              >
+                😊
+              </p>
+              <p 
+              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+              onClick={()=>setShowEmoji(false) }
+              >
+                👎
+              </p>
+              <p 
+              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+              onClick={()=>setShowEmoji(false) }
+              >
+                😎
+              </p>
             </div>
           }
         </div>

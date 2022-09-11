@@ -15,9 +15,10 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardUpdateApiCall, createChecklistItem, deleteChecklistItem, updateChecklistItem } from "../../hooks/useFetch";
+import { cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, updateChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
+import { toFormData } from "../../util/helpers";
 
 
 const Progress = ({ progress, setProgress }) => {
@@ -65,6 +66,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   const [localCard, setLocalCard] = useState(card);
   const { updateCard, boardLists } = useBoardCardContext();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
@@ -73,8 +75,12 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
   const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
+  const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
+  const [allUserForAssignee, setAllUserForAssignee] = useState([]);
+  const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
+  const [attachFiles, setAttachFiles] = useState([]);
   const [createNewTag, setCreateNewTag] = useState({
     name: "",
     color: "#47b9ea",
@@ -86,8 +92,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   })
 
 
-  // get user img from user info, which store at local storage...
-  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
   // 🟩🟩🟩
   // user esc key press Event Listener for closing modal...
@@ -122,8 +126,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     getTags();
   }, [userSelectedWorkSpaceId, createNewTag]);
 
+
   // 🟩🟩🟩
-  const handleAddTags = async (tag) => {
+  const handle_add_tags = async (tag) => {
     // add for display at UI
     setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
 
@@ -142,7 +147,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   };
 
   // 🟥🟥🟥
-  const handleDeleteTags = async (tag) => {
+  const handle_delete_tags = async (tag) => {
 
     // add for display at UI
     setLocalCard((pre) => ({ ...pre, tags: pre.tags.filter(({ _id }) => _id !== tag._id) }));
@@ -166,13 +171,12 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   };
 
   // 🟩🟩🟩
-  const handleNewTagCreation = async (e) => {
+  const handle_new_tag_creation = async (e) => {
     e.preventDefault();
 
     try {
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
-      // setSetTagsIntoCard((pre) => [...pre, data.tag]);
       setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
       setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
     } catch (error) {
@@ -239,7 +243,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // ✅✅✅
-  const handleCreateCheckList = () => {
+  const handle_create_check_list = () => {
     setNewCheckListItemJSX(true);
   }
 
@@ -255,27 +259,26 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       const cardCheckList = { ...cardValue, checkList: [...cardValue.checkList, checkListItemObj] }
 
       setLocalCard(cardCheckList);
-      console.log(cardCheckList);
+
       try {
         await createChecklistItem(selectedSpaceId, listID, card._id, checkListItemObj)
       } catch (error) {
         console.log(error.response.data.issue)
       }
 
-      // const resetCheckListItem = { checked: '', content: '' };
-      setCheckListItem({ checked: '' , content: '' });
+      setCheckListItem({ checked: '', content: '' });
     }
 
   }
 
-
-  const handleCheckListChange = e => {
+  // ✅✅✅
+  const handle_check_list_change = e => {
     const { checked, name, value } = e.target;
     setCheckListItem(pre => ({ ...pre, [name]: [name].includes('content') ? value : checked }));
   }
 
   // ✅✅✅
-  const handleCheckListUpdateOnChange = async (e, itemId) => {
+  const handle_check_list_update_on_change = async (e, itemId) => {
 
     let updatedCheckList;
     const { type } = e.target;
@@ -299,10 +302,11 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       }
     }
 
+    // update UI
     setLocalCard(updatedCheckList);
-    const updatedCheckListItemObj = updatedCheckList?.checkList?.find(({ _id }) => _id === itemId)
 
-    console.log(updatedCheckListItemObj);
+    // updated object send at server
+    const updatedCheckListItemObj = updatedCheckList?.checkList?.find(({ _id }) => _id === itemId)
 
     try {
       await updateChecklistItem(selectedSpaceId, listID, card._id, itemId, updatedCheckListItemObj);
@@ -313,7 +317,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // 🟥🟥🟥
-  const handleRemoveCheckListItem = async (itemId) => {
+  const handle_remove_check_list_item = async (itemId) => {
     const tempCard = { ...localCard };
 
     const updatedCheckList = {
@@ -331,7 +335,69 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     }
   }
 
+  // 🟩🟩🟩
+  const handle_card_attachments = async e => {
+    // const filesList = e.target.files
+    // const filesArray = Array.from(filesList)
+    // // console.log(filesArray);
+    // // const readFiles = filesArray.map(file => URL.createObjectURL(file));
 
+    // const readFiles = filesArray.map(file => toFormData(file));
+    // console.log(readFiles);
+    const file = e.target.files[0];
+    const formData = toFormData({ file: file });
+    const tempCard = { ...localCard }
+    const tempAttachment = [...attachFiles, formData]
+
+    // setAttachFiles(tempAttachment)
+
+    const updateCardWithAttachFile = { ...tempCard, attachments: [...tempCard.attachments, formData] }
+
+    setLocalCard(updateCardWithAttachFile);
+
+    try {
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, updateCardWithAttachFile);
+
+      console.log(data);
+
+    } catch (error) {
+      console.log(error?.response?.data?.issue);
+    }
+
+  }
+
+  // 🟩🟩🟩
+  const handle_open_assignee_modal = async (e) => {
+
+    setOpenAssigneeModal(pre => !pre)
+
+    try {
+      if (!openAssigneeModal) {
+        const { data } = await getAllUser();
+        setAllUserForAssignee(data.users)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 🟩🟩🟩
+  const handle_add_assignee_users = (user) => {
+    setAssigneeUsers(pre => ([...pre, user]));
+    setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
+
+  }
+
+  // 🟥🟥🟥
+  const handle_remove_assignee_users = (user) => {
+    setAssigneeUsers(pre => pre.filter(({ _id }) => _id !== user._id));
+    setAllUserForAssignee(pre => ([user, ...pre]));
+
+
+  }
+
+
+  const getFileName = file => file.name;
 
   return (
     <section
@@ -347,7 +413,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
             <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200">
               <RightOK />
-              <span>Done</span>
+              <span onClick={() => setProgress(pre => pre === 100 ? 0 : 100)}>Done</span>
             </div>
 
             <div className="flex items-center space-x-2 px-3 pl-4">
@@ -355,16 +421,17 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               <Progress progress={progress} setProgress={setProgress} />
             </div>
 
+            {/* 🟨🟨🟨🟨🟨🟨 Assignee Section 🟨🟨🟨🟨🟨🟨 */}
             <div className="relative flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
-              <div onClick={() => setOpenAssigneeModal(pre => !pre)} className='flex gap-2'>
+              <div onClick={handle_open_assignee_modal} className='flex gap-2'>
                 <UserPlus />
                 <span>Assignee</span>
               </div>
 
               {
                 openAssigneeModal &&
-                <div className="absolute top-14 left-[50%] translate-x-[-50%]  w-[450px] h-[500px] bg-gray-200 rounded-md z-50 shadow-lg
-                before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-gray-200 before:w-7 before:h-7"
+                <div className="absolute top-14 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-lg
+                before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
                 >
                   <div className="flex py-3 px-4 items-center justify-between text-gray-600">
                     <p>Assign user to card</p>
@@ -372,17 +439,55 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                   </div>
 
                   <div className="px-4">
-                    <input type="text" name="" id="" className="w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150" />
+                    <input
+                      type="text"
+                      value={searchUserForAssignee}
+                      onChange={e => setSearchUserForAssignee(e.target.value)}
+                      className="text-black w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150"
+                    />
                   </div>
 
-                  <div className="mt-2 px-2">
-
-                    <div className="relative flex items-center px-2.5 py-2 hover:bg-gray-100 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2">
-                      <img src={userImg} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
-                      <span>taiseen</span>
-
+                  {
+                    assigneeUsers?.length > 0 &&
+                    <div className="mt-2 px-2">
+                      <p className="text-black py-1">Already assigned</p>
+                      {
+                        assigneeUsers?.map(user =>
+                          <div
+                            key={user?._id}
+                            className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['X'] after:absolute after:text-themeColor after:right-4"
+                            onClick={() => handle_remove_assignee_users(user)}
+                          >
+                            <img src={userInfo.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                            <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
+                          </div>
+                        )
+                      }
                     </div>
-                  </div>
+                  }
+
+                  {
+                    // Just Print List of users
+                    // ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+                    allUserForAssignee?.length > 0 &&
+                    <div className="mt-2 px-2 overflow-y-auto h-[350px] customScroll">
+                      <p className="text-black py-1">Not assigned</p>
+                      {
+                        allUserForAssignee
+                          ?.filter(user => user.fullName?.toLowerCase()?.includes(searchUserForAssignee?.toLowerCase()))
+                          ?.map(user =>
+                            <div
+                              key={user?._id}
+                              className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
+                              onClick={() => handle_add_assignee_users(user)}
+                            >
+                              <img src={userInfo.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                              <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
+                            </div>
+                          )
+                      }
+                    </div>
+                  }
                 </div>
               }
             </div>
@@ -484,14 +589,14 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                     key={tag?._id}
                     style={{ backgroundColor: tag.color }}
                     className={`px-2 py-1 text-white cursor-pointer rounded-full`}
-                    onClick={() => handleDeleteTags(tag)}
+                    onClick={() => handle_delete_tags(tag)}
                   >
                     {tag.name}
                   </span>
                 ))
               }
               {tagsFromAPI.length > 0 ? (
-                <form onSubmit={handleNewTagCreation}>
+                <form onSubmit={handle_new_tag_creation}>
                   <input
                     type="text"
                     placeholder="Add a tag..."
@@ -515,10 +620,10 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                 <div className="max-h-[255px] overflow-y-auto absolute top-[60px] left-[60px] right-0 flex flex-col text-gray-100 shadow-2xl bg-white customScroll">
                   {tagsFromAPI.map((tag, i) => (
                     <div
-                      key={tag?._id}
+                      key={i}
                       onClick={() => {
                         setShowTags(false);
-                        handleAddTags(tag);
+                        handle_add_tags(tag);
                       }}
                       className="pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer"
                     >
@@ -563,26 +668,31 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                 localCard?.checkList?.length > 0 &&
                 localCard?.checkList?.map(item => (
                   <div className="flex items-center justify-between px-8" key={item._id}>
+
                     <input
                       type="checkbox"
                       className="w-4 h-4 cursor-pointer"
-                      // checked={item.checked}
                       defaultChecked={item.checked}
-                      onChange={(e) => handleCheckListUpdateOnChange(e, item._id)}
+                      onChange={(e) => handle_check_list_update_on_change(e, item._id)}
                     />
+
                     <input
                       type="text"
                       value={item.content}
-                      onChange={(e) => handleCheckListUpdateOnChange(e, item._id)}
+                      onChange={(e) => handle_check_list_update_on_change(e, item._id)}
                       className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                     />
+
                     <div className="relative group cursor-pointer px-2 hover:text-red-400">
                       <DotsSingle />
                       <div className="absolute top-[-22px] left-5 hidden group-hover:block bg-gray-200 px-3 py-1 rounded-md">
 
                         <p
                           className="hover:text-red-500 duration-200 hover:underline text-black"
-                          onClick={() => handleRemoveCheckListItem(item._id)}>Delete</p>
+                          onClick={() => handle_remove_check_list_item(item._id)}
+                        >
+                          Delete
+                        </p>
 
                         <p className="text-black">Assign</p>
 
@@ -601,15 +711,14 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                     type="checkbox"
                     name="check"
                     className="w-4 h-4 cursor-pointer"
-                    // value={checkListItem.checked}
                     checked={checkListItem.checked}
-                    onChange={handleCheckListChange}
+                    onChange={handle_check_list_change}
                   />
                   <input
                     type="text"
                     name="content"
                     value={checkListItem.content}
-                    onChange={handleCheckListChange}
+                    onChange={handle_check_list_change}
                     onKeyDown={handle_check_list_item_enter_btn}
                     className="flex-1 mx-2 px-1 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                   />
@@ -620,20 +729,53 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               }
 
 
-              <p className="text-[#B9C3CE] px-3 py-2 rounded-md bg-slate-100 inline-block mt-2 ml-4 cursor-pointer hover:bg-slate-200 duration-150" onClick={handleCreateCheckList}>
+              <p className="text-[#B9C3CE] px-3 py-2 rounded-md bg-slate-100 inline-block mt-2 ml-4 cursor-pointer hover:bg-slate-200 duration-150" onClick={handle_create_check_list}>
                 Add item to check ist
               </p>
             </div>
 
           </div>
 
-          <div className="my-8 ml-4 ">
-            <label htmlFor="file" className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
+          <div className="mt-8 ml-4 mb-4">
+            <label
+              // onChange={cardAttachments}
+              htmlFor="file" className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
               Attachments
-              <input type="file" id="file" className="hidden" />
+              <input type="file" id="file" className="hidden" multiple onChange={handle_card_attachments} />
             </label>
           </div>
+
+          <div className="mb-4 mx-8 flex items-center gap-1 flex-wrap">
+
+            {
+              localCard?.attachments?.length > 0 &&
+              localCard?.attachments?.map((file, i) =>
+                // attachFiles?.length > 0 &&
+                // attachFiles?.map((file, i) =>
+                // console.log(file)
+                <div
+                  key={i}
+                  className="relative rounded-md p-2 cursor-pointer hover:bg-gray-200"
+                >
+                  <span
+                    className="absolute top-2 right-2 px-1.5 bg-gray-500 rounded-full"
+                    onClick={() => setAttachFiles(pre => pre.filter((_, idx) => idx !== i))}
+                  >
+                    x
+                  </span>
+
+                  <img src={file} alt="" className=" w-28 h-24" />
+                  <div className="text-sm pt-2">
+                    <p><b>{getFileName(file)}</b></p>
+                    <p>Added <b>time</b></p>
+                    <p>By <b>{userInfo.username}</b></p>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+
         </div>
 
         {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
