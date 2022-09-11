@@ -15,10 +15,9 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, updateChecklistItem } from "../../hooks/useFetch";
+import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, updateChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
-import { toFormData } from "../../util/helpers";
 
 
 const Progress = ({ progress, setProgress }) => {
@@ -337,34 +336,45 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   // 🟩🟩🟩
   const handle_card_attachments = async e => {
-    // const filesList = e.target.files
-    // const filesArray = Array.from(filesList)
-    // // console.log(filesArray);
-    // // const readFiles = filesArray.map(file => URL.createObjectURL(file));
 
-    // const readFiles = filesArray.map(file => toFormData(file));
-    // console.log(readFiles);
-    const file = e.target.files[0];
-    const formData = toFormData({ file: file });
-    const tempCard = { ...localCard }
-    const tempAttachment = [...attachFiles, formData]
+    const files = e.target.files;
+    
+    const formData = new FormData();
 
-    // setAttachFiles(tempAttachment)
-
-    const updateCardWithAttachFile = { ...tempCard, attachments: [...tempCard.attachments, formData] }
-
-    setLocalCard(updateCardWithAttachFile);
+    for (const file of files) {
+      formData.append('attachments', file);
+    }
 
     try {
-      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, updateCardWithAttachFile);
+      const { data } = await cardAttachmentUpdateApiCall(selectedSpaceId, listID, card._id, formData);
 
-      console.log(data);
+      console.log(data.updatedCard.attachments);
+
+      setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
 
     } catch (error) {
       console.log(error?.response?.data?.issue);
     }
 
   }
+
+  const handle_attach_delete = async file => {
+
+    try {
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAttachmentUrl: file });
+
+      // console.log(data.updatedCard.attachments);
+      // console.log(data);
+
+      setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
+
+    } catch (error) {
+      console.log(error?.response?.data?.issue);
+    }
+
+  }
+
+
 
   // 🟩🟩🟩
   const handle_open_assignee_modal = async (e) => {
@@ -398,6 +408,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
 
   const getFileName = file => file.name;
+
+
+
 
   return (
     <section
@@ -742,7 +755,13 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               htmlFor="file" className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
               Attachments
-              <input type="file" id="file" className="hidden" multiple onChange={handle_card_attachments} />
+              <input
+                multiple
+                id="file"
+                type="file"
+                className="hidden"
+                onChange={handle_card_attachments}
+              />
             </label>
           </div>
 
@@ -751,16 +770,13 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             {
               localCard?.attachments?.length > 0 &&
               localCard?.attachments?.map((file, i) =>
-                // attachFiles?.length > 0 &&
-                // attachFiles?.map((file, i) =>
-                // console.log(file)
                 <div
                   key={i}
                   className="relative rounded-md p-2 cursor-pointer hover:bg-gray-200"
                 >
                   <span
                     className="absolute top-2 right-2 px-1.5 bg-gray-500 rounded-full"
-                    onClick={() => setAttachFiles(pre => pre.filter((_, idx) => idx !== i))}
+                    onClick={() => handle_attach_delete(file)}
                   >
                     x
                   </span>
