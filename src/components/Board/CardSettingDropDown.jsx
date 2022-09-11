@@ -42,7 +42,7 @@ const CardSettingDropDown = ({ right, progress, setProgress, noteDone, setNoteDo
             </div> */}
 
             <div className='boardActionDropDown group' onClick={handleActionDropDownClick}>
-                <RightOK className='group-hover:text-teal-500' /> <span>Make as {noteDone ? 'not' : ''} done</span>
+                <RightOK className='group-hover:text-teal-500' /> <span>Make as {noteDone ? '' : 'not'} done</span>
             </div>
 
             <div
