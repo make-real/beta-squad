@@ -41,9 +41,9 @@ const CardSettingDropDown = ({ right, progress, setProgress, noteDone, setNoteDo
                 <LinkingChain className='group-hover:text-teal-500' /> <span>Copy Card link</span>
             </div> */}
 
-            <div className='boardActionDropDown group' onClick={handleActionDropDownClick}>
+            {/* <div className='boardActionDropDown group' onClick={handleActionDropDownClick}>
                 <RightOK className='group-hover:text-teal-500' /> <span>Make as {noteDone ? '' : 'not'} done</span>
-            </div>
+            </div> */}
 
             <div
                 className='boardActionDropDown group'

@@ -18,6 +18,7 @@ import { CardSettingDropDown } from ".";
 import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, updateChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
+import ConfirmDialog from "./ConfirmDialog";
 
 
 const Progress = ({ progress, setProgress }) => {
@@ -61,7 +62,7 @@ const Progress = ({ progress, setProgress }) => {
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress }) => {
+const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress, progressStatus }) => {
 
   const [localCard, setLocalCard] = useState(card);
   const { updateCard, boardLists } = useBoardCardContext();
@@ -79,7 +80,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
-  const [attachFiles, setAttachFiles] = useState([]);
+  const [attachFileLoading, setAttachFileLoading] = useState(false);
+  const [deleteAttachFile, setDeleteAttachFile] = useState('');
+  const [deleteAttachFileLoading, setDeleteAttachFileLoading] = useState(false);
   const [createNewTag, setCreateNewTag] = useState({
     name: "",
     color: "#47b9ea",
@@ -338,7 +341,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const handle_card_attachments = async e => {
 
     const files = e.target.files;
-    
+
     const formData = new FormData();
 
     for (const file of files) {
@@ -346,11 +349,11 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     }
 
     try {
+      setAttachFileLoading(true);
       const { data } = await cardAttachmentUpdateApiCall(selectedSpaceId, listID, card._id, formData);
-
-      console.log(data.updatedCard.attachments);
-
+      // console.log(data.updatedCard.attachments);
       setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
+      setAttachFileLoading(false);
 
     } catch (error) {
       console.log(error?.response?.data?.issue);
@@ -358,19 +361,21 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   }
 
-  const handle_attach_delete = async file => {
+  const handle_attach_delete = file => {
 
-    try {
-      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAttachmentUrl: file });
+    setDeleteAttachFileLoading(true);
+    setDeleteAttachFile(file)
+    // try {
+    //   const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAttachmentUrl: file });
 
-      // console.log(data.updatedCard.attachments);
-      // console.log(data);
+    //   // console.log(data.updatedCard.attachments);
+    //   // console.log(data);
 
-      setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
+    //   setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
 
-    } catch (error) {
-      console.log(error?.response?.data?.issue);
-    }
+    // } catch (error) {
+    //   console.log(error?.response?.data?.issue);
+    // }
 
   }
 
@@ -407,9 +412,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
 
-  const getFileName = file => file.name;
-
-
 
 
   return (
@@ -421,6 +423,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
         className="bg-gray-50 w-[60%] rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
+
         {/* 🟨🟨🟨 Section 1 🟨🟨🟨 */}
         <div className="flex items-center justify-between border-b border-gray-300 p-2">
           <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
@@ -519,10 +522,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             <Dropdown
               button={<DotsSingle
                 className="text-[#7088A1] cursor-pointer w-8 h-8 p-1 py-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
-              // onClick={(e) => {
-              //   e.stopPropagation();
-              //   setModalActionToggling((pre) => !pre);
-              // }}
               />}
               menu={
                 () => {
@@ -541,21 +540,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
               className="text-[#7088A1] cursor-pointer w-8 h-8 p-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
               onClick={() => setBoardModal(false)}
             />
-            {/* 
-            {
-              // Little Action Menu for Board Modal
-              modalActionToggling && (
-                // <CardSettingDropDown
-                //   cardID={card._id}
-                //   listID={listID}
-                //   noteDone={noteDone}
-                //   setNoteDone={setNoteDone}
-                //   setModalActionToggling={setModalActionToggling}
-                // />
-              )
-            } */}
           </div>
         </div>
+
 
         {/* 🟨🟨🟨 Section 2 ||| Middle area 🟨🟨🟨 */}
         <div className="flex flex-col border-b border-gray-300">
@@ -766,33 +753,51 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           </div>
 
           <div className="mb-4 mx-8 flex items-center gap-1 flex-wrap">
-
+            {
+              attachFileLoading &&
+              <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/70 grid place-items-center">
+                <div className="loading_continuous"></div>
+              </div>
+            }
             {
               localCard?.attachments?.length > 0 &&
               localCard?.attachments?.map((file, i) =>
                 <div
                   key={i}
-                  className="relative rounded-md p-2 cursor-pointer hover:bg-gray-200"
+                  className="relative rounded-md p-2 cursor-pointer hover:bg-gray-200 group"
                 >
-                  <span
-                    className="absolute top-2 right-2 px-1.5 bg-gray-500 rounded-full"
+                  <div
+                    className="absolute top-2 right-2 w-5 h-5 bg-gray-500 rounded-full text-center leading-5 hover:text-red-500 hover:bg-white duration-200 invisible group-hover:visible"
                     onClick={() => handle_attach_delete(file)}
                   >
                     x
-                  </span>
+                  </div>
 
                   <img src={file} alt="" className=" w-28 h-24" />
                   <div className="text-sm pt-2">
-                    <p><b>{getFileName(file)}</b></p>
-                    <p>Added <b>time</b></p>
+                    {/* <p><b>{getFileName(file)}</b></p> */}
+                    {/* <p>Added <b>time</b></p> */}
                     <p>By <b>{userInfo.username}</b></p>
                   </div>
                 </div>
               )
             }
+
+            {
+              deleteAttachFileLoading &&
+              <ConfirmDialog
+                listID={listID}
+                cardID={localCard?._id}
+                deleteAttachment
+                setLocalCard={setLocalCard}
+                setDeleteAttachFileLoading={setDeleteAttachFileLoading}
+                deleteAttachFile={deleteAttachFile}
+              />
+            }
           </div>
 
         </div>
+
 
         {/* 🟨🟨🟨 Section 3 ||| Bottom Area 🟨🟨🟨 */}
         <div className=" py-4 flex items-center justify-center space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150">
@@ -805,6 +810,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           </label>
           <input type="file" id="file" className="hidden" />
         </div>
+
       </div>
     </section>
   );

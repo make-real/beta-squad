@@ -151,9 +151,9 @@ const Card = ({ card, listID }) => {
                     👍 <span className='text-black'>1</span>
                 </div> */}
 
-          <div 
-          className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200' 
-          onClick={e => { e.stopPropagation(); setShowEmoji(pre => !pre) }}
+          <div
+            className='flex items-center text-gray-400 p-1.5 rounded-md cursor-pointer hover:bg-gray-300 duration-200'
+            onClick={e => { e.stopPropagation(); setShowEmoji(pre => !pre) }}
           >
             <Plus width="12" height="12" className='mr-[2px]' />
             <Smile />
@@ -161,31 +161,31 @@ const Card = ({ card, listID }) => {
 
           {
             showEmoji &&
-            <div 
-            className="z-20 absolute top-10 right-[-2px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 cursor-pointer" 
-            onClick={e => { e.stopPropagation() }}
+            <div
+              className="z-20 absolute top-10 right-[-2px] flex gap-2 items-center p-1 bg-gray-300 rounded-md after:content-[''] after:absolute after:top-[-5px] after:right-2 after:w-5 after:h-5 after:bg-gray-300 after:rotate-45 after:-z-10 cursor-pointer"
+              onClick={e => { e.stopPropagation() }}
             >
-              <p 
-              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
-              onClick={()=>setShowEmoji(false) }
+              <p
+                className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+                onClick={() => setShowEmoji(false)}
               >
                 👍
               </p>
-              <p 
-              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
-              onClick={()=>setShowEmoji(false) }
+              <p
+                className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+                onClick={() => setShowEmoji(false)}
               >
                 😊
               </p>
-              <p 
-              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
-              onClick={()=>setShowEmoji(false) }
+              <p
+                className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+                onClick={() => setShowEmoji(false)}
               >
                 👎
               </p>
-              <p 
-              className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
-              onClick={()=>setShowEmoji(false) }
+              <p
+                className="p-1 bg-gray-100 rounded-md hover:bg-gray-400 duration-150"
+                onClick={() => setShowEmoji(false)}
               >
                 😎
               </p>
@@ -208,10 +208,6 @@ const Card = ({ card, listID }) => {
         }
 
       </div>
-      {/* <ConfirmDialog
-        listID={"boardListID"}
-        setConfirmModalOpen={"setConfirmModalOpen"}
-      /> */}
     </>
   );
 };

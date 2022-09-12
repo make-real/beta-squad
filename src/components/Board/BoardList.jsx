@@ -110,7 +110,3 @@ const BoardList = ({ boardList }) => {
 };
 
 export default BoardList;
-
-// menu={({closePopup}) => (
-//   <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
-// )}
