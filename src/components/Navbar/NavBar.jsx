@@ -119,14 +119,14 @@ const NavBar = () => {
           </div>
         )}
 
-        {linkClick === "Chat" && (
+        {/* {linkClick === "Chat" && ( */}
           <div
             className="flex p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
             onClick={() => handleSidePanel("add-member")}
           >
             <HiOutlineUser className="text-xl font-bold" />
           </div>
-        )}
+        {/* )} */}
 
         <div
           onClick={() => handleSidePanel("setting")}

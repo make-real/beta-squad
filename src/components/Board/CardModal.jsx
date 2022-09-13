@@ -429,7 +429,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
             <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200">
               <RightOK />
-              <span onClick={() => setProgress(pre => pre === 100 ? 0 : 100)}>Done</span>
+              <span onClick={() => setProgress(pre => pre === 4 ? 0 : 4)}>Done</span>
             </div>
 
             <div className="flex items-center space-x-2 px-3 pl-4">
@@ -543,10 +543,12 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                 () => {
                   return <CardSettingDropDown
                     cardID={card._id}
+                    setProgress={setProgress}
                     listID={listID}
                     noteDone={noteDone}
                     setNoteDone={setNoteDone}
                     setModalActionToggling={setModalActionToggling}
+                    setCardSettingDropDownToggle={setModalActionToggling}
                   />
                 }
               }

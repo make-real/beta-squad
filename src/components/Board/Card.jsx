@@ -120,6 +120,7 @@ const Card = ({ card, listID }) => {
             // ⚪⚪⚪ For 3 Dots, Menu toggling...
             visible && (
               <Dropdown
+              width={220}
                 button={
                   <DotsSingle
                     className={`cursor-pointer py-1.5 w-6 h-8 rounded-lg hover:bg-gray-300 duration-200 text-gray-400 active:bg-gray-300`}
