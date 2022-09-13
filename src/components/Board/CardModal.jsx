@@ -15,7 +15,7 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, updateChecklistItem } from "../../hooks/useFetch";
+import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, getSpaceMembers, updateChecklistItem } from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 import ConfirmDialog from "./ConfirmDialog";
@@ -77,7 +77,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
   const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
   const [allUserForAssignee, setAllUserForAssignee] = useState([]);
-  const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
   const [attachFileLoading, setAttachFileLoading] = useState(false);
@@ -113,13 +112,18 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     [listID, card._id, localCard]
   );
 
+  // console.log(localCard);
   // 🟩🟩🟩
   useEffect(() => {
     const getTags = async () => {
       try {
         // GET Method || For fetching all tag's under specific workShop
         const { data } = await get_tags(userSelectedWorkSpaceId);
-        setTagsFromAPI(data?.tags);
+
+        // tags
+        const remainTag = data?.tags.filter(({ _id }) => !localCard?.tags?.some(tag => tag._id === _id));
+
+        setTagsFromAPI(remainTag);
       } catch (error) {
         console.log(error);
       }
@@ -180,6 +184,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
       setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
+
+
       setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
     } catch (error) {
       console.log(error)
@@ -245,9 +251,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // ✅✅✅
-  const handle_create_check_list = () => {
-    setNewCheckListItemJSX(true);
-  }
+  const handle_create_check_list = () => setNewCheckListItemJSX(true);
 
   // ✅✅✅
   const handle_check_list_item_enter_btn = async e => {
@@ -337,7 +341,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     }
   }
 
-  // 🟩🟩🟩
+  // 🟩🟩🟩 📌📌📌📌📌📌📌📌📌📌📌📌📌📌
   const handle_card_attachments = async e => {
 
     const files = e.target.files;
@@ -351,7 +355,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     try {
       setAttachFileLoading(true);
       const { data } = await cardAttachmentUpdateApiCall(selectedSpaceId, listID, card._id, formData);
-      // console.log(data.updatedCard.attachments);
       setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
       setAttachFileLoading(false);
 
@@ -361,25 +364,11 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   }
 
+  // 🟥🟥🟥 📌📌📌📌📌📌📌📌📌📌📌📌📌📌
   const handle_attach_delete = file => {
-
     setDeleteAttachFileLoading(true);
     setDeleteAttachFile(file)
-    // try {
-    //   const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAttachmentUrl: file });
-
-    //   // console.log(data.updatedCard.attachments);
-    //   // console.log(data);
-
-    //   setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
-
-    // } catch (error) {
-    //   console.log(error?.response?.data?.issue);
-    // }
-
   }
-
-
 
   // 🟩🟩🟩
   const handle_open_assignee_modal = async (e) => {
@@ -388,8 +377,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
     try {
       if (!openAssigneeModal) {
-        const { data } = await getAllUser();
-        setAllUserForAssignee(data.users)
+        const { data } = await getSpaceMembers(selectedSpaceId);
+        const remainUser = data.members.filter(({ _id }) => !localCard?.assignee?.some(user => user._id === _id));
+        setAllUserForAssignee(remainUser)
       }
     } catch (error) {
       console.log(error);
@@ -397,20 +387,29 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // 🟩🟩🟩
-  const handle_add_assignee_users = (user) => {
-    setAssigneeUsers(pre => ([...pre, user]));
+  const handle_add_assignee_users = async (user) => {
     setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
 
+    try {
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { assignUser: user._id });
+      setLocalCard(data.updatedCard)
+    } catch (error) {
+      toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+    }
   }
 
   // 🟥🟥🟥
-  const handle_remove_assignee_users = (user) => {
-    setAssigneeUsers(pre => pre.filter(({ _id }) => _id !== user._id));
+  const handle_remove_assignee_users = async (user) => {
+
     setAllUserForAssignee(pre => ([user, ...pre]));
 
-
+    try {
+      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAssignedUser: user._id });
+      setLocalCard(data.updatedCard)
+    } catch (error) {
+      toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+    }
   }
-
 
 
 
@@ -419,12 +418,13 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       className="fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center"
       onClick={() => setBoardModal(false)}
     >
+
       <div
         className="bg-gray-50 w-[60%] rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
 
-        {/* 🟨🟨🟨 Section 1 🟨🟨🟨 */}
+        {/* 🟨🟨🟨 Section 1 ||| Heading area 🟨🟨🟨 */}
         <div className="flex items-center justify-between border-b border-gray-300 p-2">
           <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
             <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200">
@@ -438,23 +438,24 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             </div>
 
             {/* 🟨🟨🟨🟨🟨🟨 Assignee Section 🟨🟨🟨🟨🟨🟨 */}
-            <div className="relative flex items-center space-x-2 cursor-pointer p-3 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
-              <div onClick={handle_open_assignee_modal} className='flex gap-2'>
+            <div className="relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
+
+              <div onClick={handle_open_assignee_modal} className='flex gap-2 px-3 py-2'>
                 <UserPlus />
                 <span>Assignee</span>
               </div>
 
               {
                 openAssigneeModal &&
-                <div className="absolute top-14 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-lg
-                before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
+                <div className="absolute top-12 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
                 >
                   <div className="flex py-3 px-4 items-center justify-between text-gray-600">
                     <p>Assign user to card</p>
                     <p className="px-2 py-1 cursor-pointer hover:bg-gray-400 duration-300 rounded-md">Assign yourself</p>
                   </div>
 
-                  <div className="px-4">
+                  <div className="px-4 pb-.5">
+                    {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
                     <input
                       type="text"
                       value={searchUserForAssignee}
@@ -464,17 +465,26 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                   </div>
 
                   {
-                    assigneeUsers?.length > 0 &&
-                    <div className="mt-2 px-2">
+                    // * List of users ===> that Assign yet...
+                    // 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+                    localCard?.assignee?.length > 0 &&
+                    <div className={`mt-2 px-2  ${allUserForAssignee?.length === 0 && 'pb-2'}`}>
                       <p className="text-black py-1">Already assigned</p>
                       {
-                        assigneeUsers?.map(user =>
+                        localCard?.assignee?.map(user =>
                           <div
                             key={user?._id}
                             className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['X'] after:absolute after:text-themeColor after:right-4"
                             onClick={() => handle_remove_assignee_users(user)}
                           >
-                            <img src={userInfo.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                            {
+                              user.avatar
+                                ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                                : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
+                                  {user?.fullName.charAt(0)}
+                                </p>
+                            }
+
                             <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
                           </div>
                         )
@@ -483,10 +493,10 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                   }
 
                   {
-                    // Just Print List of users
-                    // ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+                    // ? Just Print List of users ===> that NOT Assign yet...
+                    // 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
                     allUserForAssignee?.length > 0 &&
-                    <div className="mt-2 px-2 overflow-y-auto h-[350px] customScroll">
+                    <div className="mt-2 px-2 overflow-y-auto h-[250px] customScroll pb-2">
                       <p className="text-black py-1">Not assigned</p>
                       {
                         allUserForAssignee
@@ -497,7 +507,13 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                               className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
                               onClick={() => handle_add_assignee_users(user)}
                             >
-                              <img src={userInfo.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                              {
+                                user.avatar
+                                  ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                                  : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
+                                    {user?.fullName.charAt(0)}
+                                  </p>
+                              }
                               <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
                             </div>
                           )
@@ -739,6 +755,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           <div className="mt-8 ml-4 mb-4">
             <label
               // onChange={cardAttachments}
+              // 📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌
               htmlFor="file" className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
               Attachments
@@ -754,12 +771,14 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
           <div className="mb-4 mx-8 flex items-center gap-1 flex-wrap">
             {
+              // 📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌
               attachFileLoading &&
               <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/70 grid place-items-center">
                 <div className="loading_continuous"></div>
               </div>
             }
             {
+              // 📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌
               localCard?.attachments?.length > 0 &&
               localCard?.attachments?.map((file, i) =>
                 <div
@@ -812,6 +831,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
         </div>
 
       </div>
+
     </section>
   );
 };
