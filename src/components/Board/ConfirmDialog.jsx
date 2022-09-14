@@ -1,5 +1,5 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { boardListDelete, cardDeleteApiCall } from '../../hooks/useFetch';
+import { boardListDelete, cardDeleteApiCall, cardUpdateApiCall } from '../../hooks/useFetch';
 import { useSelector } from "react-redux";
 import { Close } from '../../assets/icons'
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 // This <Component /> called by 🟨🟨🟨 BoardListSettingDropDown.jsx 🟨🟨🟨
 // This <Component /> called by 🟨🟨🟨 CardSettingDropDown.jsx 🟨🟨🟨
-const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfirmModalOpen }) => {
+const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfirmModalOpen, setDeleteAttachFileLoading, deleteAttachment, setLocalCard, deleteAttachFile }) => {
 
   const { removeBoardList, removeCard } = useBoardCardContext();
 
@@ -21,15 +21,24 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
   const handleCancel = (e) => {
     e.stopPropagation();
 
-    // for closing confirm modal window
-    setConfirmModalOpen(false);
 
-    if (cardID !== undefined) {
+    // if (deleteAttachment) {
+    //   // close modal for delete attachment file...
+    //   setDeleteAttachFileLoading(false);
+    // } else {
+    //   // for closing confirm modal window
+    //   setConfirmModalOpen(false);
+    // }
+
+
+    if (cardID !== undefined && deleteAttachment === false) {
       setCardSettingDropDownToggle(false);
-
+    } else if (deleteAttachment) {
+      setDeleteAttachFileLoading(false); // close modal for delete attachment file...
     } else {
-
+      setConfirmModalOpen(false); // for closing confirm modal window
     }
+
   }
 
 
@@ -38,9 +47,10 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
     e.stopPropagation();
 
     // for closing confirm modal window
-    setConfirmModalOpen(false);
+    // setConfirmModalOpen(false);
 
     try {
+
       // if no card id is present, its mean list delete operation happening by user
       if (cardID === undefined) {
 
@@ -53,7 +63,11 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
 
         // display a notification for user
         toast.success(`${data?.message}`, { autoClose: 3000 });
-      } else {
+      }
+
+
+      // card delete functionality...
+      if (cardID !== undefined && deleteAttachment !== true) {
 
         const { data } = await cardDeleteApiCall(selectedSpaceId, listID, cardID);
 
@@ -64,10 +78,23 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
         // display a notification for user
         toast.success(`${data?.message}`, { autoClose: 3000 });
       }
+
+
+      // attachment delete functionality...
+      if (deleteAttachment) {
+
+        const { data } = await cardUpdateApiCall(selectedSpaceId, listID, cardID, { removeAttachmentUrl: deleteAttachFile });
+
+        // after delete attach file update UI + auto close modal
+        setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }));
+        setDeleteAttachFileLoading(false);
+      }
+      
     } catch (error) {
       console.log(error?.response?.data?.issue?.message);
       toast.error(`${error?.response?.data?.issue?.message}`, { autoClose: 3000 });
     }
+
   }
 
 
@@ -86,9 +113,10 @@ const ConfirmDialog = ({ listID, cardID, setCardSettingDropDownToggle, setConfir
           className='absolute top-4 right-4 w-4 h-4 text-gray-400 cursor-pointer hover:text-red-500 duration-200'
         />
 
-        <p className='font-bold text-teal-500'>DELETE {`${cardID === undefined ? 'LIST' : 'CARD'}`}</p>
+        { }
+        <p className='font-bold text-teal-500'>DELETE {`${deleteAttachment ? 'FILE' : cardID === undefined ? 'LIST' : 'CARD'}`}</p>
 
-        <p className='pb-3'>Are you sure you want to delete this {`${cardID === undefined ? 'list' : 'card'}`} ?</p>
+        <p className='pb-3'>Are you sure you want to delete this {`${deleteAttachment ? 'file' : cardID === undefined ? 'list' : 'card'}`} ?</p>
 
         <div className='flex items-center justify-end gap-3'>
           <div

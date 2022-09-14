@@ -72,17 +72,17 @@ export const BoardCardContext = ({ children }) => {
   const handleDragEnd = (bid, cid) => {
     let s_bIndex, s_cIndex, d_bIndex, d_cIndex;
 
-    s_bIndex = boardLists?.findIndex(({ id }) => id === bid);
+    s_bIndex = boardLists?.findIndex(({ _id }) => _id === bid);
     if (s_bIndex < 0) return;
 
-    s_cIndex = boardLists[s_bIndex]?.cards?.findIndex(({ id }) => id === cid);
+    s_cIndex = boardLists[s_bIndex]?.cards?.findIndex(({ _id }) => _id === cid);
     if (s_cIndex < 0) return;
 
-    d_bIndex = boardLists?.findIndex(({ id }) => id === target.bid);
+    d_bIndex = boardLists?.findIndex(({ _id }) => _id === target.bid);
     if (d_bIndex < 0) return;
 
     d_cIndex = boardLists[d_bIndex]?.cards?.findIndex(
-      ({ id }) => id === target.cid
+      ({ _id }) => _id === target.cid
     );
     if (d_cIndex < 0) return;
 

@@ -84,7 +84,6 @@ const ModalSearchSpace = ({ setSpaceSearchModal, allSpace, setCreateSpaceModal }
                         </div>
                     }
 
-
                 </div>
 
             </form>

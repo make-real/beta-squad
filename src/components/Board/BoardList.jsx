@@ -11,6 +11,7 @@ import useAxios from "../../api";
 import "tippy.js/dist/tippy.css";
 
 const BoardList = ({ boardList }) => {
+
   const dropDownRef = useRef();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
@@ -60,6 +61,7 @@ const BoardList = ({ boardList }) => {
     }
   };
 
+
   return (
     <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>
       <div
@@ -108,7 +110,3 @@ const BoardList = ({ boardList }) => {
 };
 
 export default BoardList;
-
-// menu={({closePopup}) => (
-//   <BoardListSettingDropDown close={closePopup} boardListID={boardList?._id} />
-// )}

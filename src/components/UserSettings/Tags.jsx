@@ -22,9 +22,9 @@ export const Tag = ({ children, color, className }) => {
 };
 
 const Tags = () => {
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+
   const [modal, setModal] = React.useState(false);
   const [deleteModal, setDeleteModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -55,6 +55,7 @@ const Tags = () => {
 
   const openEditModal = (item, toDelete) => {
     toDelete ? setDeleteModal(true) : setModal(true);
+
     setTagInfo((prev) => ({
       ...prev,
       name: item.name,
@@ -62,6 +63,7 @@ const Tags = () => {
       color: item.color,
     }));
   };
+
   const openModal = () => {
     setModal(true);
     setTagInfo((prev) => ({
@@ -71,6 +73,9 @@ const Tags = () => {
       color: "",
     }));
   };
+
+
+
   return (
     <>
       <div className=" min-h-screen  w-[820px] p-5 space-y-4 h-screen ">
@@ -90,7 +95,7 @@ const Tags = () => {
             <PageLoader />
           ) : (
             Object.entries(tags).map(([key, value]) => (
-              <div className="mb-10">
+              <div className="mb-10" key={key}>
                 <h4 className="uppercase">{key}</h4>
                 <hr />
                 {value.map((item) => (
@@ -102,7 +107,7 @@ const Tags = () => {
                       <div className="flex align-middle justify-center">
                         <Delete
                           onClick={() => openEditModal(item, true)}
-                          className="mr-5 opacity-30 cursor-pointer"
+                          className="mr-5 opacity-30 cursor-pointer hove:text-red-500"
                         />
                         <EditPen
                           onClick={() => openEditModal(item)}

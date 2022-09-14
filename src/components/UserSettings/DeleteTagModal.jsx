@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Button from "../Button";
 import { delete_tag } from "../../api/tags";
+import { useSelector } from "react-redux";
+import Button from "../Button";
 
-const DeleteTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
+
+const DeleteTagModal = ({ setCreateSpaceModal, onUpdate, tag }) => {
+
   const [loading, setLoading] = useState(false);
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
 
   useEffect(() => {
     const handleEscapeKeyPress = (e) => {
@@ -18,8 +22,9 @@ const DeleteTagModal = ({ setCreateSpaceModal, onUpdate, tag, setTag }) => {
   const onDelete = async (e) => {
     try {
       setLoading(true);
-      await delete_tag(tag);
+      await delete_tag({ workSpaceId: userSelectedWorkSpaceId, tagId: tag.tagId });
       onUpdate();
+      toast.success('Tag Deleted...', { autoClose: 2000 });
       setLoading(false);
     } catch (error) {
       setLoading(false);
