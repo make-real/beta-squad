@@ -4,7 +4,8 @@ import { userSignIn } from "../../hooks/useFetch";
 import { FcGoogle } from "react-icons/fc";
 import React, { useState } from "react";
 import images from "../../assets";
-import {Loader} from "../Loader";
+import { Loader } from "../Loader";
+import { GoogleLogin } from "react-google-login";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Login = () => {
 
       // navigate user into user profile page...
       navigate("/projects");
-      
+
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -102,10 +103,31 @@ const Login = () => {
             Sign in to HeySpace
           </h2>
 
-          <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
+          <GoogleLogin
+            clientId={"847086669844-eh638a23fs7oi7ein72gasoq45kcba91.apps.googleusercontent.com"}
+            render={(renderProps) => (
+              <button
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900"
+              >
+                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
+                <span className="text-sm">Sign in with Google</span>
+              </button>
+            )}
+            onSuccess={(data) => {
+              console.log(data);
+            }}
+            onFailure={(error) => {
+              console.log(error);
+            }}
+            cookiePolicy="single_host_origin"
+          />
+
+          {/* <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
             <FcGoogle className="my-auto text-center mr-1.5" />{" "}
             <span className="text-sm">Sign in with Google</span>
-          </div>
+          </div> */}
 
           <div className="border-b-2 border-gray-100 pt-5 text-gray-100 relative">
             <span className="absolute left-1/2 top-1.5 bg-white  px-1.5 -translate-x-1/2 ">
