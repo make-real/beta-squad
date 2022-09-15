@@ -415,12 +415,12 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
   return (
     <section
-      className="fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center"
+      className="fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center "
       onClick={() => setBoardModal(false)}
     >
 
       <div
-        className="bg-gray-50 w-[60%] rounded-2xl"
+        className="bg-gray-50 w-[60%] rounded-2xl overflow-y-auto overflow-x-hidden"
         onClick={(e) => e.stopPropagation()}
       >
 
@@ -540,8 +540,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                 className="text-[#7088A1] cursor-pointer w-8 h-8 p-1 py-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
               />}
               menu={
-                () => {
-                  return <CardSettingDropDown
+                () => (
+                  <CardSettingDropDown
                     cardID={card._id}
                     setProgress={setProgress}
                     listID={listID}
@@ -550,7 +550,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                     setModalActionToggling={setModalActionToggling}
                     setCardSettingDropDownToggle={setModalActionToggling}
                   />
-                }
+                )
               }
             />
 
@@ -563,7 +563,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
 
         {/* 🟨🟨🟨 Section 2 ||| Middle area 🟨🟨🟨 */}
-        <div className="flex flex-col border-b border-gray-300">
+        <div className="flex flex-col border-b border-gray-300 ">
           <div className="flex items-center justify-between p-4 text-gray-400 ">
             <div className="flex items-center space-x-4">
               <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
@@ -658,7 +658,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             }
           </div>
 
-          <div className="mt-8 ml-4 w-full">
+          <div className="mt-4 ml-4 w-full">
             <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Description className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
               <span>Description</span>
@@ -673,7 +673,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             />
           </div>
 
-          <div className="mt-8 ml-4 ">
+          <div className="mt-4 ml-4 ">
             <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
               <span>Checklist</span>
@@ -754,7 +754,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
           </div>
 
-          <div className="mt-8 ml-4 mb-4">
+          <div className="mt-4 ml-4 mb-4">
             <label
               // onChange={cardAttachments}
               // 📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌

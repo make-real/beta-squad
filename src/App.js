@@ -1,6 +1,6 @@
 import {
-  Board, Calender, Chat, List, Timeline, Register, Login, Layout, Profile, DeveloperConsole,
-  ManageWorkspace, UserSettingLayout, Preferences, PageNotFound,
+  Board, Calender, Chat, Timeline, Register, Login, Layout, Profile, DeveloperConsole,
+  ManageWorkspace, UserSettingLayout, Preferences, PageNotFound, CardAsList,
 } from "./components";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
@@ -44,10 +44,10 @@ const App = () => {
         </Route>
 
 
-        <Route path="projects" element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
+        <Route path="projects" element={<ProtectedRoute> <Layout selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>}>
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
           <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
-          <Route path="list" element={<ProtectedRoute> <List /> </ProtectedRoute>} />
+          <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId}/> </ProtectedRoute>} />
           <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
         </Route>

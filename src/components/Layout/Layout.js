@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import { NavBar, SideBar } from "../";
 // import SideBar from "../Sidebar/SideBar";
 
-const Layout = () => {
+const Layout = ({selectedSpaceId}) => {
   return (
     <div>
       <Outlet />
-      <NavBar />
+      <NavBar selectedSpaceId={selectedSpaceId}/>
       <SideBar />
     </div>
   );

@@ -1,45 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { FiSettings } from "react-icons/fi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { AiOutlineCheck, AiOutlineInfoCircle } from "react-icons/ai";
-import Button from "../Button";
-import { useDispatch, useSelector } from "react-redux";
+import { removeSpace, updateSpace } from "../../store/slice/space";
 import { delete_space, update_space } from "../../api/space";
-import { toast } from "react-toastify";
-import { updateSpace } from "../../store/slice/space";
-import ColorPicker from "../ColorPicker";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { PRIVACY } from '../../constant/enums'
+import { useEffect, useState } from "react";
+import { FiSettings } from "react-icons/fi";
+import { toast } from "react-toastify";
+import ColorPicker from "../ColorPicker";
+import Button from "../Button";
+
 
 const Setting = () => {
 
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const { selectedSpace, allSpaces } = useSelector(state => state.space);
+  const [deletingSpaceModal, setDeletingSpaceModal] = useState(false)
   const [space, setSpace] = useState({
     name: "",
     description: "",
     color: "",
     privacy: "",
   });
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const { selectedSpace, allSpaces } = useSelector((state) => state.space);
-
-  const [deletingSpaceModal, setDeletingSpaceModal] = useState(false)
 
   useEffect(() => {
-    const currentSpace = allSpaces?.find(
-      (space) => space._id === selectedSpace
-    );
-    setSpace(currentSpace);
-  }, [selectedSpace]);
+    const currentSpace = allSpaces?.find(({ _id }) => _id === selectedSpace);
+    if (currentSpace) {
+      setSpace(currentSpace);
+    } else {
+      // when space deleting... by default select it...
+      setSpace(allSpaces[0]);
+    }
+  }, [selectedSpace, allSpaces]);
 
-  const onChange = (e) => {
-    setSpace({ ...space, [e.target.name]: e.target.value });
-  };
+
+  const onChange = (e) => setSpace({ ...space, [e.target.name]: e.target.value })
+
 
   const onSubmit = async () => {
     try {
       setLoading(true);
       await update_space(selectedSpace, space);
-      dispatch(updateSpace(space));
+
+      // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
+      // dispatch(updateSpace(space));
+      // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
       toast.success("Your space has been updated!", { autoClose: 1000 });
       setLoading(false);
     } catch (error) {
@@ -53,12 +58,13 @@ const Setting = () => {
   const handleDeletingSpace = async () => {
     try {
       const { data } = await delete_space(selectedSpace)
+      dispatch(removeSpace(selectedSpace))
       toast.success(data.message, { autoClose: 1000 });
     } catch (error) {
       toast.error(error.workspaceId, { autoClose: 1000 });
     }
   }
-  
+
   return (
     <section className="p-2 pb-[100px] customScroll">
       <div className="flex text-teal-600 text-sm">
@@ -106,7 +112,7 @@ const Setting = () => {
           <h6 className="pl-3">Colour</h6>
         </div>
         <ColorPicker
-          value={space.color}
+          value={space?.color}
           onChange={(c) => setSpace((prev) => ({ ...prev, color: c }))}
         />
       </div>
@@ -125,7 +131,7 @@ const Setting = () => {
               type="radio"
               value="public"
               className="radioButton"
-              checked={space.privacy === PRIVACY.PUBLIC}
+              checked={space?.privacy === PRIVACY.PUBLIC}
               onChange={(e) =>
                 setSpace((pre) => ({
                   ...pre,
@@ -147,7 +153,7 @@ const Setting = () => {
               type="radio"
               value="private"
               className="radioButton"
-              checked={space.privacy === PRIVACY.PRIVATE}
+              checked={space?.privacy === PRIVACY.PRIVATE}
               onChange={(e) =>
                 setSpace((pre) => ({
                   ...pre,

@@ -19,10 +19,7 @@ import {
 
 const WorkspaceSettings = () => {
 
-  const { workspaces, selectedWorkspace } = useSelector(
-    (state) => state.workspace
-  );
-
+  const { selectedWorkspace } = useSelector(state => state.workspace);
   const [workspace, setWorkspace] = useState(selectedWorkspace);
   const [workspaceMembers, setWorkspaceMembers] = useState([]);
   const [changingRoll, setChangingRoll] = useState("");

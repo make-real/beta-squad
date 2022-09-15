@@ -31,16 +31,19 @@ import {
   setSelectedSpaceId,
   setSelectedSpaceObject,
 } from "../../store/slice/space";
+import { get_space_data, get_workspace_data } from "../../api/workSpace";
 import { useStyleContext } from "../../context/StyleContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import Dropdown from "../../components/Dropdown";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import { get_space_data, get_workspace_data } from "../../api/workSpace";
-import Dropdown from "../../components/Dropdown";
+
 
 const SideBar = () => {
+
+  const dispatch = useDispatch();
   const { margin, setMargin } = useStyleContext();
   const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
@@ -48,22 +51,16 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-  // const [selectedSpaceName, setSelectedSpaceName] = useState('');
-
-  const dispatch = useDispatch();
 
   // For Work-Spaces
-  const allWorkSpaces = useSelector((state) => state.workspace.workspaces);
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+  const { workspaces, selectedWorkspace } = useSelector(state => state.workspace);
 
   // For All Space
-  const allSpace = useSelector((state) => state.space.allSpaces);
-  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+  const { selectedSpace, allSpaces } = useSelector(state => state.space);
 
   // get user img from user info, which store at local storage...
   const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
+
 
   // re-render for Work-Space
   useEffect(() => {
@@ -86,14 +83,15 @@ const SideBar = () => {
     getWorkSpaceData();
 
     // when new work-space add, re-render this component...
-  }, [dispatch, allWorkSpaces?.length]);
+  }, [dispatch, workspaces?.length]);
+
 
   // re-render for space's under specific workSpace
   useEffect(() => {
     // 🟨🟨🟨 GET request for all Spaces data...
     const getSpaceData = async () => {
       try {
-        const { data } = await get_space_data(userSelectedWorkSpaceId);
+        const { data } = await get_space_data(selectedWorkspace);
 
         // get all Space data
         dispatch(addSpace(data.spaces));
@@ -102,7 +100,7 @@ const SideBar = () => {
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
         dispatch(setSelectedSpaceObject(data.spaces[0]));
       } catch (error) {
-        // console.log("space selection ==> ", error);
+        console.log("space selection ==> ", error);
       }
     };
 
@@ -111,7 +109,9 @@ const SideBar = () => {
 
     // when id workSpace ID change,
     // re-fetch all space's under this specific workSpace ID...
-  }, [dispatch, userSelectedWorkSpaceId]);
+  }, [dispatch, selectedWorkspace]);
+
+
 
   return (
     <>
@@ -123,7 +123,7 @@ const SideBar = () => {
               <div className="space-y-1">
                 {
                   // 🟨🟨🟨 all work-Space loop here...
-                  allWorkSpaces?.map((workSpace) => (
+                  workspaces?.map((workSpace) => (
                     <Tippy
                       key={workSpace?._id}
                       placement="right"
@@ -133,11 +133,10 @@ const SideBar = () => {
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div
                         className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${
-                        userSelectedWorkSpaceId === workSpace?._id
-                          ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
-                          : ""
-                      }`}
+                      ${selectedWorkspace === workSpace?._id
+                            ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
+                            : ""
+                          }`}
                         onClick={() =>
                           dispatch(setSelectedWorkSpaceId(workSpace?._id))
                         }
@@ -211,9 +210,8 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
         <div
-          className={`${
-            !margin ? "hidden" : "w-[275px]"
-          } bg-[#202F3E] duration-200`}
+          className={`${!margin ? "hidden" : "w-[275px]"
+            } bg-[#202F3E] duration-200`}
         >
           <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
             <div className="flex items-center space-x-4 relative">
@@ -363,7 +361,7 @@ const SideBar = () => {
 
             {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
             <div className="my-0">
-              {allSpace?.map((space) => (
+              {allSpaces?.map((space) => (
                 <div
                   key={space._id}
                   className="flex pr-2 items-center group"
@@ -375,10 +373,9 @@ const SideBar = () => {
                   <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
 
                   <div
-                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${
-                      selectedSpaceId === space._id ? "bg-gray-600" : ""
-                    } `}
-                    // onClick={() => setSelectedSpaceName(space.name)}
+                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpace === space._id ? "bg-gray-600" : ""
+                      } `}
+                  // onClick={() => setSelectedSpaceName(space.name)}
                   >
                     {space.privacy.includes("private") ? (
                       <SpaceLogoLock color={space.color || "#57BEC7"} />
@@ -468,7 +465,7 @@ const SideBar = () => {
         // 🟨🟨🟨 🔎🔎🔎 Space Searching Modal Open / Popup 🟨🟨🟨
         spaceSearchModal && (
           <ModalSearchSpace
-            allSpace={allSpace}
+            allSpace={allSpaces}
             setSpaceSearchModal={setSpaceSearchModal}
             setCreateSpaceModal={setCreateSpaceModal}
           />
