@@ -9,11 +9,13 @@ export const add_space_members = (spaceId, memberId) => {
     memberId,
   });
 };
+
 export const remove_space_members = (spaceId, memberId) => {
   return useAxios.put(`/spaces/${spaceId}/remove-members`, {
     memberId,
   });
 };
+
 export const update_space = (spaceId, data) => {
   return useAxios.patch(`/spaces/${spaceId}`, {
     name: data.name,
@@ -22,6 +24,7 @@ export const update_space = (spaceId, data) => {
     privacy: data.privacy,
   });
 };
+
 export const leave_space = (spaceId) => {
   return useAxios.post(`/spaces/${spaceId}/leave`);
 };

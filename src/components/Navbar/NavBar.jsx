@@ -1,66 +1,79 @@
-import { HiOutlineUser, HiOutlinePuzzle, HiMenuAlt1 } from "react-icons/hi";
 import { SpaceLogoLock, SpaceLogo } from "../../assets/icons";
 import { useStyleContext } from "../../context/StyleContext";
+import { HiOutlineUser, HiMenuAlt1 } from "react-icons/hi";
 import { navLinks } from "../../constant/data";
+import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { FiSettings } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { TbFilter } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import { useState } from "react";
-import Members from "./Members";
-import AddOn from "./AddOn";
 import Setting from "./Setting";
+import Members from "./Members";
 import Filter from "./Filter";
+import AddOn from "./AddOn";
 
 
-const NavBar = () => {
+const NavBar = ({ selectedSpaceId }) => {
 
   const { margin } = useStyleContext();
+  const { allSpaces } = useSelector(state => state.space);
   const lastActiveLink = JSON.parse(localStorage.getItem('activeLink'));
 
   const [linkClick, setLinkClick] = useState(lastActiveLink || navLinks[0].name);
+  const [currentSelectedSpace, setCurrentSelectedSpace] = useState({})
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");
 
   // at refreshing time, persistence selected Link  
   localStorage.setItem('activeLink', JSON.stringify(linkClick));
 
-  const selectedSpaceObj = useSelector(state => state.space.selectedSpaceObj);
-
   const handleSidePanel = (name) => {
     setSidePanel(true);
     setNavIcons(name);
   };
 
+  useEffect(() => {
+    const tempSpace = allSpaces?.find(({ _id }) => _id === selectedSpaceId);
+
+    if (tempSpace) {
+      setCurrentSelectedSpace(tempSpace);
+    } else {
+      // when space deleting... by default select it... 
+      setCurrentSelectedSpace(allSpaces[0]);
+    }
+
+  }, [selectedSpaceId, allSpaces]);
+
 
   const activeLink = "mr-8 py-4 font-bold text-teal-400";
   const normalLink = "mr-8 py-4 font-bold text-gray-300 hover:text-gray-600 hover:underline";
 
+
   return (
     <header
-      className={`${margin ? "ml-[325px]" : "ml-[50px]"
-        } fixed top-0 left-0 right-0 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
+      className={`${margin ? "ml-[325px]" : "ml-[50px]"} 
+      fixed top-0 left-0 right-0 bg-white px-8 py-2 flex items-center justify-between border-b border-gray-300`}
     >
       {/* 🟨🟨🟨 Left Side */}
       <div className="flex items-center gap-5">
         <div className="w-12 h-12">
           {/* <img src={asserts.haySpace} alt="logo" /> */}
 
-          {selectedSpaceObj?.privacy?.includes("private") ? (
-            <SpaceLogoLock color={selectedSpaceObj?.color || "#57BEC7"} className="w-12 h-12" />
+          {currentSelectedSpace?.privacy?.includes("private") ? (
+            <SpaceLogoLock color={currentSelectedSpace?.color || "#57BEC7"} className="w-12 h-12" />
           ) : (
-            <SpaceLogo color={selectedSpaceObj?.color || "#57BEC7"} className="w-12 h-12" />
+            <SpaceLogo color={currentSelectedSpace?.color || "#57BEC7"} className="w-12 h-12" />
           )}
         </div>
 
         <div div="true">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold" style={{ color: selectedSpaceObj?.color }}>
+            <h2 className="text-xl font-bold" style={{ color: currentSelectedSpace?.color }}>
               {
-                selectedSpaceObj &&
-                selectedSpaceObj?.name
+                currentSelectedSpace &&
+                currentSelectedSpace?.name
               }
             </h2>
             <p className="text-[12px] text-gray-300 font-light">
@@ -75,7 +88,7 @@ const NavBar = () => {
                 to={path}
                 onClick={() => setLinkClick(name)}
                 className={name === linkClick ? activeLink : normalLink}
-                style={name === linkClick ? { color: selectedSpaceObj.color } : { color: '#cbd5e0' }}
+                style={name === linkClick ? { color: currentSelectedSpace?.color } : { color: '#cbd5e0' }}
               >
                 {name}
               </Link>
@@ -120,12 +133,12 @@ const NavBar = () => {
         )}
 
         {/* {linkClick === "Chat" && ( */}
-          <div
-            className="flex p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
-            onClick={() => handleSidePanel("add-member")}
-          >
-            <HiOutlineUser className="text-xl font-bold" />
-          </div>
+        <div
+          className="flex p-2 cursor-pointer duration-300 rounded-lg hover:bg-gray-100 hover:text-teal-400 "
+          onClick={() => handleSidePanel("add-member")}
+        >
+          <HiOutlineUser className="text-xl font-bold" />
+        </div>
         {/* )} */}
 
         <div

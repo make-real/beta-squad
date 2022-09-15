@@ -11,6 +11,7 @@ import signIn2 from './images/signIn2.png';
 import timeCamp from './images/timeCamp.png';
 import userLogin from './images/userLogin.png';
 import chattingStart from './images/chattingStart.png';
+import cardAsList from './images/cardAsList.png';
 
 
 const images = {
@@ -27,6 +28,7 @@ const images = {
     timeCamp,
     userLogin,
     chattingStart,
+    cardAsList,
 }
 
 export default images;

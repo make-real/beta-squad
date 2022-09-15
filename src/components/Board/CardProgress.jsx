@@ -9,7 +9,7 @@ const CardProgress = ({ progress, setProgress, list }) => {
     const handlePreviewProgressChange = (v) => () => setPreviewProgress(v);
 
     return (
-        <div className={`flex items-center space-x-2 px-3 pl-4 ${list && 'absolute top-28 -left-28 z-50 bg-white rounded-md'}`}>
+        <div className={`flex items-center space-x-2 px-3 pl-4 ${list && 'absolute top-16 py-2 h-22 -left-28 z-50 bg-white rounded-md before:absolute '}`}>
             {[...Array(5).keys()].map((itemIndex) => (
                 <div
                     key={itemIndex}

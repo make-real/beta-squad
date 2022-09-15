@@ -2,7 +2,9 @@ import { useRef } from "react";
 import Popup from "reactjs-popup";
 
 const Dropdown = ({ menu, button, width, disabled, position }) => {
+  
   const ref = useRef(null);
+
   return (
     <Popup
       position={position}
@@ -16,7 +18,11 @@ const Dropdown = ({ menu, button, width, disabled, position }) => {
       trigger={<div>{button}</div>}
       disabled={disabled}
     >
-      {menu({ closePopup: () => ref.current?.close() })}
+
+      {
+        menu({ closePopup: () => ref.current?.close() })
+      }
+
     </Popup>
   );
 };

@@ -32,7 +32,7 @@ const CardSettingDropDown = ({ right, progress, setProgress, noteDone, setNoteDo
 
 
     return (
-        <div className=''>
+        <div className='w-fit'>
             {/* <div className='boardActionDropDown group line-through relative'>
                 <Copy className='group-hover:text-teal-500' /> <span>Copy Card</span>
             </div>
@@ -41,7 +41,7 @@ const CardSettingDropDown = ({ right, progress, setProgress, noteDone, setNoteDo
                 <LinkingChain className='group-hover:text-teal-500' /> <span>Copy Card link</span>
             </div> */}
 
-            <div className='boardActionDropDown group' onClick={handleActionDropDownClick}>
+            <div className='boardActionDropDown group w-fit' onClick={handleActionDropDownClick}>
                 <RightOK className='group-hover:text-teal-500' /> <span>Make as {noteDone ? '' : 'not'} done</span>
             </div>
 

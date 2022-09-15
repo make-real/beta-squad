@@ -138,3 +138,6 @@ export const getSpaceMembers = spaceId => api.get(`/spaces/${spaceId}/members`);
 
 
 export const getAllUser = () => api.get('/users');
+
+
+export const getCardAsList = spaceId => api.get(`/spaces/${spaceId}/row?sortBy=progress&sort=descending`);
