@@ -6,9 +6,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { fetchUserToken } from './util/fetchUserToken';
 import { ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import 'react-toastify/dist/ReactToastify.css';
-import Tags from "./components/UserSettings/Tags";
 import WorkspaceSettings from "./components/UserSettings/WorkspaceSettings";
+import Tags from "./components/UserSettings/Tags";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
@@ -16,13 +17,16 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+
 const AuthRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
   if (jwt) return <Navigate to="/projects" />;
   return children;
 };
 
+
 const App = () => {
+
   const selectedSpaceId = useSelector(state => state.space.selectedSpace);
 
   return (
@@ -47,7 +51,7 @@ const App = () => {
         <Route path="projects" element={<ProtectedRoute> <Layout selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>}>
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
           <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
-          <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId}/> </ProtectedRoute>} />
+          <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
         </Route>

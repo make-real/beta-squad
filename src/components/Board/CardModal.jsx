@@ -19,6 +19,7 @@ import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, de
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 import ConfirmDialog from "./ConfirmDialog";
+import AssigneeUser from "../AssigneeUser/AssigneeUser";
 
 
 const Progress = ({ progress, setProgress }) => {
@@ -75,8 +76,10 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
   const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
-  const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
-  const [allUserForAssignee, setAllUserForAssignee] = useState([]);
+
+  // const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
+  // const [allUserForAssignee, setAllUserForAssignee] = useState([]);
+
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
   const [attachFileLoading, setAttachFileLoading] = useState(false);
@@ -371,45 +374,47 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // 🟩🟩🟩
-  const handle_open_assignee_modal = async (e) => {
+  const handle_open_assignee_modal = ( ) => {
 
     setOpenAssigneeModal(pre => !pre)
 
-    try {
-      if (!openAssigneeModal) {
-        const { data } = await getSpaceMembers(selectedSpaceId);
-        const remainUser = data.members.filter(({ _id }) => !localCard?.assignee?.some(user => user._id === _id));
-        setAllUserForAssignee(remainUser)
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   if (!openAssigneeModal) {
+    //     const { data } = await getSpaceMembers(selectedSpaceId);
+    //     console.log(data)
+    //     const remainUser = data.members.filter(({ _id }) => !localCard?.assignee?.some(user => user._id === _id));
+    //     setAllUserForAssignee(remainUser)
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
   }
 
-  // 🟩🟩🟩
-  const handle_add_assignee_users = async (user) => {
-    setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
+  // // 🟩🟩🟩
+  // const handle_add_assignee_users = async (user) => {
+  //   setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
 
-    try {
-      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { assignUser: user._id });
-      setLocalCard(data.updatedCard)
-    } catch (error) {
-      toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
-    }
-  }
+  //   try {
+  //     const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { assignUser: user._id });
+  //     setLocalCard(data.updatedCard)
+  //   } catch (error) {
+  //     toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+  //   }
+  // }
 
-  // 🟥🟥🟥
-  const handle_remove_assignee_users = async (user) => {
+  // // 🟥🟥🟥
+  // const handle_remove_assignee_users = async (user) => {
 
-    setAllUserForAssignee(pre => ([user, ...pre]));
+  //   setAllUserForAssignee(pre => ([user, ...pre]));
 
-    try {
-      const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAssignedUser: user._id });
-      setLocalCard(data.updatedCard)
-    } catch (error) {
-      toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
-    }
-  }
+  //   try {
+  //     const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAssignedUser: user._id });
+  //     setLocalCard(data.updatedCard)
+  //   } catch (error) {
+  //     toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+  //   }
+  // }
 
 
 
@@ -445,82 +450,99 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                 <span>Assignee</span>
               </div>
 
+
               {
                 openAssigneeModal &&
-                <div className="absolute top-12 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
-                >
-                  <div className="flex py-3 px-4 items-center justify-between text-gray-600">
-                    <p>Assign user to card</p>
-                    <p className="px-2 py-1 cursor-pointer hover:bg-gray-400 duration-300 rounded-md">Assign yourself</p>
-                  </div>
+                <AssigneeUser
+                  listID={listID}
+                  localCard={localCard}
+                  spaceID={selectedSpaceId}
+                  setLocalCard={setLocalCard}
+                  openAssigneeModal={openAssigneeModal}
+                // searchUserForAssignee={searchUserForAssignee}
+                // setSearchUserForAssignee={setSearchUserForAssignee}
+                // allUserForAssignee={allUserForAssignee}
+                // setAllUserForAssignee={setAllUserForAssignee}
+                // handle_remove_assignee_users={handle_remove_assignee_users}
+                // allUserForAssignee={allUserForAssignee}
+                // handle_add_assignee_users={handle_add_assignee_users}
+                />
 
-                  <div className="px-4 pb-.5">
-                    {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
-                    <input
-                      type="text"
-                      value={searchUserForAssignee}
-                      onChange={e => setSearchUserForAssignee(e.target.value)}
-                      className="text-black w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150"
-                    />
-                  </div>
 
-                  {
-                    // * List of users ===> that Assign yet...
-                    // 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
-                    localCard?.assignee?.length > 0 &&
-                    <div className={`mt-2 px-2  ${allUserForAssignee?.length === 0 && 'pb-2'}`}>
-                      <p className="text-black py-1">Already assigned</p>
-                      {
-                        localCard?.assignee?.map(user =>
-                          <div
-                            key={user?._id}
-                            className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['X'] after:absolute after:text-themeColor after:right-4"
-                            onClick={() => handle_remove_assignee_users(user)}
-                          >
-                            {
-                              user.avatar
-                                ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
-                                : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
-                                  {user?.fullName.charAt(0)}
-                                </p>
-                            }
+                // <div className="absolute top-12 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
+                // >
+                //   <div className="flex py-3 px-4 items-center justify-between text-gray-600">
+                //     <p>Assign user to card</p>
+                //     <p className="px-2 py-1 cursor-pointer hover:bg-gray-400 duration-300 rounded-md">Assign yourself</p>
+                //   </div>
 
-                            <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
-                          </div>
-                        )
-                      }
-                    </div>
-                  }
+                //   <div className="px-4 pb-.5">
+                //     {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
+                //     <input
+                //       type="text"
+                //       value={searchUserForAssignee}
+                //       onChange={e => setSearchUserForAssignee(e.target.value)}
+                //       className="text-black w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150"
+                //     />
+                //   </div>
 
-                  {
-                    // ? Just Print List of users ===> that NOT Assign yet...
-                    // 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
-                    allUserForAssignee?.length > 0 &&
-                    <div className="mt-2 px-2 overflow-y-auto h-[250px] customScroll pb-2">
-                      <p className="text-black py-1">Not assigned</p>
-                      {
-                        allUserForAssignee
-                          ?.filter(user => user.fullName?.toLowerCase()?.includes(searchUserForAssignee?.toLowerCase()))
-                          ?.map(user =>
-                            <div
-                              key={user?._id}
-                              className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
-                              onClick={() => handle_add_assignee_users(user)}
-                            >
-                              {
-                                user.avatar
-                                  ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
-                                  : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
-                                    {user?.fullName.charAt(0)}
-                                  </p>
-                              }
-                              <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
-                            </div>
-                          )
-                      }
-                    </div>
-                  }
-                </div>
+                //   {
+                //     // * List of users ===> that Assign yet...
+                //     // 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
+                //     localCard?.assignee?.length > 0 &&
+                //     <div className={`mt-2 px-2  ${allUserForAssignee?.length === 0 && 'pb-2'}`}>
+                //       <p className="text-black py-1">Already assigned</p>
+                //       {
+                //         localCard?.assignee?.map(user =>
+                //           <div
+                //             key={user?._id}
+                //             className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['X'] after:absolute after:text-themeColor after:right-4"
+                //             onClick={() => handle_remove_assignee_users(user)}
+                //           >
+                //             {
+                //               user.avatar
+                //                 ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                //                 : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
+                //                   {user?.fullName.charAt(0)}
+                //                 </p>
+                //             }
+
+                //             <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
+                //           </div>
+                //         )
+                //       }
+                //     </div>
+                //   }
+
+                //   {
+                //     // ? Just Print List of users ===> that NOT Assign yet...
+                //     // 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
+                //     allUserForAssignee?.length > 0 &&
+                //     <div className="mt-2 px-2 overflow-y-auto h-[250px] customScroll pb-2">
+                //       <p className="text-black py-1">Not assigned</p>
+                //       {
+                //         allUserForAssignee
+                //           ?.filter(user => user.fullName?.toLowerCase()?.includes(searchUserForAssignee?.toLowerCase()))
+                //           ?.map(user =>
+                //             <div
+                //               key={user?._id}
+                //               className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
+                //               onClick={() => handle_add_assignee_users(user)}
+                //             >
+                //               {
+                //                 user.avatar
+                //                   ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
+                //                   : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
+                //                     {user?.fullName.charAt(0)}
+                //                   </p>
+                //               }
+                //               <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
+                //             </div>
+                //           )
+                //       }
+                //     </div>
+                //   }
+                // </div>
               }
             </div>
 

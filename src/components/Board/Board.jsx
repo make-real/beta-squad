@@ -32,7 +32,7 @@ const Board = ({ selectedSpaceId }) => {
       }
     };
     fetchData();
-  }, [selectedSpaceId]);
+  }, [selectedSpaceId, setBoardList]);
 
   // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
   // POST Method ➕ add list inside board...
