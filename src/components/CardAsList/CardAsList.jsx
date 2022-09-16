@@ -46,13 +46,44 @@ const CardAsList = ({ selectedSpaceId }) => {
     }
   }
 
+  // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
+  // console.log(allCardAsList);
+  // console.log('assignee', openAssigneeUserModal);
 
+  //   {
+  //     "_id": "62fd8d11f02fe7fec41725ff",
+  //     "name": "Var",
+  //     "progress": 4,
+  //     "tags": [
+  //         {
+  //             "_id": "631a263453e3c0797afe91fc",
+  //             "name": "JSX",
+  //             "color": "#facc15"
+  //         }
+  //     ],
+  //     "assignee": [
+  //         {
+  //             "_id": "62f2c5566a44ceb7795f7a31",
+  //             "fullName": "taiseen",
+  //             "username": "taiseen",
+  //             "avatar": "https://res.cloudinary.com/duaxe7mr0/raw/upload/v1662658077/jx42zlvht3uqpysywu0s.jpg"
+  //         }
+  //     ],
+  //     "spaceRef": "62fd87a5f02fe7fec4172196",
+  //     "listRef": {
+  //         "_id": "62fd8d07f02fe7fec41725c6",
+  //         "name": "Variable"
+  //     }
+  // }
+
+  const [localCard, setLocalCard] = useState({})
 
   useEffect(() => {
     const cardsList = async () => {
       try {
         const { data } = await getCardAsList(selectedSpaceId)
         setAllCardAsList(data.cards);
+        // console.log(data.cards);
       } catch (error) {
         console.log(error);
       }
@@ -60,8 +91,7 @@ const CardAsList = ({ selectedSpaceId }) => {
     cardsList()
   }, [selectedSpaceId])
 
-  // console.log(allCardAsList);
-  console.log('assignee',openAssigneeUserModal);
+
 
 
   return allCardAsList?.length === 0
@@ -99,7 +129,11 @@ const CardAsList = ({ selectedSpaceId }) => {
             {
               allCardAsList?.length > 0 &&
               allCardAsList.map((card, i) => (
-                <tr className={`${i % 2 && 'bg-slate-100'}`} key={card._id}>
+                <tr
+                  key={card._id}
+                  className={`${i % 2 && 'bg-slate-100'}`}
+                  onClick={() => setLocalCard(card)}
+                >
 
                   <td className="p-1 cursor-pointer">
                     <div className="p-3 hover:bg-gray-300 duration-200 rounded-lg">{card?.name}</div>
@@ -113,14 +147,24 @@ const CardAsList = ({ selectedSpaceId }) => {
                           ? card?.assignee?.map((user, i) =>
                             <div
                               key={user?._id}
-                              className='flex -space-x-4'
-                              onClick={() => setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))}
+                              className='flex -space-x-2'
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))
+                              }}
                             >
-                              <p
-                                className='w-6 h-6 rounded-full bg-gray-400 border-2 border-gray-600 leading-6 text-center'
-                              >
-                                {user?.fullName.charAt(0).toUpperCase()}
-                              </p>
+                              {
+                                user?.avatar
+                                  ? <img src={user?.avatar} alt="" className="w-6 h-6 rounded-full " />
+                                  : (
+                                    <p
+                                      className='w-6 h-6 rounded-full bg-gray-400 leading-6 text-center'
+                                    >
+                                      {user?.fullName.charAt(0).toUpperCase()}
+                                    </p>
+                                  )
+                              }
+
                             </div>
                           )
 
@@ -131,7 +175,14 @@ const CardAsList = ({ selectedSpaceId }) => {
                             <HiOutlineUserAdd className="text-xl text-gray-600 group-hover:text-teal-500" />
                             {
                               openAssigneeUserModal.isOpen && openAssigneeUserModal.index === i &&
-                              <AssigneeUser className='absolute' />
+                              <AssigneeUser
+                                className='absolute'
+                                listID={localCard?.listRef?._id}
+                                localCard={localCard}
+                                spaceID={localCard?.spaceRef}
+                                setLocalCard={setLocalCard}
+                                openAssigneeModal={openAssigneeUserModal.isOpen}
+                              />
                             }
                           </div>
                       }

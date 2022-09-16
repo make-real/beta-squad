@@ -1,18 +1,75 @@
-import React from 'react'
+import { cardUpdateApiCall, getSpaceMembers } from '../../hooks/useFetch';
+import { useState, useEffect } from 'react';
+import { toast } from "react-toastify";
+
 
 const AssigneeUser = (props) => {
 
-    const {
-        localCard,
-        searchUserForAssignee,
-        setSearchUserForAssignee,
-        handle_remove_assignee_users,
-        allUserForAssignee,
-        handle_add_assignee_users,
-    } = props;
+    const { localCard, setLocalCard, spaceID, listID, openAssigneeModal } = props;
+
+    console.log(localCard)
+
+    const [allUserForAssignee, setAllUserForAssignee] = useState([]);
+    const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
+
+
+    useEffect(() => {
+
+        const getUserFromServer = async () => {
+            try {
+                if (openAssigneeModal) {
+                    const { data } = await getSpaceMembers(spaceID);
+                    const remainUser = data.members.filter(({ _id }) => !localCard?.assignee?.some(user => user._id === _id));
+                    setAllUserForAssignee(remainUser)
+                    // console.log(remainUser);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        getUserFromServer();
+
+    }, [openAssigneeModal, spaceID, listID, localCard])
+
+
+
+
+    // 🟩🟩🟩
+    const handle_add_assignee_users = async (user) => {
+        setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
+
+        try {
+            const { data } = await cardUpdateApiCall(spaceID, listID, localCard._id, { assignUser: user._id });
+            setLocalCard(data.updatedCard)
+        } catch (error) {
+            toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+        }
+    }
+
+
+
+    // 🟥🟥🟥
+    const handle_remove_assignee_users = async (user) => {
+
+        setAllUserForAssignee(pre => ([user, ...pre]));
+
+        try {
+            const { data } = await cardUpdateApiCall(spaceID, listID, localCard._id, { removeAssignedUser: user._id });
+            setLocalCard(data.updatedCard)
+        } catch (error) {
+            toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
+        }
+    }
+
+
+
+
 
     return (
-        <div className="absolute top-12 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
+        <div
+            onClick={e => e.stopPropagation()}
+            className="absolute top-12 left-[50%] translate-x-[-50%] w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
         >
             <div className="flex py-3 px-4 items-center justify-between text-gray-600">
                 <p>Assign user to card</p>

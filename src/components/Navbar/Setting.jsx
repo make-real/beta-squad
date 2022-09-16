@@ -40,12 +40,12 @@ const Setting = () => {
   const onSubmit = async () => {
     try {
       setLoading(true);
-      await update_space(selectedSpace, space);
-
+      const { data } = await update_space(selectedSpace, space);
+      // console.log(data);
       // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
-      // dispatch(updateSpace(space));
+      dispatch(updateSpace(space));
       // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
-      toast.success("Your space has been updated!", { autoClose: 1000 });
+      toast.success(data.message, { autoClose: 1000 });
       setLoading(false);
     } catch (error) {
       toast.error(error.message, { autoClose: 1000 });
@@ -128,6 +128,7 @@ const Setting = () => {
         <div className="py-3">
           <div className="flex items-center gap-3 mb-1">
             <input
+              id="public"
               type="radio"
               value="public"
               className="radioButton"
@@ -150,6 +151,7 @@ const Setting = () => {
 
           <div className="flex items-center gap-3 mb-1 mt-4">
             <input
+              id="private"
               type="radio"
               value="private"
               className="radioButton"

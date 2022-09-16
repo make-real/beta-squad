@@ -23,10 +23,7 @@ export const spaceSlice = createSlice({
             state.allSpaces = [...state.allSpaces, payload];
         },
         updateSpace: (state, { payload }) => {
-            const index = state.allSpaces.findIndex(
-                (space) => space.id === payload.id
-            );
-            state.allSpaces[index] = payload;
+            state.allSpaces = state.allSpaces.map(space => space._id === payload._id ? payload : space);
         },
         removeSpace: (state, { payload }) => {
             state.allSpaces = state.allSpaces.filter(({ _id }) => _id !== payload);
