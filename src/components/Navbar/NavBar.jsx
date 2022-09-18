@@ -21,7 +21,7 @@ const NavBar = ({ selectedSpaceId }) => {
   const { allSpaces } = useSelector(state => state.space);
   const lastActiveLink = JSON.parse(localStorage.getItem('activeLink'));
 
-  const [linkClick, setLinkClick] = useState(lastActiveLink || navLinks[0].name);
+  const [linkClick, setLinkClick] = useState(lastActiveLink || navLinks[0]?.name);
   const [currentSelectedSpace, setCurrentSelectedSpace] = useState({})
   const [sidePanel, setSidePanel] = useState(false);
   const [navIcons, setNavIcons] = useState("");

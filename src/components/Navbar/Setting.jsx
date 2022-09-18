@@ -1,4 +1,4 @@
-import { removeSpace, updateSpace } from "../../store/slice/space";
+import { removeSpace, setSelectedSpaceId, updateSpace } from "../../store/slice/space";
 import { delete_space, update_space } from "../../api/space";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -30,6 +30,7 @@ const Setting = () => {
     } else {
       // when space deleting... by default select it...
       setSpace(allSpaces[0]);
+      dispatch(setSelectedSpaceId(allSpaces[0]._id));
     }
   }, [selectedSpace, allSpaces]);
 
@@ -41,10 +42,7 @@ const Setting = () => {
     try {
       setLoading(true);
       const { data } = await update_space(selectedSpace, space);
-      // console.log(data);
-      // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
       dispatch(updateSpace(space));
-      // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
       toast.success(data.message, { autoClose: 1000 });
       setLoading(false);
     } catch (error) {
@@ -109,7 +107,7 @@ const Setting = () => {
       <div className="mt-5 bg-white p-3.5 rounded-md">
         <div className="flex text-gray-600 mb-3">
           <AiOutlineInfoCircle className="my-auto" />
-          <h6 className="pl-3">Colour</h6>
+          <h6 className="pl-3">Color</h6>
         </div>
         <ColorPicker
           value={space?.color}
