@@ -134,10 +134,10 @@ export const deleteChecklistItem = (spaceId, listId, cardId, checklistId) =>
     api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`);
 
 
-export const getSpaceMembers = spaceId => api.get(`/spaces/${spaceId}/members`);
-
-
 export const getAllUser = () => api.get('/users');
 
+export const getSpaceMembers = spaceId => api.get(`/spaces/${spaceId}/members`);
+
+export const getSingleCard = (spaceId, listId, cardId) => api.get(`/spaces/${spaceId}/board/${listId}/card/${cardId}`);
 
 export const getCardAsList = spaceId => api.get(`/spaces/${spaceId}/row?sortBy=progress&sort=descending`);

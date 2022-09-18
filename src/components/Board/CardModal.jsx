@@ -15,7 +15,10 @@ import { create_tag, get_tags } from "../../api/tags";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CardSettingDropDown } from ".";
-import { cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem, deleteChecklistItem, getAllUser, getSpaceMembers, updateChecklistItem } from "../../hooks/useFetch";
+import {
+  cardAttachmentUpdateApiCall, cardUpdateApiCall, createChecklistItem,
+  deleteChecklistItem, getSingleCard, updateChecklistItem
+} from "../../hooks/useFetch";
 import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 import ConfirmDialog from "./ConfirmDialog";
@@ -63,23 +66,20 @@ const Progress = ({ progress, setProgress }) => {
 
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
-const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress, progressStatus }) => {
+const CardModal = (prop) => {
 
-  const [localCard, setLocalCard] = useState(card);
+  const { setBoardModal, noteDone, setNoteDone, card, listID, progress, setProgress, progressStatus, handleDataChange = () => { } } = prop;
+
+  const [localCard, setLocalCard] = useState({});
   const { updateCard, boardLists } = useBoardCardContext();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
   const nameOfBoardList = boardLists.find(({ _id }) => _id === listID)?.name;
-
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
   const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
-
-  // const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
-  // const [allUserForAssignee, setAllUserForAssignee] = useState([]);
-
   const [modalActionToggling, setModalActionToggling] = useState(false);
   const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
   const [attachFileLoading, setAttachFileLoading] = useState(false);
@@ -96,6 +96,18 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   })
 
 
+  useEffect(() => {
+
+    const getCard = async () => {
+
+      const { data } = await getSingleCard(selectedSpaceId, listID, card?._id)
+      setLocalCard(data?.card)
+    }
+
+    getCard()
+
+  }, [selectedSpaceId, listID, card?._id])
+
 
   // 🟩🟩🟩
   // user esc key press Event Listener for closing modal...
@@ -108,12 +120,14 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     return () => document.removeEventListener("keydown", handleEscapeKeyPress);
   }, [setBoardModal]);
 
+
   // 🟩🟩🟩
   // CardInfo Modal Data Update when user input new data...
   useEffect(
-    () => updateCard(listID, card._id, localCard),
+    () => updateCard(listID, localCard._id, localCard),
     [listID, card._id, localCard]
   );
+
 
   // console.log(localCard);
   // 🟩🟩🟩
@@ -148,8 +162,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
     try {
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
+      handleDataChange()
 
-      updateCard(listID, card._id, data.updatedCard);
+      updateCard(listID, localCard._id, data.updatedCard);
     } catch (error) {
       console.log(error?.response?.data?.issue);
     }
@@ -170,7 +185,9 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
     try {
       const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagRemoved)
 
-      updateCard(listID, card._id, data.updatedCard);
+      updateCard(listID, localCard._id, data.updatedCard);
+      handleDataChange()
+
     } catch (error) {
       // error for user at notification...
       toast.error(error?.response?.data?.issue, { autoClose: 3000 });
@@ -187,9 +204,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
       setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
-
-
       setTagsFromAPI((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
+      handleDataChange()
     } catch (error) {
       console.log(error)
     }
@@ -223,6 +239,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   // 🟩🟩🟩
   // handle keyBoard enter button press
   const handle_card_name_update_enter_btn = async (e) => {
+    console.log(e.target.value)
+    // setLocalCard(pre=> ({...pre, name : e.target.value }))
     if (e.key === 'Enter') {
       const cardTagObject = { ...localCard, name: localCard.name };
 
@@ -230,6 +248,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
         const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
         if (data.updatedCard._id) {
           toast.success(`Card name updated`, { autoClose: 2000 });
+          handleDataChange()
         }
       } catch (error) {
         console.log(error?.response?.data?.issue);
@@ -246,6 +265,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
         const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardTagObject)
         if (data.updatedCard._id) {
           toast.success(`Description updated`, { autoClose: 2000 });
+          handleDataChange()
         }
       } catch (error) {
         console.log(error?.response?.data?.issue);
@@ -271,6 +291,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
 
       try {
         await createChecklistItem(selectedSpaceId, listID, card._id, checkListItemObj)
+        handleDataChange()
       } catch (error) {
         console.log(error.response.data.issue)
       }
@@ -284,6 +305,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const handle_check_list_change = e => {
     const { checked, name, value } = e.target;
     setCheckListItem(pre => ({ ...pre, [name]: [name].includes('content') ? value : checked }));
+    handleDataChange()
   }
 
   // ✅✅✅
@@ -360,6 +382,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
       const { data } = await cardAttachmentUpdateApiCall(selectedSpaceId, listID, card._id, formData);
       setLocalCard(pre => ({ ...pre, attachments: data.updatedCard.attachments }))
       setAttachFileLoading(false);
+      handleDataChange()
 
     } catch (error) {
       console.log(error?.response?.data?.issue);
@@ -371,56 +394,18 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const handle_attach_delete = file => {
     setDeleteAttachFileLoading(true);
     setDeleteAttachFile(file)
+    handleDataChange()
   }
 
   // 🟩🟩🟩
-  const handle_open_assignee_modal = () => {
+  const handle_open_assignee_modal = () => setOpenAssigneeModal(pre => !pre)
 
-    setOpenAssigneeModal(pre => !pre)
-
-    // try {
-    //   if (!openAssigneeModal) {
-    //     const { data } = await getSpaceMembers(selectedSpaceId);
-    //     console.log(data)
-    //     const remainUser = data.members.filter(({ _id }) => !localCard?.assignee?.some(user => user._id === _id));
-    //     setAllUserForAssignee(remainUser)
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-  }
-
-  // // 🟩🟩🟩
-  // const handle_add_assignee_users = async (user) => {
-  //   setAllUserForAssignee(pre => pre.filter(({ _id }) => _id !== user._id));
-
-  //   try {
-  //     const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { assignUser: user._id });
-  //     setLocalCard(data.updatedCard)
-  //   } catch (error) {
-  //     toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
-  //   }
-  // }
-
-  // // 🟥🟥🟥
-  // const handle_remove_assignee_users = async (user) => {
-
-  //   setAllUserForAssignee(pre => ([user, ...pre]));
-
-  //   try {
-  //     const { data } = await cardUpdateApiCall(selectedSpaceId, listID, card._id, { removeAssignedUser: user._id });
-  //     setLocalCard(data.updatedCard)
-  //   } catch (error) {
-  //     toast.error(error.response.data.issue.assignUser, { autoClose: 2000 });
-  //   }
-  // }
 
 
 
   return (
     <section
-      className="fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center "
+      className="fixed top-0 right-0 left-0 bottom-0 z-[500] bg-black/30 grid place-items-center overflow-visible "
       onClick={() => setBoardModal(false)}
     >
 
@@ -460,82 +445,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                   setLocalCard={setLocalCard}
                   openAssigneeModal={openAssigneeModal}
                 />
-
-
-                // <div className="absolute top-12 left-[50%] translate-x-[-50%]  w-[450px] bg-white rounded-md z-50 shadow-[1px_1px_8px_8px_rgba(0,0,0,.3)] before:content-[''] before:absolute before:top-[-6px] before:z-[-50] before:left-[50%] before:translate-x-[-50%] before:rotate-45 before:bg-white before:w-7 before:h-7"
-                // >
-                //   <div className="flex py-3 px-4 items-center justify-between text-gray-600">
-                //     <p>Assign user to card</p>
-                //     <p className="px-2 py-1 cursor-pointer hover:bg-gray-400 duration-300 rounded-md">Assign yourself</p>
-                //   </div>
-
-                //   <div className="px-4 pb-.5">
-                //     {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
-                //     <input
-                //       type="text"
-                //       value={searchUserForAssignee}
-                //       onChange={e => setSearchUserForAssignee(e.target.value)}
-                //       className="text-black w-full px-2 py-1 rounded-md outline-none border focus:border-blue-400 duration-150"
-                //     />
-                //   </div>
-
-                //   {
-                //     // * List of users ===> that Assign yet...
-                //     // 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢
-                //     localCard?.assignee?.length > 0 &&
-                //     <div className={`mt-2 px-2  ${allUserForAssignee?.length === 0 && 'pb-2'}`}>
-                //       <p className="text-black py-1">Already assigned</p>
-                //       {
-                //         localCard?.assignee?.map(user =>
-                //           <div
-                //             key={user?._id}
-                //             className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['X'] after:absolute after:text-themeColor after:right-4"
-                //             onClick={() => handle_remove_assignee_users(user)}
-                //           >
-                //             {
-                //               user.avatar
-                //                 ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
-                //                 : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
-                //                   {user?.fullName.charAt(0)}
-                //                 </p>
-                //             }
-
-                //             <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
-                //           </div>
-                //         )
-                //       }
-                //     </div>
-                //   }
-
-                //   {
-                //     // ? Just Print List of users ===> that NOT Assign yet...
-                //     // 🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵
-                //     allUserForAssignee?.length > 0 &&
-                //     <div className="mt-2 px-2 overflow-y-auto h-[250px] customScroll pb-2">
-                //       <p className="text-black py-1">Not assigned</p>
-                //       {
-                //         allUserForAssignee
-                //           ?.filter(user => user.fullName?.toLowerCase()?.includes(searchUserForAssignee?.toLowerCase()))
-                //           ?.map(user =>
-                //             <div
-                //               key={user?._id}
-                //               className="relative group flex items-center px-2.5 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
-                //               onClick={() => handle_add_assignee_users(user)}
-                //             >
-                //               {
-                //                 user.avatar
-                //                   ? <img src={user.avatar} alt="" className="w-6 h-6 rounded-full ring ring-teal-500" />
-                //                   : <p className="w-6 h-6 rounded-full ring ring-teal-500 text-black font-bold grid place-items-center">
-                //                     {user?.fullName.charAt(0)}
-                //                   </p>
-                //               }
-                //               <span className="duration-150 group-hover:text-black">{user?.fullName}</span>
-                //             </div>
-                //           )
-                //       }
-                //     </div>
-                //   }
-                // </div>
               }
             </div>
 
@@ -598,7 +507,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
           <div className="p-3">
             <input
               type="text"
-              value={card?.name}
+              value={localCard?.name}
               // onChange={e => deBounceGetCardName(e.target.value)}
               onChange={e => setLocalCard(pre => ({ ...pre, name: e.target.value }))}
               onKeyDown={handle_card_name_update_enter_btn}
@@ -686,7 +595,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             <input
               type="text"
               className="w-[85%] px-3 h-14 ml-10 border border-gray-50 hover:border-gray-200 outline-none bg-gray-50 cursor-pointer rounded-md text-gray-600"
-              value={card?.description}
+              value={localCard?.description}
               onChange={e => setLocalCard(pre => ({ ...pre, description: e.target.value }))}
               onKeyDown={handle_card_description_update_enter_btn}
             />
