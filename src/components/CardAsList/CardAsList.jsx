@@ -7,13 +7,22 @@ import { useState, useEffect } from "react";
 import AssigneeUser from "../AssigneeUser/AssigneeUser";
 import CardProgress from '../Board/CardProgress';
 import images from "../../assets";
+import { CardModal } from "../Board";
+import { create_tag } from "../../api/tags";
+import { useSelector } from "react-redux";
 
 
 
 const CardAsList = ({ selectedSpaceId }) => {
 
+
   const { margin } = useStyleContext();
   const [allCardAsList, setAllCardAsList] = useState([])
+  const [cardModal, setCardModal] = useState(false);
+  const [localCard, setLocalCard] = useState({})
+  const [progress, setProgress] = useState(0)
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const [openAssigneeUserModal, setOpenAssigneeUserModal] = useState({
     isOpen: false,
@@ -29,6 +38,41 @@ const CardAsList = ({ selectedSpaceId }) => {
     isOpen: false,
     index: 0,
   })
+
+  const [createNewTag, setCreateNewTag] = useState({
+    name: "",
+    color: "#47b9ea",
+  });
+
+
+  // 🟩🟩🟩
+  const handle_new_tag_creation = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      // POST Method for creating tag's inside a specific workSpace
+      const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
+      // console.log(data);
+      // dispatch(addNewTag({ newTag: data?.tag, cardID }))
+      // setAllCardAsList((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
+      // setAllCardAsList((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
+      // workSpaceRef
+      // console.log({allCardAsList.tags})
+
+      // setAllCardAsList(pre => ({...pre, tags : pre.tags.find(({workSpaceRef}) => workSpaceRef === data?.tag?._id )}));
+
+    } catch (error) {
+      console.log(error)
+    }
+
+    // close drop down tag container...
+    // setShowTags(false);
+
+    // clear input field
+    setCreateNewTag((pre) => ({ ...pre, name: "" }));
+  };
+
 
 
   const progressStatus = (progress) => {
@@ -46,50 +90,24 @@ const CardAsList = ({ selectedSpaceId }) => {
     }
   }
 
-  // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
-  // console.log(allCardAsList);
-  // console.log('assignee', openAssigneeUserModal);
 
-  //   {
-  //     "_id": "62fd8d11f02fe7fec41725ff",
-  //     "name": "Var",
-  //     "progress": 4,
-  //     "tags": [
-  //         {
-  //             "_id": "631a263453e3c0797afe91fc",
-  //             "name": "JSX",
-  //             "color": "#facc15"
-  //         }
-  //     ],
-  //     "assignee": [
-  //         {
-  //             "_id": "62f2c5566a44ceb7795f7a31",
-  //             "fullName": "taiseen",
-  //             "username": "taiseen",
-  //             "avatar": "https://res.cloudinary.com/duaxe7mr0/raw/upload/v1662658077/jx42zlvht3uqpysywu0s.jpg"
-  //         }
-  //     ],
-  //     "spaceRef": "62fd87a5f02fe7fec4172196",
-  //     "listRef": {
-  //         "_id": "62fd8d07f02fe7fec41725c6",
-  //         "name": "Variable"
-  //     }
-  // }
-
-  const [localCard, setLocalCard] = useState({})
 
   useEffect(() => {
     const cardsList = async () => {
       try {
         const { data } = await getCardAsList(selectedSpaceId)
-        setAllCardAsList(data.cards);
-        // console.log(data.cards);
+        setAllCardAsList(data?.cards)
       } catch (error) {
         console.log(error);
       }
     }
     cardsList()
   }, [selectedSpaceId])
+
+
+  useEffect(() => {
+    // cardsList()
+  }, [allCardAsList])
 
 
 
@@ -105,15 +123,15 @@ const CardAsList = ({ selectedSpaceId }) => {
       </div>
     )
     : (
-      <section className={`pt-20 px-3 bg-gray-100`}>
+      <section className={`pt-20 px-3 bg-gray-100 h-screen `}>
 
         <table
           className={`
           ${margin ? 'ml-[325px] w-[81vw]' : 'ml-[50px] w-[95vw]'} 
-          duration-200 text-left max-h-[800px] `
+          duration-200 text-left  `
           }
         >
-          <thead className="sticky top-0 ">
+          <thead className="sticky top-0 left-0 right-0 z-50">
             <tr className="bg-white p-8 text-gray-400 font-thin font-[Signika]">
               <th className="py-3 px-4">Card Name</th>
               <th className="py-3 px-4">Assign</th>
@@ -135,19 +153,21 @@ const CardAsList = ({ selectedSpaceId }) => {
                   onClick={() => setLocalCard(card)}
                 >
 
-                  <td className="p-1 cursor-pointer">
+                  {/* Card Name */}
+                  <td className="p-1 cursor-pointer" onClick={() => setCardModal(true)}>
                     <div className="p-3 hover:bg-gray-300 duration-200 rounded-lg">{card?.name}</div>
                   </td>
 
                   {/* Assignee User */}
                   <td className="p-1">
-                    <div className="cursor-pointer w-10 h-10 flex justify-center items-center rounded-md duration-200 hover:bg-gray-200 group">
+                    <div className={`cursor-pointer ${card?.assignee?.length > 0 ? 'w-fit' : 'w-10 '} 
+                    relative h-10 flex justify-center items-center rounded-md duration-200 hover:bg-gray-200 group mx-auto`}>
                       {
                         card?.assignee?.length > 0
                           ? card?.assignee?.map((user, i) =>
                             <div
                               key={user?._id}
-                              className='flex -space-x-2'
+                              className={`flex relative ${i !== 0 && `-left-${i + 1}`}`}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))
@@ -155,7 +175,8 @@ const CardAsList = ({ selectedSpaceId }) => {
                             >
                               {
                                 user?.avatar
-                                  ? <img src={user?.avatar} alt="" className="w-6 h-6 rounded-full " />
+                                  ? <img src={user?.avatar} alt="" className={`w-6 h-6 rounded-full `}
+                                    style={{ aspectRatio: '1:1' }} />
                                   : (
                                     <p
                                       className='w-6 h-6 rounded-full bg-gray-400 leading-6 text-center'
@@ -164,35 +185,38 @@ const CardAsList = ({ selectedSpaceId }) => {
                                     </p>
                                   )
                               }
-
                             </div>
                           )
 
                           : <div
-                            className="relative"
+                            className=""
                             onClick={() => setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))}
                           >
                             <HiOutlineUserAdd className="text-xl text-gray-600 group-hover:text-teal-500" />
-                            {
-                              openAssigneeUserModal.isOpen && openAssigneeUserModal.index === i &&
-                              <AssigneeUser
-                                className='absolute'
-                                listID={localCard?.listRef?._id}
-                                localCard={localCard}
-                                spaceID={localCard?.spaceRef}
-                                setLocalCard={setLocalCard}
-                                openAssigneeModal={openAssigneeUserModal.isOpen}
-                              />
-                            }
                           </div>
+                      }
+                      {
+                        openAssigneeUserModal.isOpen && openAssigneeUserModal.index === i &&
+                        <AssigneeUser
+                          className='absolute'
+                          listID={localCard?.listRef?._id}
+                          localCard={localCard}
+                          spaceID={localCard?.spaceRef}
+                          setLocalCard={setLocalCard}
+                          openAssigneeModal={openAssigneeUserModal.isOpen}
+                        />
                       }
                     </div>
                   </td>
 
+
+                  {/* Date */}
                   <td className="p-1">
                     <span className="p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-300 hover:text-teal-500">Set Dates</span>
                   </td>
 
+
+                  {/* Progress */}
                   <td className="p-1">
 
                     <div
@@ -203,39 +227,74 @@ const CardAsList = ({ selectedSpaceId }) => {
 
                       {
                         openCardProgress.isOpen && openCardProgress.index === i &&
-
                         <CardProgress list />
-
                       }
                     </div>
 
                   </td>
 
+
+                  {/* user name */}
                   <td className="p-1">
                     <span className="p-3 cursor-pointer hover:text-teal-300 duration-200">
-                      DEMO
+                      {userInfo.fullName}
                     </span>
                   </td>
 
-                  <td className="p-1 space-x-1">
+
+                  {/* Tags */}
+                  <td className="p-1 space-x-1 flex">
                     {
                       card?.tags?.length > 0 &&
-                      card?.tags?.map(tag =>
+                      card?.tags?.slice(0, 2).map(tag =>
                         <span
                           key={tag?._id}
                           style={{ backgroundColor: tag.color }}
-                          className="cursor-pointer text-sm rounded-full px-2 py-1"
+                          className="cursor-pointer text-sm rounded-full px-2 py-1 text-white"
                         >
                           {tag.name}
                         </span>
                       )
                     }
-                    <span
-                      className="px-2 text-white bg-gray-500 rounded-full cursor-pointer"
+                    <div
+                      className="relative px-3 text-white bg-gray-500 rounded-full cursor-pointer w-fit"
                       onClick={() => setOpenTagModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))}
                     >
                       ...
-                    </span>
+                      {
+                        openTagModal.isOpen && openTagModal.index === i &&
+                        <div className="absolute w-48 p-2 bg-white top-8 left-[50%] translate-x-[-50%] rounded-md z-50 flex flex-wrap gap-2 items-center">
+                          {
+                            card?.tags?.length > 0 &&
+                            card?.tags?.map(tag =>
+                              <span
+                                key={tag?._id}
+                                style={{ backgroundColor: tag.color }}
+                                className="cursor-pointer text-sm rounded-full px-2 py-1"
+                              >
+                                {tag.name}
+                              </span>
+                            )
+                          }
+                          <form onSubmit={handle_new_tag_creation}>
+                            <input
+                              type="text"
+                              placeholder="Add a tag"
+                              className="ml-2 py-1 px-2 outline-none bg-gray-100 w-24 rounded-md text-black"
+                              value={createNewTag.name}
+                              onClick={e => e.stopPropagation()}
+                              onChange={(e) =>
+                                setCreateNewTag((pre) => ({
+                                  ...pre,
+                                  name: e.target.value,
+                                }))
+                              }
+                            // onClick={() => setShowTags(true)}
+                            />
+                          </form>
+                        </div>
+                      }
+                    </div>
                   </td>
 
                 </tr>
@@ -247,6 +306,19 @@ const CardAsList = ({ selectedSpaceId }) => {
 
         <AddCardButton />
 
+        {
+          // When Task Click >>> then Modal Open
+          cardModal &&
+          <CardModal
+            card={localCard}
+            listID={localCard?.listRef?._id}
+            progress={progress}
+            setProgress={setProgress}
+            setBoardModal={setCardModal}
+          // noteDone={noteDone}
+          // setNoteDone={setNoteDone}
+          />
+        }
       </section >
     );
 };

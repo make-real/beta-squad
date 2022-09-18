@@ -71,7 +71,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
-  const nameOfBoardList = boardLists.find(({ _id }) => _id === listID).name;
+  const nameOfBoardList = boardLists.find(({ _id }) => _id === listID)?.name;
 
   const [showTags, setShowTags] = useState(false);
   const [tagsFromAPI, setTagsFromAPI] = useState([]);
@@ -374,7 +374,7 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
   }
 
   // 🟩🟩🟩
-  const handle_open_assignee_modal = ( ) => {
+  const handle_open_assignee_modal = () => {
 
     setOpenAssigneeModal(pre => !pre)
 
@@ -459,13 +459,6 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
                   spaceID={selectedSpaceId}
                   setLocalCard={setLocalCard}
                   openAssigneeModal={openAssigneeModal}
-                // searchUserForAssignee={searchUserForAssignee}
-                // setSearchUserForAssignee={setSearchUserForAssignee}
-                // allUserForAssignee={allUserForAssignee}
-                // setAllUserForAssignee={setAllUserForAssignee}
-                // handle_remove_assignee_users={handle_remove_assignee_users}
-                // allUserForAssignee={allUserForAssignee}
-                // handle_add_assignee_users={handle_add_assignee_users}
                 />
 
 
@@ -613,6 +606,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             />
           </div>
 
+
+          {/* Tags */}
           <div className="p-3 flex relative">
             <div
               className="ml-2 w-10 h-10 grid place-items-center cursor-pointer hover:bg-gray-100 rounded-md duration-200 group"
@@ -680,6 +675,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             }
           </div>
 
+
+          {/* Description */}
           <div className="mt-4 ml-4 w-full">
             <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <Description className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
@@ -695,6 +692,8 @@ const CardModal = ({ setBoardModal, noteDone, setNoteDone, card, listID, progres
             />
           </div>
 
+
+          {/* Checklist */}
           <div className="mt-4 ml-4 ">
             <div className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group">
               <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{" "}
