@@ -12,17 +12,16 @@ import { create_tag } from "../../api/tags";
 import { useSelector } from "react-redux";
 
 
-
 const CardAsList = ({ selectedSpaceId }) => {
 
-
-  const { margin } = useStyleContext();
-  const [allCardAsList, setAllCardAsList] = useState([])
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const [allCardAsList, setAllCardAsList] = useState([]);
   const [cardModal, setCardModal] = useState(false);
   const [localCard, setLocalCard] = useState({})
   const [progress, setProgress] = useState(0)
-  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const { margin } = useStyleContext();
+
 
   const [openAssigneeUserModal, setOpenAssigneeUserModal] = useState({
     isOpen: false,
@@ -73,8 +72,6 @@ const CardAsList = ({ selectedSpaceId }) => {
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
   };
 
-
-
   const progressStatus = (progress) => {
     switch (progress) {
       case 4:
@@ -90,24 +87,19 @@ const CardAsList = ({ selectedSpaceId }) => {
     }
   }
 
-
-
-  useEffect(() => {
-    const cardsList = async () => {
-      try {
-        const { data } = await getCardAsList(selectedSpaceId)
-        setAllCardAsList(data?.cards)
-      } catch (error) {
-        console.log(error);
-      }
+  const cardsList = async () => {
+    try {
+      const { data } = await getCardAsList(selectedSpaceId)
+      setAllCardAsList(data?.cards)
+    } catch (error) {
+      console.log(error);
     }
-    cardsList()
-  }, [selectedSpaceId])
-
+  }
 
   useEffect(() => {
-    // cardsList()
-  }, [allCardAsList])
+    cardsList()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSpaceId, ])
 
 
 
@@ -134,7 +126,7 @@ const CardAsList = ({ selectedSpaceId }) => {
           <thead className="sticky top-0 left-0 right-0 z-50">
             <tr className="bg-white p-8 text-gray-400 font-thin font-[Signika]">
               <th className="py-3 px-4">Card Name</th>
-              <th className="py-3 px-4">Assign</th>
+              <th className="py-3 px-4 mx-auto">Assign</th>
               <th className="py-3 px-4">Date</th>
               <th className="py-3 px-4">Progress</th>
               <th className="py-3 px-4">List</th>
@@ -164,18 +156,19 @@ const CardAsList = ({ selectedSpaceId }) => {
                     relative h-10 flex justify-center items-center rounded-md duration-200 hover:bg-gray-200 group mx-auto`}>
                       {
                         card?.assignee?.length > 0
-                          ? card?.assignee?.map((user, i) =>
+                          ? card?.assignee?.slice(0, 2)?.map((user) =>
                             <div
                               key={user?._id}
-                              className={`flex relative ${i !== 0 && `-left-${i + 1}`}`}
-                              onClick={(e) => {
+                              className={`flex justify-center  relative ${(i !== 0 && `-left-${i}`)}`}
+                              onClick={e => {
                                 e.stopPropagation();
+                                setLocalCard(card)
                                 setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))
                               }}
                             >
                               {
                                 user?.avatar
-                                  ? <img src={user?.avatar} alt="" className={`w-6 h-6 rounded-full `}
+                                  ? <img src={user?.avatar} alt="" className={`w-6 h-6 rounded-full`}
                                     style={{ aspectRatio: '1:1' }} />
                                   : (
                                     <p
@@ -187,14 +180,26 @@ const CardAsList = ({ selectedSpaceId }) => {
                               }
                             </div>
                           )
-
-                          : <div
-                            className=""
-                            onClick={() => setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))}
-                          >
-                            <HiOutlineUserAdd className="text-xl text-gray-600 group-hover:text-teal-500" />
-                          </div>
+                          : (
+                            <div
+                              className="relative"
+                              onClick={() => {
+                                setLocalCard(card)
+                                setOpenAssigneeUserModal(pre => ({ ...pre, isOpen: !pre.isOpen, index: i }))
+                              }}
+                            >
+                              <HiOutlineUserAdd className="text-xl text-gray-600 group-hover:text-teal-500" />
+                            </div>
+                          )
                       }
+                      <div>
+                        {
+                          card.assignee.length > 2 &&
+                          <p className='w-6 h-6 rounded-full bg-gray-400 leading-6 text-center relative -left-5'>
+                            {card.assignee.length}+
+                          </p>
+                        }
+                      </div>
                       {
                         openAssigneeUserModal.isOpen && openAssigneeUserModal.index === i &&
                         <AssigneeUser
@@ -203,6 +208,7 @@ const CardAsList = ({ selectedSpaceId }) => {
                           localCard={localCard}
                           spaceID={localCard?.spaceRef}
                           setLocalCard={setLocalCard}
+                          handleDataChange={cardsList}
                           openAssigneeModal={openAssigneeUserModal.isOpen}
                         />
                       }
@@ -211,7 +217,7 @@ const CardAsList = ({ selectedSpaceId }) => {
 
 
                   {/* Date */}
-                  <td className="p-1">
+                  <td className="p-1" >
                     <span className="p-2 cursor-pointer rounded-lg duration-200 hover:bg-gray-300 hover:text-teal-500">Set Dates</span>
                   </td>
 
@@ -243,14 +249,14 @@ const CardAsList = ({ selectedSpaceId }) => {
 
 
                   {/* Tags */}
-                  <td className="p-1 space-x-1 flex">
+                  <td className="p-1 space-x-1 flex items-center">
                     {
                       card?.tags?.length > 0 &&
                       card?.tags?.slice(0, 2).map(tag =>
                         <span
                           key={tag?._id}
                           style={{ backgroundColor: tag.color }}
-                          className="cursor-pointer text-sm rounded-full px-2 py-1 text-white"
+                          className="cursor-pointer text-sm rounded-full px-2 py-1 text-white self-center"
                         >
                           {tag.name}
                         </span>
@@ -302,7 +308,7 @@ const CardAsList = ({ selectedSpaceId }) => {
             }
           </tbody>
 
-        </table>
+        </table >
 
         <AddCardButton />
 
@@ -315,6 +321,7 @@ const CardAsList = ({ selectedSpaceId }) => {
             progress={progress}
             setProgress={setProgress}
             setBoardModal={setCardModal}
+            handleDataChange={cardsList}
           // noteDone={noteDone}
           // setNoteDone={setNoteDone}
           />
@@ -324,13 +331,3 @@ const CardAsList = ({ selectedSpaceId }) => {
 };
 
 export default CardAsList;
-
-
-
-// assignee:  []
-// listRef : {_id: '6314b5bbc86aca536353b316', name: 'Hello'}
-// name : "Testing 1"
-// progress : 0
-// spaceRef : "62fd8794f02fe7fec417218e"
-// tags : []
-// _id : "6314b5c4c86aca536353b32a"

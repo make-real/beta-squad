@@ -4,6 +4,8 @@ import space from "./slice/space";
 import userInfo from "./slice/userInfo";
 import message from "./slice/message";
 import board from "./slice/board";
+import cardAsList from "./slice/cardAsList";
+
 
 const rootReducer = combineReducers({
   workspace,
@@ -11,6 +13,7 @@ const rootReducer = combineReducers({
   userInfo,
   message,
   board,
+  cardAsList,
 });
 
 const store = configureStore({

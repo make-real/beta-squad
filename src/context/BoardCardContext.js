@@ -58,7 +58,7 @@ export const BoardCardContext = ({ children }) => {
     if (boardIndex < 0) return; // IF no card found, return nothing...
 
     // 🟧🟧🟧 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
+    const cardIndex = boardLists[boardIndex]?.cards?.findIndex(({ _id }) => _id === cid);
     if (cardIndex < 0) return; // IF no card found, return nothing...
 
     const tempBoard = [...boardLists]; // copy
