@@ -1,15 +1,15 @@
+import { cardUpdateApiCall, getCardAsList } from "../../hooks/useFetch";
 import { useStyleContext } from "../../context/StyleContext";
-import { getCardAsList } from "../../hooks/useFetch";
+import { create_tag, get_tags } from "../../api/tags";
 import { HiOutlineUserAdd } from "react-icons/hi";
-import { month } from "../../constant/data";
-import { AddCardButton } from "..";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { CardModal } from "../Board";
+import { AddCardButton } from "..";
 import AssigneeUser from "../AssigneeUser/AssigneeUser";
 import CardProgress from '../Board/CardProgress';
 import images from "../../assets";
-import { CardModal } from "../Board";
-import { create_tag } from "../../api/tags";
-import { useSelector } from "react-redux";
 
 
 const CardAsList = ({ selectedSpaceId }) => {
@@ -21,7 +21,7 @@ const CardAsList = ({ selectedSpaceId }) => {
   const [localCard, setLocalCard] = useState({})
   const [progress, setProgress] = useState(0)
   const { margin } = useStyleContext();
-
+  const [tagsFromAPI, setTagsFromAPI] = useState([])
 
   const [openAssigneeUserModal, setOpenAssigneeUserModal] = useState({
     isOpen: false,
@@ -43,26 +43,79 @@ const CardAsList = ({ selectedSpaceId }) => {
     color: "#47b9ea",
   });
 
+  const [showTagsDropDown, setShowTagsDropDown] = useState(false)
 
-  // 🟩🟩🟩
+
+  const cardsList = async () => {
+    try {
+      const { data } = await getCardAsList(selectedSpaceId)
+      setAllCardAsList(data?.cards)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    cardsList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSpaceId])
+
+
+  // Get Tags List from server
+  useEffect(() => {
+    const getTags = async () => {
+      try {
+        // GET Method || For fetching all tag's under specific workShop
+        const { data } = await get_tags(userSelectedWorkSpaceId);
+        setTagsFromAPI(data.tags);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTags();
+  }, [showTagsDropDown, userSelectedWorkSpaceId]);
+
+
+  const filterTags = tagsOfArray => {
+
+    const tagsID = tagsOfArray.map(tag => tag._id);
+
+    const remainTag = tagsFromAPI?.filter(({ _id }) => !tagsID?.includes(_id));
+
+    return remainTag;
+  }
+
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
   const handle_new_tag_creation = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
+    // let listId;
+
+    // if (typeof (localCard?.listRef) === 'object') {
+    //   listId = localCard?.listRef?._id;
+    //   console.log('have');
+    // } else {
+    //   listId = localCard?.listRef;
+    //   console.log('note have');
+    // }
+
+
+
     try {
       // POST Method for creating tag's inside a specific workSpace
       const { data } = await create_tag({ workSpaceId: userSelectedWorkSpaceId, ...createNewTag });
-      // console.log(data);
-      // dispatch(addNewTag({ newTag: data?.tag, cardID }))
-      // setAllCardAsList((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
-      // setAllCardAsList((pre) => ({ ...pre, tags: [...pre.tags, data.tag] }));
-      // workSpaceRef
-      // console.log({allCardAsList.tags})
+      await cardUpdateApiCall(selectedSpaceId, localCard?.listRef?._id, localCard?._id, { tagId: data?.tag?._id })
+      toast.success('New tag create + add successful')
 
-      // setAllCardAsList(pre => ({...pre, tags : pre.tags.find(({workSpaceRef}) => workSpaceRef === data?.tag?._id )}));
+      // refetch all Card-as-List info
+      cardsList()
 
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data.issue)
+      toast.error(error.response.data.issue.message)
     }
 
     // close drop down tag container...
@@ -71,6 +124,48 @@ const CardAsList = ({ selectedSpaceId }) => {
     // clear input field
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
   };
+
+
+  // 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩
+  const handle_add_tags = async (tag, i) => {
+
+    // remove from drop-down ui of tag's list
+    setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
+
+    setAllCardAsList((pre) => pre.map((oldTag, idx) => idx === i
+      ? { ...oldTag, tags: [...oldTag.tags, tag] }
+      : oldTag
+    ));
+
+    try {
+      await cardUpdateApiCall(selectedSpaceId, localCard?.listRef?._id, localCard?._id, { tagId: tag?._id })
+      cardsList()
+    } catch (error) {
+      console.log(error?.response?.data?.issue);
+    }
+  };
+
+
+  // 🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥
+  const handle_delete_tags = async (tagDelete, cardIdx) => {
+
+    // add for display at UI
+    setAllCardAsList(pre => pre.map((cardList, idx) => idx === cardIdx
+      ? { ...cardList, tags: cardList.tags.filter(tag => tag?._id !== tagDelete._id) }
+      : cardList
+    ));
+
+    try {
+      await cardUpdateApiCall(selectedSpaceId, localCard?.listRef?._id, localCard?._id, { removeTagId: tagDelete._id })
+      cardsList()
+    } catch (error) {
+      // error for user at notification...
+      toast.error(error?.response?.data?.issue, { autoClose: 3000 });
+      console.log(error?.response?.data?.issue);
+    }
+
+  };
+
 
   const progressStatus = (progress) => {
     switch (progress) {
@@ -86,21 +181,6 @@ const CardAsList = ({ selectedSpaceId }) => {
         return 0;
     }
   }
-
-  const cardsList = async () => {
-    try {
-      const { data } = await getCardAsList(selectedSpaceId)
-      setAllCardAsList(data?.cards)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    cardsList()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSpaceId, ])
-
 
 
 
@@ -140,7 +220,7 @@ const CardAsList = ({ selectedSpaceId }) => {
               allCardAsList?.length > 0 &&
               allCardAsList.map((card, i) => (
                 <tr
-                  key={card._id}
+                  key={card?._id}
                   className={`${i % 2 && 'bg-slate-100'}`}
                   onClick={() => setLocalCard(card)}
                 >
@@ -194,7 +274,7 @@ const CardAsList = ({ selectedSpaceId }) => {
                       }
                       <div>
                         {
-                          card.assignee.length > 2 &&
+                          card?.assignee?.length > 2 &&
                           <p className='w-6 h-6 rounded-full bg-gray-400 leading-6 text-center relative -left-5'>
                             {card.assignee.length}+
                           </p>
@@ -269,14 +349,15 @@ const CardAsList = ({ selectedSpaceId }) => {
                       ...
                       {
                         openTagModal.isOpen && openTagModal.index === i &&
-                        <div className="absolute w-48 p-2 bg-white top-8 left-[50%] translate-x-[-50%] rounded-md z-50 flex flex-wrap gap-2 items-center">
+                        <div className="absolute w-64 p-2 bg-white top-8 left-[50%] translate-x-[-50%] rounded-md z-50 flex flex-wrap gap-2 items-center">
                           {
                             card?.tags?.length > 0 &&
-                            card?.tags?.map(tag =>
+                            card?.tags?.map((tag, tagIdx) =>
                               <span
                                 key={tag?._id}
                                 style={{ backgroundColor: tag.color }}
                                 className="cursor-pointer text-sm rounded-full px-2 py-1"
+                                onClick={() => handle_delete_tags(tag, tagIdx, i)}
                               >
                                 {tag.name}
                               </span>
@@ -288,17 +369,39 @@ const CardAsList = ({ selectedSpaceId }) => {
                               placeholder="Add a tag"
                               className="ml-2 py-1 px-2 outline-none bg-gray-100 w-24 rounded-md text-black"
                               value={createNewTag.name}
-                              onClick={e => e.stopPropagation()}
+                              onClick={e => { e.stopPropagation(); setShowTagsDropDown(pre => !pre) }}
                               onChange={(e) =>
                                 setCreateNewTag((pre) => ({
                                   ...pre,
                                   name: e.target.value,
                                 }))
                               }
-                            // onClick={() => setShowTags(true)}
                             />
                           </form>
+                          {
+                            showTagsDropDown &&
+                            <div className="bg-white text-black flex flex-col pr-2 h-64 overflow-auto w-full customScroll">
+                              {
+                                filterTags(card?.tags)?.length > 0 &&
+                                filterTags(card?.tags)?.map((tag) =>
+                                  <p
+                                    key={tag?._id}
+                                    className="cursor-pointer my-1 text-white"
+                                    onClick={() => handle_add_tags(tag, i)}
+                                  >
+                                    <span
+                                      style={{ backgroundColor: tag.color }}
+                                      className='text-sm rounded-full px-2 py-1'
+                                    >
+                                      {tag.name}
+                                    </span>
+                                  </p>
+                                )
+                              }
+                            </div>
+                          }
                         </div>
+
                       }
                     </div>
                   </td>

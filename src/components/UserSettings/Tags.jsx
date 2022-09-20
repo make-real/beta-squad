@@ -1,16 +1,17 @@
-import React from "react";
-import { BsTag } from "react-icons/bs";
+import { Delete, EditPen } from "../../assets/icons";
+import { sortByAlphabet } from "../../util/helpers";
 import { useSelector } from "react-redux";
 import { get_tags } from "../../api/tags";
-import { Close, Delete, EditPen, Plus, RightArrow } from "../../assets/icons";
-import { sortByAlphabet } from "../../util/helpers";
-import Button from "../Button";
-import Dropdown from "../Dropdown";
-import { Loader, PageLoader } from "../Loader";
+import { BsTag } from "react-icons/bs";
+import { PageLoader } from "../Loader";
 import CreateTagModal from "./CreateTagModal";
 import DeleteTagModal from "./DeleteTagModal";
+import Button from "../Button";
+import { useEffect, useState } from "react";
+
 
 export const Tag = ({ children, color, className }) => {
+
   return (
     <div
       style={{ backgroundColor: color }}
@@ -25,18 +26,18 @@ const Tags = () => {
 
   const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
 
-  const [modal, setModal] = React.useState(false);
-  const [deleteModal, setDeleteModal] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [tagInfo, setTagInfo] = React.useState({
+  const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [tagInfo, setTagInfo] = useState({
     spaceId: userSelectedWorkSpaceId,
     tagId: "",
     name: "",
     color: "",
   });
-  const [tags, setTags] = React.useState([]);
+  const [tags, setTags] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getTags();
   }, [userSelectedWorkSpaceId]);
 
@@ -98,9 +99,9 @@ const Tags = () => {
               <div className="mb-10" key={key}>
                 <h4 className="uppercase">{key}</h4>
                 <hr />
-                {value.map((item) => (
+                {value.map((item, i) => (
                   <>
-                    <div className="flex justify-between mt-3">
+                    <div className="flex justify-between mt-3" key={i}>
                       <Tag className="mb-3" color={item.color}>
                         {item.name}
                       </Tag>
