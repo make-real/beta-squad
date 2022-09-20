@@ -1,4 +1,4 @@
-import { removeSpace, setSelectedSpaceId, updateSpace } from "../../store/slice/space";
+import { removeSpace, setSelectedSpaceId, setSelectedSpaceObject, updateSpace } from "../../store/slice/space";
 import { delete_space, update_space } from "../../api/space";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -43,6 +43,7 @@ const Setting = () => {
       setLoading(true);
       const { data } = await update_space(selectedSpace, space);
       dispatch(updateSpace(space));
+      dispatch(setSelectedSpaceObject(space));
       toast.success(data.message, { autoClose: 1000 });
       setLoading(false);
     } catch (error) {
