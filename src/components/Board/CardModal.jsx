@@ -277,7 +277,7 @@ const CardModal = (prop) => {
     >
 
       <div
-        className="bg-gray-50 w-[60%] rounded-2xl h-[85vh] overflow-auto customScroll"
+        className="bg-gray-50 w-[60%] rounded-2xl h-[85vh] overflow-y-auto customScroll"
         onClick={(e) => e.stopPropagation()}
       >
 
