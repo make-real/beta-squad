@@ -18,7 +18,8 @@
 |10| yarn add `lodash`                  | Javascript helper methods             |
 |11| yarn add `date-fns`                | Date manager                          |
 |12| yarn add `reactjs-popup`           | Managing popups                       |
-
+|14| yarn add `react-google-login`      | Google Login component                |
+|15| yarn add `gapi-script`             | Google API Script                     |
 
 
 
