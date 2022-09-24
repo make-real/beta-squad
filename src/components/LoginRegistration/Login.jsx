@@ -145,8 +145,6 @@ const Login = () => {
           </h2>
 
 
-
-
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
 
@@ -166,10 +164,32 @@ const Login = () => {
 
 
 
-
-
-
-
+          {/* 
+          <GoogleLogin
+            clientId={"847086669844-eh638a23fs7oi7ein72gasoq45kcba91.apps.googleusercontent.com"}
+            render={(renderProps) => (
+              <button
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900"
+              >
+                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
+                <span className="text-sm">Sign in with Google</span>
+              </button>
+            )}
+            onSuccess={(data) => {
+              console.log(data);
+            }}
+            onFailure={(error) => {
+              console.log(error);
+            }}
+            cookiePolicy="single_host_origin"
+          />
+          */}
+          {/* <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
+            <FcGoogle className="my-auto text-center mr-1.5" />{" "}
+            <span className="text-sm">Sign in with Google</span>
+          </div> */}
 
 
           <div className="border-b-2 border-gray-100 pt-5 text-gray-100 relative">

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import Popup from "reactjs-popup";
 
-const Dropdown = ({ menu, button, width, disabled, position }) => {
+const Dropdown = ({ menu, button, width, disabled, position, style }) => {
   
   const ref = useRef(null);
 
@@ -14,6 +14,7 @@ const Dropdown = ({ menu, button, width, disabled, position }) => {
         padding: 10,
         width: `${width || 200}px`,
         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+        ...style
       }}
       trigger={<div>{button}</div>}
       disabled={disabled}
