@@ -67,6 +67,11 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
             />
+
+            <RenderVoice
+              message={msg.replayOf}
+              scrollToBottom={scrollToBottom}
+            />
             <p
               className="text-sm text-gray-900"
               dangerouslySetInnerHTML={{
@@ -76,6 +81,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           </div>
         )}
         <RenderAttachment message={msg} scrollToBottom={scrollToBottom} />
+        <RenderVoice message={msg} scrollToBottom={scrollToBottom} />
         <p
           className="text-sm text-gray-900"
           dangerouslySetInnerHTML={{
@@ -191,12 +197,6 @@ const RenderAttachment = ({ message, scrollToBottom }) =>
           className="max-w-[500px] mb-2"
         />
       );
-    } else if (extension === "wav") {
-      return (
-        <div>
-          <AudioInput url={src} />
-        </div>
-      );
     } else {
       return (
         <div className="mb-2">
@@ -212,6 +212,22 @@ const RenderAttachment = ({ message, scrollToBottom }) =>
       );
     }
   });
+
+const RenderVoice = ({ message, scrollToBottom }) => {
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  if (message?.content?.voice) {
+    return (
+      <div>
+        <AudioInput url={message?.content?.voice} />
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
 
 const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
   const dispatch = useDispatch();

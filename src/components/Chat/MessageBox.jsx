@@ -94,7 +94,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
       const formData = new FormData();
       let blob = await fetch(url).then((r) => r.blob());
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
-      formData.append("attachments", wavefilefromblob);
+      formData.append("voice", wavefilefromblob);
       if (messageToRespond?._id) {
         formData.append("replayOf", messageToRespond?._id);
       }
@@ -226,12 +226,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                         __html: populateUsers(messageToRespond?.content),
                       }}
                     ></p>
-                  ) : messageToRespond?.content?.attachments.some((i) =>
-                      i.includes("wav")
-                    ) ? (
+                  ) : Boolean(messageToRespond?.content?.voice) ? (
                     <p className="text-sm">Voice</p>
                   ) : (
-                    <p className="text-sm">Image</p>
+                    <p className="text-sm">Attachment</p>
                   )}
                 </div>
                 <div
