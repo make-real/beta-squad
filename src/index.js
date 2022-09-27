@@ -57,7 +57,7 @@ if (token) {
 }
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <SocketContext socket={socket}>
       <Provider store={store}>
         <BrowserRouter>
@@ -71,5 +71,5 @@ root.render(
         </BrowserRouter>
       </Provider>
     </SocketContext>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

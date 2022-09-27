@@ -4,13 +4,13 @@ import { addBoardListApiCall } from "../../hooks/useFetch";
 import { AddBtn, BoardList } from ".";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import useAxios from "../../api/index";
 
-
 const Board = ({ selectedSpaceId }) => {
-
   // ContextAPI | Read + Write Operation For Board Section
-  const { boardLists, setBoardList, addBoardList } = useBoardCardContext();
+  const { handleDragEnd, boardLists, setBoardList, addBoardList } =
+    useBoardCardContext();
 
   // Globally Left side margin maintain
   const { margin } = useStyleContext();
@@ -59,21 +59,38 @@ const Board = ({ selectedSpaceId }) => {
     }
   };
 
+  const dragEnd = (result) => {
+    // console.log(result);
+    handleDragEnd(
+      {
+        target: result.destination.droppableId,
+        targetIndex: result.destination.index,
+      },
+      {
+        source: result.source.droppableId,
+        sourceIndex: result.source.index,
+      }
+    );
+  };
+
   return (
     <section
-      className={`${margin ? "ml-[325px]" : "ml-[50px]"
-        } duration-200 w-full overflow-x-auto customScroll`}
+      className={`${
+        margin ? "ml-[325px]" : "ml-[50px]"
+      } duration-200 w-full overflow-x-auto customScroll`}
     >
       <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]">
-        {
-          // all board list print at UI by this loop...
-          boardLists
-            ?.slice(0)
-            ?.reverse()
-            ?.map(boardList => (
-              <BoardList key={boardList._id} boardList={boardList} />
-            ))
-        }
+        <DragDropContext onDragEnd={dragEnd}>
+          {
+            // all board list print at UI by this loop...
+            boardLists
+              ?.slice(0)
+              ?.reverse()
+              ?.map((boardList) => (
+                <BoardList key={boardList._id} boardList={boardList} />
+              ))
+          }
+        </DragDropContext>
 
         {/*  + Add a list | Button UI */}
         <AddBtn

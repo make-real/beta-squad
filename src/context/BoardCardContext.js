@@ -3,7 +3,6 @@ import { createContext, useContext, useState } from "react";
 const BoardCardItem = createContext();
 
 export const BoardCardContext = ({ children }) => {
-
   const [target, setTarget] = useState({ bid: "", cid: "" });
 
   const [boardLists, setBoardList] = useState([]);
@@ -42,7 +41,9 @@ export const BoardCardContext = ({ children }) => {
     if (boardIndex < 0) return;
 
     // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex].cards.findIndex(({ _id }) => _id === cid);
+    const cardIndex = boardLists[boardIndex].cards.findIndex(
+      ({ _id }) => _id === cid
+    );
     if (cardIndex < 0) return;
 
     // 🟥🟥🟥 3rd ==> 🔎 Remove the Card index from board
@@ -58,7 +59,9 @@ export const BoardCardContext = ({ children }) => {
     if (boardIndex < 0) return; // IF no card found, return nothing...
 
     // 🟧🟧🟧 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex]?.cards?.findIndex(({ _id }) => _id === cid);
+    const cardIndex = boardLists[boardIndex]?.cards?.findIndex(
+      ({ _id }) => _id === cid
+    );
     if (cardIndex < 0) return; // IF no card found, return nothing...
 
     const tempBoard = [...boardLists]; // copy
@@ -66,37 +69,16 @@ export const BoardCardContext = ({ children }) => {
     setBoardList(tempBoard); // update state variable
   };
 
-  // 🟨🟨🟨 For Card's D-&-D
-  const handleDragEnter = (bid, cid) => setTarget({ bid, cid });
+  const handleDragEnd = ({ target, targetIndex }, { source, sourceIndex }) => {
+    const board = [...boardLists];
+    const sourceBoard = board[board.findIndex(({ _id }) => _id === source)];
+    const targetBoard = board[board.findIndex(({ _id }) => _id === target)];
 
-  const handleDragEnd = (bid, cid) => {
-    let s_bIndex, s_cIndex, d_bIndex, d_cIndex;
+    const card = sourceBoard.cards[sourceIndex];
 
-    s_bIndex = boardLists?.findIndex(({ _id }) => _id === bid);
-    if (s_bIndex < 0) return;
-
-    s_cIndex = boardLists[s_bIndex]?.cards?.findIndex(({ _id }) => _id === cid);
-    if (s_cIndex < 0) return;
-
-    d_bIndex = boardLists?.findIndex(({ _id }) => _id === target.bid);
-    if (d_bIndex < 0) return;
-
-    d_cIndex = boardLists[d_bIndex]?.cards?.findIndex(
-      ({ _id }) => _id === target.cid
-    );
-    if (d_cIndex < 0) return;
-
-    const tempBoard = [...boardLists]; // copy all board's
-    const tempCard = tempBoard[s_bIndex].cards[s_cIndex]; // copy of that selected card
-
-    tempBoard[s_bIndex].cards.splice(s_cIndex, 1); // remove that selected card from source board
-    tempBoard[d_bIndex].cards.splice(d_cIndex, 0, tempCard); // add that coped card into destination board
-
-    setBoardList(tempBoard); // update boards
+    sourceBoard.cards.splice(sourceIndex, 1);
+    targetBoard.cards.splice(targetIndex, 0, card);
   };
-
-  // store all data in local storage
-  // useEffect(() => localStorage.setItem('kanban', JSON.stringify(boardLists)), [boardLists]);
 
   return (
     <BoardCardItem.Provider
@@ -109,7 +91,7 @@ export const BoardCardContext = ({ children }) => {
         updateCard,
         removeCard,
         handleDragEnd,
-        handleDragEnter,
+        // handleDragEnter,
       }}
     >
       {children}

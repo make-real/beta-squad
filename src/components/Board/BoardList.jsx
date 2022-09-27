@@ -9,9 +9,9 @@ import Dropdown from "../Dropdown";
 import Tippy from "@tippyjs/react";
 import useAxios from "../../api";
 import "tippy.js/dist/tippy.css";
+import Draggable from "../Draggable";
 
 const BoardList = ({ boardList }) => {
-
   const dropDownRef = useRef();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
@@ -61,21 +61,12 @@ const BoardList = ({ boardList }) => {
     }
   };
 
-
   return (
     <div className={`w-[300px] min-h-full rounded-lg mb-2 mr-3 flex flex-col`}>
       <div
         className="overflow-hidden bg-gray-100 flex items-center justify-between p-4 rounded-t-lg"
         ref={dropDownRef}
       >
-        {/* <Tippy
-          placement="center"
-          content={`${boardList?.cards?.length} cards`}
-          className="bg-gray-600/70 text-[10px] w-40"
-        >
-
-        </Tippy> */}
-
         <div className="text-gray-500 text-lg flex-1">
           {boardList?.name || "New List"}
         </div>
@@ -84,7 +75,7 @@ const BoardList = ({ boardList }) => {
           button={
             <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200" />
           }
-          width={260}
+          width={180}
           menu={({ closePopup }) => (
             <BoardListSettingDropDown
               close={closePopup}
@@ -95,9 +86,21 @@ const BoardList = ({ boardList }) => {
       </div>
 
       <div className="bg-gray-100 pb-4 flex flex-col items-center gap-3 overflow-y-auto customScroll">
-        {boardList?.cards?.map((card) => (
-          <Card key={card._id} card={card} listID={boardList?._id} />
-        ))}
+        <Draggable
+          listId={boardList?._id}
+          elements={boardList?.cards}
+          render={({ item: card, provided, snapshot }) => (
+            <div
+              ref={provided.innerRef}
+              snapshot={snapshot}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              className="mb-3"
+            >
+              <Card key={card._id} card={card} listID={boardList?._id} />
+            </div>
+          )}
+        />
       </div>
 
       <AddBtn
