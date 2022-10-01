@@ -7,21 +7,17 @@ export const BoardCardContext = ({ children }) => {
 
   const [boardLists, setBoardList] = useState([]);
 
-  // 🟨🟨🟨 For List's
   const addBoardList = (newListObj) =>
     setBoardList((pre) => [newListObj, ...pre]);
 
   const removeBoardList = (bid) =>
     setBoardList((pre) => pre.filter(({ _id }) => _id !== bid));
 
-  // 🟨🟨🟨 For Card's
   const addCard = (cardObj, bid) => {
-    // 🟩🟩🟩 1st Find 🔎 that specific Board index, for enter ==> the Newly Created Card.
     const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
 
-    if (boardIndex < 0) return; // IF no board found, return nothing...
+    if (boardIndex < 0) return;
 
-    // 🟩🟩🟩 2nd update the Card inside a specific Board
     setBoardList((prev) => {
       const tempBoard = [...prev];
 
@@ -36,37 +32,37 @@ export const BoardCardContext = ({ children }) => {
   };
 
   const removeCard = (bid, cid) => {
-    // 🟥🟥🟥 1st ==> 🔎 Find the Board index
     const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
     if (boardIndex < 0) return;
 
-    // 🟥🟥🟥 2nd ==> 🔎 Find the Card index
     const cardIndex = boardLists[boardIndex].cards.findIndex(
       ({ _id }) => _id === cid
     );
     if (cardIndex < 0) return;
 
-    // 🟥🟥🟥 3rd ==> 🔎 Remove the Card index from board
     const tempBoard = [...boardLists];
     tempBoard[boardIndex].cards.splice(cardIndex, 1);
 
     setBoardList(tempBoard);
   };
 
-  const updateCard = (bid, cid, card) => {
-    // 🟧🟧🟧 1st ==> 🔎 Find the Board index
-    const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
-    if (boardIndex < 0) return; // IF no card found, return nothing...
-
-    // 🟧🟧🟧 2nd ==> 🔎 Find the Card index
-    const cardIndex = boardLists[boardIndex]?.cards?.findIndex(
-      ({ _id }) => _id === cid
-    );
-    if (cardIndex < 0) return; // IF no card found, return nothing...
-
-    const tempBoard = [...boardLists]; // copy
-    tempBoard[boardIndex].cards[cardIndex] = card; // replace / update that specific card
-    setBoardList(tempBoard); // update state variable
+  const updateCard = (bid, cid, newCard) => {
+    const tempBoard = [...boardLists];
+    const newBoard = tempBoard.map((board) => {
+      if (board._id === bid) {
+        board.cards = board.cards.map((card) => {
+          if (card._id === cid) {
+            card = {
+              ...card,
+              ...newCard,
+            };
+          }
+          return card;
+        });
+      }
+      return board;
+    });
+    setBoardList(newBoard);
   };
 
   const handleDragEnd = ({ target, targetIndex }, { source, sourceIndex }) => {
@@ -80,6 +76,22 @@ export const BoardCardContext = ({ children }) => {
     targetBoard.cards.splice(targetIndex, 0, card);
   };
 
+  const toggleCardModal = (bid, cid) => {
+    const tempBoard = [...boardLists];
+    const newBoard = tempBoard.map((board) => {
+      if (board._id === bid) {
+        board.cards = board.cards.map((card) => {
+          if (card._id === cid) {
+            card.modal = !card.modal;
+          }
+          return card;
+        });
+      }
+      return board;
+    });
+    setBoardList(newBoard);
+  };
+
   return (
     <BoardCardItem.Provider
       value={{
@@ -91,7 +103,7 @@ export const BoardCardContext = ({ children }) => {
         updateCard,
         removeCard,
         handleDragEnd,
-        // handleDragEnter,
+        toggleCardModal,
       }}
     >
       {children}

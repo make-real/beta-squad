@@ -12,12 +12,10 @@ const Card = ({ card, listID }) => {
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
-  const { updateCard } = useBoardCardContext();
-  const [cardModal, setCardModal] = useState(false);
+  const { updateCard, toggleCardModal } = useBoardCardContext();
   const [noteDone, setNoteDone] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [showEmoji, setShowEmoji] = useState(false);
-  const [progress, setProgress] = useState(0 || card.progress);
+  const [progress, setProgress] = useState(card?.progress);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
@@ -37,7 +35,6 @@ const Card = ({ card, listID }) => {
   };
 
   const handleClick = (e) => {
-    // track out-side of click... & close setting drop down div...
     if (!dropDownRef?.current?.contains(e.target))
       setCardSettingDropDownToggle(false);
   };
@@ -58,7 +55,6 @@ const Card = ({ card, listID }) => {
       }
     };
     cardProgressUpdate();
-    // when progress change, call this update function...
   }, [progress]);
 
   useEffect(() => {
@@ -66,19 +62,36 @@ const Card = ({ card, listID }) => {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
+  const toggle_card_modal = () => {
+    toggleCardModal(listID, card._id);
+  };
+
+  const checked = card.checkList?.filter((item) => item?.checked);
+  const unchecked = card.checkList?.filter((item) => !item?.checked);
   return (
     <>
       <div
-        // draggable
         ref={dropDownRef}
-        onClick={() => setCardModal(true)}
-        // onMouseEnter={() => setVisible(true)}
-        // onMouseLeave={() => setVisible(false)}
-        // onDragEnd={() => handleDragEnd(listID, card._id)}
-        // onDragEnter={() => handleDragEnter(listID, card._id)}
+        onClick={toggle_card_modal}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
         className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 cursor-grab hover:bg-gray-200"
         style={{ borderColor: selectedSpaceObj?.color }}
       >
+        {!!progress && (
+          <div
+            className={`mb-2 flex items-center justify-center w-6 h-6 rounded-full text-white
+            ${progress === 4 ? "bg-teal-400" : " bg-gray-400"}`}
+          >
+            {progress === 4 ? (
+              <RightOK className="w-4 h-4" />
+            ) : (
+              <span className="text-[8px] text-center">
+                {progressStatus(progress)}%
+              </span>
+            )}
+          </div>
+        )}
         <p className="text-lg mr-4 text-gray-800">{card.name}</p>
         <div className="pt-2 text-white flex gap-1 flex-wrap">
           {card?.tags?.length
@@ -89,7 +102,7 @@ const Card = ({ card, listID }) => {
         </div>
 
         <div className="absolute top-4 right-3 flex">
-          {visible ? (
+          {visible && (
             <Dropdown
               width={200}
               button={
@@ -106,36 +119,31 @@ const Card = ({ card, listID }) => {
                   progress={progress}
                   setProgress={setProgress}
                   noteDone={noteDone}
-                  cardModal={cardModal}
                   setNoteDone={setNoteDone}
                   setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />
               )}
             />
-          ) : (
-            noteDone && (
-              <div
-                className={`flex items-center justify-center w-8 h-8 rounded-full text-white
-              ${
-                progressStatus(progress) === 100
-                  ? "bg-teal-400"
-                  : " bg-gray-400"
-              }`}
-              >
-                {progressStatus(progress) === 100 ? (
-                  <RightOK />
-                ) : (
-                  <span className="text-xs text-center">
-                    {progressStatus(progress)}%
-                  </span>
-                )}
-              </div>
-            )
           )}
         </div>
 
-        <div className="relative flex items-center justify-between mt-3">
-          <div
+        {!!(checked.length + unchecked.length) && (
+          <div className="relative flex items-center mt-3">
+            <div className="relative flex w-[100px] h-2 bg-slate-300 rounded-full">
+              <div
+                style={{
+                  width:
+                    (checked.length / (checked.length + unchecked.length)) *
+                      100 +
+                    "%",
+                }}
+                className="h-full bg-violet-700 rounded-full"
+              />
+            </div>
+            <p className="text-gray-400 text-sm ml-2">
+              {checked.length}/{checked.length + unchecked.length}
+            </p>
+            {/* <div
             className={`w-8 h-8 grid place-items-center rounded-md cursor-pointer hover:bg-gray-300 hover:text-teal-400 text-[#B9C3CE] ${
               visible ? "visible" : "invisible"
             }`}
@@ -166,19 +174,20 @@ const Card = ({ card, listID }) => {
                 </p>
               </div>
             )}
-          />
-        </div>
+          /> */}
+          </div>
+        )}
 
         {
           // When Task Click >>> then Modal Open
-          cardModal && (
+          card.modal && (
             <CardModal
               card={card}
               listID={listID}
               noteDone={noteDone}
               progress={progress}
               setProgress={setProgress}
-              setBoardModal={setCardModal}
+              setBoardModal={toggle_card_modal}
               setNoteDone={setNoteDone}
             />
           )

@@ -15,8 +15,14 @@ import api from "../../api";
 
 import { useReactMediaRecorder } from "react-media-recorder";
 import { populateUsers, sliceText } from "../../util/helpers";
+import { ScaleLoader } from "react-spinners";
 
-const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
+const MessageBox = ({
+  messageToRespond,
+  setMessageToRespond,
+  custom,
+  onComment,
+}) => {
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -78,10 +84,14 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
         return;
       }
       setInput("");
-      await send_message(selectedSpaceId, {
-        textMessage: text,
-        replayOf: messageToRespond?._id,
-      });
+      if (custom) {
+        await onComment({ text });
+      } else {
+        await send_message(selectedSpaceId, {
+          textMessage: text,
+          replayOf: messageToRespond?._id,
+        });
+      }
       setInput("");
     } catch (error) {
       console.log(error);
@@ -94,25 +104,29 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
       const formData = new FormData();
       let blob = await fetch(url).then((r) => r.blob());
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
-      formData.append("voice", wavefilefromblob);
-      if (messageToRespond?._id) {
-        formData.append("replayOf", messageToRespond?._id);
+      if (custom) {
+        await onComment({ audio: wavefilefromblob });
+      } else {
+        formData.append("attachments", wavefilefromblob);
+        if (messageToRespond?._id) {
+          formData.append("replayOf", messageToRespond?._id);
+        }
+        let config = {
+          method: "post",
+          url: `spaces/${selectedSpaceId}/chat/send-messages`,
+          data: formData,
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+          onUploadProgress: function (progressEvent) {
+            let UpPer = parseInt(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadPercentage(UpPer);
+          },
+        };
+        await api(config);
       }
-      let config = {
-        method: "post",
-        url: `spaces/${selectedSpaceId}/chat/send-messages`,
-        data: formData,
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-        onUploadProgress: function (progressEvent) {
-          let UpPer = parseInt(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadPercentage(UpPer);
-        },
-      };
-      await api(config);
       setUploadPercentage(0);
     } catch (error) {
       console.log(error);
@@ -122,31 +136,33 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
   const onMediaFilePicked = async (e) => {
     setMessageToRespond();
     try {
-      const formData = new FormData();
-
-      if (messageToRespond?._id) {
-        formData.append("replayOf", messageToRespond?._id);
+      if (custom) {
+        await onComment({ image: e.target.files });
+      } else {
+        const formData = new FormData();
+        if (messageToRespond?._id) {
+          formData.append("replayOf", messageToRespond?._id);
+        }
+        for (const file of e.target.files) {
+          formData.append("attachments", file);
+        }
+        let config = {
+          method: "post",
+          url: `spaces/${selectedSpaceId}/chat/send-messages`,
+          data: formData,
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+          onUploadProgress: function (progressEvent) {
+            let UpPer = parseInt(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadPercentage(UpPer);
+          },
+        };
+        await api(config);
+        setUploadPercentage(0);
       }
-
-      for (const file of e.target.files) {
-        formData.append("attachments", file);
-      }
-      let config = {
-        method: "post",
-        url: `spaces/${selectedSpaceId}/chat/send-messages`,
-        data: formData,
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-        onUploadProgress: function (progressEvent) {
-          let UpPer = parseInt(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadPercentage(UpPer);
-        },
-      };
-      await api(config);
-      setUploadPercentage(0);
     } catch (error) {
       console.log(error);
     }
@@ -183,8 +199,6 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
 
   useEffect(() => {
     if (Boolean(mediaBlobUrl) && audioSent) {
-      // upload audio
-
       uploadAudioFile(mediaBlobUrl);
       console.log("Uploading...");
     }
@@ -240,77 +254,50 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                 </div>
               </div>
             )}
-
-            <div className="w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3">
-              <MentionsInput
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                singleLine={true}
-                onKeyDown={(e) =>
-                  e.key === "Enter" ? handleSendMessage() : null
-                }
-                classNames={classNames}
-                customSuggestionsContainer={(children) => (
-                  <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm">
-                    {children}
-                  </div>
-                )}
-                allowSuggestionsAboveCursor={true}
-                inputRef={inputRef}
-                autoFocus
-              >
-                <Mention
-                  className={classNames.mentions__mention}
-                  trigger="@"
-                  data={users}
-                  markup="{{__id__}}"
-                  renderSuggestion={(entry) => {
-                    return (
-                      <h1
-                        className={
-                          "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
-                        }
-                      >
-                        {entry.display}
-                      </h1>
-                    );
-                  }}
-                  displayTransform={(id) =>
-                    users.find((user) => user.id === id).display
+            {!isRecording ? (
+              <div className="w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3">
+                <MentionsInput
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  singleLine={true}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" ? handleSendMessage() : null
                   }
-                />
-              </MentionsInput>
-              <div className="text-gray-400 flex mt-[5px]">
-                {isRecording ? (
-                  <>
-                    <div className="px-2 cursor-pointer relative">
-                      <MdDeleteOutline
-                        className="duration-300 text-[red]  hover:text-teal-400"
-                        onClick={() => {
-                          setRecording(false);
-                          setAudioSent(false);
-
-                          stopRecording();
-                        }}
-                      />
+                  classNames={classNames}
+                  customSuggestionsContainer={(children) => (
+                    <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm">
+                      {children}
                     </div>
-
-                    <div className="px-2 cursor-pointer relative">
-                      <span className="text-xs "> Recording...</span>
-                    </div>
-
-                    <div className="px-2 cursor-pointer relative">
-                      <BiSend
-                        className="duration-300 text-teal-400  hover:text-teal-500"
-                        onClick={() => {
-                          setRecording(false);
-                          setAudioSent(true);
-                          stopRecording();
-                        }}
-                      />
-                    </div>
-                  </>
-                ) : (
+                  )}
+                  allowSuggestionsAboveCursor={true}
+                  inputRef={inputRef}
+                  autoFocus
+                >
+                  <Mention
+                    className={classNames.mentions__mention}
+                    trigger="@"
+                    data={users}
+                    markup="{{__id__}}"
+                    renderSuggestion={(entry) => {
+                      return (
+                        <h1
+                          className={
+                            "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
+                          }
+                        >
+                          {entry.display}
+                        </h1>
+                      );
+                    }}
+                    displayTransform={(id) =>
+                      users.find((user) => user.id === id).display
+                    }
+                  />
+                </MentionsInput>
+                <div className="text-gray-400 flex mt-[5px]">
+                  {/* {isRecording ? (
+                  
+                ) : ( */}
                   <div className="px-2 cursor-pointer relative">
                     <BiMicrophone
                       size={20}
@@ -318,42 +305,75 @@ const MessageBox = ({ messageToRespond, setMessageToRespond }) => {
                       onClick={handleStartRecording}
                     />
                   </div>
-                )}
+                  {/* )} */}
 
-                <label
-                  className="px-1.5 cursor-pointer relative"
-                  htmlFor="userInputFile"
-                  onClick={() => handleAttach()}
-                >
-                  <ImAttachment
-                    className="duration-300  hover:text-teal-400 "
+                  <label
+                    className="px-1.5 cursor-pointer relative"
+                    htmlFor="userInputFile"
                     onClick={() => handleAttach()}
-                  />
-
-                  <input
-                    type="file"
-                    id="userInputFile"
-                    className="hidden"
-                    multiple
-                    onChange={onMediaFilePicked}
-                  />
-                </label>
-                <div className="px-2 cursor-pointer relative">
-                  <GoMention
-                    className="duration-300  hover:text-teal-400"
-                    onClick={handleMention}
-                  />
-                </div>
-                <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
-                  <BsEmojiSmile onClick={() => handleEmoji()} />
-                  {showEmojis && (
-                    <div className="absolute  right-0 bottom-8">
-                      <Picker onEmojiClick={onEmojiClick} />
-                    </div>
-                  )}
+                  >
+                    <ImAttachment
+                      className="duration-300  hover:text-teal-400 "
+                      onClick={() => handleAttach()}
+                    />
+                    <input
+                      type="file"
+                      id="userInputFile"
+                      className="hidden"
+                      multiple
+                      onChange={onMediaFilePicked}
+                    />
+                  </label>
+                  <div className="px-2 cursor-pointer relative">
+                    <GoMention
+                      className="duration-300  hover:text-teal-400"
+                      onClick={handleMention}
+                    />
+                  </div>
+                  <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
+                    <BsEmojiSmile onClick={() => handleEmoji()} />
+                    {showEmojis && (
+                      <div className="absolute  right-0 bottom-8">
+                        <Picker onEmojiClick={onEmojiClick} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="w-full flex align-middle">
+                <div className="mr-5 my-auto">
+                  <MdDeleteOutline
+                  size={30}
+                    className="duration-300 text-red-400"
+                    onClick={() => {
+                      setRecording(false);
+                      setAudioSent(false);
+                      stopRecording();
+                    }}
+                  />
+                </div>
+
+                <div className="flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative">
+                  {/* <span className="text-xs ">Recording...</span> */}
+                  {Array.from({ length: 20 }).map(() => (
+                    <ScaleLoader width={2} color="#36d7b7" />
+                  ))}
+                </div>
+
+                <div className="ml-5 my-auto">
+                  <BiSend
+                    size={30}
+                    className="duration-300 text-teal-400  hover:text-teal-500"
+                    onClick={() => {
+                      setRecording(false);
+                      setAudioSent(true);
+                      stopRecording();
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

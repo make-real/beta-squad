@@ -1,6 +1,6 @@
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import { useStyleContext } from "../../context/StyleContext";
-import { addBoardListApiCall } from "../../hooks/useFetch";
+import { addBoardListApiCall, moveCard } from "../../hooks/useFetch";
 import { AddBtn, BoardList } from ".";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -59,18 +59,28 @@ const Board = ({ selectedSpaceId }) => {
     }
   };
 
-  const dragEnd = (result) => {
-    // console.log(result);
-    handleDragEnd(
-      {
-        target: result.destination.droppableId,
-        targetIndex: result.destination.index,
-      },
-      {
-        source: result.source.droppableId,
-        sourceIndex: result.source.index,
-      }
-    );
+  const dragEnd = async (result) => {
+    console.log(result);
+    try {
+      handleDragEnd(
+        {
+          target: result.destination.droppableId,
+          targetIndex: result.destination.index,
+        },
+        {
+          source: result.source.droppableId,
+          sourceIndex: result.source.index,
+        }
+      );
+      await moveCard(
+        selectedSpaceId,
+        result.source.droppableId,
+        result.draggableId,
+        result.destination.droppableId
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

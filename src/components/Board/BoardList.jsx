@@ -73,7 +73,7 @@ const BoardList = ({ boardList }) => {
 
         <Dropdown
           button={
-            <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 rounded-lg hover:bg-gray-200 duration-200" />
+            <DotsSingle className="text-gray-500 cursor-pointer w-8 h-8 p-2 mr-1 rounded-lg hover:bg-gray-200 duration-200" />
           }
           width={180}
           menu={({ closePopup }) => (

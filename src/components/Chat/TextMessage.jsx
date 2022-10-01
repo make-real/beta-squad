@@ -16,7 +16,13 @@ import { add_reaction, delete_message } from "../../api/message";
 import moment from "moment";
 import AudioInput from "./Audio/Render";
 
-const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
+const Message = ({
+  space,
+  msg,
+  scrollToBottom,
+  setMessageToRespond,
+  forComment,
+}) => {
   const [showReactEmojis, setShowReactEmojis] = useState(false);
 
   const userId = JSON.parse(localStorage.getItem("userId"));
@@ -43,7 +49,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   };
 
   return (
-    <div className="flex pb-5 hover:bg-slate-50 relative user-box">
+    <div className="flex px-3 py-2 hover:bg-slate-200 relative user-box">
       <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
         {msg.sender.avatar ? (
           <img src={msg?.sender?.avatar} alt="" className="rounded-full" />
@@ -53,7 +59,12 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           </h6>
         )}
       </div>
-      <div className="bg-slate-100 p-3 rounded-lg ml-3 shadow-md max-w-[900px]">
+      <div
+        style={{
+          maxWidth: forComment ? "400px" : "900px",
+        }}
+        className={`bg-slate-100 p-3 rounded-lg ml-3 shadow-md`}
+      >
         <div className="flex justify-between text-xs text-sky-900	pb-2">
           <h6 className="font-bold">{msg?.sender?.fullName}</h6>
           <small className="text-neutral-600 ml-5">
@@ -68,10 +79,10 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
               scrollToBottom={scrollToBottom}
             />
 
-            <RenderVoice
+            {/* <RenderVoice
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
-            />
+            /> */}
             <p
               className="text-sm text-gray-900"
               dangerouslySetInnerHTML={{
@@ -80,8 +91,11 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
             ></p>
           </div>
         )}
-        <RenderAttachment message={msg} scrollToBottom={scrollToBottom} />
-        <RenderVoice message={msg} scrollToBottom={scrollToBottom} />
+        <RenderAttachment
+          message={msg}
+          scrollToBottom={scrollToBottom}
+          small={forComment}
+        />
         <p
           className="text-sm text-gray-900"
           dangerouslySetInnerHTML={{
@@ -107,7 +121,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
         </div>
       )}
 
-      <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
+      <div className="absolute right-5 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
         <div className="px-1 hover:text-teal-400 tooltip-box">
           <BsArrow90DegRight />
           <p className="tooltip-text">Convert the task</p>
@@ -160,10 +174,6 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
           <VscCommentDiscussion />
           <p className="tooltip-text">Respond to this message</p>
         </div>
-        {/* <div className="px-1.5 hover:text-teal-400 tooltip-box">
-          <MdModeEditOutline />
-          <p className="tooltip-text">Edit message</p>
-        </div> */}
 
         {msg.sender._id === userId && (
           <div className="px-1.5 hover:text-teal-400 tooltip-box">
@@ -181,7 +191,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond }) => {
   );
 };
 
-const RenderAttachment = ({ message, scrollToBottom }) =>
+const RenderAttachment = ({ message, scrollToBottom, small }) =>
   message?.content?.attachments?.map((src, idx) => {
     const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
 
@@ -194,7 +204,19 @@ const RenderAttachment = ({ message, scrollToBottom }) =>
           key={idx}
           src={src}
           alt=""
-          className="max-w-[500px] mb-2"
+          style={{
+            maxWidth: small ? "300px" : "500px",
+            marginBottom: "10px",
+          }}
+          // className="max-w-[500px] mb-2"
+        />
+      );
+    } else if (["wav"].includes(extension)) {
+      return (
+        <RenderVoice
+          message={message}
+          scrollToBottom={scrollToBottom}
+          small={small}
         />
       );
     } else {
@@ -218,25 +240,26 @@ const RenderVoice = ({ message, scrollToBottom }) => {
     scrollToBottom();
   }, []);
 
-  if (message?.content?.voice) {
-    return (
-      <div>
-        <AudioInput url={message?.content?.voice} />
-      </div>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <div>
+      <AudioInput url={message?.content?.attachments[0]} />
+    </div>
+  );
 };
 
-const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
+const TextMessage = ({
+  messageToRespond,
+  setMessageToRespond,
+  forComment,
+  comments,
+}) => {
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
 
-  const messages = useSelector((state) => state.message.messages);
+  const messagesState = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-  // console.log(messages)
+  const messages = forComment ? comments : messagesState;
 
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
@@ -244,9 +267,6 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
         try {
           const { data } = await get_messages(selectedSpaceId);
           dispatch(addBulkMessage(data.messages.reverse()));
-
-          // console.log(data.messages);
-
           scrollToBottom();
         } catch (error) {
           alert(error.message);
@@ -259,7 +279,6 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
 
   useEffect(() => {
     scrollToBottom();
-    // console.log(messageToRespond);
   }, [messages, messageToRespond]);
 
   const scrollToBottom = () => {
@@ -278,9 +297,10 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
             scrollToBottom={scrollToBottom}
             key={idx}
             setMessageToRespond={setMessageToRespond}
+            forComment={forComment}
           />
         ))
-      ) : (
+      ) : forComment ? null : (
         <div className="grid place-items-center h-[70vh] text-gray-700">
           <div className="text-center space-y-3">
             <img src={images.chattingStart} alt="" className="w-36 mx-auto" />
@@ -296,7 +316,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
       <div ref={messagesEndRef} />
 
       {/* 🔘🔘🔘🔘🔘🔘🔘🔘🔘 Seen SMS 🔘🔘🔘🔘🔘🔘🔘🔘🔘 */}
-      <div className="text-gray-400 text-xs flex justify-between">
+      {/* <div className="text-gray-400 text-xs flex justify-between">
         <div>
           {messages?.length &&
             messages[messages?.length - 1]?.seen?.length + " seen"}
@@ -317,7 +337,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond }) => {
             )
           )}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

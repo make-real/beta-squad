@@ -15,11 +15,11 @@ import {
   get_workspace_member,
   update_workspace,
 } from "../../api/workSpace";
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoIosArrowDown } from "react-icons/io";
 
 const WorkspaceSettings = () => {
-
-  const { selectedWorkspace } = useSelector(state => state.workspace);
+  const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [workspace, setWorkspace] = useState(selectedWorkspace);
   const [workspaceMembers, setWorkspaceMembers] = useState([]);
   const [changingRoll, setChangingRoll] = useState("");
@@ -129,15 +129,14 @@ const WorkspaceSettings = () => {
     }
   };
 
-
   const handleDeletingSpace = async () => {
     try {
-      const { data } = await delete_workspace(selectedWorkspace)
+      const { data } = await delete_workspace(selectedWorkspace);
       toast.success(data.message, { autoClose: 1000 });
     } catch (error) {
       toast.error(error.workspaceId, { autoClose: 1000 });
     }
-  }
+  };
 
   const isChangingRoll = (id) => id === changingRoll;
   const isBlockingUser = (id) => id === changingRoll;
@@ -237,7 +236,12 @@ const WorkspaceSettings = () => {
                         className="mt-0"
                         text
                       >
-                        {user?.role}
+                        <div className="flex items-center gap-2">
+                          <div className="">{user?.role}</div>
+                          <div className="">
+                            <IoIosArrowDown className="my-auto" />
+                          </div>
+                        </div>
                       </Button>
                     }
                     menu={({ closePopup }) =>
@@ -249,6 +253,8 @@ const WorkspaceSettings = () => {
                         )
                         .map((roll) => (
                           <Button
+                            sm
+                            block
                             onClick={() => {
                               changeUserRoll(
                                 user?._id,
@@ -264,49 +270,38 @@ const WorkspaceSettings = () => {
                         ))
                     }
                   />
-                  <Button
+                  {/* <Button
                     loading={isBlockingUser(user?._id)}
                     onClick={blockUser(user?._id, "member")}
                     className="mt-0"
                     text
                   >
                     Remove
-                  </Button>
+                  </Button> */}
+                  <Dropdown
+                    position="left center"
+                    width={120}
+                    button={
+                      <div className="px-1 text-[#7088A1] cursor-pointer h-full flex items-center">
+                        <BsThreeDotsVertical />
+                      </div>
+                    }
+                    menu={({ closePopup }) => (
+                      <>
+                        <Button sm block className="mx-auto mt-0" text>
+                          Remove
+                        </Button>
+                        <Button sm block className="mx-auto mt-0" text>
+                          Block
+                        </Button>
+                      </>
+                    )}
+                  />
                 </>
               ) : (
-                <div className="text-[#7088A1] font-bold space-y-2 text-center">
-                  <h4 className="my-auto">
-                    Workspace owner
-                  </h4>
-                  <h4 className="bg-gray-300 rounded-md px-2 py-1 text-red-400 hover:text-red-600 hover:bg-gray-400 duration-200 cursor-pointer"
-                    onClick={() => setDeletingSpaceModal(true)}
-                  >
-                    Delete this space
-                  </h4>
-
-                  {
-                    deletingSpaceModal &&
-                    <div className="bg-black/70 fixed right-0 top-0 left-0 bottom-0 z-30 grid place-items-center" onClick={() => setDeletingSpaceModal(false)}>
-                      <div className="bg-white p-8 rounded-md text-gray-800">
-                        <h2 className="text-xl">Are you sure to delete this workspace?</h2>
-                        <p className="text-sm text-red-500">By deleting you will lost all of your working data associated with this workspace.</p>
-                        <div className="space-x-4 mt-4">
-
-                          <button className="w-12 py-1 bg-red-400 hover:bg-red-500 rounded-md duration-200 hover:text-gray-900"
-                            onClick={handleDeletingSpace}>
-                            Yes
-                          </button>
-
-                          <button className="w-12 py-1 bg-green-400 hover:bg-green-500 rounded-md duration-200 hover:text-gray-900"
-                            onClick={() => setDeletingSpaceModal(false)}
-                          >No
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  }
+                <div className="text-[#7088A1] font-bold text-center flex items-center">
+                  Workspace owner
                 </div>
-
               )}
             </div>
             {user?.role === "owner" && <hr className="mt-3" />}
