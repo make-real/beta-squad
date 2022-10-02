@@ -13,10 +13,12 @@ import {
   delete_workspace,
   get_single_workspace_data,
   get_workspace_member,
+  transfer_ownership,
   update_workspace,
 } from "../../api/workSpace";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
+import Avatar from "../Avatar";
 
 const WorkspaceSettings = () => {
   const { selectedWorkspace } = useSelector((state) => state.workspace);
@@ -115,16 +117,29 @@ const WorkspaceSettings = () => {
     }
   };
 
-  const blockUser = (id, roll) => async () => {
+  const removeUser = async (id) => {
     try {
       setBlocking(id);
       await change_workspace_member_role(selectedWorkspace, {
         id,
-        roll,
+        role: "remove",
       });
       setBlocking("");
       getWorkspaceMembers();
     } catch (error) {
+      console.log(error);
+      setBlocking("");
+    }
+  };
+
+  const transferOwnership = async (id) => {
+    try {
+      setBlocking(id);
+      await transfer_ownership(selectedWorkspace, id);
+      setBlocking("");
+      getWorkspaceMembers();
+    } catch (error) {
+      console.log(error);
       setBlocking("");
     }
   };
@@ -139,7 +154,7 @@ const WorkspaceSettings = () => {
   };
 
   const isChangingRoll = (id) => id === changingRoll;
-  const isBlockingUser = (id) => id === changingRoll;
+  const isBlockingUser = (id) => id === blocking;
 
   return (
     <div className="min-h-screen overflow-auto w-[820px] p-5 space-y-4 h-screen">
@@ -213,14 +228,15 @@ const WorkspaceSettings = () => {
           <>
             <div key={i} className="flex align-middle justify-between mt-4">
               <div className="flex items-center w-[150px]">
-                <img
+                <Avatar user={user} />
+                {/* <img
                   className="w-10 h-10 rounded-full border"
                   src={
                     userImg ||
                     "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                   }
                   alt="user"
-                />
+                /> */}
                 <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
                   <p>{user?.fullName}</p>
                   <p>{user?.email}</p>
@@ -270,33 +286,47 @@ const WorkspaceSettings = () => {
                         ))
                     }
                   />
-                  {/* <Button
-                    loading={isBlockingUser(user?._id)}
-                    onClick={blockUser(user?._id, "member")}
-                    className="mt-0"
-                    text
-                  >
-                    Remove
-                  </Button> */}
-                  <Dropdown
-                    position="left center"
-                    width={120}
-                    button={
-                      <div className="px-1 text-[#7088A1] cursor-pointer h-full flex items-center">
-                        <BsThreeDotsVertical />
-                      </div>
-                    }
-                    menu={({ closePopup }) => (
-                      <>
-                        <Button sm block className="mx-auto mt-0" text>
-                          Remove
-                        </Button>
-                        <Button sm block className="mx-auto mt-0" text>
-                          Block
-                        </Button>
-                      </>
-                    )}
-                  />
+                  {isBlockingUser(user._id) ? (
+                    <Loader />
+                  ) : (
+                    <Dropdown
+                      position="left center"
+                      width={180}
+                      button={
+                        <div className="px-1 text-[#7088A1] cursor-pointer h-full flex items-center">
+                          <BsThreeDotsVertical />
+                        </div>
+                      }
+                      menu={({ closePopup }) => (
+                        <>
+                          <Button
+                            sm
+                            block
+                            className="mt-0"
+                            text
+                            onClick={() => {
+                              removeUser(user._id);
+                              closePopup();
+                            }}
+                          >
+                            Remove
+                          </Button>
+                          <Button
+                            sm
+                            block
+                            className="mt-0"
+                            text
+                            onClick={() => {
+                              transferOwnership(user._id);
+                              closePopup();
+                            }}
+                          >
+                            Transfer ownership
+                          </Button>
+                        </>
+                      )}
+                    />
+                  )}
                 </>
               ) : (
                 <div className="text-[#7088A1] font-bold text-center flex items-center">

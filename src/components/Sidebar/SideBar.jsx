@@ -39,10 +39,9 @@ import Dropdown from "../../components/Dropdown";
 import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-
+import Avatar from "../Avatar";
 
 const SideBar = () => {
-
   const dispatch = useDispatch();
   const { margin, setMargin } = useStyleContext();
   const [newWorkSpace, setNewWorkSpace] = useState(false);
@@ -53,14 +52,16 @@ const SideBar = () => {
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
 
   // For Work-Spaces
-  const { workspaces, selectedWorkspace } = useSelector(state => state.workspace);
+  const { workspaces, selectedWorkspace } = useSelector(
+    (state) => state.workspace
+  );
 
   // For All Space
-  const { selectedSpace, allSpaces } = useSelector(state => state.space);
+  const { selectedSpace, allSpaces } = useSelector((state) => state.space);
 
   // get user img from user info, which store at local storage...
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
-
 
   // re-render for Work-Space
   useEffect(() => {
@@ -84,7 +85,6 @@ const SideBar = () => {
 
     // when new work-space add, re-render this component...
   }, [dispatch, workspaces?.length]);
-
 
   // re-render for space's under specific workSpace
   useEffect(() => {
@@ -111,8 +111,6 @@ const SideBar = () => {
     // re-fetch all space's under this specific workSpace ID...
   }, [dispatch, selectedWorkspace]);
 
-
-
   return (
     <>
       <section className={`fixed top-0 bottom-0 bg-gray-800 flex`}>
@@ -133,10 +131,11 @@ const SideBar = () => {
                       {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                       <div
                         className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
-                      ${selectedWorkspace === workSpace?._id
-                            ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
-                            : ""
-                          }`}
+                      ${
+                        selectedWorkspace === workSpace?._id
+                          ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
+                          : ""
+                      }`}
                         onClick={() =>
                           dispatch(setSelectedWorkSpaceId(workSpace?._id))
                         }
@@ -210,25 +209,18 @@ const SideBar = () => {
 
         {/* 🟨🟨🟨 toggling sidebar 🟨🟨🟨 */}
         <div
-          className={`${!margin ? "hidden" : "w-[275px]"
-            } bg-[#202F3E] duration-200`}
+          className={`${
+            !margin ? "hidden" : "w-[275px]"
+          } bg-[#202F3E] duration-200`}
         >
           <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
-            <div className="flex items-center space-x-4 relative">
+            <div className="flex items-center space-x-4 py-2 relative">
               <Dropdown
                 position="bottom left"
                 width={230}
                 button={
-                  <div className="mt-3 mb-2">
-                    <img
-                      alt="userImage"
-                      src={
-                        userImg
-                          ? userImg
-                          : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                      }
-                      className="w-6 h-6 rounded-full cursor-pointer"
-                    />
+                  <div className="cursor-pointer">
+                    <Avatar user={user} />
                   </div>
                 }
                 menu={() => (
@@ -353,9 +345,10 @@ const SideBar = () => {
                   <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
 
                   <div
-                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${selectedSpace === space._id ? "bg-gray-600" : ""
-                      } `}
-                  // onClick={() => setSelectedSpaceName(space.name)}
+                    className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${
+                      selectedSpace === space._id ? "bg-gray-600" : ""
+                    } `}
+                    // onClick={() => setSelectedSpaceName(space.name)}
                   >
                     {space.privacy.includes("private") ? (
                       <SpaceLogoLock color={space.color || "#57BEC7"} />

@@ -17,6 +17,7 @@ import Dropdown from "../Dropdown";
 import Button from "../Button";
 import ModalWorkSpaceCreate from "../Sidebar/ModalWorkSpaceCreate";
 import { toast } from "react-toastify";
+import { Loader } from "../Loader";
 
 const ManageWorkspace = () => {
   const [extraExpandBox, setExtraExpandBox] = useState(true);
@@ -25,6 +26,9 @@ const ManageWorkspace = () => {
   const { workspaces, selectedWorkspace } = useSelector(
     (state) => state.workspace
   );
+  const [wId, setWId] = useState("");
+
+  const isLoading = (id) => id === wId;
 
   useEffect(() => {
     fetchData();
@@ -45,22 +49,28 @@ const ManageWorkspace = () => {
     fetchData();
   };
 
-  const leaveWorkspace = async(id) => {
+  const leaveWorkspace = async (id) => {
     try {
+      setWId(id);
       await leave_workspace(id);
       fetchData();
+      setWId("");
     } catch (error) {
-      toast.error(error.response?.data?.issue?.message);
+      setWId("");
+      toast.error(error.workspaceId);
       console.log(error);
     }
   };
 
-  const archiveWorkspace = async(id) => {
+  const archiveWorkspace = async (id) => {
     try {
+      setWId(id);
       await archive_workspace(id);
       fetchData();
+      setWId("");
     } catch (error) {
-      toast.error(error.response?.data?.issue?.message);
+      setWId("");
+      toast.error(error.workspaceId);
       console.log(error);
     }
   };
@@ -113,34 +123,38 @@ const ManageWorkspace = () => {
                     </h6>
                   </div>
                   <div className="my-auto">
-                    <Dropdown
-                      width={150}
-                      button={<BiDotsVertical />}
-                      menu={({ closePopup }) => (
-                        <>
-                          <Button
-                            onClick={() => {
-                              leaveWorkspace(item._id);
-                              closePopup();
-                            }}
-                            block
-                            text
-                          >
-                            Leave
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              archiveWorkspace(item._id);
-                              closePopup();
-                            }}
-                            block
-                            text
-                          >
-                            Archive
-                          </Button>
-                        </>
-                      )}
-                    />
+                    {isLoading(item._id) ? (
+                      <Loader />
+                    ) : (
+                      <Dropdown
+                        width={150}
+                        button={<BiDotsVertical />}
+                        menu={({ closePopup }) => (
+                          <>
+                            <Button
+                              onClick={() => {
+                                leaveWorkspace(item._id);
+                                closePopup();
+                              }}
+                              block
+                              text
+                            >
+                              Leave
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                archiveWorkspace(item._id);
+                                closePopup();
+                              }}
+                              block
+                              text
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      />
+                    )}
                   </div>
                 </div>
               ))}

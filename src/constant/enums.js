@@ -1,5 +1,5 @@
 export const WORKSPACE_ROLE = {
-  OWNER: "Owner",
+  // OWNER: "Owner",
   GUEST: "Guest",
   ADMIN: "Admin",
   USER: "User",

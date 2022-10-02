@@ -28,7 +28,7 @@ const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
   return (
     <div>
       <nav>
-        <Link to="/projects" className="userSettings group line-through">
+        {/* <Link to="/projects" className="userSettings group line-through">
           <SpaceLogo className="text-[#B9C3CE] group-hover:text-purple-500" />
           <span>Show Workspace list</span>
         </Link>
@@ -38,7 +38,7 @@ const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
           <span>Set your status</span>
         </Link>
 
-        <div className="border-b border-gray-300 my-2"></div>
+        <div className="border-b border-gray-300 my-2"></div> */}
 
         <Link
           to="/settings"
@@ -48,7 +48,7 @@ const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
           <span className="group-hover:text-purple-500">Settings</span>
         </Link>
 
-        <Link to="/projects" className="userSettings group line-through">
+        {/* <Link to="/projects" className="userSettings group line-through">
           <Subscription className="text-[#B9C3CE]" />
           <span className="group-hover:text-purple-500">Subscription</span>
         </Link>
@@ -66,7 +66,7 @@ const UserSettingsDropDown = ({ userMenu, setUserMenu }) => {
         <Link to="/projects" className="userSettings group line-through">
           <Mobile className="text-[#B9C3CE]" />
           <span className="group-hover:text-purple-500">Apps</span>
-        </Link>
+        </Link> */}
 
         <div
           onClick={handleLogOut}
