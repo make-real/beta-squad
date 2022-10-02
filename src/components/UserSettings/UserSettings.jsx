@@ -14,6 +14,7 @@ import {
   setSelectedWorkSpaceId,
 } from "../../store/slice/workspace";
 import { useEffect } from "react";
+import Avatar from "../Avatar";
 
 const UserSettings = () => {
   const { loginUserInfo } = useUserInfoContext();
@@ -48,9 +49,10 @@ const UserSettings = () => {
     <section className="w-[325px] text-sm fixed top-0 bottom-0 text-[#9FB4C3] bg-[#23313F] rounded-r-lg p-3">
       <Link
         to="/settings"
-        className="text-white mt-4 font-bold flex bg-[#253443] p-1.5 rounded-sm border-b-2 border-[#2d4154]"
+        className="text-white mt-4 h-13 font-bold flex bg-[#253443] p-1.5 rounded-sm border-b-2 border-[#2d4154]"
       >
-        <div className="w-11 h-11 rounded-full overflow-hidden">
+        <Avatar size={10} user={loginUserInfo} />
+        {/* <div className="w-11 h-11 rounded-full overflow-hidden">
           <img
             src={
               loginUserInfo.avatar ||
@@ -58,8 +60,8 @@ const UserSettings = () => {
             }
             alt=""
           />
-        </div>
-        <h6 className="my-auto  pl-6">Profile Settings</h6>
+        </div> */}
+        <h6 className="my-auto pl-2">Profile Settings</h6>
       </Link>
 
       <Link
@@ -69,12 +71,12 @@ const UserSettings = () => {
         Manage Workspaces
       </Link>
 
-      <Link
+      {/* <Link
         to="/settings/developer"
         className="font-bold mt-3 flex w-full hover:bg-[#253443] p-2 rounded-sm "
       >
         Developer Console
-      </Link>
+      </Link> */}
 
       <div className="border-b-2 border-[#293C4F] ">
         <Dropdown
@@ -134,9 +136,9 @@ const UserSettings = () => {
             <BsTag className="my-auto mr-2" /> <h6> Tags</h6>
           </Link>
 
-          <div className="flex p-2.5 rounded-md hover:bg-[#293C4F] line-through">
+          {/* <div className="flex p-2.5 rounded-md hover:bg-[#293C4F] line-through">
             <FiShoppingBag className="my-auto mr-2" /> <h6> Preferences</h6>
-          </div>
+          </div> */}
         </div>
       </div>
 

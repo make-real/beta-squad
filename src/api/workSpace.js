@@ -10,11 +10,11 @@ export const get_single_workspace_data = (id) => {
 };
 
 export const leave_workspace = (id) => {
-  return useAxios.post(`/workspaces/${id}/leave`);
+  return useAxios.put(`/workspaces/${id}/leave`);
 };
 
 export const archive_workspace = (id) => {
-  return useAxios.post(`/workspaces/${id}/archive`);
+  return useAxios.delete(`/workspaces/${id}`);
 };
 
 export const create_workspace = (data) => {
@@ -40,6 +40,12 @@ export const change_workspace_member_role = (spaceId, { id, role }) => {
   return useAxios.put(`workspaces/${spaceId}/member-role`, {
     memberId: id,
     requestFor: role,
+  });
+};
+
+export const transfer_ownership = (workspaceId, userId) => {
+  return useAxios.put(`workspaces/${workspaceId}/ownership-transfer`, {
+    memberId: userId,
   });
 };
 
