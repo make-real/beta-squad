@@ -63,6 +63,7 @@ const Card = ({ card, listID }) => {
   }, []);
 
   const toggle_card_modal = () => {
+    console.log("taggling........");
     toggleCardModal(listID, card._id);
   };
 
@@ -78,22 +79,27 @@ const Card = ({ card, listID }) => {
         className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 cursor-grab hover:bg-gray-200"
         style={{ borderColor: selectedSpaceObj?.color }}
       >
-        {!!progress && (
-          <div
-            className={`mb-2 flex items-center justify-center w-6 h-6 rounded-full text-white
-            ${progress === 4 ? "bg-teal-400" : " bg-gray-400"}`}
-          >
-            {progress === 4 ? (
-              <RightOK className="w-4 h-4" />
-            ) : (
-              <span className="text-[8px] text-center">
-                {progressStatus(progress)}%
-              </span>
-            )}
+        {!!card.assignee.length && (
+          <div className="mb-3 flex">
+            {card.assignee.map((user, i) => (
+              <div style={{ marginLeft: i ? "-5px" : 0 }}>
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt=""
+                    className="w-6 h-6 rounded-full ring bg-white ring-teal-500"
+                  />
+                ) : (
+                  <p className="w-6 h-6 rounded-full ring bg-white ring-teal-500 text-black font-bold grid place-items-center">
+                    {user?.fullName.charAt(0)}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         )}
-        <p className="text-lg mr-4 text-gray-800">{card.name}</p>
-        <div className="pt-2 text-white flex gap-1 flex-wrap">
+        <p className="text-sm mr-4 text-gray-800">{card.name}</p>
+        <div className="pt-5 text-white flex gap-1 flex-wrap">
           {card?.tags?.length
             ? card?.tags?.map((tag) => (
                 <CardChip small tag={tag} key={tag?.name} />
@@ -101,7 +107,24 @@ const Card = ({ card, listID }) => {
             : null}
         </div>
 
-        <div className="absolute top-4 right-3 flex">
+        <div className="absolute top-2 right-2 flex">
+          {!!progress && (
+            <div
+              style={{
+                backgroundColor:
+                  progress === 4 ? selectedSpaceObj?.color : "grey",
+              }}
+              className={`mt-[2px] flex items-center justify-center w-7 h-7 rounded-full text-white`}
+            >
+              {progress === 4 ? (
+                <RightOK className="w-4 h-4" />
+              ) : (
+                <span className="text-[8px] text-center">
+                  {progressStatus(progress)}%
+                </span>
+              )}
+            </div>
+          )}
           {visible && (
             <Dropdown
               width={200}
@@ -132,12 +155,13 @@ const Card = ({ card, listID }) => {
             <div className="relative flex w-[100px] h-2 bg-slate-300 rounded-full">
               <div
                 style={{
+                  backgroundColor: selectedSpaceObj?.color,
                   width:
                     (checked.length / (checked.length + unchecked.length)) *
                       100 +
                     "%",
                 }}
-                className="h-full bg-violet-700 rounded-full"
+                className="h-full rounded-full"
               />
             </div>
             <p className="text-gray-400 text-sm ml-2">
@@ -177,22 +201,20 @@ const Card = ({ card, listID }) => {
           /> */}
           </div>
         )}
-
-        {
-          // When Task Click >>> then Modal Open
-          card.modal && (
-            <CardModal
-              card={card}
-              listID={listID}
-              noteDone={noteDone}
-              progress={progress}
-              setProgress={setProgress}
-              setBoardModal={toggle_card_modal}
-              setNoteDone={setNoteDone}
-            />
-          )
-        }
       </div>
+      {
+        card.modal && (
+          <CardModal
+            card={card}
+            listID={listID}
+            noteDone={noteDone}
+            progress={progress}
+            setProgress={setProgress}
+            setBoardModal={toggle_card_modal}
+            setNoteDone={setNoteDone}
+          />
+        )
+      }
     </>
   );
 };

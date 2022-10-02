@@ -47,22 +47,18 @@ export const BoardCardContext = ({ children }) => {
   };
 
   const updateCard = (bid, cid, newCard) => {
-    const tempBoard = [...boardLists];
-    const newBoard = tempBoard.map((board) => {
-      if (board._id === bid) {
-        board.cards = board.cards.map((card) => {
-          if (card._id === cid) {
-            card = {
-              ...card,
-              ...newCard,
-            };
-          }
-          return card;
-        });
-      }
-      return board;
-    });
-    setBoardList(newBoard);
+    const copy = [...boardLists];
+    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
+    if (boardIndex < 0) return;
+    const cardIndex = copy[boardIndex].cards.findIndex(
+      ({ _id }) => _id === cid
+    );
+    if (cardIndex < 0) return;
+    copy[boardIndex].cards[cardIndex] = {
+      ...copy[boardIndex].cards[cardIndex],
+      ...newCard,
+    };
+    setBoardList(copy);
   };
 
   const handleDragEnd = ({ target, targetIndex }, { source, sourceIndex }) => {
@@ -77,19 +73,14 @@ export const BoardCardContext = ({ children }) => {
   };
 
   const toggleCardModal = (bid, cid) => {
-    const tempBoard = [...boardLists];
-    const newBoard = tempBoard.map((board) => {
-      if (board._id === bid) {
-        board.cards = board.cards.map((card) => {
-          if (card._id === cid) {
-            card.modal = !card.modal;
-          }
-          return card;
-        });
-      }
-      return board;
-    });
-    setBoardList(newBoard);
+    const copy = [...boardLists];
+    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
+    const cardIndex = copy[boardIndex].cards.findIndex(
+      ({ _id }) => _id === cid
+    );
+    copy[boardIndex].cards[cardIndex].modal =
+      !copy[boardIndex].cards[cardIndex].modal;
+    setBoardList(copy);
   };
 
   return (

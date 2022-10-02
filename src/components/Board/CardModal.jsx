@@ -32,19 +32,19 @@ import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import CardMessage from "./CardComment";
 import ImgsViewer from "react-images-viewer";
-const CardModal = (prop) => {
-  const {
-    setBoardModal,
-    noteDone,
-    setNoteDone,
-    card,
-    listID,
-    progress,
-    setProgress,
-    progressStatus,
-    handleDataChange = () => {},
-  } = prop;
-
+import { formatDate } from "../../util/date";
+import TaskDatePicker from "../TaskDatePicker";
+const CardModal = ({
+  setBoardModal,
+  noteDone,
+  setNoteDone,
+  card,
+  listID,
+  progress,
+  setProgress,
+  progressStatus,
+  handleDataChange = () => {},
+}) => {
   const [localCard, setLocalCard] = useState({});
   const { updateCard, boardLists } = useBoardCardContext();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -79,12 +79,12 @@ const CardModal = (prop) => {
 
   useEffect(() => {
     const handleEscapeKeyPress = (e) => {
-      if (e.code === "Escape") setBoardModal();
+      if (e.code === "Escape") setBoardModal(localCard);
     };
 
     document.addEventListener("keydown", handleEscapeKeyPress);
     return () => document.removeEventListener("keydown", handleEscapeKeyPress);
-  }, [setBoardModal]);
+  }, []);
 
   useEffect(
     () => updateCard(listID, localCard._id, localCard),
@@ -139,7 +139,28 @@ const CardModal = (prop) => {
     // }
   };
 
-  const handle_create_check_list = () => setNewCheckListItemJSX(true);
+  const changeDate = async (date, card) => {
+    const cardCopy = {
+      ...localCard,
+      startDate: date.start,
+      endDate: date.end,
+    };
+    setLocalCard(cardCopy);
+    try {
+      await cardUpdateApiCall(selectedSpaceId, listID, card._id, cardCopy);
+      handleDataChange();
+    } catch (error) {
+      console.log(error.response.data.issue);
+    }
+  };
+
+  const handle_create_check_list = () => {
+    setNewCheckListItemJSX(true);
+    setCheckListItem({
+      checked: false,
+      content: "",
+    });
+  };
 
   const handle_check_list_item_enter_btn = async (e) => {
     if (e.key === "Enter") {
@@ -295,10 +316,7 @@ const CardModal = (prop) => {
 
   return (
     <>
-      <section
-        className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible "
-        onClick={() => setBoardModal()}
-      >
+      <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible">
         <div className="flex flex-col relative bg-gray-50 w-[90%] h-[90vh] max-w-[1800px] rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between border-b border-gray-300 py-2">
             <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
@@ -310,19 +328,18 @@ const CardModal = (prop) => {
                 <span>Done</span>
               </div>
 
-              <div className="flex items-center space-x-2 px-3 pl-4">
+              <div className="flex items-center px-3 pl-4">
                 <span>Progress:</span>
-                <CardProgress progress={progress} setProgress={setProgress} />
+                <div className="ml-4">
+                  <CardProgress progress={progress} setProgress={setProgress} />
+                </div>
               </div>
 
               <div className="relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
                 <Dropdown
                   width={450}
                   button={
-                    <div
-                      onClick={handle_open_assignee_modal}
-                      className="flex gap-2 ml-5 px-3 py-2 align-middle"
-                    >
+                    <div className="flex gap-2 ml-5 px-3 py-2 items-center">
                       {localCard.assignee?.length ? (
                         localCard.assignee.map((user, i) => (
                           <div className="ml-[-15px]">
@@ -353,7 +370,34 @@ const CardModal = (prop) => {
                       localCard={localCard}
                       spaceID={selectedSpaceId}
                       setLocalCard={setLocalCard}
-                      openAssigneeModal={openAssigneeModal}
+                    />
+                  )}
+                />
+              </div>
+              <div className="ml-3 relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-xl text-gray-400">
+                <Dropdown
+                  width={350}
+                  button={
+                    localCard.startDate ? (
+                      <div className="p-2 text-center cursor-pointer rounded-lg duration-200 hover:bg-gray-300 hover:text-teal-500">
+                        {formatDate(localCard.startDate, "MMM, dd")} -{" "}
+                        {formatDate(localCard.endDate, "MMM, dd")}
+                      </div>
+                    ) : (
+                      <div className="p-2 text-center cursor-pointer rounded-lg duration-200 hover:bg-gray-300 hover:text-teal-500">
+                        Start - Due
+                      </div>
+                    )
+                  }
+                  menu={({ closePopup }) => (
+                    <TaskDatePicker
+                      startDate={localCard?.startDate}
+                      endDate={localCard?.endDate}
+                      onChange={(date) => {
+                        closePopup();
+                        changeDate(date, localCard);
+                      }}
+                      close={closePopup}
                     />
                   )}
                 />
@@ -379,11 +423,9 @@ const CardModal = (prop) => {
                   />
                 )}
               />
-
-              <Close
-                className="text-[#7088A1] cursor-pointer w-8 h-8 p-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200"
-                onClick={() => setBoardModal()}
-              />
+              <div onClick={() => setBoardModal(localCard)}>
+                <Close className="text-[#7088A1] cursor-pointer w-8 h-8 p-2 rounded-md hover:bg-gray-200 hover:text-teal-500 duration-200" />
+              </div>
             </div>
           </div>
           <div class="flex flex-1 min-h-0">
@@ -478,11 +520,11 @@ const CardModal = (prop) => {
                     <span>Checklist</span>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="">
                     {localCard?.checkList?.length > 0 &&
                       localCard?.checkList?.map((item) => (
                         <div
-                          className="flex items-center justify-between px-8"
+                          className="flex items-center justify-between"
                           key={item._id}
                         >
                           <input
@@ -500,7 +542,7 @@ const CardModal = (prop) => {
                             onChange={(e) =>
                               handle_check_list_update_on_change(e, item._id)
                             }
-                            className="flex-1 mx-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                           />
 
                           <Dropdown
@@ -513,13 +555,17 @@ const CardModal = (prop) => {
                             }
                             menu={() => (
                               <div className="w-full">
-                                <div className="boardActionDropDownSm flex justify-center">
+                                <div
+                                  onClick={() =>
+                                    handle_remove_check_list_item(item._id)
+                                  }
+                                  className="boardActionDropDownSm flex justify-center"
+                                >
                                   <p>Delete</p>
                                 </div>
-
-                                <div className="boardActionDropDownSm flex justify-center">
+                                {/* <div className="boardActionDropDownSm flex justify-center">
                                   <p>Assign</p>
-                                </div>
+                                </div> */}
                               </div>
                             )}
                           />
@@ -527,34 +573,55 @@ const CardModal = (prop) => {
                       ))}
 
                     {newCheckListItemJSX && (
-                      <div className="flex items-center justify-between px-8">
+                      <div className="flex items-center justify-between">
                         <input
                           type="checkbox"
                           name="check"
                           className="w-4 h-4 cursor-pointer"
-                          checked={checkListItem.checked}
+                          style={{ color: "red" }}
+                          checked={checkListItem?.checked}
                           onChange={handle_check_list_change}
                         />
                         <input
                           type="text"
                           name="content"
-                          value={checkListItem.content}
+                          value={checkListItem?.content}
                           onChange={handle_check_list_change}
                           onKeyDown={handle_check_list_item_enter_btn}
-                          className="flex-1 mx-2 px-2 py-1 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                          className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                         />
-                        <div className="px-2 cursor-pointer hover:text-red-400">
-                          <DotsSingle />
-                        </div>
+                        <Dropdown
+                          width={120}
+                          position="right center"
+                          button={
+                            <div className="px-2 cursor-pointer hover:text-red-400">
+                              <DotsSingle />
+                            </div>
+                          }
+                          menu={() => (
+                            <div className="w-full">
+                              <div
+                                onClick={() => {
+                                  setCheckListItem();
+                                  setNewCheckListItemJSX(false);
+                                }}
+                                className="boardActionDropDownSm flex justify-center"
+                              >
+                                <p>Remove</p>
+                              </div>
+                            </div>
+                          )}
+                        />
                       </div>
                     )}
 
-                    <Button sm onClick={handle_create_check_list}>
+                    <Button
+                      className="mt-5"
+                      sm
+                      onClick={handle_create_check_list}
+                    >
                       Add item to check ist
                     </Button>
-                    {/* <p className="text-[#B9C3CE] py-2 px-3 rounded-md bg-slate-100 inline-block mt-2 cursor-pointer hover:bg-slate-200 duration-150">
-                    Add item to check ist
-                  </p> */}
                   </div>
                 </div>
 

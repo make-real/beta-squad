@@ -144,5 +144,4 @@ export const moveCard = (spaceId, listId, cardId, newListId) =>
     newListId,
   });
 
-export const getCardAsList = (spaceId) =>
-  api.get(`/spaces/${spaceId}/row?sortBy=progress&sort=descending`);
+export const getCardAsList = (spaceId) => api.get(`/spaces/${spaceId}/row`);

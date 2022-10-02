@@ -71,7 +71,7 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
                             onClick={() => setInputToggle(true)}
                         >
                             <Plus className={`${btnText === 'card' ? 'text-gray-200 bg-gray-400 p-1 rounded-full' : 'text-gray-500'}`} />
-                            <p className='text-gray-500 text-lg'>Add a {btnText}...</p>
+                            <p className='text-gray-500 text-sm'>Add a {btnText}...</p>
                         </div>
                     )
             }

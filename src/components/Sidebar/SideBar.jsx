@@ -264,26 +264,6 @@ const SideBar = () => {
                   />
                 )}
               />
-
-              {/* <div
-                className=" cursor-pointer flex justify-center items-center"
-                onClick={() => {
-                  setUserNotificationSMS((pre) => !pre);
-                  setUserNotificationBell(false);
-                  setUserMenu(false);
-                }}
-              >
-                <SMS className="text-[#1F2E3D] hover:text-gray-200" />
-              </div>
-
-              <div
-                className=" cursor-pointer flex justify-center items-center"
-                onClick={() => {
-                  setUserNotificationBell((pre) => !pre);
-                  setUserNotificationSMS(false);
-                  setUserMenu(false);
-                }}
-              ></div> */}
             </div>
 
             <p className="capitalize text-gray-500 text-sm">make real</p>
@@ -305,7 +285,7 @@ const SideBar = () => {
             </div>
           </div>
 
-          <div className="flex items-center w-full m-3 space-x-4">
+          {/* <div className="flex items-center w-full m-3 space-x-4">
             <div className="w-[60%] hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 mt-[2px] cursor-pointer rounded-lg mr-2 ">
               <Search />{" "}
               <p className="text-sideBarTextColor font-bold">Search...</p>
@@ -315,9 +295,9 @@ const SideBar = () => {
               <ArrowLeft className="cursor-pointer" />
               <ArrowRight className="cursor-pointer" />
             </div>
-          </div>
+          </div> */}
 
-          <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
+          {/* <div className="flex items-center px-2.5 py-1 m-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg">
             <Task />
             <p className="uppercase text-sideBarTextColor font-bold line-through text-sm">
               My Tasks
@@ -328,9 +308,9 @@ const SideBar = () => {
             <p className="uppercase text-sideBarTextColor font-bold line-through text-sm">
               OverWatch
             </p>
-          </div>
+          </div> */}
 
-          <div className="overflow-y-auto h-full my-8">
+          <div className="overflow-y-auto h-full">
             <div className="flex w-full items-center m-3 justify-between pr-4">
               {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
               <div
