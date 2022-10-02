@@ -12,6 +12,7 @@ const Draggable = ({ elements, render, listId }) => {
                 key={item._id}
                 draggableId={item._id}
                 index={index}
+                isDragDisabled={item.modal}
               >
                 {(provided, snapshot) => render({ item, provided, snapshot })}
               </DraggableElement>

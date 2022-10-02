@@ -67,9 +67,9 @@ const BoardList = ({ boardList }) => {
         className="overflow-hidden bg-gray-100 flex items-center justify-between p-4 rounded-t-lg"
         ref={dropDownRef}
       >
-        <div className="text-gray-500 text-lg flex-1">
+        <p className="text-gray-500 flex-1">
           {boardList?.name || "New List"}
-        </div>
+        </p>
 
         <Dropdown
           button={

@@ -4,6 +4,7 @@ import ConfirmDialog from "./ConfirmDialog";
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardSettingDropDown = ({
+  close,
   right,
   progress,
   setProgress,
@@ -15,42 +16,23 @@ const CardSettingDropDown = ({
   cardModal,
 }) => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-
-  // if cardModal Open by user click, then hide this Card-Setting-DropDown-Toggle window
   if (cardModal === true) setCardSettingDropDownToggle(false);
 
   const handleActionDropDownClick = (e) => {
     e.stopPropagation();
-
-    setNoteDone((pre) => {
-      if (pre) {
-        setProgress(4);
-      } else {
-        setProgress(0);
-      }
-
-      return !pre;
-    });
-
+    progress !== 0 ? setProgress(0) : setProgress(4);
     setCardSettingDropDownToggle(false);
+    close && close();
   };
 
   return (
     <div className="w-full">
-      {/* <div className='boardActionDropDown group line-through relative'>
-                <Copy className='group-hover:text-teal-500' /> <span>Copy Card</span>
-            </div>
-
-            <div className='boardActionDropDown group line-through'>
-                <LinkingChain className='group-hover:text-teal-500' /> <span>Copy Card link</span>
-            </div> */}
-
       <div
         className="boardActionDropDown group w-full"
         onClick={handleActionDropDownClick}
       >
         <RightOK className="group-hover:text-teal-500" />{" "}
-        <span>{noteDone ? "Unmark card" : "Mark as done"}</span>
+        <span>{progress !== 0 ? "Unmark card" : "Mark as done"}</span>
       </div>
 
       <div
@@ -64,17 +46,14 @@ const CardSettingDropDown = ({
         <span>Delete Card</span>
       </div>
 
-      {
-        // confirm dialog open for delete operation...
-        confirmModalOpen && (
-          <ConfirmDialog
-            listID={listID}
-            cardID={cardID}
-            setConfirmModalOpen={setConfirmModalOpen}
-            setCardSettingDropDownToggle={setCardSettingDropDownToggle}
-          />
-        )
-      }
+      {confirmModalOpen && (
+        <ConfirmDialog
+          listID={listID}
+          cardID={cardID}
+          setConfirmModalOpen={setConfirmModalOpen}
+          setCardSettingDropDownToggle={setCardSettingDropDownToggle}
+        />
+      )}
     </div>
   );
 };

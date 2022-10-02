@@ -19,11 +19,7 @@ const Chat = () => {
           messageToRespond={messageToRespond}
           setMessageToRespond={setMessageToRespond}
         />
-
       </div>
-      
-
-      
       <MessageBox
         messageToRespond={messageToRespond}
         setMessageToRespond={setMessageToRespond}

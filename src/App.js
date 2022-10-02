@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import WorkspaceSettings from "./components/UserSettings/WorkspaceSettings";
 import Tags from "./components/UserSettings/Tags";
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 
 const ProtectedRoute = ({ children }) => {
