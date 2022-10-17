@@ -79,9 +79,9 @@ const Card = ({ card, listID }) => {
         className="relative w-[275px] h-fit bg-white px-3 py-3 rounded-md border-t-4 cursor-grab hover:bg-gray-200"
         style={{ borderColor: selectedSpaceObj?.color }}
       >
-        {!!card.assignee.length && (
+        {!!card.assignee?.length && (
           <div className="mb-3 flex">
-            {card.assignee.map((user, i) => (
+            {card.assignee?.map((user, i) => (
               <div style={{ marginLeft: i ? "-5px" : 0 }}>
                 {user.avatar ? (
                   <img
