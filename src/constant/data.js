@@ -55,14 +55,14 @@ export const navLinks = [
     name: "List",
     path: "/projects/list",
   },
-  {
-    name: "Calendar",
-    path: "/projects/calendar",
-  },
-  {
-    name: "Timeline",
-    path: "/projects/timeline",
-  },
+  // {
+  //   name: "Calendar",
+  //   path: "/projects/calendar",
+  // },
+  // {
+  //   name: "Timeline",
+  //   path: "/projects/timeline",
+  // },
 ];
 
 export const checkBoxFilter = [

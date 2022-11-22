@@ -78,9 +78,9 @@ const NavBar = ({ selectedSpaceId }) => {
             >
               {currentSelectedSpace && currentSelectedSpace?.name}
             </h2>
-            <p className="text-[12px] text-gray-300 font-light">
+            {/* <p className="text-[12px] text-gray-300 font-light">
               Project purpose...
-            </p>
+            </p> */}
           </div>
 
           <nav>

@@ -1,15 +1,11 @@
-import {
-  BsArrow90DegRight,
-  BsEmojiSmile,
-  BsThreeDotsVertical,
-} from "react-icons/bs";
+import { BsEmojiSmile } from "react-icons/bs";
 import { VscCommentDiscussion } from "react-icons/vsc";
-import { MdClose, MdModeEditOutline } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
-import { populateUsers, sliceText } from "../../util/helpers";
+import { populateUsers } from "../../util/helpers";
 import images from "../../assets";
 import { add_reaction, delete_message } from "../../api/message";
 
@@ -49,8 +45,8 @@ const Message = ({
   };
 
   return (
-    <div className="flex px-3 py-2 hover:bg-slate-200 relative user-box">
-      <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative	">
+    <div className="flex px-6 py-5 hover:bg-slate-100 relative user-box">
+      <div className="w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative">
         {msg.sender.avatar ? (
           <img src={msg?.sender?.avatar} alt="" className="rounded-full" />
         ) : (
@@ -59,11 +55,12 @@ const Message = ({
           </h6>
         )}
       </div>
+
       <div
         style={{
           maxWidth: forComment ? "400px" : "900px",
         }}
-        className={`bg-slate-100 p-3 rounded-lg ml-3 shadow-md`}
+        className={`relative bg-slate-100 p-3 rounded-lg ml-3 shadow-md`}
       >
         <div className="flex justify-between text-xs text-sky-900	pb-2">
           <h6 className="font-bold">{msg?.sender?.fullName}</h6>
@@ -78,11 +75,6 @@ const Message = ({
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
             />
-
-            {/* <RenderVoice
-              message={msg.replayOf}
-              scrollToBottom={scrollToBottom}
-            /> */}
             <p
               className="text-sm text-gray-900"
               dangerouslySetInnerHTML={{
@@ -91,41 +83,39 @@ const Message = ({
             ></p>
           </div>
         )}
-        <RenderAttachment
-          message={msg}
-          scrollToBottom={scrollToBottom}
-          small={forComment}
-        />
+        {msg.content.voice ? (
+          <RenderVoice message={msg} scrollToBottom={scrollToBottom} />
+        ) : (
+          <RenderAttachment
+            message={msg}
+            scrollToBottom={scrollToBottom}
+            small={forComment}
+          />
+        )}
         <p
           className="text-sm text-gray-900"
           dangerouslySetInnerHTML={{
             __html: populateUsers(msg?.content),
           }}
         ></p>
+        {Boolean(msg?.reactions.length) && (
+          <div className="absolute right-0 -bottom-4 flex bg-white border border-gray-200 text-gray-500 rounded-3xl py-1 px-2">
+            {msg?.reactions?.map((data, idx) => (
+              <p
+                key={idx}
+                className="text-lg tooltip-box select-none"
+              >
+                {data?.reaction}
+                <p className="tooltip-text select-none">
+                  {data.reactor.fullName}
+                </p>
+              </p>
+            ))}
+          </div>
+        )}
       </div>
 
-      {Boolean(msg?.reactions.length) && (
-        <div className="absolute right-0 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 reaction-wrapper">
-          {msg?.reactions?.map((data, idx) => (
-            <p
-              key={idx}
-              className="px-1 text-xs hover:text-teal-400 tooltip-box select-none"
-            >
-              {data?.reaction}
-
-              <p className="tooltip-text select-none">
-                {data.reactor.fullName}
-              </p>
-            </p>
-          ))}
-        </div>
-      )}
-
       <div className="absolute right-5 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
-        <div className="px-1 hover:text-teal-400 tooltip-box">
-          <BsArrow90DegRight />
-          <p className="tooltip-text">Convert the task</p>
-        </div>
         <div className="px-1.5 hover:text-teal-400 tooltip-box">
           <BsEmojiSmile onClick={() => setShowReactEmojis(!showReactEmojis)} />
           <p className="tooltip-text select-none">Add a reaction</p>
@@ -181,11 +171,6 @@ const Message = ({
             <p className="tooltip-text">Delete</p>
           </div>
         )}
-
-        <div className="px-1 hover:text-teal-400 tooltip-box">
-          <BsThreeDotsVertical />
-          <p className="tooltip-text">Add as a quote</p>
-        </div>
       </div>
     </div>
   );
@@ -205,18 +190,9 @@ const RenderAttachment = ({ message, scrollToBottom, small }) =>
           src={src}
           alt=""
           style={{
-            maxWidth: small ? "300px" : "500px",
+            maxWidth: small ? "150px" : "200px",
             marginBottom: "10px",
           }}
-          // className="max-w-[500px] mb-2"
-        />
-      );
-    } else if (["wav"].includes(extension)) {
-      return (
-        <RenderVoice
-          message={message}
-          scrollToBottom={scrollToBottom}
-          small={small}
         />
       );
     } else {
@@ -242,7 +218,7 @@ const RenderVoice = ({ message, scrollToBottom }) => {
 
   return (
     <div>
-      <AudioInput url={message?.content?.attachments[0]} />
+      <AudioInput url={message?.content?.voice} />
     </div>
   );
 };
@@ -312,32 +288,7 @@ const TextMessage = ({
           </div>
         </div>
       )}
-
       <div ref={messagesEndRef} />
-
-      {/* 🔘🔘🔘🔘🔘🔘🔘🔘🔘 Seen SMS 🔘🔘🔘🔘🔘🔘🔘🔘🔘 */}
-      {/* <div className="text-gray-400 text-xs flex justify-between">
-        <div>
-          {messages?.length &&
-            messages[messages?.length - 1]?.seen?.length + " seen"}
-        </div>
-
-        <div className="flex gap-1">
-          {messages[messages?.length - 1]?.seen.map((data) =>
-            data?.avatar ? (
-              <img
-                src={data?.avatar}
-                alt=""
-                className="w-4 h-4 rounded-full mb-2 tooltip-box"
-              />
-            ) : (
-              <p className="w-5 h-5 rounded-full mb-2 tooltip-box bg-gray-300 text-black font-bold grid place-items-center">
-                {data?.fullName.charAt(0)}
-              </p>
-            )
-          )}
-        </div>
-      </div> */}
     </>
   );
 };

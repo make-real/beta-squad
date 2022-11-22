@@ -74,7 +74,7 @@ const Preferences = () => {
           </div>
         </div>
 
-        <div className="bg-white p-3 rounded-md">
+        {/* <div className="bg-white p-3 rounded-md">
           <h6 className="text-[#7088A1] text-base font-bold">
             Chats retention
           </h6>
@@ -104,7 +104,7 @@ const Preferences = () => {
               className="outline-none bg-gray-100 w-[80px] p-1 border rounded-md"
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -107,7 +107,7 @@ const MessageBox = ({
       if (custom) {
         await onComment({ audio: wavefilefromblob });
       } else {
-        formData.append("attachments", wavefilefromblob);
+        formData.append("voice", wavefilefromblob);
         if (messageToRespond?._id) {
           formData.append("replayOf", messageToRespond?._id);
         }

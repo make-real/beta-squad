@@ -15,8 +15,8 @@ import { get_workspace_member } from "../../api/workSpace";
 import ConfirmModal from "../ConfirmModal";
 
 const Members = () => {
-  const [members, setMembers] = React.useState();
-  const [allMembers, setAllMembers] = React.useState();
+  const [members, setMembers] = React.useState([]);
+  const [allMembers, setAllMembers] = React.useState([]);
   const [addMemberModal, setAddMemberModal] = React.useState(false);
   const [addingMember, setAddingMember] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -117,28 +117,30 @@ const Members = () => {
               {loading ? (
                 <Loader />
               ) : (
-                searchMembers?.map((item) => (
-                  <div
-                    className="flex flex-row align-middle py-1 cursor-pointer"
-                    key={item._id}
-                  >
-                    <div className="my-auto">
-                      <Avatar user={item} />
-                    </div>
-                    <h6 className="text-sm text-sky-900 pl-4 my-auto">
-                      {item.fullName}
-                    </h6>
-                    <Button
-                      loading={isLoading(item._id)}
-                      onClick={addMember(item._id)}
-                      sm
-                      className="ml-auto my-auto mt-0"
-                      text
+                searchMembers
+                  ?.filter((el) => !members.map((a) => a._id).includes(el._id))
+                  ?.map((item) => (
+                    <div
+                      className="flex flex-row align-middle py-1 cursor-pointer"
+                      key={item._id}
                     >
-                      Add Member
-                    </Button>
-                  </div>
-                ))
+                      <div className="my-auto">
+                        <Avatar user={item} />
+                      </div>
+                      <h6 className="text-sm text-sky-900 pl-4 my-auto">
+                        {item.fullName}
+                      </h6>
+                      <Button
+                        loading={isLoading(item._id)}
+                        onClick={addMember(item._id)}
+                        sm
+                        className="ml-auto my-auto mt-0"
+                        text
+                      >
+                        Add Member
+                      </Button>
+                    </div>
+                  ))
               )}
             </div>
           </div>

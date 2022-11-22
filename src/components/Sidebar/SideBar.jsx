@@ -258,7 +258,7 @@ const SideBar = () => {
               />
             </div>
 
-            <p className="capitalize text-gray-500 text-sm">make real</p>
+            {/* <p className="capitalize text-gray-500 text-sm">make real</p> */}
 
             <div
               className="cursor-pointer"
@@ -332,7 +332,7 @@ const SideBar = () => {
           </div> */}
 
             {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
-            <div className="my-0">
+            <div className="ml-3">
               {allSpaces?.map((space) => (
                 <div
                   key={space._id}
@@ -342,7 +342,7 @@ const SideBar = () => {
                     dispatch(setSelectedSpaceObject(space));
                   }}
                 >
-                  <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" />
+                  {/* <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" /> */}
 
                   <div
                     className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${

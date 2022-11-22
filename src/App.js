@@ -54,8 +54,8 @@ const App = () => {
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
           <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
-          <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
-          <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} />
+          {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
+          <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
         </Route>
 
 
