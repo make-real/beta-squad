@@ -1,30 +1,27 @@
 import { useUserInfoContext } from "../../context/UserInfoContext";
 import { Link, useNavigate } from "react-router-dom";
 import { userSignIn } from "../../hooks/useFetch";
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
-import { gapi } from 'gapi-script';
+import { gapi } from "gapi-script";
 import { useEffect, useState } from "react";
 import { Loader } from "../Loader";
 import images from "../../assets";
-
+import useAuth from "../../hooks/auth";
 
 const Login = () => {
-
   const navigate = useNavigate();
   const { setLoginUserInfo } = useUserInfoContext();
   const [loader, setLoader] = useState(false);
   const [userInput, setUserInput] = useState({ email: "", password: "" });
   const [errorInfo, setErrorInfo] = useState({ email: "", password: "" });
+  const { loader: gloader, error, googleAuth } = useAuth();
 
-  // collect all user input data from UI
   const handleUserInput = (e) => {
     const { name, value } = e.target;
     setUserInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
-  // User Info send to backend for registration...
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -57,43 +54,38 @@ const Login = () => {
     }
   };
 
-
   const onSuccess = async (res) => {
-
-    console.log(res)
+    console.log(res);
 
     const result = res?.profileObj;
     const token = res?.tokenId;
 
     try {
-      // directly send user info at ==> Redux (Auth Reducer) 
+      // directly send user info at ==> Redux (Auth Reducer)
       // for storing user info at localStorage, for later using as per requirement...
       // dispatch({ type: AUTH, data: { result, token } });
 
       // after user login, redirect user at the index page...
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   const onFailure = async (response) => {
-    console.log(response)
-    alert('🔴 Google Sign In was unsuccessful.\n🔴 Try again later...');
-  }
-
+    console.log(response);
+    alert("🔴 Google Sign In was unsuccessful.\n🔴 Try again later...");
+  };
 
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({
         clientId: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
-        scope: ''
+        scope: "",
       });
     };
-    gapi.load('client:auth2', initClient);
+    gapi.load("client:auth2", initClient);
   });
-
 
   return (
     <section className="flex">
@@ -143,26 +135,33 @@ const Login = () => {
           <h2 className="text-center text-2xl font-bold text-cyan-800	">
             Sign in to HeySpace
           </h2>
-
-
-          <GoogleLogin
+          <div
+            onClick={googleAuth}
+            className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900"
+          >
+            {gloader ? (
+              <Loader />
+            ) : (
+              <>
+                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
+                <span className="text-sm">Sign in with Google BD</span>
+              </>
+            )}
+          </div>
+          {/* <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-
-            render={
-              renderProps => (
-                <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
-                  <FcGoogle className="my-auto text-center mr-1.5" />{" "}
-                  <span className="text-sm">Sign in with Google BD</span>
-                </div>
-              )}
+            render={(renderProps) => (
+              <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
+                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
+                <span className="text-sm">Sign in with Google BD</span>
+              </div>
+            )}
             // our custom logic set in these function...
             onSuccess={onSuccess}
             onFailure={onFailure}
             cookiePolicy="single_host_origin"
             isSignedIn={true}
-          />
-
-
+          /> */}
 
           {/* 
           <GoogleLogin
@@ -191,7 +190,6 @@ const Login = () => {
             <span className="text-sm">Sign in with Google</span>
           </div> */}
 
-
           <div className="border-b-2 border-gray-100 pt-5 text-gray-100 relative">
             <span className="absolute left-1/2 top-1.5 bg-white  px-1.5 -translate-x-1/2 ">
               or
@@ -208,8 +206,9 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="email@company.com"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.email && "border-red-500"
-                  }`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.email && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
               {errorInfo.email && (
@@ -228,8 +227,9 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${errorInfo.password && "border-red-500"
-                  }`}
+                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
+                  errorInfo.password && "border-red-500"
+                }`}
                 onChange={handleUserInput}
               />
               {errorInfo.password && (

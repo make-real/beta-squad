@@ -1,4 +1,5 @@
 import { debounce as LDebounch } from "lodash";
+import config from "../config";
 
 export const debounce = (func, delay) => {
   return LDebounch(func, delay || 300);
@@ -101,7 +102,7 @@ export const sentLocalNotification = (msg) => {
     const notification = new Notification(msg);
 
     notification.onclick = function () {
-      window.open("https://space.makereal.click/projects");
+      window.open(`${config.APP_URL}/projects`);
     };
 
     // …
@@ -113,7 +114,7 @@ export const sentLocalNotification = (msg) => {
         const notification = new Notification(msg);
 
         notification.onclick = function () {
-          window.open("https://space.makereal.click/projects");
+          window.open(`${config.APP_URL}/projects`);
         };
       }
     });

@@ -20,6 +20,7 @@ import {
   requestNotificationPermission,
   sentLocalNotification,
 } from "./util/helpers";
+import config from "./config";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -31,7 +32,7 @@ requestNotificationPermission();
 let socket;
 
 if (token) {
-  socket = io("https://space-api.makereal.click", {
+  socket = io(config.BASE_URL, {
     auth: {
       socketAuthToken: token,
     },

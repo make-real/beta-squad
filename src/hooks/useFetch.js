@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import config from "../config";
 
 // Backend || Server ==> URL Address
-const api = axios.create({ baseURL: "https://space-api.makereal.click/api" });
+const api = axios.create({ baseURL: config.API_URL });
 
 // with every url request send user identification at server side for authentication...
 // send user auth automatically every time with every request...

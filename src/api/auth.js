@@ -1,5 +1,11 @@
 import useAxios from ".";
 
+export const o_auth_login = (token) => {
+  return useAxios.post(`user-auth/oauth`, {
+    token,
+  });
+};
+
 export const get_my_profile = () => {
   const userId = JSON.parse(localStorage.getItem("userId"));
   return useAxios.get(`users/profile/${userId}`);

@@ -9,7 +9,8 @@ on:
 
 env:
   CI: false
-  REACT_APP_API_BASE_URL: https://space-api.makereal.click/api
+  REACT_APP_API_BASE_URL: https://space-api.makereal.click
+  REACT_APP_BASE_URL: https://space.makereal.click
 
 jobs:
   build:

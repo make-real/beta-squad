@@ -1,7 +1,8 @@
 import axios from "axios";
+import config from "../config";
 
 const useAxios = axios.create({
-  baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
+  baseURL: config.API_URL,
 });
 
 useAxios.interceptors.request.use(
