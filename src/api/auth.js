@@ -1,8 +1,8 @@
 import useAxios from ".";
 
 export const o_auth_login = (token) => {
-  return useAxios.post(`user-auth/oauth`, {
-    token,
+  return useAxios.post(`user-auth/login`, {
+    googleAuthToken: token,
   });
 };
 
