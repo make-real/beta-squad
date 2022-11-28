@@ -67,6 +67,7 @@ const WorkspaceSettings = () => {
       setInviteLoader(true);
       await add_workspace_member(selectedWorkspace, userEmail);
       toast.success(`Invitation sent to ${userEmail}`, { autoClose: 1000 });
+      getWorkspaceMembers();
       setUserEmail("");
       setInviteLoader(false);
     } catch (error) {
@@ -224,119 +225,132 @@ const WorkspaceSettings = () => {
           </div>
         </div>
         <hr className="my-5" />
-        {workspaceMembers?.map((user, i) => (
-          <>
-            <div key={i} className="flex align-middle justify-between mt-4">
-              <div className="flex items-center w-[150px]">
-                <Avatar user={user} />
-                {/* <img
-                  className="w-10 h-10 rounded-full border"
-                  src={
-                    userImg ||
-                    "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                  }
-                  alt="user"
-                /> */}
-                <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
-                  <p>{user?.fullName}</p>
-                  <p>{user?.email}</p>
+        {workspaceMembers
+          ?.filter((user) => user?.role === "owner")
+          .map((user, i) => (
+            <>
+              <div key={i} className="flex align-middle justify-between mt-4">
+                <div className="flex items-center w-[150px]">
+                  <Avatar user={user} />
+                  <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
+                    <p>{user?.fullName}</p>
+                    <p>{user?.email}</p>
+                  </div>
                 </div>
-              </div>
-              {user?.role !== "owner" ? (
-                <>
-                  <Dropdown
-                    width={120}
-                    button={
-                      <Button
-                        loading={isChangingRoll(user?._id)}
-                        className="mt-0"
-                        text
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="">{user?.role}</div>
-                          <div className="">
-                            <IoIosArrowDown className="my-auto" />
-                          </div>
-                        </div>
-                      </Button>
-                    }
-                    menu={({ closePopup }) =>
-                      Object.values(WORKSPACE_ROLE)
-                        .filter(
-                          (role) =>
-                            role.toLocaleLowerCase() !==
-                            user?.role.toLocaleLowerCase()
-                        )
-                        .map((roll) => (
-                          <Button
-                            sm
-                            block
-                            onClick={() => {
-                              changeUserRoll(
-                                user?._id,
-                                roll.toLocaleLowerCase()
-                              );
-                              closePopup();
-                            }}
-                            className="mx-auto mt-0"
-                            text
-                          >
-                            {roll}
-                          </Button>
-                        ))
-                    }
-                  />
-                  {isBlockingUser(user._id) ? (
-                    <Loader />
-                  ) : (
-                    <Dropdown
-                      position="left center"
-                      width={180}
-                      button={
-                        <div className="px-1 text-[#7088A1] cursor-pointer h-full flex items-center">
-                          <BsThreeDotsVertical />
-                        </div>
-                      }
-                      menu={({ closePopup }) => (
-                        <>
-                          <Button
-                            sm
-                            block
-                            className="mt-0"
-                            text
-                            onClick={() => {
-                              removeUser(user._id);
-                              closePopup();
-                            }}
-                          >
-                            Remove
-                          </Button>
-                          <Button
-                            sm
-                            block
-                            className="mt-0"
-                            text
-                            onClick={() => {
-                              transferOwnership(user._id);
-                              closePopup();
-                            }}
-                          >
-                            Transfer ownership
-                          </Button>
-                        </>
-                      )}
-                    />
-                  )}
-                </>
-              ) : (
                 <div className="text-[#7088A1] font-bold text-center flex items-center">
                   Workspace owner
                 </div>
-              )}
-            </div>
-            {user?.role === "owner" && <hr className="mt-3" />}
-          </>
-        ))}
+              </div>
+              <hr className="mt-3" />
+            </>
+          ))}
+        {workspaceMembers
+          ?.filter((user) => user?.role !== "owner")
+          .map((user, i) => (
+            <>
+              <div key={i} className="flex align-middle justify-between mt-4">
+                <div className="flex items-center w-[150px]">
+                  <Avatar user={user} />
+                  <div className="text-[#7088A1] text-xs font-bold flex flex-col justify-center ml-2">
+                    <p>{user?.fullName}</p>
+                    <p>{user?.email}</p>
+                  </div>
+                </div>
+                {user?.role !== "owner" ? (
+                  <>
+                    <Dropdown
+                      width={120}
+                      button={
+                        <Button
+                          loading={isChangingRoll(user?._id)}
+                          className="mt-0"
+                          text
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="">{user?.role}</div>
+                            <div className="">
+                              <IoIosArrowDown className="my-auto" />
+                            </div>
+                          </div>
+                        </Button>
+                      }
+                      menu={({ closePopup }) =>
+                        Object.values(WORKSPACE_ROLE)
+                          .filter(
+                            (role) =>
+                              role.toLocaleLowerCase() !==
+                              user?.role.toLocaleLowerCase()
+                          )
+                          .map((roll) => (
+                            <Button
+                              sm
+                              block
+                              onClick={() => {
+                                changeUserRoll(
+                                  user?._id,
+                                  roll.toLocaleLowerCase()
+                                );
+                                closePopup();
+                              }}
+                              className="mx-auto mt-0"
+                              text
+                            >
+                              {roll}
+                            </Button>
+                          ))
+                      }
+                    />
+                    {isBlockingUser(user._id) ? (
+                      <Loader />
+                    ) : (
+                      <Dropdown
+                        position="left center"
+                        width={180}
+                        button={
+                          <div className="px-1 text-[#7088A1] cursor-pointer h-full flex items-center">
+                            <BsThreeDotsVertical />
+                          </div>
+                        }
+                        menu={({ closePopup }) => (
+                          <>
+                            <Button
+                              sm
+                              block
+                              className="mt-0"
+                              text
+                              onClick={() => {
+                                removeUser(user._id);
+                                closePopup();
+                              }}
+                            >
+                              Remove
+                            </Button>
+                            <Button
+                              sm
+                              block
+                              className="mt-0"
+                              text
+                              onClick={() => {
+                                transferOwnership(user._id);
+                                closePopup();
+                              }}
+                            >
+                              Transfer ownership
+                            </Button>
+                          </>
+                        )}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="text-[#7088A1] font-bold text-center flex items-center">
+                    Workspace owner
+                  </div>
+                )}
+              </div>
+              {user?.role === "owner" && <hr className="mt-3" />}
+            </>
+          ))}
       </div>
       <input
         className="hidden"

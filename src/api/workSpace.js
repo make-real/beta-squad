@@ -44,7 +44,7 @@ export const change_workspace_member_role = (spaceId, { id, role }) => {
 };
 
 export const transfer_ownership = (workspaceId, userId) => {
-  return useAxios.put(`workspaces/${workspaceId}/ownership-transfer`, {
+  return useAxios.patch(`workspaces/${workspaceId}/ownership-transfer`, {
     memberId: userId,
   });
 };

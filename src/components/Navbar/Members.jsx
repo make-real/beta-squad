@@ -85,6 +85,10 @@ const Members = () => {
   const searchMembers = allMembers?.filter((member) => {
     return member.fullName.toLowerCase().includes(search.toLowerCase());
   });
+
+  const remainingMembers = searchMembers?.filter(
+    (el) => !members.map((a) => a._id).includes(el._id)
+  );
   return (
     <>
       <section className="p-2 overflow-y-auto">
@@ -113,13 +117,12 @@ const Members = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full input-style rounded-full border-[3px] outline-none	border-gray-300 text-slate-600 py-2	px-4"
             />
-            <div className="bg-white mt-2 first-letter:mt-2 p-2">
-              {loading ? (
-                <Loader />
-              ) : (
-                searchMembers
-                  ?.filter((el) => !members.map((a) => a._id).includes(el._id))
-                  ?.map((item) => (
+            {(remainingMembers.length || loading) && (
+              <div className="bg-white mt-2 first-letter:mt-2 p-2">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  remainingMembers?.map((item) => (
                     <div
                       className="flex flex-row align-middle py-1 cursor-pointer"
                       key={item._id}
@@ -141,8 +144,9 @@ const Members = () => {
                       </Button>
                     </div>
                   ))
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <>

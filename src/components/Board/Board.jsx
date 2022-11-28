@@ -6,25 +6,25 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import useAxios from "../../api/index";
+import images from "../../assets";
+import { useSelector } from "react-redux";
+import { filterStatus } from "../../store/slice/board";
 
 const Board = ({ selectedSpaceId }) => {
-  // ContextAPI | Read + Write Operation For Board Section
   const { handleDragEnd, boardLists, setBoardList, addBoardList } =
     useBoardCardContext();
+  const { filter } = useSelector((state) => state.board);
 
-  // Globally Left side margin maintain
   const { margin } = useStyleContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (selectedSpaceId) {
-          // GET Method ==> for all Board List --- under specific Space reference ID
           const { data } = await useAxios.get(
             `/spaces/${selectedSpaceId}/board?getCards=true`
           );
 
-          // update Context API for UI
           setBoardList(data.lists);
         }
       } catch (error) {
@@ -34,33 +34,25 @@ const Board = ({ selectedSpaceId }) => {
     fetchData();
   }, [selectedSpaceId]);
 
-  // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
-  // POST Method ➕ add list inside board...
   const handleBoardListCreation = async (selectedSpaceId, text) => {
     const listObject = { name: text };
 
     try {
-      // its a POST method | object send into backend/server
       const { data } = await addBoardListApiCall(selectedSpaceId, listObject);
 
-      // update user UI... by ContextAPI
       addBoardList(data.list);
 
-      // display a notification for user
       toast.success(`${data?.list?.name} - list create successfully`, {
         autoClose: 3000,
       });
     } catch (error) {
-      // error for developer for deBugging...
       console.log(error.response.data);
 
-      // error for user at notification...
       toast.error(error?.response?.data?.issue?.message, { autoClose: 3000 });
     }
   };
 
   const dragEnd = async (result) => {
-    console.log(result);
     try {
       handleDragEnd(
         {
@@ -83,32 +75,94 @@ const Board = ({ selectedSpaceId }) => {
     }
   };
 
+  const filterdBoardList = () => {
+    let boardCopy = [...boardLists];
+
+    boardCopy = boardCopy.map((brd) => {
+      const filteredCard = brd.cards.filter((card) => {
+        if (filter.assignee.length) {
+          let exist = false;
+          card.assignee.forEach((assignee) => {
+            if (!exist) {
+              exist = filter.assignee.includes(assignee._id);
+            }
+          });
+          return exist;
+        } else {
+          return true;
+        }
+      });
+      return { ...brd, cards: filteredCard };
+    });
+
+    boardCopy = boardCopy.map((brd) => {
+      const filteredCard = brd.cards.filter((card) => {
+        if (filter.tags.length) {
+          let exist = false;
+          card.tags.forEach((tag) => {
+            if (!exist) {
+              exist = filter.tags.includes(tag._id);
+            }
+          });
+          return exist;
+        } else {
+          return true;
+        }
+      });
+      return { ...brd, cards: filteredCard };
+    });
+
+    boardCopy = boardCopy.map((brd) => {
+      let filteredCard = brd.cards;
+      if (filterStatus[filter.status] === 0) {
+        filteredCard = brd.cards.filter((card) => card.progress === 0);
+      } else if (filterStatus[filter.status] === 4) {
+        filteredCard = brd.cards.filter((card) => card.progress === 4);
+      } else if (filterStatus[filter.status] === -1) {
+        filteredCard = brd.cards.filter(
+          (card) => card.progress < 4 && card.progress > 0
+        );
+      }
+      return { ...brd, cards: filteredCard };
+    });
+
+    return boardCopy;
+  };
+
   return (
     <section
-      className={`${
-        margin ? "ml-[325px]" : "ml-[50px]"
-      } duration-200 w-full overflow-x-auto customScroll`}
+      className={`${margin ? "ml-[325px]" : "ml-[50px]"} duration-200 ${
+        selectedSpaceId && "w-full overflow-x-auto customScroll"
+      }`}
     >
-      <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]">
-        <DragDropContext onDragEnd={dragEnd}>
-          {
-            // all board list print at UI by this loop...
-            boardLists
+      {selectedSpaceId ? (
+        <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]">
+          <DragDropContext onDragEnd={dragEnd}>
+            {filterdBoardList()
               ?.slice(0)
               ?.reverse()
               ?.map((boardList) => (
                 <BoardList key={boardList._id} boardList={boardList} />
-              ))
-          }
-        </DragDropContext>
+              ))}
+          </DragDropContext>
 
-        {/*  + Add a list | Button UI */}
-        <AddBtn
-          placeHolder="Add list name..."
-          btnText="list"
-          onSubmit={(text) => handleBoardListCreation(selectedSpaceId, text)}
-        />
-      </div>
+          {/*  + Add a list | Button UI */}
+          <AddBtn
+            placeHolder="Add list name..."
+            btnText="list"
+            onSubmit={(text) => handleBoardListCreation(selectedSpaceId, text)}
+          />
+        </div>
+      ) : (
+        <div className="h-[100vh] w-[calc(100vw - 325px)] flex justify-center flex-col items-center">
+          <img src={images.chattingStart} alt="" className="w-36 mx-auto" />
+          <h2 className="text-2xl font-bold">What a quiet team!</h2>
+          <p className="text-center max-w-[400px]">
+            Don’t be shy, create a space to start communication with your team
+            mates.
+          </p>
+        </div>
+      )}
     </section>
   );
 };

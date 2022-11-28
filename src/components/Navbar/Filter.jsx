@@ -4,9 +4,15 @@ import { capitalize } from "lodash";
 import color from "../../colors.json";
 import Button from "../Button";
 import { useDispatch, useSelector } from "react-redux";
-import { setBoardFilter, setAssignedFilter } from "../../store/slice/board";
+import {
+  setBoardFilter,
+  setAssignedFilter,
+  setTagFilter,
+  clearFilterState,
+} from "../../store/slice/board";
 import { get_space_members } from "../../api/space";
 import { Loader, PageLoader } from "../Loader";
+import { get_tags } from "../../api/tags";
 
 const Option = ({
   value,
@@ -52,6 +58,13 @@ const Option = ({
       />
       <label
         htmlFor="public"
+        style={
+          background && {
+            backgroundColor: background,
+            borderRadius: "20",
+            color: "white",
+          }
+        }
         className={` font-bold cursor-pointer ${
           background ? "text-white px-3 py-1 text-sm" : "text-gray-400"
         } bg-${background}-500 rounded-full`}
@@ -65,13 +78,18 @@ const Option = ({
 const Filter = () => {
   const { filterObject } = useSelector((state) => state.board);
   const { selectedSpace } = useSelector((state) => state.space);
+  const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getMembers();
+    if (!filterObject[1].options.length || !filterObject[2].options.length) {
+      getMembers();
+      getTags();
+    }
   }, [selectedSpace]);
+
   const getMembers = async () => {
     try {
       setLoader(true);
@@ -83,6 +101,23 @@ const Filter = () => {
       console.log(error);
     }
   };
+
+  const getTags = async () => {
+    try {
+      setLoader(true);
+      const { data } = await get_tags(selectedWorkspace);
+      dispatch(setTagFilter(data.tags));
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
+
+  const clearFilter = () => {
+    dispatch(clearFilterState());
+  };
+
   return (
     <section className="p-2 pb-[100px]">
       <div className="flex justify-between">
@@ -90,7 +125,7 @@ const Filter = () => {
           <TbFilter className="my-auto" />{" "}
           <span className="my-auto pl-2">Filter</span>
         </div>
-        <Button className="mt-0" text sm>
+        <Button onClick={clearFilter} className="mt-0" text sm>
           Clear filters
         </Button>
       </div>

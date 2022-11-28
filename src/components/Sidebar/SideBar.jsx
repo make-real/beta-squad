@@ -379,7 +379,7 @@ const SideBar = () => {
             {/* 🟨🟨🟨 User Logo List 🟨🟨🟨 */}
             <div>
               <div className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group">
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                   <img
                     src={
                       "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
@@ -388,37 +388,7 @@ const SideBar = () => {
                     alt="userImage"
                   />
                   <p className="capitalize text-sideBarTextColor font-bold text-sm">
-                    Mahbub
-                  </p>
-                </div>
-                <Eye className="invisible group-hover:visible" />
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={asserts.defaultList}
-                    className="w-6 h-6 rounded-full cursor-pointer ring-2 ring-green-400"
-                    alt="userImage"
-                  />
-                  <p className="capitalize text-sideBarTextColor font-bold text-sm">
-                    Hey Bot
-                  </p>
-                </div>
-                <Eye className="invisible group-hover:visible" />
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={
-                      "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                    }
-                    className="w-6 h-6 rounded-full cursor-pointer ring-2 ring-green-400"
-                    alt="userImage"
-                  />
-                  <p className="capitalize text-sideBarTextColor font-bold text-sm">
-                    Mitu
+                    Me
                   </p>
                 </div>
                 <Eye className="invisible group-hover:visible" />

@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const filterStatus = {
+  incomplete: 0,
+  inprogress: -1,
+  complete: 4,
+};
+
 const initialState = {
   filterObject: [
     {
@@ -8,53 +14,25 @@ const initialState = {
       options: [
         { label: "All task", value: "all" },
         { label: "Incomplete", value: "incomplete" },
+        { label: "Inprogress", value: "inprogress" },
         { label: "Complete", value: "complete" },
-        { label: "Archive", value: "archive" },
       ],
     },
     {
       parent: "assignee",
       multiselect: true,
-      options: [
-        { label: "Zahin", value: "45r635635f3356r" },
-        { label: "Tasin Mir", value: "34r63456345345r3" },
-        { label: "Mahabub", value: "345f4534f345dy4" },
-        { label: "Taiseen", value: "3f4534f7345743f5" },
-        { label: "Unassigned", value: "unassigned" },
-      ],
+      options: [],
     },
     {
-      parent: "tag",
+      parent: "tags",
       multiselect: true,
-      options: [
-        {
-          tag: {
-            name: "In Progress",
-            color: "orange",
-          },
-          value: "progress",
-        },
-        {
-          tag: {
-            name: "Done",
-            color: "green",
-          },
-          value: "done",
-        },
-        {
-          tag: {
-            name: "Issue",
-            color: "red",
-          },
-          value: "issue",
-        },
-      ],
+      options: [],
     },
   ],
   filter: {
     status: "all",
     assignee: [],
-    tag: [],
+    tags: [],
   },
 };
 
@@ -73,14 +51,26 @@ export const boardSlice = createSlice({
         label: user.fullName,
         value: user._id,
       }));
-      state.filterObject[index].options.push({
-        label: "Unassigned",
-        value: "unassigned",
-      });
+    },
+    setTagFilter: (state, { payload }) => {
+      const index = state.filterObject.findIndex(
+        (item) => item.parent === "tags"
+      );
+      state.filterObject[index].options = payload.map((tag) => ({
+        tag: {
+          name: tag.name,
+          color: tag.color,
+        },
+        value: tag._id,
+      }));
+    },
+    clearFilterState: (state) => {
+      state.filter = initialState.filter;
     },
   },
 });
 
-export const { setBoardFilter, setAssignedFilter } = boardSlice.actions;
+export const { setBoardFilter, setAssignedFilter, setTagFilter, clearFilterState } =
+  boardSlice.actions;
 
 export default boardSlice.reducer;
