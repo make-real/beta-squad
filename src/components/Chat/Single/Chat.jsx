@@ -3,28 +3,41 @@ import TextMessage from "../TextMessage";
 import MessageBox from "../MessageBox";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { get_single_messages } from "../../../api/chat";
+import { get_single_messages, send_single_message } from "../../../api/chat";
 import { useSelector } from "react-redux";
 
 const SingleChat = () => {
   const { margin } = useStyleContext();
-  const { id } = useParams();
+  const { participantID } = useParams();
   const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [messageToRespond, setMessageToRespond] = useState();
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     getMessages();
-  }, [id]);
+  }, [participantID]);
 
   const getMessages = async () => {
     try {
-      const { data } = get_single_messages(selectedWorkspace, id);
+      const { data } = await get_single_messages(selectedWorkspace, participantID);
+
       setMessages(data.messages);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+
+  const sendMessage = async () => {
+    try {
+      await send_single_message(userSelectedWorkSpaceId, {
+        sendTo: participantID,
+        textMessage: "Hello World",
+      });
+    } catch (error) {}
+  };
+
   return (
     <div className={`${margin ? "ml-[325px]" : "ml-[50px]"}`}>
       <div
@@ -34,15 +47,12 @@ const SingleChat = () => {
         }}
         className={`overflow-y-auto overflow-x-hidden bg-white border-b-[0.5px] border-slate-500 pt-5 customScroll`}
       >
-        <TextMessage
-          messageToRespond={messageToRespond}
-          setMessageToRespond={setMessageToRespond}
-        />
+        <code>
+          <pre>{JSON.stringify(messages, null, 4)}</pre>
+        </code>
       </div>
-      <MessageBox
-        messageToRespond={messageToRespond}
-        setMessageToRespond={setMessageToRespond}
-      />
+
+      <button onClick={sendMessage}>Send Message</button>
     </div>
   );
 };

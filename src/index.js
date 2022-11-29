@@ -11,15 +11,8 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
-import {
-  addReaction,
-  addSingleMessage,
-  removeMessage,
-} from "./store/slice/message";
-import {
-  requestNotificationPermission,
-  sentLocalNotification,
-} from "./util/helpers";
+import { addReaction, addSingleMessage, removeMessage } from "./store/slice/message";
+import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
 import config from "./config";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -48,6 +41,10 @@ if (token) {
     }
   });
 
+  socket?.on("ON_MESSAGE_REMOVED", (msg) => {
+    console.log(msg);
+  });
+
   socket?.on("NEW_REACTION_RECEIVED", (data) => {
     store.dispatch(addReaction(data));
   });
@@ -59,18 +56,18 @@ if (token) {
 
 root.render(
   // <React.StrictMode>
-    <SocketContext socket={socket}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <BoardCardContext>
-            <UserInfoContext>
-              <StyleContext>
-                <App />
-              </StyleContext>
-            </UserInfoContext>
-          </BoardCardContext>
-        </BrowserRouter>
-      </Provider>
-    </SocketContext>
+  <SocketContext socket={socket}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <BoardCardContext>
+          <UserInfoContext>
+            <StyleContext>
+              <App />
+            </StyleContext>
+          </UserInfoContext>
+        </BoardCardContext>
+      </BrowserRouter>
+    </Provider>
+  </SocketContext>
   // </React.StrictMode>
 );

@@ -115,7 +115,7 @@ const SideBar = () => {
   }, [dispatch, selectedWorkspace]);
 
   const openChat = (id) => {
-    navigate("chat/" + id);
+    navigate("single-chat/" + id);
   };
 
   return (
@@ -341,6 +341,7 @@ const SideBar = () => {
                   onClick={() => {
                     dispatch(setSelectedSpaceId(space._id));
                     dispatch(setSelectedSpaceObject(space));
+                    navigate('/projects')
                   }}
                 >
                   {/* <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" /> */}
