@@ -132,7 +132,7 @@ const Board = ({ selectedSpaceId }) => {
   return (
     <section
       className={`${margin ? "ml-[325px]" : "ml-[50px]"} duration-200 ${
-        selectedSpaceId && "w-full overflow-x-auto customScroll"
+        selectedSpaceId ? "overflow-x-auto customScroll" : ""
       }`}
     >
       {selectedSpaceId ? (

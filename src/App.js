@@ -11,6 +11,7 @@ import Tags from "./components/UserSettings/Tags";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import SingleChat from "./components/Chat/Single/Chat";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -39,7 +40,6 @@ const App = () => {
         <Route index element={<AuthRoute><Login /></AuthRoute>} />
         <Route path="register" element={<AuthRoute><Register /></AuthRoute>} />
 
-
         <Route path="settings" element={<ProtectedRoute> <UserSettingLayout /> </ProtectedRoute>}>
           <Route index element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
           <Route path="manage-workspace" element={<ProtectedRoute> <ManageWorkspace /> </ProtectedRoute>} />
@@ -54,6 +54,7 @@ const App = () => {
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
           <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
+          <Route path="chat/:id" element={<ProtectedRoute> <SingleChat /> </ProtectedRoute>} />
           {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
         </Route>

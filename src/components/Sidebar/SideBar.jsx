@@ -31,7 +31,12 @@ import {
   setSelectedSpaceId,
   setSelectedSpaceObject,
 } from "../../store/slice/space";
-import { get_space_data, get_workspace_data } from "../../api/workSpace";
+import { get_space_members } from "../../api/space";
+import {
+  get_space_data,
+  get_workspace_data,
+  get_workspace_member,
+} from "../../api/workSpace";
 import { useStyleContext } from "../../context/StyleContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -40,8 +45,10 @@ import asserts from "../../assets";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Avatar from "../Avatar";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { margin, setMargin } = useStyleContext();
   const [newWorkSpace, setNewWorkSpace] = useState(false);
@@ -50,53 +57,53 @@ const SideBar = () => {
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
-
-  // For Work-Spaces
+  const { selectedSpace, allSpaces } = useSelector((state) => state.space);
   const { workspaces, selectedWorkspace } = useSelector(
     (state) => state.workspace
   );
+  const [members, setMembers] = useState([]);
 
-  // For All Space
-  const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+  useEffect(() => {
+    if (selectedWorkspace) {
+      getSpaceMember();
+    }
+  }, [selectedWorkspace]);
 
-  // get user img from user info, which store at local storage...
+  const getSpaceMember = async () => {
+    try {
+      const { data } = await get_workspace_member(selectedWorkspace);
+      setMembers(data?.teamMembers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
-  // re-render for Work-Space
   useEffect(() => {
-    // 🟨🟨🟨 GET request for Work-Spaces data...
     const getWorkSpaceData = async () => {
       try {
         const { data } = await get_workspace_data();
 
-        // get all Work-Space data & send into redux store...
         dispatch(addWorkSpace(data.workspaces));
 
-        // by default select 1st Work-Space ID
         dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
       } catch (error) {
         console.log(error);
       }
     };
 
-    // call this function...
     getWorkSpaceData();
-
-    // when new work-space add, re-render this component...
   }, [dispatch, workspaces?.length]);
 
-  // re-render for space's under specific workSpace
   useEffect(() => {
-    // 🟨🟨🟨 GET request for all Spaces data...
     const getSpaceData = async () => {
       try {
         const { data } = await get_space_data(selectedWorkspace);
 
-        // get all Space data
         dispatch(addSpace(data.spaces));
 
-        // by default select 1st Space ID
         dispatch(setSelectedSpaceId(data.spaces[0]?._id));
         dispatch(setSelectedSpaceObject(data.spaces[0]));
       } catch (error) {
@@ -104,12 +111,12 @@ const SideBar = () => {
       }
     };
 
-    // call this function...
     getSpaceData();
-
-    // when id workSpace ID change,
-    // re-fetch all space's under this specific workSpace ID...
   }, [dispatch, selectedWorkspace]);
+
+  const openChat = (id) => {
+    navigate("chat/" + id);
+  };
 
   return (
     <>
@@ -119,45 +126,39 @@ const SideBar = () => {
           {margin ? (
             <>
               <div className="space-y-1">
-                {
-                  // 🟨🟨🟨 all work-Space loop here...
-                  workspaces?.map((workSpace) => (
-                    <Tippy
-                      key={workSpace?._id}
-                      placement="right"
-                      content={workSpace?.name}
-                      className="bg-gray-600/70 text-[10px] w-40"
-                    >
-                      {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
-                      <div
-                        className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
+                {workspaces?.map((workSpace) => (
+                  <Tippy
+                    key={workSpace?._id}
+                    placement="right"
+                    content={workSpace?.name}
+                    className="bg-gray-600/70 text-[10px] w-40"
+                  >
+                    {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
+                    <div
+                      className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
                       ${
                         selectedWorkspace === workSpace?._id
                           ? "before:content-[''] before:absolute before:top-[50%] before:left-0 before:translate-y-[-50%] before:bg-white before:w-[2px] before:h-5 before:rounded-md"
                           : ""
                       }`}
-                        onClick={() =>
-                          dispatch(setSelectedWorkSpaceId(workSpace?._id))
-                        }
-                      >
-                        {workSpace.logo ? (
-                          <img
-                            src={workSpace.logo}
-                            alt="searchIcon"
-                            className="rounded-[4px]"
-                          />
-                        ) : (
-                          <div
-                            // onClick={() => setNewWorkShop(true)}
-                            className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold"
-                          >
-                            {workSpace.name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                    </Tippy>
-                  ))
-                }
+                      onClick={() =>
+                        dispatch(setSelectedWorkSpaceId(workSpace?._id))
+                      }
+                    >
+                      {workSpace.logo ? (
+                        <img
+                          src={workSpace.logo}
+                          alt="searchIcon"
+                          className="rounded-[4px]"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold">
+                          {workSpace.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                  </Tippy>
+                ))}
               </div>
 
               {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
@@ -348,7 +349,6 @@ const SideBar = () => {
                     className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${
                       selectedSpace === space._id ? "bg-gray-600" : ""
                     } `}
-                    // onClick={() => setSelectedSpaceName(space.name)}
                   >
                     {space.privacy.includes("private") ? (
                       <SpaceLogoLock color={space.color || "#57BEC7"} />
@@ -378,49 +378,39 @@ const SideBar = () => {
 
             {/* 🟨🟨🟨 User Logo List 🟨🟨🟨 */}
             <div>
-              <div className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group">
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={
-                      "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                    }
-                    className="w-6 h-6 rounded-full cursor-pointer ring-2 ring-green-400"
-                    alt="userImage"
-                  />
-                  <p className="capitalize text-sideBarTextColor font-bold text-sm">
-                    Me
-                  </p>
+              {members.map((item) => (
+                <div
+                  onClick={() => openChat(item._id)}
+                  className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group"
+                >
+                  <div className="flex items-center space-x-3">
+                    <Avatar user={item} />
+                    <p className="capitalize text-sideBarTextColor font-bold text-sm">
+                      {item.fullName}
+                    </p>
+                  </div>
+                  {/* <Eye className="invisible group-hover:visible" /> */}
                 </div>
-                <Eye className="invisible group-hover:visible" />
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
-      {
-        // 🟨🟨🟨 ➕➕➕ Create New WorkSpace Modal Open / Popup 🟨🟨🟨
-        newWorkSpace && (
-          <ModalWorkSpaceCreate setNewWorkSpace={setNewWorkSpace} />
-        )
-      }
+      {newWorkSpace && (
+        <ModalWorkSpaceCreate setNewWorkSpace={setNewWorkSpace} />
+      )}
 
-      {
-        // 🟨🟨🟨 🔎🔎🔎 Space Searching Modal Open / Popup 🟨🟨🟨
-        spaceSearchModal && (
-          <ModalSearchSpace
-            allSpace={allSpaces}
-            setSpaceSearchModal={setSpaceSearchModal}
-            setCreateSpaceModal={setCreateSpaceModal}
-          />
-        )
-      }
+      {spaceSearchModal && (
+        <ModalSearchSpace
+          allSpace={allSpaces}
+          setSpaceSearchModal={setSpaceSearchModal}
+          setCreateSpaceModal={setCreateSpaceModal}
+        />
+      )}
 
-      {
-        // 🟨🟨🟨 ➕➕➕ Create Space Modal Open / Popup 🟨🟨🟨
-        createSpaceModal && (
-          <ModalSpaceCreate setCreateSpaceModal={setCreateSpaceModal} />
-        )
-      }
+      {createSpaceModal && (
+        <ModalSpaceCreate setCreateSpaceModal={setCreateSpaceModal} />
+      )}
     </>
   );
 };
