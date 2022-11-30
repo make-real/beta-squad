@@ -169,42 +169,44 @@ const Message = ({
 };
 
 const RenderAttachment = ({ message, scrollToBottom, small }) => {
-  try {
-    message?.content?.attachments?.map((src, idx) => {
-      const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+  return (
+    <>
+      {message?.content?.attachments?.map((src, idx) => {
+        const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
 
-      if (
-        ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)
-      ) {
-        return (
-          <img
-            onLoad={scrollToBottom}
-            key={idx}
-            src={src}
-            alt=''
-            style={{
-              maxWidth: small ? "150px" : "200px",
-              marginBottom: "10px",
-            }}
-          />
-        );
-      } else {
-        return (
-          <div className='mb-2'>
-            <a
-              className='underline text-blue-600 hover:text-blue-800 visited:text-purple-600'
-              target='_blank'
-              rel='noreferrer'
-              href={src}>
-              {src}
-            </a>
-          </div>
-        );
-      }
-    });
-  } catch (error) {
-    return <></>;
-  }
+        if (
+          ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(
+            extension
+          )
+        ) {
+          return (
+            <img
+              onLoad={scrollToBottom}
+              key={idx}
+              src={src}
+              alt=''
+              style={{
+                maxWidth: small ? "150px" : "200px",
+                marginBottom: "10px",
+              }}
+            />
+          );
+        } else {
+          return (
+            <div className='mb-2'>
+              <a
+                className='underline text-blue-600 hover:text-blue-800 visited:text-purple-600'
+                target='_blank'
+                rel='noreferrer'
+                href={src}>
+                {src}
+              </a>
+            </div>
+          );
+        }
+      })}
+    </>
+  );
 };
 
 const RenderVoice = ({ message, scrollToBottom }) => {
