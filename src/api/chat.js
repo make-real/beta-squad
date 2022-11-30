@@ -2,12 +2,14 @@ import useAxios from ".";
 import { toFormData } from "../util/helpers";
 
 export const get_single_messages = (workspaceId, userId) => {
-  return useAxios.get(`/chat/${workspaceId}/get-messages?participant=${userId}`);
+  return useAxios.get(
+    `/chat/${workspaceId}/get-messages?participant=${userId}`
+  );
 };
 
 export const send_single_message = (workspaceId, data) => {
-  const formData = toFormData(data);
-  return useAxios.post(`/chat/${workspaceId}/send-messages`, formData);
+  // const formData = toFormData(data);
+  return useAxios.post(`/chat/${workspaceId}/send-messages`, data);
 };
 
 /**

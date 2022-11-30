@@ -7,7 +7,7 @@ import { MdClose } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 import { get_mentionable_users, send_message } from "../../api/message";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "./mention.module.css";
 import { useRef } from "react";
@@ -16,8 +16,11 @@ import api from "../../api";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { populateUsers, sliceText } from "../../util/helpers";
 import { ScaleLoader } from "react-spinners";
+import { useParams } from "react-router-dom";
+import { send_single_message } from "../../api/chat";
+import { addSingleMessagePrivate } from "../../store/slice/privateChat";
 
-const MessageBox = ({
+const PrivateMessageBox = ({
   messageToRespond,
   setMessageToRespond,
   custom,
@@ -26,6 +29,9 @@ const MessageBox = ({
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+  const userSelectedWorkSpaceId = useSelector(
+    (state) => state.workspace.selectedWorkspace
+  );
   const [audio, setAudio] = useState(null);
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
@@ -33,6 +39,9 @@ const MessageBox = ({
 
   const [isRecording, setRecording] = useState(false);
   const [audioSent, setAudioSent] = useState(false);
+
+  const { participantID } = useParams();
+  const dispatch = useDispatch();
 
   // console.log(messageToRespond);
 
@@ -87,10 +96,13 @@ const MessageBox = ({
       if (custom) {
         await onComment({ text });
       } else {
-        await send_message(selectedSpaceId, {
+        const { data } = await send_single_message(userSelectedWorkSpaceId, {
+          sendTo: participantID,
           textMessage: text,
           replayOf: messageToRespond?._id,
         });
+
+        dispatch(addSingleMessagePrivate(data.message));
       }
       setInput("");
     } catch (error) {
@@ -113,7 +125,8 @@ const MessageBox = ({
         }
         let config = {
           method: "post",
-          url: `spaces/${selectedSpaceId}/chat/send-messages`,
+          url: `/chat/${userSelectedWorkSpaceId}/send-messages`,
+          sendTo: participantID,
           data: formData,
           headers: {
             "content-type": "multipart/form-data",
@@ -125,8 +138,9 @@ const MessageBox = ({
             setUploadPercentage(UpPer);
           },
         };
-        await api(config);
+        const { data } = await api(config);
       }
+
       setUploadPercentage(0);
     } catch (error) {
       console.log(error);
@@ -140,6 +154,7 @@ const MessageBox = ({
         await onComment({ image: e.target.files });
       } else {
         const formData = new FormData();
+        formData.append("sendTo", participantID);
         if (messageToRespond?._id) {
           formData.append("replayOf", messageToRespond?._id);
         }
@@ -148,7 +163,7 @@ const MessageBox = ({
         }
         let config = {
           method: "post",
-          url: `spaces/${selectedSpaceId}/chat/send-messages`,
+          url: `/chat/${userSelectedWorkSpaceId}/send-messages`,
           data: formData,
           headers: {
             "content-type": "multipart/form-data",
@@ -375,4 +390,4 @@ const MessageBox = ({
   );
 };
 
-export default MessageBox;
+export default PrivateMessageBox;

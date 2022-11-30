@@ -11,6 +11,7 @@ import {
 } from "../../../store/slice/privateChat";
 import { useDispatch } from "react-redux";
 import PrivateTextMessage from "../PrivateTextMessage";
+import PrivateMessageBox from "../PrivateMessageBox";
 
 const SingleChat = () => {
   const { margin } = useStyleContext();
@@ -19,8 +20,6 @@ const SingleChat = () => {
   const [messageToRespond, setMessageToRespond] = useState();
   const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
-
-  console.log(messageToRespond);
 
   useEffect(() => {
     getMessages();
@@ -39,20 +38,20 @@ const SingleChat = () => {
     }
   };
 
-  const userSelectedWorkSpaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+  // const userSelectedWorkSpaceId = useSelector(
+  //   (state) => state.workspace.selectedWorkspace
+  // );
 
-  const sendMessage = async () => {
-    try {
-      const { data } = await send_single_message(userSelectedWorkSpaceId, {
-        sendTo: participantID,
-        textMessage: "Hello World",
-      });
-      console.log(data);
-      dispatch(addSingleMessagePrivate(data.message));
-    } catch (error) {}
-  };
+  // const sendMessage = async () => {
+  //   try {
+  //     const { data } = await send_single_message(userSelectedWorkSpaceId, {
+  //       sendTo: participantID,
+  //       textMessage: "Hello World",
+  //     });
+  //     console.log(data);
+  //     dispatch(addSingleMessagePrivate(data.message));
+  //   } catch (error) {}
+  // };
 
   return (
     <div className={`${margin ? "ml-[325px]" : "ml-[50px]"}`}>
@@ -64,7 +63,11 @@ const SingleChat = () => {
         className={`overflow-y-auto overflow-x-hidden bg-white border-b-[0.5px] border-slate-500 pt-5 customScroll`}>
         <PrivateTextMessage />
       </div>
-      <button onClick={sendMessage}>Send Message</button>
+
+      <PrivateMessageBox
+        messageToRespond={messageToRespond}
+        setMessageToRespond={setMessageToRespond}
+      />
     </div>
   );
 };
