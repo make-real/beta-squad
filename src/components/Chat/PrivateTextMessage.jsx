@@ -7,7 +7,7 @@ import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers } from "../../util/helpers";
 import images from "../../assets";
-import { add_reaction, delete_message } from "../../api/message";
+import { add_reaction, delete_message } from "../../api/chat";
 
 import moment from "moment";
 import AudioInput from "./Audio/Render";
