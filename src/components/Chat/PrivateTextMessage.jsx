@@ -20,7 +20,6 @@ const Message = ({
   forComment,
 }) => {
   const [showReactEmojis, setShowReactEmojis] = useState(false);
-  console.log(msg);
 
   const userId = JSON.parse(localStorage.getItem("userId"));
 
@@ -38,7 +37,6 @@ const Message = ({
   )?.reaction;
 
   const handleDelete = async () => {
-    console.log(msg._id);
     try {
       await delete_message(space, msg._id);
     } catch (error) {
@@ -231,7 +229,6 @@ const PrivateTextMessage = ({
   const messagesEndRef = useRef();
 
   const messagesState = useSelector((state) => state.privateChat.messages);
-  console.log(messagesState);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const messages = forComment ? comments : messagesState;

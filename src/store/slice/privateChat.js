@@ -9,7 +9,6 @@ const privateChatSlice = createSlice({
   initialState,
   reducers: {
     addBulkMessagePrivate: (state, { payload }) => {
-      console.log(payload);
       state.messages = payload;
     },
     addSingleMessagePrivate: (state, { payload }) => {

@@ -20,6 +20,8 @@ const SingleChat = () => {
   const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
 
+  console.log(messageToRespond);
+
   useEffect(() => {
     getMessages();
   }, [participantID]);
@@ -45,7 +47,7 @@ const SingleChat = () => {
     try {
       const { data } = await send_single_message(userSelectedWorkSpaceId, {
         sendTo: participantID,
-        textMessage: "lorem ipsum dollar sit amet",
+        textMessage: "Hello World",
       });
       console.log(data);
       dispatch(addSingleMessagePrivate(data.message));
@@ -62,7 +64,6 @@ const SingleChat = () => {
         className={`overflow-y-auto overflow-x-hidden bg-white border-b-[0.5px] border-slate-500 pt-5 customScroll`}>
         <PrivateTextMessage />
       </div>
-
       <button onClick={sendMessage}>Send Message</button>
     </div>
   );
