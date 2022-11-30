@@ -5,7 +5,7 @@ import userInfo from "./slice/userInfo";
 import message from "./slice/message";
 import board from "./slice/board";
 import cardAsList from "./slice/cardAsList";
-
+import privateChat from "./slice/privateChat";
 
 const rootReducer = combineReducers({
   workspace,
@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
   message,
   board,
   cardAsList,
+  privateChat,
 });
 
 const store = configureStore({

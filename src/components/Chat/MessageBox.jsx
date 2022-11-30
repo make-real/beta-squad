@@ -22,6 +22,7 @@ const MessageBox = ({
   setMessageToRespond,
   custom,
   onComment,
+  sendMessage,
 }) => {
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
@@ -212,50 +213,46 @@ const MessageBox = ({
           width: `${uploadPercentage}%`,
           height: "2px",
           transition: "1s all",
-        }}
-      ></div>
+        }}></div>
 
       {/* <div>
         Demo mot dfdfdf sdsdfdsf afadsfadsfads asdfasdfadsf 
       </div> */}
 
-      <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
-        <div className="w-full h-full flex justify-center align-middle">
+      <div className='px-3 mt-[10px] relative text-gray-300 flex w-full'>
+        <div className='w-full h-full flex justify-center align-middle'>
           <div
             className={`w-full ${
               messageToRespond &&
               "border-[0.5px] border-[#2d4154] p-3 rounded-md"
-            }`}
-          >
+            }`}>
             {messageToRespond && (
-              <div className="flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
+              <div className='flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md'>
                 <div>
-                  <p className="text-bold text-themeColor text-sm mb-1">
+                  <p className='text-bold text-themeColor text-sm mb-1'>
                     {messageToRespond?.sender?.fullName}
                   </p>
                   {messageToRespond?.content?.text ? (
                     <p
-                      className="text-sm text-gray-900"
+                      className='text-sm text-gray-900'
                       dangerouslySetInnerHTML={{
                         __html: populateUsers(messageToRespond?.content),
-                      }}
-                    ></p>
+                      }}></p>
                   ) : Boolean(messageToRespond?.content?.voice) ? (
-                    <p className="text-sm">Voice</p>
+                    <p className='text-sm'>Voice</p>
                   ) : (
-                    <p className="text-sm">Attachment</p>
+                    <p className='text-sm'>Attachment</p>
                   )}
                 </div>
                 <div
-                  className="cursor-pointer"
-                  onClick={() => setMessageToRespond()}
-                >
+                  className='cursor-pointer'
+                  onClick={() => setMessageToRespond()}>
                   <MdClose />
                 </div>
               </div>
             )}
             {!isRecording ? (
-              <div className="w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3">
+              <div className='w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -265,26 +262,24 @@ const MessageBox = ({
                   }
                   classNames={classNames}
                   customSuggestionsContainer={(children) => (
-                    <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm">
+                    <div className='bg-white absolute bottom-6 min-w-[300px] shadow-sm'>
                       {children}
                     </div>
                   )}
                   allowSuggestionsAboveCursor={true}
                   inputRef={inputRef}
-                  autoFocus
-                >
+                  autoFocus>
                   <Mention
                     className={classNames.mentions__mention}
-                    trigger="@"
+                    trigger='@'
                     data={users}
-                    markup="{{__id__}}"
+                    markup='{{__id__}}'
                     renderSuggestion={(entry) => {
                       return (
                         <h1
                           className={
                             "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
-                          }
-                        >
+                          }>
                           {entry.display}
                         </h1>
                       );
@@ -294,46 +289,45 @@ const MessageBox = ({
                     }
                   />
                 </MentionsInput>
-                <div className="text-gray-400 flex mt-[5px]">
+                <div className='text-gray-400 flex mt-[5px]'>
                   {/* {isRecording ? (
                   
                 ) : ( */}
-                  <div className="px-2 cursor-pointer relative">
+                  <div className='px-2 cursor-pointer relative'>
                     <BiMicrophone
                       size={20}
-                      className="duration-300  hover:text-teal-400 mt-[-2px]"
+                      className='duration-300  hover:text-teal-400 mt-[-2px]'
                       onClick={handleStartRecording}
                     />
                   </div>
                   {/* )} */}
 
                   <label
-                    className="px-1.5 cursor-pointer relative"
-                    htmlFor="userInputFile"
-                    onClick={() => handleAttach()}
-                  >
+                    className='px-1.5 cursor-pointer relative'
+                    htmlFor='userInputFile'
+                    onClick={() => handleAttach()}>
                     <ImAttachment
-                      className="duration-300  hover:text-teal-400 "
+                      className='duration-300  hover:text-teal-400 '
                       onClick={() => handleAttach()}
                     />
                     <input
-                      type="file"
-                      id="userInputFile"
-                      className="hidden"
+                      type='file'
+                      id='userInputFile'
+                      className='hidden'
                       multiple
                       onChange={onMediaFilePicked}
                     />
                   </label>
-                  <div className="px-2 cursor-pointer relative">
+                  <div className='px-2 cursor-pointer relative'>
                     <GoMention
-                      className="duration-300  hover:text-teal-400"
+                      className='duration-300  hover:text-teal-400'
                       onClick={handleMention}
                     />
                   </div>
-                  <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
+                  <div className='px-2 cursor-pointer duration-300  hover:text-teal-400 relative'>
                     <BsEmojiSmile onClick={() => handleEmoji()} />
                     {showEmojis && (
-                      <div className="absolute  right-0 bottom-8">
+                      <div className='absolute  right-0 bottom-8'>
                         <Picker onEmojiClick={onEmojiClick} />
                       </div>
                     )}
@@ -341,11 +335,11 @@ const MessageBox = ({
                 </div>
               </div>
             ) : (
-              <div className="w-full flex align-middle">
-                <div className="mr-5 my-auto">
+              <div className='w-full flex align-middle'>
+                <div className='mr-5 my-auto'>
                   <MdDeleteOutline
-                  size={30}
-                    className="duration-300 text-red-400"
+                    size={30}
+                    className='duration-300 text-red-400'
                     onClick={() => {
                       setRecording(false);
                       setAudioSent(false);
@@ -354,17 +348,17 @@ const MessageBox = ({
                   />
                 </div>
 
-                <div className="flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative">
+                <div className='flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative'>
                   {/* <span className="text-xs ">Recording...</span> */}
                   {Array.from({ length: 20 }).map(() => (
-                    <ScaleLoader width={2} color="#36d7b7" />
+                    <ScaleLoader width={2} color='#36d7b7' />
                   ))}
                 </div>
 
-                <div className="ml-5 my-auto">
+                <div className='ml-5 my-auto'>
                   <BiSend
                     size={30}
-                    className="duration-300 text-teal-400  hover:text-teal-500"
+                    className='duration-300 text-teal-400  hover:text-teal-500'
                     onClick={() => {
                       setRecording(false);
                       setAudioSent(true);
