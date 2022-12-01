@@ -125,7 +125,8 @@ const MessageBox = ({
             setUploadPercentage(UpPer);
           },
         };
-        await api(config);
+        const { data } = await api(config);
+        console.log(data);
       }
       setUploadPercentage(0);
     } catch (error) {
@@ -160,8 +161,7 @@ const MessageBox = ({
             setUploadPercentage(UpPer);
           },
         };
-        const { data } = await api(config);
-        console.log(data);
+        await api(config);
         setUploadPercentage(0);
       }
     } catch (error) {

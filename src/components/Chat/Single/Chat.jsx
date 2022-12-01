@@ -21,9 +21,11 @@ const SingleChat = () => {
   const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
 
+  console.log(messageToRespond);
+
   useEffect(() => {
     getMessages();
-  }, [participantID]);
+  }, [participantID, selectedWorkspace]);
 
   const getMessages = async () => {
     try {
@@ -61,7 +63,10 @@ const SingleChat = () => {
           marginTop: "70px",
         }}
         className={`overflow-y-auto overflow-x-hidden bg-white border-b-[0.5px] border-slate-500 pt-5 customScroll`}>
-        <PrivateTextMessage />
+        <PrivateTextMessage
+          messageToRespond={messageToRespond}
+          setMessageToRespond={setMessageToRespond}
+        />
       </div>
 
       <PrivateMessageBox
