@@ -114,6 +114,7 @@ const PrivateMessageBox = ({
     setMessageToRespond();
     try {
       const formData = new FormData();
+      formData.append("sendTo", participantID);
       let blob = await fetch(url).then((r) => r.blob());
       var wavefilefromblob = new File([blob], `${Date.now()}.wav`);
       if (custom) {
@@ -139,6 +140,7 @@ const PrivateMessageBox = ({
           },
         };
         const { data } = await api(config);
+        dispatch(addSingleMessagePrivate(data.message));
       }
 
       setUploadPercentage(0);
@@ -176,7 +178,7 @@ const PrivateMessageBox = ({
           },
         };
         const { data } = await api(config);
-        console.log(data);
+        dispatch(addSingleMessagePrivate(data.message));
         setUploadPercentage(0);
       }
     } catch (error) {
