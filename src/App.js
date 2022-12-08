@@ -36,7 +36,12 @@ const ProtectedRoute = ({ children }) => {
 const AuthRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
     if (jwt) return <Navigate to="/projects" />;
-    return children;
+    return (
+        <>
+            <TopNav />
+            {children}
+        </>
+    );
 };
 
 const App = () => {
@@ -44,7 +49,6 @@ const App = () => {
 
     return (
         <main className="overflow-hidden">
-            <TopNav selectedSpaceId={selectedSpaceId} />
             <Routes>
                 <Route path="/" />
                 <Route
@@ -68,8 +72,7 @@ const App = () => {
                     path="settings"
                     element={
                         <ProtectedRoute>
-                            {" "}
-                            <UserSettingLayout />{" "}
+                            <UserSettingLayout />
                         </ProtectedRoute>
                     }
                 >
@@ -77,8 +80,7 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <Profile />{" "}
+                                <Profile />
                             </ProtectedRoute>
                         }
                     />
@@ -86,8 +88,7 @@ const App = () => {
                         path="manage-workspace"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <ManageWorkspace />{" "}
+                                <ManageWorkspace />
                             </ProtectedRoute>
                         }
                     />
@@ -95,8 +96,7 @@ const App = () => {
                         path="developer"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <DeveloperConsole />{" "}
+                                <DeveloperConsole />
                             </ProtectedRoute>
                         }
                     />
@@ -104,8 +104,7 @@ const App = () => {
                         path="preferences"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <Preferences />{" "}
+                                <Preferences />
                             </ProtectedRoute>
                         }
                     />
@@ -113,8 +112,7 @@ const App = () => {
                         path="workspace-settings"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <WorkspaceSettings />{" "}
+                                <WorkspaceSettings />
                             </ProtectedRoute>
                         }
                     />
@@ -122,8 +120,7 @@ const App = () => {
                         path="tags"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <Tags />{" "}
+                                <Tags />
                             </ProtectedRoute>
                         }
                     />
@@ -133,8 +130,7 @@ const App = () => {
                     path="projects"
                     element={
                         <ProtectedRoute>
-                            {" "}
-                            <Layout selectedSpaceId={selectedSpaceId} />{" "}
+                            <Layout selectedSpaceId={selectedSpaceId} />
                         </ProtectedRoute>
                     }
                 >
@@ -142,8 +138,7 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <Chat />{" "}
+                                <Chat />
                             </ProtectedRoute>
                         }
                     />
@@ -151,8 +146,7 @@ const App = () => {
                         path="kanban"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <Board selectedSpaceId={selectedSpaceId} />{" "}
+                                <Board selectedSpaceId={selectedSpaceId} />
                             </ProtectedRoute>
                         }
                     />
@@ -160,10 +154,7 @@ const App = () => {
                         path="list"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <CardAsList
-                                    selectedSpaceId={selectedSpaceId}
-                                />{" "}
+                                <CardAsList selectedSpaceId={selectedSpaceId} />
                             </ProtectedRoute>
                         }
                     />
@@ -171,8 +162,7 @@ const App = () => {
                         path="chat/:id"
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <GroupChat />{" "}
+                                <GroupChat />
                             </ProtectedRoute>
                         }
                     />
@@ -181,8 +171,7 @@ const App = () => {
                         exact
                         element={
                             <ProtectedRoute>
-                                {" "}
-                                <SingleChat />{" "}
+                                <SingleChat />
                             </ProtectedRoute>
                         }
                     />

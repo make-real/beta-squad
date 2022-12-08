@@ -32,6 +32,7 @@ const Login = () => {
       // store user (JWT token) + (user ID) into local storage...
       localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
       localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
+      
 
       // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
       setLoginUserInfo(data.loggedUser);

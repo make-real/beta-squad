@@ -7,23 +7,30 @@ import SettingsIcon from "../assets/setting.svg";
 import LogoutIcon from "../assets/logout.svg";
 import ProfileIcon from "../assets/profile.svg";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const TopNav = ({ selectedSpaceId }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+const TopNav = () => {
+    const [userInfo, setUserInfo] = useState(false);
 
     useEffect(() => {
-        setIsLoggedIn(selectedSpaceId ? true : false);
-    }, [selectedSpaceId]);
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        setUserInfo(userInfo);
+    }, []);
 
     return (
-        <div className="bg-white py-[15px] px-[50px] shadow-md min-h-[70px] flex">
-            {isLoggedIn ? <LoggedInTopNav /> : <NotLoggedInTopNav />}
+        <div className="bg-white py-[15px] px-[50px] shadow-md min-h-[70px] max-h-[70px] w-full flex">
+            {userInfo ? (
+                <LoggedInTopNav userInfo={userInfo} />
+            ) : (
+                <NotLoggedInTopNav />
+            )}
         </div>
     );
 };
 
-const LoggedInTopNav = () => {
-    const [showDropDownMenu, setShowDropDownMenu] = useState(true);
+const LoggedInTopNav = ({ userInfo }) => {
+    const [showDropDownMenu, setShowDropDownMenu] = useState(false);
+    const workspaces = useSelector((state) => state.workspace.workspaces);
 
     return (
         <div className="relative flex justify-end w-full">
@@ -35,13 +42,15 @@ const LoggedInTopNav = () => {
             <div className="mx-[35px] h-full w-[2px] bg-[#031124] opacity-10"></div>
             <div className="flex gap-4">
                 <div className="">
-                    <h1 className="text-[14px] font-semibold">Guy Hawkins</h1>
+                    <h1 className="text-[14px] font-semibold">
+                        {userInfo.fullName}
+                    </h1>
                     <p className="text-[12px] text-end text-gray-400">
-                        @1248oleo
+                        @{userInfo.username}
                     </p>
                 </div>
                 <img
-                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
+                    src={userInfo.avatar}
                     alt=""
                     className="w-[35px] h-[35px] rounded-full"
                 />
@@ -63,22 +72,26 @@ const LoggedInTopNav = () => {
                     Workspaces
                 </h2>
                 <div className="mt-[15px] flex flex-col">
-                    <div className="bg-gray-100 flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
-                        <img
-                            src="https://assets.stickpng.com/thumbs/5847f439cef1014c0b5e4890.png"
-                            alt=""
-                            className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
-                        />
-                        <p className="text-[14px]">Make Real</p>
-                    </div>
-                    <div className="flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Android_O_Preview_Logo.png/1024px-Android_O_Preview_Logo.png"
-                            alt=""
-                            className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
-                        />
-                        <p className="text-[14px]">Daal Vaat</p>
-                    </div>
+                    {workspaces.length === 0 ? (
+                        <p className="px-[20px] text-[14px] text-gray-400 text-center">
+                            No workspaces yet
+                        </p>
+                    ) : (
+                        workspaces.map((workspace) => {
+                            return (
+                                <div className="bg-gray-100 flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
+                                    <img
+                                        src="https://assets.stickpng.com/thumbs/5847f439cef1014c0b5e4890.png"
+                                        alt=""
+                                        className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
+                                    />
+                                    <p className="text-[14px]">
+                                        {workspace.name}
+                                    </p>
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
                 <div className="w-[80%] mx-auto h-[1px] bg-gray-200 my-[15px]"></div>
                 <div className="flex flex-col">
