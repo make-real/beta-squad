@@ -1,0 +1,141 @@
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import LogoIcon from "../assets/logo.svg";
+import NotificationIcon from "../assets/notification.svg";
+import ArrowDown from "../assets/arrowdown.svg";
+import SettingsIcon from "../assets/setting.svg";
+import LogoutIcon from "../assets/logout.svg";
+import ProfileIcon from "../assets/profile.svg";
+import { useEffect } from "react";
+
+const TopNav = ({ selectedSpaceId }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    useEffect(() => {
+        setIsLoggedIn(selectedSpaceId ? true : false);
+    }, [selectedSpaceId]);
+
+    return (
+        <div className="bg-white py-[15px] px-[50px] shadow-md min-h-[70px] flex">
+            {isLoggedIn ? <LoggedInTopNav /> : <NotLoggedInTopNav />}
+        </div>
+    );
+};
+
+const LoggedInTopNav = () => {
+    const [showDropDownMenu, setShowDropDownMenu] = useState(true);
+
+    return (
+        <div className="relative flex justify-end w-full">
+            <img
+                className="w-[18px] cursor-pointer"
+                src={NotificationIcon}
+                alt="notification"
+            />
+            <div className="mx-[35px] h-full w-[2px] bg-[#031124] opacity-10"></div>
+            <div className="flex gap-4">
+                <div className="">
+                    <h1 className="text-[14px] font-semibold">Guy Hawkins</h1>
+                    <p className="text-[12px] text-end text-gray-400">
+                        @1248oleo
+                    </p>
+                </div>
+                <img
+                    src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
+                    alt=""
+                    className="w-[35px] h-[35px] rounded-full"
+                />
+                <img
+                    className="w-[15px] cursor-pointer"
+                    src={ArrowDown}
+                    alt="dropdown menu"
+                    onClick={() => setShowDropDownMenu(!showDropDownMenu)}
+                />
+            </div>
+
+            {/* DropDown Menu */}
+            <div
+                className={`origin-top-right scale-0 pointer-events-none ${
+                    showDropDownMenu ? "scale-100 pointer-events-auto" : ""
+                } transition-transform absolute top-[50px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
+            >
+                <h2 className="px-[20px] text-[#818892] text-[16px]">
+                    Workspaces
+                </h2>
+                <div className="mt-[15px] flex flex-col">
+                    <div className="bg-gray-100 flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
+                        <img
+                            src="https://assets.stickpng.com/thumbs/5847f439cef1014c0b5e4890.png"
+                            alt=""
+                            className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
+                        />
+                        <p className="text-[14px]">Make Real</p>
+                    </div>
+                    <div className="flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Android_O_Preview_Logo.png/1024px-Android_O_Preview_Logo.png"
+                            alt=""
+                            className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
+                        />
+                        <p className="text-[14px]">Daal Vaat</p>
+                    </div>
+                </div>
+                <div className="w-[80%] mx-auto h-[1px] bg-gray-200 my-[15px]"></div>
+                <div className="flex flex-col">
+                    <div className="cursor-pointer hover:bg-gray-100 flex items-center gap-3 px-[20px] py-[10px]">
+                        <img
+                            className="w-[17px]"
+                            src={SettingsIcon}
+                            alt="Manage Workspace"
+                        />
+                        <h2 className="text-[14px]">Manage Workspace</h2>
+                    </div>
+                    <div className="cursor-pointer hover:bg-gray-100 flex items-center gap-3 px-[20px] py-[10px]">
+                        <img
+                            className="w-[17px]"
+                            src={ProfileIcon}
+                            alt="Profile"
+                        />
+                        <h2 className="text-[14px]">Profile</h2>
+                    </div>
+                    <div className="cursor-pointer hover:bg-gray-100 flex items-center gap-3 px-[20px] py-[10px]">
+                        <img
+                            className="w-[17px]"
+                            src={LogoutIcon}
+                            alt="Profile"
+                        />
+                        <h2 className="text-[14px]">Logout</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const NotLoggedInTopNav = () => {
+    const location = useLocation();
+    const currentPage =
+        location.pathname === "/login"
+            ? "login"
+            : location.pathname === "/register"
+            ? "register"
+            : "login";
+    console.log(location.pathname === "/register");
+    console.log(currentPage);
+    return (
+        <div className="flex justify-between w-full">
+            <div className="flex items-center gap-2">
+                <img src={LogoIcon} alt="logo" />
+                <h1 className="text-[#6576FF] text-[20px]">TaskM</h1>
+            </div>
+            <Link
+                to={`${currentPage === "register" ? "/" : "/register"}`}
+                className="bg-[#6576FF] px-[30px] py-[10px] text-white rounded-md font-normal text-sm cursor-pointer"
+            >
+                {currentPage === "register" ? "Login" : "Register"}
+            </Link>
+        </div>
+    );
+};
+
+export default TopNav;
