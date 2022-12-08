@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import LogoIcon from "../assets/logo.svg";
-import NotificationIcon from "../assets/notification.svg";
-import ArrowDown from "../assets/arrowdown.svg";
-import SettingsIcon from "../assets/setting.svg";
-import LogoutIcon from "../assets/logout.svg";
-import ProfileIcon from "../assets/profile.svg";
+import LogoIcon from "../../assets/logo.svg";
+import NotificationIcon from "../../assets/notification.svg";
+import ArrowDown from "../../assets/arrowdown.svg";
+import SettingsIcon from "../../assets/setting.svg";
+import LogoutIcon from "../../assets/logout.svg";
+import ProfileIcon from "../../assets/profile.svg";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
