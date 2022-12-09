@@ -6,10 +6,11 @@ import TopNavbar from "../Navs/TopNavbar";
 
 const Layout = ({ selectedSpaceId }) => {
     return (
-        <div className="flex">
+        <div className="flex min-h-screen">
             {/* <NavBar selectedSpaceId={selectedSpaceId} /> */}
+            {/* <SideBar /> */}
             <SideNavbar />
-            <div className="w-full">
+            <div className="w-full flex flex-col">
                 <TopNavbar />
                 <Outlet />
             </div>
