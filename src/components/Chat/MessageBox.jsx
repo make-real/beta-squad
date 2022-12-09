@@ -252,7 +252,7 @@ const MessageBox = ({
               </div>
             )}
             {!isRecording ? (
-              <div className='w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3'>
+              <div className='w-full flex relative shadow-md border bg-white rounded-lg px-3 py-2'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}

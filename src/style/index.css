@@ -329,3 +329,11 @@ body {
     top: 50%;
     right: 0;
 }
+
+.rotate-menu-open {
+    transform: rotate(180);
+}
+
+.rotate-menu-close {
+    transform: rotate(-180);
+}

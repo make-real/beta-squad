@@ -45,8 +45,15 @@ const Message = ({
   };
 
   return (
-    <div className='flex px-6 py-5 hover:bg-slate-100 relative user-box'>
-      <div className='w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative'>
+    <div
+      className={`flex ${
+        msg.sender._id === userId ? "flex-row-reverse" : ""
+      } pl-6 pr-14 py-5 hover:bg-slate-100 relative user-box
+      `}>
+      <div
+        className={`w-10 h-10 white	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[9999]  ${
+          msg.sender._id === userId ? "-ml-6" : ""
+        }`}>
         {msg.sender.avatar ? (
           <img src={msg?.sender?.avatar} alt='' className='rounded-full' />
         ) : (
@@ -60,25 +67,45 @@ const Message = ({
         style={{
           maxWidth: forComment ? "400px" : "900px",
         }}
-        className={`relative bg-slate-100 p-3 rounded-lg ml-3 shadow-md`}>
-        <div className='flex justify-between text-xs text-sky-900	pb-2'>
-          <h6 className='font-bold'>{msg?.sender?.fullName}</h6>
-          <small className='text-neutral-600 ml-5'>
+        className={`relative ${
+          msg.sender._id === userId
+            ? "bg-[#6576FF] text-white"
+            : "bg-slate-100 text-[#031124]"
+        }  p-3 rounded-lg ml-3 shadow-md`}>
+        <div
+          className={`flex flex-row justify-between text-xs pb-2 ${
+            msg.sender._id === userId
+              ? "text-white border-b border-white pr-6 flex-row-reverse"
+              : "text-[#54CC7C] border-b border-[#f3dfdf] pl-6"
+          }`}>
+          <h6
+            className={`font-bold ${
+              msg.sender._id === userId ? "hidden" : ""
+            }`}>
+            {msg?.sender?.fullName}
+          </h6>
+          <small
+            className={`${msg.sender._id === userId ? "text-white" : "ml-5"}`}>
             {moment(msg.createdAt).fromNow()}
           </small>
         </div>
 
         {msg.replayOf && (
-          <div className='mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper'>
+          <div className='mb-2 border-l-4 pl-3 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper'>
             <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
             />
-            <p
-              className='text-sm text-gray-900'
-              dangerouslySetInnerHTML={{
-                __html: populateUsers(msg.replayOf.content),
-              }}></p>
+            <span
+              className={`${
+                msg.sender._id === userId ? "text-white" : "text-[#031124]"
+              }`}>
+              <p
+                className={`text-sm block`}
+                dangerouslySetInnerHTML={{
+                  __html: populateUsers(msg.replayOf.content),
+                }}></p>
+            </span>
           </div>
         )}
         {msg.content.voice ? (
@@ -91,7 +118,9 @@ const Message = ({
           />
         )}
         <p
-          className='text-sm text-gray-900'
+          className={`text-sm pt-1 ${
+            msg.sender._id === userId ? "text-white" : "text-[#031124] pl-5"
+          }`}
           dangerouslySetInnerHTML={{
             __html: populateUsers(msg?.content),
           }}></p>
@@ -271,7 +300,7 @@ const TextMessage = ({
           />
         ))
       ) : forComment ? null : (
-        <div className='grid place-items-center h-[70vh] text-gray-700'>
+        <div className='grid place-items-center h-[60vh] text-gray-700'>
           <div className='text-center space-y-3'>
             <img src={images.chattingStart} alt='' className='w-36 mx-auto' />
             <h2 className='text-2xl font-bold'>What a quiet team!</h2>
