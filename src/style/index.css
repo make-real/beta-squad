@@ -5,7 +5,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .rounded_border {
+        @apply before:absolute before:w-[25px] before:h-[25px] before:border-[2px] before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:-z-0 before:rounded-[4px];
+    }
+}
+
 @layer utilities {
+    .auth-shadow {
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+            rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    }
+    .normal-shadow {
+        box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1);
+    }
     .calenderSection {
         @apply p-1.5 px-2 cursor-pointer hover:bg-gray-100 hover:text-teal-500 duration-200 rounded-lg font-bold;
     }
