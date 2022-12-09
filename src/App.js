@@ -26,6 +26,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import SingleChat from "./components/Chat/Single/Chat";
 import GroupChat from "./components/Chat/Group/Chat";
 import TopNav from "./components/Navs/TopNavbar";
+import Home from "./components/Home/Home";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -48,7 +49,7 @@ const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     return (
-        <main className="">
+        <main className="overflow-hidden">
             <Routes>
                 <Route path="/" />
                 <Route
@@ -138,7 +139,7 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                <Chat />
+                                <Home />
                             </ProtectedRoute>
                         }
                     />

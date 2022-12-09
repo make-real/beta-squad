@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoIcon from "../../assets/logo.svg";
 import NotificationIcon from "../../assets/notification.svg";
 import ArrowDown from "../../assets/arrowdown.svg";
@@ -8,6 +8,7 @@ import LogoutIcon from "../../assets/logout.svg";
 import ProfileIcon from "../../assets/profile.svg";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { userLogOut } from "../../hooks/useFetch";
 
 const TopNav = () => {
     const [userInfo, setUserInfo] = useState(false);
@@ -31,6 +32,18 @@ const TopNav = () => {
 const LoggedInTopNav = ({ userInfo }) => {
     const [showDropDownMenu, setShowDropDownMenu] = useState(false);
     const workspaces = useSelector((state) => state.workspace.workspaces);
+    const navigate = useNavigate();
+
+    const handleLogOut = async () => {
+        try {
+            await userLogOut();
+        } catch (error) {
+            console.log(error);
+        }
+
+        localStorage.clear();
+        navigate("/");
+    };
 
     return (
         <div className="relative flex justify-end w-full">
@@ -111,7 +124,10 @@ const LoggedInTopNav = ({ userInfo }) => {
                         />
                         <h2 className="text-[14px]">Profile</h2>
                     </div>
-                    <div className="cursor-pointer hover:bg-gray-100 flex items-center gap-3 px-[20px] py-[10px]">
+                    <div
+                        className="cursor-pointer hover:bg-gray-100 flex items-center gap-3 px-[20px] py-[10px]"
+                        onClick={handleLogOut}
+                    >
                         <img
                             className="w-[17px]"
                             src={LogoutIcon}
