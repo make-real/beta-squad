@@ -10,7 +10,7 @@ const BoardListSettingDropDown = ({ boardListID }) => {
     <>
       <div className="text-gray-400">
         <div
-          className="p-1.5 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group"
+          className="p-2 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group"
           onClick={(e) => {
             e.stopPropagation();
             setConfirmModalOpen(true);

@@ -68,10 +68,10 @@ const BoardList = ({ boardList }) => {
 
     return (
         <div
-            className={`w-[300px] min-h-full mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl`}
+            className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl`}
         >
             <div
-                className="overflow-hidden flex justify-between items-center mt-3"
+                className="overflow-hidden flex justify-between items-center my-3"
                 ref={dropDownRef}
             >
                 <p className="text-[#818892] flex-1 py-1 px-4">
@@ -81,7 +81,7 @@ const BoardList = ({ boardList }) => {
                 <Dropdown
                     position={['bottom right', 'top right']}
                     button={
-                        <span className="cursor-pointer py-1 px-4">
+                        <span className="cursor-pointer py-1 px-4 text-[#424D5B]">
                             <EllipsisHorizontalIcon className="h-5 w-6" />
                         </span>
                     }
@@ -96,9 +96,9 @@ const BoardList = ({ boardList }) => {
                 />
             </div>
 
-            <span className="border-[1px] border-[#EEE9E9] my-3" />
+            <span className="border-[1px] border-[#EEE9E9]" />
 
-            <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll">
+            <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-3">
                 <Draggable
                     listId={boardList?._id}
                     elements={boardList?.cards}
@@ -108,7 +108,7 @@ const BoardList = ({ boardList }) => {
                             snapshot={snapshot}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className="mb-3"
+                            className="mb-2"
                         >
                             <Card
                                 key={card._id}

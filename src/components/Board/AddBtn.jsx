@@ -29,8 +29,8 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
             className={`${
                 btnText === 'card'
                     ? 'w-full rounded-b-2xl pb-4'
-                    : 'w-72 rounded-2xl'
-            } bg-[#ECECEC]/[0.4] `}
+                    : 'w-72 rounded-2xl bg-[#ECECEC]/[0.4] '
+            }`}
         >
             {inputToggle ? (
                 <form className="w-full px-3 py-2" onSubmit={handleSubmit}>

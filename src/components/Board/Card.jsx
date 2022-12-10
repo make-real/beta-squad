@@ -92,14 +92,13 @@ const Card = ({ card, listID }) => {
                 ref={dropDownRef}
                 onMouseEnter={() => setVisible(true)}
                 onMouseLeave={() => setVisible(false)}
-                className="group relative w-[275px] h-fit bg-white px-3 py-3 rounded-md cursor-grab hover:bg-gray-200"
+                className="group relative w-[285px] h-fit bg-white px-3 py-3 rounded-2xl cursor-grab hover:bg-gray-200"
             >
                 {/* top-right shape */}
                 <span
                     className="absolute top-0 left-0 h-4 w-4 rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
                     style={{ backgroundColor: randomColor() }}
                 />
-
                 {/* message indicator */}
                 <span
                     className="absolute -top-1 right-1 h-3 w-3 rounded-full"
@@ -125,6 +124,7 @@ const Card = ({ card, listID }) => {
                         ))}
                     </div>
                 )}
+
                 <div className="flex justify-between items-center">
                     <p className="text-sm mr-4 text-gray-800">{card.name}</p>
                     <div
