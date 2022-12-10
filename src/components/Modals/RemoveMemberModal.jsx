@@ -1,33 +1,20 @@
-import React from "react";
-import WarningIcon from "../../assets/icon_component/Warning";
 import CrossIcon from "../../assets/cross.svg";
+import React from "react";
 
-const DeleteProjectModal = ({
+const RemoveMemberModal = ({
     data,
-    setDeleteProjectData,
-    setDeletingProject,
-    setShowDeleteProjectModal,
+    cancelDeletion,
+    setShowRemovedModal,
+    setRemoveMemberData,
+    setShowRemoveMemberModal,
 }) => {
-    const deleteProject = () => {
-        setShowDeleteProjectModal(false);
-        setDeletingProject((prev) => ({ ...prev, show: true }));
-
+    const removeMember = () => {
+        setShowRemoveMemberModal(false);
+        setShowRemovedModal(true);
         setTimeout(() => {
-            setDeletingProject((prev) => ({ ...prev, done: true }));
-            setTimeout(() => {
-                setDeleteProjectData(null);
-                setDeletingProject((prev) => ({
-                    ...prev,
-                    done: false,
-                    show: false,
-                }));
-            }, 1000);
+            setShowRemovedModal(false);
+            setRemoveMemberData(null);
         }, 1500);
-    };
-
-    const cancelDeletion = () => {
-        setShowDeleteProjectModal(false);
-        setDeleteProjectData(null);
     };
 
     return (
@@ -40,28 +27,22 @@ const DeleteProjectModal = ({
                     <img src={CrossIcon} alt="" />
                 </div>
                 <h1 className="text-[#031124] text-[30px] font-bold">
-                    Delete {data.name}?
+                    Remove {data.name}?
                 </h1>
-                <p className="mt-[8px] text-[#818892] text-[14px]">
+                <p className="mt-[8px] text-[#818892] text-[14px] max-w-[400px]">
                     Are you sure you want to delete “{" "}
                     <span className="text-[#031124] font-semibold">
                         {data.name}
                     </span>
-                    ” ?
-                    <br />
-                    You can not undone this action.
+                    ” from Make real ?
                 </p>
-                <div className="mt-[30px] w-full rounded-[16px] bg-[#FFE7EB] py-[18px] px-[20px]">
-                    <div className="flex items-center gap-[11px]">
-                        <WarningIcon className="fill-[#FF3659]" />
-                        <p className="text-[#FF3659] text-[14px] font-semibold">
-                            Warning
-                        </p>
-                    </div>
-                    <p className="mt-[11px] text-[#FF3659] text-[14px]">
-                        By deleting {data.name} all the task and conversations
-                        also be deleted of this Squad.
-                    </p>
+                <div className="mt-[25px] w-full flex items-center gap-[10px]">
+                    <img
+                        src={data.avatar}
+                        className="w-[40px] h-[40px] rounded-full object-cover"
+                        alt=""
+                    />
+                    <p className="text-[#424D5B] font-semibold">{data.name}</p>
                 </div>
                 <div className="flex items-center mt-[40px] gap-[30px]">
                     <div
@@ -73,11 +54,11 @@ const DeleteProjectModal = ({
                         </p>
                     </div>
                     <div
-                        onClick={deleteProject}
+                        onClick={removeMember}
                         className="bg-[#FF3659] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
                     >
                         <p className=" text-[14px] font-semibold text-white">
-                            Delete
+                            Remove
                         </p>
                     </div>
                 </div>
@@ -85,4 +66,5 @@ const DeleteProjectModal = ({
         </div>
     );
 };
-export default DeleteProjectModal;
+
+export default RemoveMemberModal;
