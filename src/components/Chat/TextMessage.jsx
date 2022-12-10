@@ -1,6 +1,7 @@
 import { BsEmojiSmile } from "react-icons/bs";
-import { VscCommentDiscussion } from "react-icons/vsc";
-import { MdClose } from "react-icons/md";
+import { RiArrowGoForwardLine } from "react-icons/ri";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
@@ -8,6 +9,9 @@ import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers } from "../../util/helpers";
 import images from "../../assets";
 import { add_reaction, delete_message } from "../../api/message";
+import PencilIcon from "../../assets/pencil.svg";
+import DeleteIcon from "../../assets/delete.svg";
+import tickIcon from "../../assets/images/tick-square.svg";
 
 import moment from "moment";
 import AudioInput from "./Audio/Render";
@@ -47,12 +51,12 @@ const Message = ({
   return (
     <div
       className={`flex ${
-        msg.sender._id === userId ? "flex-row-reverse" : ""
-      } pl-6 pr-14 py-5 hover:bg-slate-100 relative user-box
+        msg.sender._id === userId ? "flex-row-reverse self-end" : ""
+      } pl-6 pr-14 py-5 relative user-box
       `}>
       <div
-        className={`w-10 h-10 white	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[9999]  ${
-          msg.sender._id === userId ? "-ml-6" : ""
+        className={`w-10 h-10 border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[9999]  ${
+          msg.sender._id === userId ? "-ml-6 border-[#6576FF]" : "border-white"
         }`}>
         {msg.sender.avatar ? (
           <img src={msg?.sender?.avatar} alt='' className='rounded-full' />
@@ -70,7 +74,7 @@ const Message = ({
         className={`relative ${
           msg.sender._id === userId
             ? "bg-[#6576FF] text-white"
-            : "bg-slate-100 text-[#031124]"
+            : "bg-slate-100 text-[#031124] mr-3"
         }  p-3 rounded-lg ml-3 shadow-md`}>
         <div
           className={`flex flex-row justify-between text-xs pb-2 ${
@@ -85,8 +89,11 @@ const Message = ({
             {msg?.sender?.fullName}
           </h6>
           <small
-            className={`${msg.sender._id === userId ? "text-white" : "ml-5"}`}>
-            {moment(msg.createdAt).fromNow()}
+            className={`flex gap-2 ${
+              msg.sender._id === userId ? "text-white" : "ml-5"
+            }`}>
+            {moment(msg.createdAt).fromNow()}{" "}
+            {msg.sender._id === userId ? <img src={tickIcon} alt='' /> : ""}
           </small>
         </div>
 
@@ -138,8 +145,8 @@ const Message = ({
         )}
       </div>
 
-      <div className='absolute right-5 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons'>
-        <div className='px-1.5 hover:text-teal-400 tooltip-box'>
+      <div className='flex flex-row-reverse h-fit text-gray-500 rounded-3xl py-1.5 px-2 msg-icons'>
+        <div className='px-1.5 hover:text-teal-400 tooltip-box cursor-pointer'>
           <BsEmojiSmile onClick={() => setShowReactEmojis(!showReactEmojis)} />
           <p className='tooltip-text select-none'>Add a reaction</p>
 
@@ -178,15 +185,30 @@ const Message = ({
         </div>
         <div
           onClick={() => setMessageToRespond(msg)}
-          className='px-1.5 hover:text-teal-400 tooltip-box'>
-          <VscCommentDiscussion />
+          className='px-1.5 hover:text-teal-400 tooltip-box cursor-pointer'>
+          <RiArrowGoForwardLine />
           <p className='tooltip-text'>Respond to this message</p>
         </div>
 
         {msg.sender._id === userId && (
-          <div className='px-1.5 hover:text-teal-400 tooltip-box'>
-            <MdClose onClick={handleDelete} />
-            <p className='tooltip-text'>Delete</p>
+          <div className='px-1.5 hover:text-teal-400 tooltip-box group cursor-pointer'>
+            <BiDotsVerticalRounded
+              className='text-[18px]'
+              onClick={handleDelete}
+            />
+
+            <div className='group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[30%] top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm'>
+              <div className='flex items-center gap-[15px] px-5 w-32 py-[10px] hover:bg-[#FEB45E10] cursor-pointer'>
+                <img src={PencilIcon} className='w-4 h-auto' />
+                <p className='font-semibold text-[#031124]'>Edit</p>
+              </div>
+              <div
+                onClick={handleDelete}
+                className='flex items-center gap-[15px] px-5 w-32 py-[17px] hover:bg-[#FB397F10] cursor-pointer'>
+                <img src={DeleteIcon} className='w-4 h-auto' />
+                <p className='font-semibold text-[#031124]'>Delete</p>
+              </div>
+            </div>
           </div>
         )}
       </div>

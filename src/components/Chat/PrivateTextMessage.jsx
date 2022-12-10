@@ -1,12 +1,15 @@
 import { BsEmojiSmile } from "react-icons/bs";
-import { VscCommentDiscussion } from "react-icons/vsc";
-import { MdClose } from "react-icons/md";
+import { RiArrowGoForwardLine } from "react-icons/ri";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import PencilIcon from "../../assets/pencil.svg";
+import DeleteIcon from "../../assets/delete.svg";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
 import { addBulkMessage } from "../../store/slice/message";
 import { populateUsers } from "../../util/helpers";
 import images from "../../assets";
+import tickIcon from "../../assets/images/tick-square.svg";
 import { add_reaction, delete_message } from "../../api/chat";
 
 import moment from "moment";
@@ -46,10 +49,14 @@ const Message = ({
 
   return (
     <div
-      className={`flex px-6 py-5 hover:bg-slate-100 relative user-box w-full ${
-        msg.sender._id === userId ? "justify-end" : ""
-      }`}>
-      <div className='w-10 h-10 border-teal-400	border-4 rounded-full bg-slate-700 relative'>
+      className={`flex ${
+        msg.sender._id === userId ? "flex-row-reverse self-end" : ""
+      } pl-6 pr-14 py-5 relative user-box
+      `}>
+      <div
+        className={`w-10 h-10	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[9999]  ${
+          msg.sender._id === userId ? "-ml-6 border-[#6576FF]" : "border-white"
+        }`}>
         {msg.sender.avatar ? (
           <img src={msg?.sender?.avatar} alt='' className='rounded-full' />
         ) : (
@@ -63,25 +70,48 @@ const Message = ({
         style={{
           maxWidth: forComment ? "400px" : "900px",
         }}
-        className={`relative bg-slate-100 p-3 rounded-lg ml-3 shadow-md`}>
-        <div className='flex justify-between text-xs text-sky-900	pb-2'>
-          <h6 className='font-bold'>{msg?.sender?.fullName}</h6>
-          <small className='text-neutral-600 ml-5'>
-            {moment(msg.createdAt).fromNow()}
+        className={`relative ${
+          msg.sender._id === userId
+            ? "bg-[#6576FF] text-white"
+            : "bg-slate-100 text-[#031124] mr-3"
+        }  p-3 rounded-lg ml-3 shadow-md`}>
+        <div
+          className={`flex flex-row justify-between text-xs pb-2 ${
+            msg.sender._id === userId
+              ? "text-white border-b border-white pr-6 flex-row-reverse"
+              : "text-[#54CC7C] border-b border-[#f3dfdf] pl-6"
+          }`}>
+          <h6
+            className={`font-bold ${
+              msg.sender._id === userId ? "hidden" : ""
+            }`}>
+            {msg?.sender?.fullName}
+          </h6>
+          <small
+            className={`flex gap-2 ${
+              msg.sender._id === userId ? "text-white" : "ml-5"
+            }`}>
+            {moment(msg.createdAt).fromNow()}{" "}
+            {msg.sender._id === userId ? <img src={tickIcon} alt='' /> : ""}
           </small>
         </div>
 
         {msg.replayOf && (
-          <div className='mb-2 border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper'>
+          <div className='mb-2 border-l-4 pl-3 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper'>
             <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
             />
-            <p
-              className='text-sm text-gray-900'
-              dangerouslySetInnerHTML={{
-                __html: populateUsers(msg.replayOf.content),
-              }}></p>
+            <span
+              className={`${
+                msg.sender._id === userId ? "text-white" : "text-[#031124]"
+              }`}>
+              <p
+                className={`text-sm block`}
+                dangerouslySetInnerHTML={{
+                  __html: populateUsers(msg.replayOf.content),
+                }}></p>
+            </span>
           </div>
         )}
         {msg.content.voice ? (
@@ -94,7 +124,9 @@ const Message = ({
           />
         )}
         <p
-          className='text-sm text-gray-900'
+          className={`text-sm pt-1 ${
+            msg.sender._id === userId ? "text-white" : "text-[#031124] pl-5"
+          }`}
           dangerouslySetInnerHTML={{
             __html: populateUsers(msg?.content),
           }}></p>
@@ -112,8 +144,8 @@ const Message = ({
         )}
       </div>
 
-      <div className='absolute right-5 -top-3 flex bg-white border border-gray-500 text-gray-500 rounded-3xl py-1.5 px-2 msg-icons'>
-        <div className='px-1.5 hover:text-teal-400 tooltip-box'>
+      <div className='flex flex-row-reverse h-fit text-gray-500 rounded-3xl py-1.5 px-2 msg-icons'>
+        <div className='px-1.5 hover:text-teal-400 tooltip-box cursor-pointer'>
           <BsEmojiSmile onClick={() => setShowReactEmojis(!showReactEmojis)} />
           <p className='tooltip-text select-none'>Add a reaction</p>
 
@@ -152,15 +184,30 @@ const Message = ({
         </div>
         <div
           onClick={() => setMessageToRespond(msg)}
-          className='px-1.5 hover:text-teal-400 tooltip-box'>
-          <VscCommentDiscussion />
+          className='px-1.5 hover:text-teal-400 tooltip-box cursor-pointer'>
+          <RiArrowGoForwardLine />
           <p className='tooltip-text'>Respond to this message</p>
         </div>
 
         {msg.sender._id === userId && (
-          <div className='px-1.5 hover:text-teal-400 tooltip-box'>
-            <MdClose onClick={() => handleDelete(msg._id)} />
-            <p className='tooltip-text'>Delete</p>
+          <div className='px-1.5 hover:text-teal-400 tooltip-box group cursor-pointer'>
+            <BiDotsVerticalRounded
+              className='text-[18px]'
+              onClick={handleDelete}
+            />
+
+            <div className='group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[30%] top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm'>
+              <div className='flex items-center gap-[15px] px-5 w-32 py-[10px] hover:bg-[#FEB45E10] cursor-pointer'>
+                <img src={PencilIcon} className='w-4 h-auto' />
+                <p className='font-semibold text-[#031124]'>Edit</p>
+              </div>
+              <div
+                onClick={handleDelete}
+                className='flex items-center gap-[15px] px-5 w-32 py-[17px] hover:bg-[#FB397F10] cursor-pointer'>
+                <img src={DeleteIcon} className='w-4 h-auto' />
+                <p className='font-semibold text-[#031124]'>Delete</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -169,44 +216,43 @@ const Message = ({
 };
 
 const RenderAttachment = ({ message, scrollToBottom, small }) => {
-  return (
-    <>
-      {message?.content?.attachments?.map((src, idx) => {
-        const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+  try {
+    message?.content?.attachments?.map((src, idx) => {
+      const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+      console.log(src);
 
-        if (
-          ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(
-            extension
-          )
-        ) {
-          return (
-            <img
-              onLoad={scrollToBottom}
-              key={idx}
-              src={src}
-              alt=''
-              style={{
-                maxWidth: small ? "150px" : "200px",
-                marginBottom: "10px",
-              }}
-            />
-          );
-        } else {
-          return (
-            <div className='mb-2'>
-              <a
-                className='underline text-blue-600 hover:text-blue-800 visited:text-purple-600'
-                target='_blank'
-                rel='noreferrer'
-                href={src}>
-                {src}
-              </a>
-            </div>
-          );
-        }
-      })}
-    </>
-  );
+      if (
+        ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)
+      ) {
+        return (
+          <img
+            onLoad={scrollToBottom}
+            key={idx}
+            src={src}
+            alt=''
+            style={{
+              maxWidth: small ? "150px" : "200px",
+              marginBottom: "10px",
+            }}
+          />
+        );
+      } else {
+        return (
+          <div className='mb-2'>
+            <a
+              className='underline text-blue-600 hover:text-blue-800 visited:text-purple-600'
+              target='_blank'
+              rel='noreferrer'
+              href={src}>
+              {src}
+            </a>
+          </div>
+        );
+      }
+    });
+  } catch (error) {
+    return <></>;
+  }
 };
 
 const RenderVoice = ({ message, scrollToBottom }) => {
@@ -230,7 +276,7 @@ const PrivateTextMessage = ({
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
 
-  const messagesState = useSelector((state) => state.privateChat.messages);
+  const messagesState = useSelector((state) => state.message.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const messages = forComment ? comments : messagesState;
@@ -275,7 +321,7 @@ const PrivateTextMessage = ({
           />
         ))
       ) : forComment ? null : (
-        <div className='grid place-items-center h-[70vh] text-gray-700'>
+        <div className='grid place-items-center h-[60vh] text-gray-700'>
           <div className='text-center space-y-3'>
             <img src={images.chattingStart} alt='' className='w-36 mx-auto' />
             <h2 className='text-2xl font-bold'>What a quiet team!</h2>
