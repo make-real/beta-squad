@@ -1,31 +1,28 @@
 import React from "react";
-import PlusIcon from "../../assets/plus.svg";
-import ArrowDown from "../../assets/arrowdown.svg";
-import EditDeleteMenu from "../DropDown/EditDeleteMenu";
-import AddMemberModal from "../Modals/AddMemberModal";
+import PlusIcon from "../../../assets/plus.svg";
+import ArrowDown from "../../../assets/arrowdown.svg";
+import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
+import AddMemberModal from "./Modals/AddMemberModal";
 import { useState } from "react";
-import UpdateMemberModal from "../Modals/UpdateMemberModal";
-import RemoveMemberModal from "../Modals/RemoveMemberModal";
-import MemberRemovedModal from "../Modals/MemberRemovedModal";
-
-const members = [
-    {
-        id: "random123",
-        name: "Md Isfat Sharik",
-        designation: "UI/UX designer",
-        type: "user",
-        email: "isfatsharikworksapace@gmail.com",
-        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlEkYksQu3pTAX_h1orl4H8z6oihY7LhrnLxGWElZg&s",
-    },
-];
+import UpdateMemberModal from "./Modals/UpdateMemberModal";
+import RemoveMemberModal from "./Modals/RemoveMemberModal";
+import MemberRemovedModal from "./Modals/MemberRemovedModal";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { get_space_members } from "../../../api/space";
 
 const SquadMembers = ({ showType }) => {
+    const selectedSpace = useSelector((state) => state.space.selectedSpace);
+
+    const [members, setMembers] = useState([]);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
     const [updateMemberData, setUpdateMemberData] = useState(null);
     const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
     const [removeMemberData, setRemoveMemberData] = useState(null);
     const [showRemovedModal, setShowRemovedModal] = useState(false);
+
+    console.log(members);
 
     const prepareUpdateMember = (data) => {
         setUpdateMemberData(data);
@@ -46,6 +43,19 @@ const SquadMembers = ({ showType }) => {
         setUpdateMemberData(null);
         setShowUpdateMemberModal(false);
     };
+
+    const fetchSpaceMembers = async () => {
+        try {
+            const { data } = await get_space_members(selectedSpace);
+            setMembers(data.members);
+        } catch (err) {
+            console.log("Error occured ==> ", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchSpaceMembers();
+    }, []);
 
     return (
         <>
@@ -68,25 +78,32 @@ const SquadMembers = ({ showType }) => {
                                     editFunc={prepareUpdateMember}
                                     className="absolute top-[10px] right-[10px]"
                                 />
-                                <div className="flex items-center gap-[10px]">
+                                <div className="flex gap-[10px]">
                                     <img
-                                        src={member.avatar}
+                                        src={member?.avatar}
                                         alt=""
                                         className="w-[50px] h-[50px] object-cover rounded-full"
                                     />
-                                    <h2 className="text-[#424D5B] font-semibold">
-                                        {member.name}
-                                    </h2>
+                                    <div>
+                                        <h2 className="text-[#424D5B] font-semibold">
+                                            {member?.fullName}
+                                        </h2>
+                                        <p className="text-[#818892]">
+                                            {member?.username}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-[16px] mt-[13px]">
-                                    <p className="text-[#818892]">
-                                        {member.designation}
-                                    </p>
-                                    <img src={ArrowDown} alt="" />
-                                </div>
-                                <p className="text-[#818892] mt-[10px]">
+                                {member?.designation && (
+                                    <div className="flex items-center gap-[16px] mt-[13px]">
+                                        <p className="text-[#818892]">
+                                            {member.designation}
+                                        </p>
+                                        <img src={ArrowDown} alt="" />
+                                    </div>
+                                )}
+                                {/* <p className="text-[#818892] mt-[10px]">
                                     {member.email}
-                                </p>
+                                </p> */}
                             </div>
                         );
                     })}

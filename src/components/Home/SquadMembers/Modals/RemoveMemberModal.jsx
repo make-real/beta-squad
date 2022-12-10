@@ -1,5 +1,6 @@
-import CrossIcon from "../../assets/cross.svg";
+import CrossIcon from "../../../../assets/cross.svg";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const RemoveMemberModal = ({
     data,
@@ -8,6 +9,9 @@ const RemoveMemberModal = ({
     setRemoveMemberData,
     setShowRemoveMemberModal,
 }) => {
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
     const removeMember = () => {
         setShowRemoveMemberModal(false);
         setShowRemovedModal(true);
@@ -27,14 +31,14 @@ const RemoveMemberModal = ({
                     <img src={CrossIcon} alt="" />
                 </div>
                 <h1 className="text-[#031124] text-[30px] font-bold">
-                    Remove {data.name}?
+                    Remove {data.fullName}?
                 </h1>
                 <p className="mt-[8px] text-[#818892] text-[14px] max-w-[400px]">
                     Are you sure you want to delete “{" "}
                     <span className="text-[#031124] font-semibold">
-                        {data.name}
+                        {data.fullName}
                     </span>
-                    ” from Make real ?
+                    ” from {currentWorkspace?.name} ?
                 </p>
                 <div className="mt-[25px] w-full flex items-center gap-[10px]">
                     <img
@@ -42,7 +46,9 @@ const RemoveMemberModal = ({
                         className="w-[40px] h-[40px] rounded-full object-cover"
                         alt=""
                     />
-                    <p className="text-[#424D5B] font-semibold">{data.name}</p>
+                    <p className="text-[#424D5B] font-semibold">
+                        {data.fullName}
+                    </p>
                 </div>
                 <div className="flex items-center mt-[40px] gap-[30px]">
                     <div

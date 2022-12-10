@@ -3,10 +3,14 @@ import SearchIcon from "../../assets/search.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import { useState } from "react";
-import Projects from "./Projects";
-import SquadMembers from "./SquadMembers";
+import Projects from "./Projects/Projects";
+import SquadMembers from "./SquadMembers/SquadMembers";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
     const [selectedTab, setSelectedTab] = useState("projects");
     const [showType, setShowType] = useState("grid");
 
@@ -18,18 +22,26 @@ const Home = () => {
     return (
         <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#EAECFF] h-full flex flex-col">
             <h1 className="font-medium text-[18px] text-[#031124]">
-                Make Real
+                {currentWorkspace?.name}
             </h1>
             <div className="mt-[40px] w-full h-full bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px]">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <img
-                            src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
-                            alt=""
-                            className="w-[30px] h-[30px] border border-[#6576FF] rounded-full mr-[12px]"
-                        />
+                        {currentWorkspace?.logo ? (
+                            <div className="mr-[12px] w-[32px] h-[32px] ">
+                                <img
+                                    src={currentWorkspace.logo}
+                                    alt=""
+                                    className="w-[30px] h-[30px] border border-[#6576FF] rounded-full mr-[12px]"
+                                />
+                            </div>
+                        ) : (
+                            <div className="mr-[12px] w-10 h-10 bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-100 font-bold border">
+                                {currentWorkspace?.name.charAt(0)}
+                            </div>
+                        )}
                         <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
-                            Make Real
+                            {currentWorkspace?.name}
                         </h2>
                         <div className="w-[9px] h-[9px] bg-[#FF3659] rounded-full"></div>
                     </div>

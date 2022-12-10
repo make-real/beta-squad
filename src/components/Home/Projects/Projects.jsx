@@ -1,12 +1,12 @@
-import PlusIcon from "../../assets/plus.svg";
-import FolderIcon from "../../assets/icon_component/Folder";
-import EditDeleteMenu from "../DropDown/EditDeleteMenu";
-import DeleteProjectModal from "../Modals/DeleteProjectModal";
+import PlusIcon from "../../../assets/plus.svg";
+import FolderIcon from "../../../assets/icon_component/Folder";
+import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
+import DeleteProjectModal from "./Modals/DeleteProjectModal";
 import { useState } from "react";
-import DeletingProjectModal from "../Modals/DeletingProjectModal";
+import DeletingProjectModal from "./Modals/DeletingProjectModal";
 import { useSelector } from "react-redux";
-import EditSquadModal from "../Modals/EditSquadModal";
-import CreateSquadModal from "../Modals/CreateSquadModal";
+import EditSquadModal from "./Modals/EditSquadModal";
+import CreateSquadModal from "./Modals/CreateSquadModal";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);

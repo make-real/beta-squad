@@ -1,12 +1,17 @@
-import CrossIcon from "../../assets/cross.svg";
-import { boxHexColorCodes } from "../../constant/data";
+import CrossIcon from "../../../../assets/cross.svg";
+import { boxHexColorCodes } from "../../../../constant/data";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { update_space } from "../../../../api/space";
+import { updateSpace } from "../../../../store/slice/space";
 
 const EditSquadModal = ({ cancelEditProject, data }) => {
     const [editData, setEditData] = useState({});
     const [selectedColor, setSelectedColor] = useState(data.color);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setEditData(data);
@@ -28,6 +33,31 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
         setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const handleSpaceUpdate = async (e) => {
+        e.preventDefault();
+
+        try {
+            const { data } = await update_space(editData._id, editData);
+            // display a notification for user
+            toast.success(`Space updated successfully`, {
+                autoClose: 3000,
+            });
+
+            dispatch(updateSpace(editData));
+        } catch (error) {
+            // error for developer for deBugging...
+            // console.log(error.response.data);
+            console.log(error);
+
+            // error for user at notification...
+            toast.error(error?.name, {
+                autoClose: 3000,
+            });
+        }
+        // close this modal
+        cancelEditProject(false);
+    };
+
     return (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
             <div className="relative w-[614px] h-[762px] bg-white rounded-[16px] px-[60px] py-[40px]">
@@ -43,7 +73,7 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                 <p className="mt-[9px] text-[#818892] text-[14px]">
                     Update the following fields to edit your existing sqaud.
                 </p>
-                <form className="mt-[40px]">
+                <form onSubmit={handleSpaceUpdate} className="mt-[40px]">
                     <p className="text-[#818892] text-[14px] font-semibold">
                         Squad Name
                     </p>
@@ -65,8 +95,8 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                         type="text"
                         className="mt-[13px] bg-[#ECECEC60] w-full py-[14px] px-[16px] outline-none border-none placeholder:text-[#818892]"
                         placeholder="Add purpose here"
-                        name="purpose"
-                        value={editData?.purpose}
+                        name="description"
+                        value={editData?.description}
                         onChange={handleChange}
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
@@ -150,19 +180,22 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                         </p>
                     </div>
                     <div className="flex items-center mt-[40px] gap-[30px]">
-                        <div
+                        <button
                             onClick={cancelEditProject}
                             className="bg-[#FFE7EB] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
                         >
                             <p className=" text-[14px] font-semibold text-[#FF3659]">
                                 Cancel
                             </p>
-                        </div>
-                        <div className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer">
+                        </button>
+                        <button
+                            type="submit"
+                            className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
+                        >
                             <p className=" text-[14px] font-semibold text-white">
                                 Update
                             </p>
-                        </div>
+                        </button>
                     </div>
                 </form>
             </div>

@@ -1,11 +1,11 @@
 import React from "react";
-import CrossIcon from "../../assets/cross.svg";
-import InboxIcon from "../../assets/inbox.svg";
-import TaguserIcon from "../../assets/tag_user.svg";
-import ProfileCircle from "../../assets/profile_circle.svg";
-import BriefCaseIcon from "../../assets/briefcase.svg";
+import CrossIcon from "../../../../assets/cross.svg";
+import TaguserIcon from "../../../../assets/tag_user.svg";
+import ProfileCircle from "../../../../assets/profile_circle.svg";
+import BriefCaseIcon from "../../../../assets/briefcase.svg";
 import { useEffect } from "react";
 import { useState } from "react";
+import { WORKSPACE_ROLE } from "../../../../constant/enums";
 
 const UpdateMemberModal = ({
     setShowUpdateMemberModal,
@@ -48,9 +48,9 @@ const UpdateMemberModal = ({
                             className="text-[#031124] placeholder:text-[#818892] text-[16px] border-none outline-none bg-transparent"
                             type="email"
                             placeholder="Enter name"
-                            name="name"
+                            name="fullName"
                             onChange={handleChange}
-                            value={editData.name}
+                            value={editData.fullName}
                         />
                     </div>
                     <p className="mt-[20px] text-[14px] font-semibold text-[#424D5B]">
@@ -93,7 +93,7 @@ const UpdateMemberModal = ({
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
                         <img src={TaguserIcon} alt="" />
                         <select
-                            name="type"
+                            name="role"
                             onChange={handleChange}
                             id=""
                             className="w-full bg-transparent text-[#031124] text-[16px] border-none outline-none"
@@ -101,16 +101,16 @@ const UpdateMemberModal = ({
                             <option selected value="">
                                 Select member type
                             </option>
-                            {["User", "Admin", "Manager", "HR"].map((type) => {
+                            {Object.values(WORKSPACE_ROLE).map((role) => {
                                 return (
                                     <option
                                         selected={
-                                            type?.toLowerCase() ===
+                                            role?.toLowerCase() ===
                                             editData.type?.toLowerCase()
                                         }
-                                        value={type}
+                                        value={role}
                                     >
-                                        {type}
+                                        {role}
                                     </option>
                                 );
                             })}
