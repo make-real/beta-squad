@@ -1,9 +1,16 @@
 import React from "react";
-import CrossIcon from "../../assets/cross.svg";
-import InboxIcon from "../../assets/inbox.svg";
-import TaguserIcon from "../../assets/tag_user.svg";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import CrossIcon from "../../../../assets/cross.svg";
+import InboxIcon from "../../../../assets/inbox.svg";
+import TaguserIcon from "../../../../assets/tag_user.svg";
+import { WORKSPACE_ROLE } from "../../../../constant/enums";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
+
     return (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
             <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px]">
@@ -18,7 +25,9 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                 </h1>
                 <p className="mt-[9px] text-[#818892] text-[14px]">
                     Enter email to add member to{" "}
-                    <span className="text-[#6576FF]">Make Real</span>
+                    <span className="text-[#6576FF]">
+                        {currentWorkspace?.name}
+                    </span>
                 </p>
                 <form className="mt-[28px]">
                     <p className="text-[14px] font-semibold text-[#424D5B]">
@@ -45,9 +54,9 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                             <option selected value="">
                                 Select member type
                             </option>
-                            <option value="">Frontend</option>
-                            <option value="">Designer</option>
-                            <option value="">Backend</option>
+                            {Object.values(WORKSPACE_ROLE).map((role) => (
+                                <option value="">{role}</option>
+                            ))}
                         </select>
                     </div>
                     <button className="mt-[40px] w-full py-[17px] rounded-[8px] bg-[#6576FF] text-white">

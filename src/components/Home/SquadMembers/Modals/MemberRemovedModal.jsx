@@ -1,5 +1,5 @@
 import React from "react";
-import DustbinIcon from "../../assets/icon_component/Dustbin";
+import DustbinIcon from "../../../../assets/icon_component/Dustbin";
 
 const MemberRemovedModal = ({ data }) => {
     return (

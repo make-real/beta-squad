@@ -24,7 +24,7 @@ import {
 } from "../../store/slice/space";
 import { useSelector } from "react-redux";
 import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
-import CreateSquadModal from "../Modals/CreateSquadModal";
+import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 
 const SideNavbar = () => {
     const navigate = useNavigate();

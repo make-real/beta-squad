@@ -1,6 +1,10 @@
 import React from "react";
-import WarningIcon from "../../assets/icon_component/Warning";
-import CrossIcon from "../../assets/cross.svg";
+import WarningIcon from "../../../../assets/icon_component/Warning";
+import CrossIcon from "../../../../assets/cross.svg";
+import { delete_space } from "../../../../api/space";
+import { removeSpace } from "../../../../store/slice/space";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const DeleteProjectModal = ({
     data,
@@ -8,12 +12,18 @@ const DeleteProjectModal = ({
     setDeletingProject,
     setShowDeleteProjectModal,
 }) => {
-    const deleteProject = () => {
+    const dispatch = useDispatch();
+    const deleteSpace = async (e) => {
+        e.preventDefault();
         setShowDeleteProjectModal(false);
         setDeletingProject((prev) => ({ ...prev, show: true }));
 
-        setTimeout(() => {
+        try {
+            const res = await delete_space(data._id);
             setDeletingProject((prev) => ({ ...prev, done: true }));
+            // display a notification for user
+            dispatch(removeSpace(data._id));
+
             setTimeout(() => {
                 setDeleteProjectData(null);
                 setDeletingProject((prev) => ({
@@ -22,7 +32,17 @@ const DeleteProjectModal = ({
                     show: false,
                 }));
             }, 1000);
-        }, 1500);
+        } catch (error) {
+            // error for developer for deBugging...
+            // console.log(error.response.data);
+            console.log(error);
+            setDeletingProject((prev) => ({ ...prev, show: false }));
+
+            // error for user at notification...
+            toast.error(error?.name, {
+                autoClose: 3000,
+            });
+        }
     };
 
     const cancelDeletion = () => {
@@ -73,7 +93,7 @@ const DeleteProjectModal = ({
                         </p>
                     </div>
                     <div
-                        onClick={deleteProject}
+                        onClick={deleteSpace}
                         className="bg-[#FF3659] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
                     >
                         <p className=" text-[14px] font-semibold text-white">
