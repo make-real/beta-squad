@@ -9,6 +9,8 @@ import {
     CheckIcon,
 } from '@heroicons/react/24/outline';
 import ConfirmDialog from './ConfirmDialog';
+import { cardUpdateApiCall } from '../../hooks/useFetch';
+import { toast } from 'react-toastify';
 
 // generate random color
 const randomColor = () => {
@@ -27,6 +29,7 @@ const Card = ({ card, listID }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const progressStatus = (progress) => {
         switch (progress) {
@@ -50,11 +53,6 @@ const Card = ({ card, listID }) => {
 
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
-    const handleActionDropDownClick = (e) => {
-        e.stopPropagation();
-        progress === null ? setProgress(0) : setProgress(4);
-    };
-
     // may be problem
     // useEffect(() => {
     //     const cardProgressUpdate = async () => {
@@ -74,6 +72,27 @@ const Card = ({ card, listID }) => {
     //     cardProgressUpdate();
     // }, [card, listID, progress, selectedSpaceId, updateCard]);
 
+    const handleProgressUpdate = async () => {
+        setProgress((pre) => (pre === 4 ? 0 : 4));
+
+        const cardTagObject = { ...card, progress: progress === 0 ? 4 : 0 };
+
+        try {
+            const { data } = await cardUpdateApiCall(
+                selectedSpaceId,
+                listID,
+                card._id,
+                cardTagObject
+            );
+            updateCard(listID, card._id, data.updatedCard);
+        } catch (error) {
+            console.log(error?.response?.data?.issue?.message);
+            toast.error(`${error?.response?.data?.issue?.message}`, {
+                autoClose: 3000,
+            });
+        }
+    };
+
     useEffect(() => {
         document.addEventListener('click', handleClick);
         return () => document.removeEventListener('click', handleClick);
@@ -86,6 +105,9 @@ const Card = ({ card, listID }) => {
 
     const checked = card.checkList?.filter((item) => item?.checked);
     const unchecked = card.checkList?.filter((item) => !item?.checked);
+
+    console.log(card );
+
     return (
         <>
             <div
@@ -269,7 +291,10 @@ const Card = ({ card, listID }) => {
                         <span className="cursor-pointer">
                             <CheckCircleIcon
                                 className="w-5 h-5"
-                                onClick={handleActionDropDownClick}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleProgressUpdate();
+                                }}
                             />
                         </span>
                     </div>
@@ -289,7 +314,6 @@ const Card = ({ card, listID }) => {
                     listID={listID}
                     cardID={card._id}
                     setConfirmModalOpen={setConfirmModalOpen}
-                    setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />
             )}
 
