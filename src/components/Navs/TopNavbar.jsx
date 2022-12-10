@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { userLogOut } from "../../hooks/useFetch";
 
 const TopNav = () => {
-    const [userInfo, setUserInfo] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -77,7 +77,7 @@ const LoggedInTopNav = ({ userInfo }) => {
 
             {/* DropDown Menu */}
             <div
-                className={`origin-top-right scale-0 pointer-events-none ${
+                className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                     showDropDownMenu ? "scale-100 pointer-events-auto" : ""
                 } transition-transform absolute top-[50px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
             >
@@ -94,7 +94,7 @@ const LoggedInTopNav = ({ userInfo }) => {
                             return (
                                 <div className="bg-gray-100 flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
                                     <img
-                                        src="https://assets.stickpng.com/thumbs/5847f439cef1014c0b5e4890.png"
+                                        src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
                                         alt=""
                                         className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
                                     />

@@ -61,12 +61,22 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                     onClick={() => {
                                         setSelectedColor(color);
                                     }}
-                                    className={`relative rounded-[4px] bg-[${color}] cursor-pointer ${
+                                    style={{ backgroundColor: color }}
+                                    className={`relative rounded-[4px] cursor-pointer ${
                                         selectedColor === color
-                                            ? `rounded_border w-[22px] h-[22px] border-[2px] border-white before:border-[${selectedColor}]`
+                                            ? `w-[22px] h-[22px] border-[2px] border-white`
                                             : "w-[16px] h-[16px]"
                                     }`}
-                                ></div>
+                                >
+                                    {selectedColor === color && (
+                                        <div
+                                            style={{
+                                                borderColor: selectedColor,
+                                            }}
+                                            className={`rounded_border`}
+                                        ></div>
+                                    )}
+                                </div>
                             );
                         })}
                     </div>
@@ -124,7 +134,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         </div>
                         <div className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer">
                             <p className=" text-[14px] font-semibold text-white">
-                                Delete
+                                Create
                             </p>
                         </div>
                     </div>

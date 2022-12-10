@@ -4,6 +4,7 @@ import EditDeleteMenu from "../DropDown/EditDeleteMenu";
 import DeleteProjectModal from "../Modals/DeleteProjectModal";
 import { useState } from "react";
 import DeletingModal from "../Modals/DeletingModal";
+import { useSelector } from "react-redux";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -13,6 +14,7 @@ const Projects = ({ showType }) => {
         show: false,
         type: "project",
     });
+    const { selectedSpace, allSpaces } = useSelector((state) => state.space);
 
     const projectsData = [
         {
@@ -41,25 +43,23 @@ const Projects = ({ showType }) => {
         <>
             {showType === "grid" ? (
                 <div className="mt-[30px] flex items-center gap-[30px] flex-wrap">
-                    {projectsData.map((project) => {
+                    {allSpaces.map((sapce) => {
                         return (
                             <div
-                                className={`relative w-[214px] h-[110px] rounded-[16px] bg-[${
-                                    project.color + "10"
-                                }] border border-[${
-                                    project.color
-                                }] flex items-center px-[17px] gap-[16px]`}
+                                style={{
+                                    backgroundColor: sapce.color + "10",
+                                    borderColor: sapce.color,
+                                }}
+                                className={`relative w-[214px] h-[110px] rounded-[16px] border flex items-center px-[17px] gap-[16px]`}
                             >
                                 <EditDeleteMenu
                                     deleteFunc={prepareDeleteProject}
-                                    data={project}
+                                    data={sapce}
                                     className="absolute top-[10px] right-[10px]"
                                 />
-                                <FolderIcon
-                                    className={`fill-[${project.color}]`}
-                                />
+                                <FolderIcon style={{ fill: sapce.color }} />
                                 <p className="text-[#424D5B] font-semibold">
-                                    {project.name}
+                                    {sapce.name}
                                 </p>
                             </div>
                         );
@@ -74,23 +74,22 @@ const Projects = ({ showType }) => {
             ) : (
                 showType === "stack" && (
                     <div className="mt-[30px] flex flex-col items-center gap-[10px]">
-                        {projectsData.map((project) => {
+                        {allSpaces.map((space) => {
                             return (
                                 <div
-                                    className={`relative w-full h-[80px] rounded-[16px] bg-[${
-                                        project.color + "10"
-                                    }] flex items-center px-[17px] gap-[16px]`}
+                                    style={{
+                                        backgroundColor: space.color + "10",
+                                    }}
+                                    className={`relative w-full h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
                                 >
                                     <EditDeleteMenu
-                                        data={project}
+                                        data={space}
                                         deleteFunc={prepareDeleteProject}
                                         className="absolute top-[10px] right-[10px]"
                                     />
-                                    <FolderIcon
-                                        className={`fill-[${project.color}]`}
-                                    />
+                                    <FolderIcon style={{ fill: space.color }} />
                                     <p className="text-[#424D5B] font-semibold">
-                                        {project.name}
+                                        {space.name}
                                     </p>
                                 </div>
                             );

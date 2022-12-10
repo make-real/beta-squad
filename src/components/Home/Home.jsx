@@ -11,11 +11,7 @@ const Home = () => {
     const [showType, setShowType] = useState("grid");
 
     const Tabs = {
-        projects: (
-            <Projects
-                showType={showType}
-            />
-        ),
+        projects: <Projects showType={showType} />,
         squad_members: <SquadMembers showType={showType} />,
     };
 
@@ -28,7 +24,7 @@ const Home = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         <img
-                            src="https://assets.stickpng.com/thumbs/5847f439cef1014c0b5e4890.png"
+                            src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
                             alt=""
                             className="w-[30px] h-[30px] border border-[#6576FF] rounded-full mr-[12px]"
                         />
