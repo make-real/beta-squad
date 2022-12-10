@@ -12,7 +12,9 @@ const privateChatSlice = createSlice({
       state.messages = payload;
     },
     addSingleMessagePrivate: (state, { payload }) => {
+      console.log(state.messages.length);
       state.messages.push(payload);
+      console.log(state.messages.length);
     },
     removeMessagePrivate: (state, { payload }) => {
       state.messages = state.messages.filter((m) => m._id !== payload);
@@ -41,11 +43,6 @@ const privateChatSlice = createSlice({
   },
 });
 
-export const {
-  addBulkMessagePrivate,
-  addSingleMessagePrivate,
-  addReactionPrivate,
-  removeMessagePrivate,
-} = privateChatSlice.actions;
+export const { addBulkMessagePrivate, addSingleMessagePrivate, addReactionPrivate, removeMessagePrivate } = privateChatSlice.actions;
 
 export default privateChatSlice.reducer;

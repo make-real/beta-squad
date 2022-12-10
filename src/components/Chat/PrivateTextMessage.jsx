@@ -276,7 +276,7 @@ const PrivateTextMessage = ({
   const dispatch = useDispatch();
   const messagesEndRef = useRef();
 
-  const messagesState = useSelector((state) => state.message.messages);
+  const messagesState = useSelector((state) => state.privateChat.messages);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const messages = forComment ? comments : messagesState;

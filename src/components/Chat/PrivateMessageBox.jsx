@@ -43,6 +43,14 @@ const PrivateMessageBox = ({
   const { participantID } = useParams();
   const dispatch = useDispatch();
 
+
+  // const { selectedWorkspace } = useSelector((state) => state.workspace);
+
+  console.log("################ Single Chat ###############");
+  console.log(userSelectedWorkSpaceId);
+  console.log("###############################");
+
+
   // console.log(messageToRespond);
 
   useEffect(() => {
@@ -96,11 +104,14 @@ const PrivateMessageBox = ({
       if (custom) {
         await onComment({ text });
       } else {
+        console.log("sending...")
         const { data } = await send_single_message(userSelectedWorkSpaceId, {
           sendTo: participantID,
           textMessage: text,
           replayOf: messageToRespond?._id,
         });
+
+        console.log(data.message)
 
         dispatch(addSingleMessagePrivate(data.message));
       }
