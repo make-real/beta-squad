@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { get_single_messages } from "../../../api/chat";
 import { useSelector } from "react-redux";
 
-const SingleChat = () => {
+const GroupChat = () => {
   const { margin } = useStyleContext();
   const [messageToRespond, setMessageToRespond] = useState();
 
@@ -31,4 +31,4 @@ const SingleChat = () => {
   );
 };
 
-export default SingleChat;
+export default GroupChat;

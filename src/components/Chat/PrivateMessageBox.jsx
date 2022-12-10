@@ -141,6 +141,7 @@ const PrivateMessageBox = ({
         };
         const { data } = await api(config);
         dispatch(addSingleMessagePrivate(data.message));
+        console.log(data);
       }
 
       setUploadPercentage(0);
@@ -240,8 +241,7 @@ const PrivateMessageBox = ({
         <div className='w-full h-full flex justify-center align-middle'>
           <div
             className={`w-full ${
-              messageToRespond &&
-              "border-[0.5px] border-[#2d4154] p-3 rounded-md"
+              messageToRespond && "border-[0.5px] border-white p-3 rounded-md"
             }`}>
             {messageToRespond && (
               <div className='flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md'>
@@ -269,7 +269,7 @@ const PrivateMessageBox = ({
               </div>
             )}
             {!isRecording ? (
-              <div className='w-full flex relative border-[0.5px] border-slate-700 rounded-md p-3'>
+              <div className='w-full flex relative shadow-md border bg-white rounded-lg px-3 py-2'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}

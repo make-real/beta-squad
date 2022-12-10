@@ -223,8 +223,7 @@ const MessageBox = ({
         <div className='w-full h-full flex justify-center align-middle'>
           <div
             className={`w-full ${
-              messageToRespond &&
-              "border-[0.5px] border-[#2d4154] p-3 rounded-md"
+              messageToRespond && "border-[0.5px] border-white p-3 rounded-md"
             }`}>
             {messageToRespond && (
               <div className='flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md'>
