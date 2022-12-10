@@ -6,6 +6,7 @@ import SearchIcon from "../../assets/search.svg";
 import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import FolderIcon from "../../assets/icon_component/Folder";
 import { useNavigate } from "react-router-dom";
 import {
     get_space_data,
@@ -225,7 +226,10 @@ const SideNavbar = () => {
                                         navigate("/projects");
                                     }}
                                 >
-                                    <SquadIcon color={space.color} />
+                                    <FolderIcon
+                                        style={{ fill: space.color }}
+                                        className={`w-[20px] h-[20px]`}
+                                    />
                                     {showFullBar && (
                                         <p className="text-[14px] text-[#C4CEFE]">
                                             {space.name}

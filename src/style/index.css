@@ -7,7 +7,7 @@
 
 @layer components {
     .rounded_border {
-        @apply before:absolute before:w-[25px] before:h-[25px] before:border-[2px] before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:-z-0 before:rounded-[4px];
+        @apply absolute w-[25px] h-[25px] border-[2px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-0 rounded-[4px];
     }
 }
 
