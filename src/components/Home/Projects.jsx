@@ -3,8 +3,10 @@ import FolderIcon from "../../assets/icon_component/Folder";
 import EditDeleteMenu from "../DropDown/EditDeleteMenu";
 import DeleteProjectModal from "../Modals/DeleteProjectModal";
 import { useState } from "react";
-import DeletingModal from "../Modals/DeletingModal";
+import DeletingProjectModal from "../Modals/DeletingProjectModal";
 import { useSelector } from "react-redux";
+import EditSquadModal from "../Modals/EditSquadModal";
+import CreateSquadModal from "../Modals/CreateSquadModal";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -12,31 +14,25 @@ const Projects = ({ showType }) => {
     const [deletingProject, setDeletingProject] = useState({
         done: false,
         show: false,
-        type: "project",
     });
+    const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
+    const [editProjectData, setEditProjectData] = useState(null);
+    const [showEditSquadModal, setShowEditSquadModal] = useState(false);
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
-
-    const projectsData = [
-        {
-            id: "random1",
-            name: "Heart Live",
-            color: "#FB397F",
-        },
-        {
-            id: "random2",
-            name: "JCI",
-            color: "#FEB45E",
-        },
-        {
-            id: "random3",
-            name: "Cycle Nation",
-            color: "#13E5C0",
-        },
-    ];
 
     const prepareDeleteProject = (projectData) => {
         setDeleteProjectData(projectData);
         setShowDeleteProjectModal(true);
+    };
+
+    const prepareEditProject = (projectData) => {
+        setEditProjectData(projectData);
+        setShowEditSquadModal(true);
+    };
+
+    const cancelEditProject = () => {
+        setEditProjectData(null);
+        setShowEditSquadModal(false);
     };
 
     return (
@@ -54,6 +50,7 @@ const Projects = ({ showType }) => {
                             >
                                 <EditDeleteMenu
                                     deleteFunc={prepareDeleteProject}
+                                    editFunc={prepareEditProject}
                                     data={sapce}
                                     className="absolute top-[10px] right-[10px]"
                                 />
@@ -65,7 +62,10 @@ const Projects = ({ showType }) => {
                         );
                     })}
 
-                    <div className="w-[214px] h-[110px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer">
+                    <div
+                        onClick={() => setShowCreateSquadModal(true)}
+                        className="w-[214px] h-[110px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+                    >
                         <div className="w-[60px] h-[60px] rounded-full bg-white flex items-center justify-center">
                             <img src={PlusIcon} alt="" />
                         </div>
@@ -95,7 +95,10 @@ const Projects = ({ showType }) => {
                             );
                         })}
 
-                        <div className="w-full h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer">
+                        <div
+                            onClick={() => setShowCreateSquadModal(true)}
+                            className="w-full h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+                        >
                             <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
                                 <img src={PlusIcon} alt="" />
                             </div>
@@ -113,7 +116,21 @@ const Projects = ({ showType }) => {
                 />
             )}
             {deletingProject.show && (
-                <DeletingModal data={deleteProjectData} {...deletingProject} />
+                <DeletingProjectModal
+                    data={deleteProjectData}
+                    {...deletingProject}
+                />
+            )}
+            {showEditSquadModal && (
+                <EditSquadModal
+                    data={editProjectData}
+                    cancelEditProject={cancelEditProject}
+                />
+            )}
+            {showCreateSquadModal && (
+                <CreateSquadModal
+                    setShowCreateSquadModal={setShowCreateSquadModal}
+                />
             )}
         </>
     );

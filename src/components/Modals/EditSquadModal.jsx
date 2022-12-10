@@ -1,26 +1,47 @@
 import CrossIcon from "../../assets/cross.svg";
-import React from "react";
 import { boxHexColorCodes } from "../../constant/data";
+import React from "react";
 import { useState } from "react";
+import { useEffect } from "react";
 
-const CreateSquadModal = ({ setShowCreateSquadModal }) => {
-    const [selectedColor, setSelectedColor] = useState("#C654FC");
+const EditSquadModal = ({ cancelEditProject, data }) => {
+    const [editData, setEditData] = useState({});
+    const [selectedColor, setSelectedColor] = useState(data.color);
+
+    useEffect(() => {
+        setEditData(data);
+    }, [data]);
+
+    const handleColorSelect = (color) => {
+        setSelectedColor(color);
+        setEditData((prev) => ({ ...prev, color: color }));
+    };
+
+    const handleChange = (e, privacy) => {
+        if (privacy) {
+            setEditData((prev) => ({
+                ...prev,
+                privacy: privacy,
+            }));
+            return;
+        }
+        setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
     return (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
             <div className="relative w-[614px] h-[762px] bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
-                    onClick={() => setShowCreateSquadModal(false)}
+                    onClick={cancelEditProject}
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
                 >
                     <img src={CrossIcon} alt="" />
                 </div>
                 <h1 className="text-[#031124] text-[30px] font-bold">
-                    Create Squad
+                    Edit {data.name}
                 </h1>
                 <p className="mt-[9px] text-[#818892] text-[14px]">
-                    Enter email to add member to{" "}
-                    <span className="text-[#6576FF]">Make Real</span>
+                    Update the following fields to edit your existing sqaud.
                 </p>
                 <form className="mt-[40px]">
                     <p className="text-[#818892] text-[14px] font-semibold">
@@ -30,6 +51,9 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         type="text"
                         className="mt-[13px] bg-[#ECECEC60] w-full py-[14px] px-[16px] outline-none border-none placeholder:text-[#818892]"
                         placeholder="Enter your new squad name"
+                        name="name"
+                        value={editData.name}
+                        onChange={handleChange}
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
                         Add Purpose{" "}
@@ -41,6 +65,9 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         type="text"
                         className="mt-[13px] bg-[#ECECEC60] w-full py-[14px] px-[16px] outline-none border-none placeholder:text-[#818892]"
                         placeholder="Add purpose here"
+                        name="purpose"
+                        value={editData?.purpose}
+                        onChange={handleChange}
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
                         Squad color
@@ -49,9 +76,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         {boxHexColorCodes.map((color) => {
                             return (
                                 <div
-                                    onClick={() => {
-                                        setSelectedColor(color);
-                                    }}
+                                    onClick={() => handleColorSelect(color)}
                                     style={{ backgroundColor: color }}
                                     className={`relative rounded-[4px] cursor-pointer ${
                                         selectedColor === color
@@ -81,6 +106,10 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                 name="privacy"
                                 id="squad_privacy_public"
                                 className="accent-[#6576FF]"
+                                checked={
+                                    editData.privacy === "public" ? true : false
+                                }
+                                onChange={() => handleChange(null, "public")}
                             />
                             <label
                                 htmlFor="squad_privacy_public"
@@ -101,6 +130,12 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                 name="privacy"
                                 id="squad_privacy_private"
                                 className="accent-[#6576FF]"
+                                checked={
+                                    editData.privacy === "private"
+                                        ? true
+                                        : false
+                                }
+                                onChange={() => handleChange(null, "private")}
                             />
                             <label
                                 htmlFor="squad_privacy_private"
@@ -116,7 +151,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                     </div>
                     <div className="flex items-center mt-[40px] gap-[30px]">
                         <div
-                            onClick={() => setShowCreateSquadModal(false)}
+                            onClick={cancelEditProject}
                             className="bg-[#FFE7EB] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
                         >
                             <p className=" text-[14px] font-semibold text-[#FF3659]">
@@ -125,7 +160,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         </div>
                         <div className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer">
                             <p className=" text-[14px] font-semibold text-white">
-                                Create
+                                Update
                             </p>
                         </div>
                     </div>
@@ -135,4 +170,4 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
     );
 };
 
-export default CreateSquadModal;
+export default EditSquadModal;
