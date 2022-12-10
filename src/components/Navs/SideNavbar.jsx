@@ -42,11 +42,6 @@ const SideNavbar = () => {
         (state) => state.workspace
     );
 
-    console.log('############### SIDEBAR ################')
-    console.log(selectedWorkspace)
-    console.log('###############################')
-
-
     const [members, setMembers] = useState([]);
 
     useEffect(() => {
