@@ -1,4 +1,4 @@
-import { Copy, Delete, EyeOpen, Plus, RightArrow } from "../../assets/icons";
+import {  Delete,  } from "../../assets/icons";
 import { useState } from "react";
 import ConfirmDialog from "./ConfirmDialog";
 
@@ -10,13 +10,13 @@ const BoardListSettingDropDown = ({ boardListID }) => {
     <>
       <div className="text-gray-400">
         <div
-          className="p-1.5 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group"
+          className="p-2 flex items-center space-x-3 cursor-pointer hover:bg-gray-200 rounded-lg duration-200 group"
           onClick={(e) => {
             e.stopPropagation();
             setConfirmModalOpen(true);
           }}
         >
-          <Delete />{" "}
+          <Delete />
           <span className="group-hover:text-teal-500">Delete list</span>
         </div>
       </div>
