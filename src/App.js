@@ -27,16 +27,17 @@ import SingleChat from "./components/Chat/Single/Chat";
 
 import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
+import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
-  if (!jwt) return <Navigate to='/' />;
+  if (!jwt) return <Navigate to="/" />;
   return children;
 };
 
 const AuthRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
-  if (jwt) return <Navigate to='/projects' />;
+  if (jwt) return <Navigate to="/projects" />;
   return (
     <>
       <TopNav />
@@ -49,9 +50,9 @@ const App = () => {
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   return (
-    <main className='overflow-hidden'>
+    <main className="overflow-hidden">
       <Routes>
-        <Route path='/' />
+        <Route path="/" />
         <Route
           index
           element={
@@ -61,7 +62,7 @@ const App = () => {
           }
         />
         <Route
-          path='register'
+          path="register"
           element={
             <AuthRoute>
               <Register />
@@ -70,12 +71,13 @@ const App = () => {
         />
 
         <Route
-          path='settings'
+          path="settings"
           element={
             <ProtectedRoute>
               <UserSettingLayout />
             </ProtectedRoute>
-          }>
+          }
+        >
           <Route
             index
             element={
@@ -85,7 +87,7 @@ const App = () => {
             }
           />
           <Route
-            path='manage-workspace'
+            path="manage-workspace"
             element={
               <ProtectedRoute>
                 <ManageWorkspace />
@@ -93,7 +95,7 @@ const App = () => {
             }
           />
           <Route
-            path='developer'
+            path="developer"
             element={
               <ProtectedRoute>
                 <DeveloperConsole />
@@ -101,7 +103,7 @@ const App = () => {
             }
           />
           <Route
-            path='preferences'
+            path="preferences"
             element={
               <ProtectedRoute>
                 <Preferences />
@@ -109,7 +111,7 @@ const App = () => {
             }
           />
           <Route
-            path='workspace-settings'
+            path="workspace-settings"
             element={
               <ProtectedRoute>
                 <WorkspaceSettings />
@@ -117,7 +119,7 @@ const App = () => {
             }
           />
           <Route
-            path='tags'
+            path="tags"
             element={
               <ProtectedRoute>
                 <Tags />
@@ -127,12 +129,13 @@ const App = () => {
         </Route>
 
         <Route
-          path='projects'
+          path="projects"
           element={
             <ProtectedRoute>
               <Layout selectedSpaceId={selectedSpaceId} />
             </ProtectedRoute>
-          }>
+          }
+        >
           <Route
             index
             element={
@@ -142,7 +145,7 @@ const App = () => {
             }
           />
           <Route
-            path='kanban'
+            path="kanban"
             element={
               <ProtectedRoute>
                 <Board selectedSpaceId={selectedSpaceId} />
@@ -150,7 +153,7 @@ const App = () => {
             }
           />
           <Route
-            path='list'
+            path="list"
             element={
               <ProtectedRoute>
                 <CardAsList selectedSpaceId={selectedSpaceId} />
@@ -158,7 +161,7 @@ const App = () => {
             }
           />
           <Route
-            path='/projects/chats'
+            path="/projects/chats"
             element={
               <ProtectedRoute>
                 <Chat />
@@ -166,7 +169,7 @@ const App = () => {
             }
           />
           <Route
-            path='single-chat/:participantID'
+            path="single-chat/:participantID"
             exact
             element={
               <ProtectedRoute>
@@ -178,11 +181,11 @@ const App = () => {
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
         </Route>
 
-        <Route path='*' element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       {/* theme="dark" */}
-      <ToastContainer theme='colored' style={{ fontSize: "18px" }} />
+      <ToastContainer theme="colored" style={{ fontSize: "18px" }} />
     </main>
   );
 };

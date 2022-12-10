@@ -14,6 +14,7 @@ import { SocketContext } from "./context/SocketContext";
 import { addReaction, addSingleMessage, removeMessage } from "./store/slice/message";
 import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
 import config from "./config";
+import { addSocket } from "./store/slice/socket";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -31,6 +32,11 @@ if (token) {
     },
   });
 
+  socket?.on("connect", () => {
+    console.log("Connected with socket server");
+    store.dispatch(addSocket(socket));
+  });
+
   socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
     const { space } = store.getState();
 
@@ -39,10 +45,6 @@ if (token) {
     } else {
       sentLocalNotification("New message recived.");
     }
-  });
-
-  socket?.on("ON_MESSAGE_REMOVED", (msg) => {
-    console.log(msg);
   });
 
   socket?.on("NEW_REACTION_RECEIVED", (data) => {

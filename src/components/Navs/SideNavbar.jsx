@@ -27,6 +27,7 @@ import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
 import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 
 const SideNavbar = () => {
+<<<<<<< HEAD
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showFullBar, setShowFullBar] = useState(true);
@@ -42,6 +43,24 @@ const SideNavbar = () => {
     (state) => state.workspace
   );
   const [members, setMembers] = useState([]);
+=======
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [showFullBar, setShowFullBar] = useState(true);
+    const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
+    const [newWorkSpace, setNewWorkSpace] = useState(false);
+    const [createSpaceModal, setCreateSpaceModal] = useState(false);
+    const [spaceSearchModal, setSpaceSearchModal] = useState(false);
+    const [userNotificationSMS, setUserNotificationSMS] = useState(false);
+    const [userNotificationBell, setUserNotificationBell] = useState(false);
+    const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
+    const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+    const { workspaces, selectedWorkspace } = useSelector(
+        (state) => state.workspace
+    );
+
+    const [members, setMembers] = useState([]);
+>>>>>>> b83c5b86ffe8a46b50f3fe9524e247b542ee6469
 
   useEffect(() => {
     if (selectedWorkspace) {
