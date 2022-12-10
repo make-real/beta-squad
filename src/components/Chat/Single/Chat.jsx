@@ -17,6 +17,7 @@ const SingleChat = () => {
   const dispatch = useDispatch();
 
   console.log(messageToRespond);
+  console.log(selectedWorkspace);
 
   useEffect(() => {
     getMessages();
