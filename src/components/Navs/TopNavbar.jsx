@@ -85,7 +85,7 @@ const LoggedInTopNav = ({ userInfo }) => {
                     Workspaces
                 </h2>
                 <div className="mt-[15px] flex flex-col">
-                    {workspaces.length === 0 ? (
+                    {workspaces?.length === 0 ? (
                         <p className="px-[20px] text-[14px] text-gray-400 text-center">
                             No workspaces yet
                         </p>
