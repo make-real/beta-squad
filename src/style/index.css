@@ -25,6 +25,7 @@
   .boardActionDropDownSm {
     @apply flex items-center gap-3 p-1 cursor-pointer rounded-lg duration-200 hover:bg-gray-200 text-[#B9C3CE];
   }
+}
 
 @layer components {
     .rounded_border {
