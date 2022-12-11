@@ -59,8 +59,8 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
     };
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
-            <div className="relative w-[614px] h-[762px] bg-white rounded-[16px] px-[60px] py-[40px]">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50 py-[20px]">
+            <div className="relative w-[614px] h-full max-h-[762px] bg-white rounded-[16px] px-[60px] py-[40px] overflow-y-scroll no-scrollbar">
                 <div
                     onClick={cancelEditProject}
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
