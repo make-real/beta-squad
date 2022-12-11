@@ -512,13 +512,13 @@ const CardModal = ({
                     </div>
 
                     {/* main part */}
-                    <div class="flex flex-1 min-h-0">
+                    <div className="flex flex-1 min-h-0">
                         <div
                             className={`flex flex-col ${
                                 showChat ? 'w-8/12' : 'w-full'
                             } `}
                         >
-                            <div class="overflow-y-auto px-4 h-full">
+                            <div className="overflow-y-auto px-4 h-full">
                                 {/* show routing */}
                                 {/* <div className="flex items-center py-4 text-gray-400 ">
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">

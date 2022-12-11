@@ -302,7 +302,7 @@ const Card = ({ card, listID, listName }) => {
 
                     <Link
                         onClick={() => {
-                            toggle_card_modal();
+                            // toggle_card_modal();
                             setCardDetails({
                                 card: card,
                                 listID: listID,
@@ -331,8 +331,8 @@ const Card = ({ card, listID, listName }) => {
                 />
             )}
 
-            {card.modal && (
-                <CardDetails
+            {/* {card.modal && (
+                <CardModal
                     card={card}
                     listID={listID}
                     noteDone={noteDone}
@@ -341,7 +341,7 @@ const Card = ({ card, listID, listName }) => {
                     setBoardModal={toggle_card_modal}
                     setNoteDone={setNoteDone}
                 />
-            )}
+            )} */}
         </>
     );
 };

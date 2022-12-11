@@ -16,12 +16,12 @@ const Preferences = () => {
           </h6>
 
           <div className=" flex">
-            <label class="switch relative inline-block w-[30px] h-[10px] my-3">
+            <label className="switch relative inline-block w-[30px] h-[10px] my-3">
               <input
                 type="checkbox"
                 className="opacity-0 w-0 h-0 toggle-checkbox"
               />
-              <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
+              <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
             </label>
 
             <div className="pl-3 my-2">
@@ -36,12 +36,12 @@ const Preferences = () => {
           </div>
 
           <div className=" flex">
-            <label class="switch relative inline-block w-[30px] h-[10px] my-3">
+            <label className="switch relative inline-block w-[30px] h-[10px] my-3">
               <input
                 type="checkbox"
                 className="opacity-0 w-0 h-0 toggle-checkbox"
               />
-              <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
+              <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
             </label>
 
             <div className="pl-3 my-2">
@@ -55,12 +55,12 @@ const Preferences = () => {
           </div>
 
           <div className=" flex">
-            <label class="switch relative inline-block w-[30px] h-[10px] my-3">
+            <label className="switch relative inline-block w-[30px] h-[10px] my-3">
               <input
                 type="checkbox"
                 className="opacity-0 w-0 h-0 toggle-checkbox"
               />
-              <span class="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
+              <span className="slider round absolute cursor-pointer top-0 right-0 left-0 bottom-0 rounded-[4px] slider2"></span>
             </label>
 
             <div className="pl-3 my-2">
