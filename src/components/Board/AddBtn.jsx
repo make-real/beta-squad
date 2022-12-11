@@ -4,7 +4,7 @@ import { Bars2Icon, PlusIcon } from '@heroicons/react/24/outline';
 
 // This <Component /> called by 🟨🟨🟨 Board.jsx 🟨🟨🟨
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
+const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
     const [userInput, setUserInput] = useState('');
     const [inputToggle, setInputToggle] = useState(false);
 
@@ -29,7 +29,9 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
             className={`${
                 btnText === 'card'
                     ? 'w-full rounded-b-2xl pb-4'
-                    : 'w-72 rounded-2xl bg-[#ECECEC]/[0.4] '
+                    : `${
+                          showType === 'grid' ? 'w-72' : 'w-full'
+                      } rounded-2xl bg-[#ECECEC]/[0.4] `
             }`}
         >
             {inputToggle ? (
@@ -78,18 +80,30 @@ const AddBtn = ({ onSubmit, btnText, placeHolder }) => {
                     className="space-x-3 px-3 py-2"
                     onClick={() => setInputToggle(true)}
                 >
-                    <span
-                        className={`flex ${
-                            btnText === 'card'
-                                ? 'justify-center'
-                                : 'justify-start'
-                        } items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
-                    >
-                        <PlusIcon
-                            className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
-                        />
-                        <p className="text-[#818892] text-sm">Add {btnText}</p>
-                    </span>
+                    {showType === 'grid' ? (
+                        <span
+                            className={`flex ${
+                                btnText === 'card'
+                                    ? 'justify-center'
+                                    : 'justify-start'
+                            } items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
+                        >
+                            <PlusIcon
+                                className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
+                            />
+                            <p className="text-[#818892] text-sm">
+                                Add {btnText}
+                            </p>
+                        </span>
+                    ) : (
+                        <span
+                            className={`flex justify-center items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
+                        >
+                            <PlusIcon
+                                className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
+                            />
+                        </span>
+                    )}
                 </div>
             )}
         </div>

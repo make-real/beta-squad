@@ -22,7 +22,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
     const TabsScreen = {
         messages: <p>Messages</p>,
-        board: <Board selectedSpaceId={selectedSpaceId} />,
+        board: <Board selectedSpaceId={selectedSpaceId} showType={showType} />,
         members: <p>Members</p>,
     };
 

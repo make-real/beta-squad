@@ -1,7 +1,6 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
 import { AddBtn, Card, BoardListSettingDropDown } from '.';
 import { addCardIntoBoardList } from '../../hooks/useFetch';
-import { DotsSingle } from '../../assets/icons';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -12,7 +11,7 @@ import 'tippy.js/dist/tippy.css';
 import Draggable from '../Draggable';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 
-const BoardList = ({ boardList }) => {
+const BoardList = ({ showType, boardList }) => {
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
@@ -114,7 +113,6 @@ const BoardList = ({ boardList }) => {
                                 key={card._id}
                                 card={card}
                                 listID={boardList?._id}
-                                listName={boardList?.name}
                             />
                         </div>
                     )}
@@ -122,6 +120,7 @@ const BoardList = ({ boardList }) => {
             </div>
 
             <AddBtn
+                showType={showType}
                 placeHolder="Enter card name"
                 btnText="card"
                 onSubmit={(text) => handleCardCreation(text)}
