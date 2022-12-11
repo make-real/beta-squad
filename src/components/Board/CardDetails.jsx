@@ -342,8 +342,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
-    const checked = card.checkList?.filter((item) => item?.checked);
-    const unchecked = card.checkList?.filter((item) => !item?.checked);
+    const checked = card?.checkList?.filter((item) => item?.checked);
+    const unchecked = card?.checkList?.filter((item) => !item?.checked);
 
     if (!card) {
         return (
@@ -356,8 +356,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             </section>
         );
     }
-
-
 
     return (
         <>
@@ -599,7 +597,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         <div className="relative flex w-full h-2 bg-slate-300 rounded-full">
                                             <div
                                                 style={{
-                                                    backgroundColor: "#5DD2D3",
+                                                    backgroundColor: '#5DD2D3',
                                                     width:
                                                         (checked.length /
                                                             (checked.length +
