@@ -1,33 +1,35 @@
-import React from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
-import { useState } from "react";
-import Projects from "./Projects/Projects";
-import SquadMembers from "./SquadMembers/SquadMembers";
-import BackArrowIcon from "../../assets/back_arrow.svg";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import SearchIcon from '../../assets/search.svg';
+import GridIcon from '../../assets/icon_component/Grid';
+import RowVerticalIcon from '../../assets/icon_component/RowVertical';
+import { useState } from 'react';
+import Projects from './Projects/Projects';
+import SquadMembers from './SquadMembers/SquadMembers';
+import BackArrowIcon from '../../assets/back_arrow.svg';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     setSelectedSpaceId,
     setSelectedSpaceObject,
-} from "../../store/slice/space";
-import FolderIcon from "../../assets/icon_component/Folder";
+} from '../../store/slice/space';
+import FolderIcon from '../../assets/icon_component/Folder';
+import Board from '../Board/Board';
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
-    const [selectedTab, setSelectedTab] = useState("messages");
-    const [showType, setShowType] = useState("grid");
+    const [selectedTab, setSelectedTab] = useState('messages');
+    const [showType, setShowType] = useState('grid');
     const dispatch = useDispatch();
+    const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const TabsScreen = {
         messages: <p>Messages</p>,
-        board: <p>Board</p>,
+        board: <Board selectedSpaceId={selectedSpaceId} />,
         members: <p>Members</p>,
     };
 
     const TabsName = {
-        messages: "Messages",
-        board: "Board",
-        members: "Members",
+        messages: 'Messages',
+        board: 'Board',
+        members: 'Members',
     };
 
     return (
@@ -75,16 +77,16 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         <div className="flex items-center gap-[22px]">
                             <div
                                 className="cursor-pointer"
-                                onClick={() => setShowType("grid")}
+                                onClick={() => setShowType('grid')}
                             >
-                                <GridIcon isSelected={showType === "grid"} />
+                                <GridIcon isSelected={showType === 'grid'} />
                             </div>
                             <div
                                 className="cursor-pointer"
-                                onClick={() => setShowType("stack")}
+                                onClick={() => setShowType('stack')}
                             >
                                 <RowVerticalIcon
-                                    isSelected={showType === "stack"}
+                                    isSelected={showType === 'stack'}
                                 />
                             </div>
                         </div>
@@ -98,8 +100,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                     onClick={() => setSelectedTab(value)}
                                     className={`${
                                         selectedTab === value
-                                            ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                                            : "text-[#818892]"
+                                            ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
+                                            : 'text-[#818892]'
                                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                 >
                                     {TabsName[value]}
