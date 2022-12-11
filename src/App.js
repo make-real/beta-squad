@@ -139,6 +139,7 @@ const App = () => {
           <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="chat/:id" element={<ProtectedRoute> <GroupChat /> </ProtectedRoute>} />
           <Route path="single-chat/:participantID" exact element={<ProtectedRoute> <SingleChat /> </ProtectedRoute>} />
+        <Route/>
           
         <Route
           path="projects"
