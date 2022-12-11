@@ -9,18 +9,23 @@ import ProfileIcon from "../../assets/profile.svg";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { userLogOut } from "../../hooks/useFetch";
+import { useDispatch } from "react-redux";
+import { setSelectedWorkSpaceId } from "../../store/slice/workspace";
 
 const TopNav = () => {
     const [userInfo, setUserInfo] = useState(null);
+    const [jwt, setJwt] = useState(null);
 
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        const jwt = JSON.parse(localStorage.getItem("jwt"));
         setUserInfo(userInfo);
+        setJwt(jwt);
     }, []);
 
     return (
         <div className="bg-white py-[15px] px-[50px] shadow-md min-h-[70px] max-h-[70px] w-full flex">
-            {userInfo ? (
+            {jwt ? (
                 <LoggedInTopNav userInfo={userInfo} />
             ) : (
                 <NotLoggedInTopNav />
@@ -30,9 +35,13 @@ const TopNav = () => {
 };
 
 const LoggedInTopNav = ({ userInfo }) => {
+    const selectedWorkspaceId = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
     const [showDropDownMenu, setShowDropDownMenu] = useState(false);
     const workspaces = useSelector((state) => state.workspace.workspaces);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogOut = async () => {
         try {
@@ -56,14 +65,14 @@ const LoggedInTopNav = ({ userInfo }) => {
             <div className="flex gap-4">
                 <div className="">
                     <h1 className="text-[14px] font-semibold">
-                        {userInfo.fullName}
+                        {userInfo?.fullName}
                     </h1>
                     <p className="text-[12px] text-end text-gray-400">
-                        @{userInfo.username}
+                        @{userInfo?.username}
                     </p>
                 </div>
                 <img
-                    src={userInfo.avatar}
+                    src={userInfo?.avatar}
                     alt=""
                     className="w-[35px] h-[35px] rounded-full"
                 />
@@ -92,7 +101,20 @@ const LoggedInTopNav = ({ userInfo }) => {
                     ) : (
                         workspaces.map((workspace) => {
                             return (
-                                <div className="bg-gray-100 flex items-center gap-3 py-[10px] px-[20px] cursor-pointer">
+                                <div
+                                    onClick={() => {
+                                        dispatch(
+                                            setSelectedWorkSpaceId(
+                                                workspace?._id
+                                            )
+                                        );
+                                    }}
+                                    className={`${
+                                        selectedWorkspaceId === workspace._id
+                                            ? "bg-gray-100"
+                                            : ""
+                                    } flex items-center gap-3 py-[10px] px-[20px] cursor-pointer`}
+                                >
                                     <img
                                         src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
                                         alt=""

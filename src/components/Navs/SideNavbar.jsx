@@ -29,6 +29,9 @@ import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 const SideNavbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
     const [showFullBar, setShowFullBar] = useState(true);
     const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
     const [newWorkSpace, setNewWorkSpace] = useState(false);
@@ -85,8 +88,8 @@ const SideNavbar = () => {
 
                 dispatch(addSpace(data.spaces));
 
-                dispatch(setSelectedSpaceId(data.spaces[0]?._id));
-                dispatch(setSelectedSpaceObject(data.spaces[0]));
+                // dispatch(setSelectedSpaceId(data.spaces[0]?._id));
+                // dispatch(setSelectedSpaceObject(data.spaces[0]));
             } catch (error) {
                 console.log("space selection ==> ", error);
             }
@@ -98,6 +101,9 @@ const SideNavbar = () => {
     const openChat = (id) => {
         navigate("single-chat/" + id);
     };
+
+    console.log(selectedSpace);
+    console.log(allSpaces);
 
     return (
         <>
@@ -136,45 +142,39 @@ const SideNavbar = () => {
                 </div>
                 {/* Workspace */}
                 <div className="mt-[32px] flex flex-col gap-3">
-                    {workspaces.map((workSpace) => {
-                        return (
-                            <div
-                                className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                                    selectedWorkspace === workSpace?._id
-                                        ? "bg-[#6576FF10]"
-                                        : ""
-                                } ${
+                    <div
+                        onClick={() => {
+                            dispatch(setSelectedSpaceId(null));
+                            dispatch(setSelectedSpaceObject(null));
+                        }}
+                        className={`flex items-center gap-3 cursor-pointer py-[10px] ${
+                            selectedSpace ? "" : "bg-[#6576FF10]"
+                        } 
+                                ${
                                     showFullBar
                                         ? "pl-[25px]"
                                         : "pl-[25px] pr-[25px]"
                                 }`}
-                                onClick={() => {
-                                    dispatch(
-                                        setSelectedWorkSpaceId(workSpace?._id)
-                                    );
-                                }}
-                            >
-                                {workSpace.logo ? (
-                                    <div className="w-[32px] h-[32px] ">
-                                        <img
-                                            src={workSpace.logo}
-                                            alt=""
-                                            className="w-full h-full bg-white  border border-[#5951F4] rounded-full"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="w-10 h-10 bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold border">
-                                        {workSpace.name.charAt(0)}
-                                    </div>
-                                )}
-                                {showFullBar && (
-                                    <p className="text-[14px] text-white">
-                                        {workSpace?.name}
-                                    </p>
-                                )}
+                    >
+                        {currentWorkspace?.logo ? (
+                            <div className="w-[32px] h-[32px] ">
+                                <img
+                                    src={currentWorkspace?.logo}
+                                    alt=""
+                                    className="w-full h-full bg-white  border border-[#5951F4] rounded-full"
+                                />
                             </div>
-                        );
-                    })}
+                        ) : (
+                            <div className="w-10 h-10 bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold border">
+                                {currentWorkspace?.name.charAt(0)}
+                            </div>
+                        )}
+                        {showFullBar && (
+                            <p className="text-[14px] text-white">
+                                {currentWorkspace?.name}
+                            </p>
+                        )}
+                    </div>
                 </div>
                 {/* Squad */}
                 <div className="mt-[24px]">
@@ -212,11 +212,15 @@ const SideNavbar = () => {
                         </div>
                     )}
                     {/* Squads List */}
-                    <div className="mt-[20px] flex flex-col gap-[20px]">
+                    <div className="mt-[20px] flex flex-col">
                         {allSpaces.map((space) => {
                             return (
                                 <div
-                                    className={`flex items-center gap-3 cursor-pointer  ${
+                                    className={`flex items-center gap-3 cursor-pointer py-[10px] ${
+                                        selectedSpace === space._id
+                                            ? "bg-[#6576FF10]"
+                                            : ""
+                                    }  ${
                                         showFullBar
                                             ? "pl-[25px]"
                                             : "pl-[25px] pr-[25px]"
@@ -250,11 +254,6 @@ const SideNavbar = () => {
                                 <img
                                     src={SearchIcon}
                                     alt="search"
-                                    className="cursor-pointer"
-                                />
-                                <img
-                                    src={BorderedPlusIcon}
-                                    alt="add"
                                     className="cursor-pointer"
                                 />
                             </div>

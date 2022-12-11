@@ -10,9 +10,13 @@ import MemberRemovedModal from "./Modals/MemberRemovedModal";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { get_space_members } from "../../../api/space";
+import { get_workspace_member } from "../../../api/workSpace";
 
 const SquadMembers = ({ showType }) => {
     const selectedSpace = useSelector((state) => state.space.selectedSpace);
+    const selectedWorkspace = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
 
     const [members, setMembers] = useState([]);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
@@ -46,8 +50,8 @@ const SquadMembers = ({ showType }) => {
 
     const fetchSpaceMembers = async () => {
         try {
-            const { data } = await get_space_members(selectedSpace);
-            setMembers(data.members);
+            const { data } = await get_workspace_member(selectedWorkspace);
+            setMembers(data?.teamMembers);
         } catch (err) {
             console.log("Error occured ==> ", err);
         }
