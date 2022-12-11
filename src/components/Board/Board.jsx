@@ -1,5 +1,4 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { useStyleContext } from '../../context/StyleContext';
 import { addBoardListApiCall, moveCard } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
@@ -9,13 +8,12 @@ import useAxios from '../../api/index';
 import images from '../../assets';
 import { useSelector } from 'react-redux';
 import { filterStatus } from '../../store/slice/board';
+import BoardStackList from './BoardStackList';
 
-const Board = ({ selectedSpaceId }) => {
+const Board = ({ selectedSpaceId, showType }) => {
     const { handleDragEnd, boardLists, setBoardList, addBoardList } =
         useBoardCardContext();
     const { filter } = useSelector((state) => state.board);
-
-    const { margin } = useStyleContext();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -120,9 +118,13 @@ const Board = ({ selectedSpaceId }) => {
         boardCopy = boardCopy.map((brd) => {
             let filteredCard = brd.cards;
             if (filterStatus[filter.status] === 0) {
-                filteredCard = brd?.cards?.filter((card) => card.progress === 0);
+                filteredCard = brd?.cards?.filter(
+                    (card) => card.progress === 0
+                );
             } else if (filterStatus[filter.status] === 4) {
-                filteredCard = brd?.cards?.filter((card) => card.progress === 4);
+                filteredCard = brd?.cards?.filter(
+                    (card) => card.progress === 4
+                );
             } else if (filterStatus[filter.status] === -1) {
                 filteredCard = brd?.cards?.filter(
                     (card) => card.progress < 4 && card.progress > 0
@@ -135,34 +137,59 @@ const Board = ({ selectedSpaceId }) => {
     };
 
     return (
-        <section
-            className={`${margin ? 'ml-[325px]' : 'ml-[50px]'} duration-200 ${
-                selectedSpaceId ? 'overflow-x-auto customScroll' : ''
-            }`}
-        >
+        <section className={`duration-200 overflow-auto customScroll`}>
             {selectedSpaceId ? (
-                <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]">
-                    <DragDropContext onDragEnd={dragEnd}>
-                        {filterdBoardList()
-                            ?.slice(0)
-                            ?.reverse()
-                            ?.map((boardList) => (
-                                <BoardList
-                                    key={boardList._id}
-                                    boardList={boardList}
-                                />
-                            ))}
-                    </DragDropContext>
+                showType === 'grid' ? (
+                    <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
+                        <DragDropContext onDragEnd={dragEnd}>
+                            {filterdBoardList()
+                                ?.slice(0)
+                                ?.reverse()
+                                ?.map((boardList) => (
+                                    <BoardList
+                                        showType={showType}
+                                        key={boardList._id}
+                                        boardList={boardList}
+                                    />
+                                ))}
+                        </DragDropContext>
 
-                    {/*  + Add a list | Button UI */}
-                    <AddBtn
-                        placeHolder="Add list name..."
-                        btnText="list"
-                        onSubmit={(text) =>
-                            handleBoardListCreation(selectedSpaceId, text)
-                        }
-                    />
-                </div>
+                        {/*  + Add a list | Button UI */}
+                        <AddBtn
+                            showType={showType}
+                            placeHolder="Add list name..."
+                            btnText="list"
+                            onSubmit={(text) =>
+                                handleBoardListCreation(selectedSpaceId, text)
+                            }
+                        />
+                    </div>
+                ) : (
+                    <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">
+                        <DragDropContext onDragEnd={dragEnd}>
+                            {filterdBoardList()
+                                ?.slice(0)
+                                ?.reverse()
+                                ?.map((boardList) => (
+                                    <BoardList
+                                        showType={showType}
+                                        key={boardList._id}
+                                        boardList={boardList}
+                                    />
+                                ))}
+                        </DragDropContext>
+
+                        {/*  + Add a list | Button UI */}
+                        <AddBtn
+                            showType={showType}
+                            placeHolder="Add list name..."
+                            btnText="list"
+                            onSubmit={(text) =>
+                                handleBoardListCreation(selectedSpaceId, text)
+                            }
+                        />
+                    </div>
+                )
             ) : (
                 <div className="h-[100vh] w-[calc(100vw - 325px)] flex justify-center flex-col items-center">
                     <img

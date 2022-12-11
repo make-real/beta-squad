@@ -15,22 +15,28 @@ const CardSettingDropDown = ({
     cardID,
     listID,
     cardModal,
+    toggleEdit,
+    setToggleEdit,
 }) => {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     if (cardModal === true) setCardSettingDropDownToggle(false);
 
-    const handleActionDropDownClick = (e) => {
-        e.stopPropagation();
-        progress !== 0 ? setProgress(0) : setProgress(4);
-        setCardSettingDropDownToggle(false);
-        close && close();
-    };
+    // const handleActionDropDownClick = (e) => {
+    //     e.stopPropagation();
+    //     progress !== 0 ? setProgress(0) : setProgress(4);
+    //     setCardSettingDropDownToggle(false);
+    //     close && close();
+    // };
 
     return (
         <div className="w-full rounded-2xl">
             <div
                 className="boardActionDropDown group w-full flex justify-center items-center"
-                onClick={handleActionDropDownClick}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setToggleEdit(!toggleEdit);
+                    close();
+                }}
             >
                 <Edit className="group-hover:text-teal-500" />
                 <span>Edit</span>

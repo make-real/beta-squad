@@ -20,7 +20,7 @@ const randomColor = () => {
 };
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const Card = ({ card, listID, listName }) => {
+const Card = ({ card, listID }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
         useState(false);
@@ -150,6 +150,7 @@ const Card = ({ card, listID, listName }) => {
 
                 <div className="flex justify-between items-center">
                     <p className="text-sm mr-4 text-gray-800">{card.name}</p>
+
                     <div
                         style={{
                             backgroundColor:
@@ -168,6 +169,9 @@ const Card = ({ card, listID, listName }) => {
                         )}
                     </div>
                 </div>
+                <p className="text-sm mr-4 text-gray-800">
+                    {card?.description || 'des'}
+                </p>
                 <div className="pt-5 text-white flex gap-1 flex-wrap">
                     {card?.tags?.length
                         ? card?.tags?.map((tag) => (
