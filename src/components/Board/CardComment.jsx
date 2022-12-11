@@ -60,8 +60,8 @@ const CardMessage = ({ listId, cardId }) => {
   };
 
   return (
-    <div className="flex flex-col w-[45%]">
-      <div class="overflow-y-auto h-full">
+    <div className="flex flex-col w-4/12 transition duration-700 ease-in-out">
+      <div className="overflow-y-auto h-full">
         <div className="my-5">
           <TextMessage
             messageToRespond={responseTo}

@@ -114,6 +114,7 @@ const BoardList = ({ boardList }) => {
                                 key={card._id}
                                 card={card}
                                 listID={boardList?._id}
+                                listName={boardList?.name}
                             />
                         </div>
                     )}

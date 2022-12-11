@@ -1,105 +1,113 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
 
 const BoardCardItem = createContext();
 
 export const BoardCardContext = ({ children }) => {
-  const [target, setTarget] = useState({ bid: "", cid: "" });
+    const [target, setTarget] = useState({ bid: '', cid: '' });
 
-  const [boardLists, setBoardList] = useState([]);
+    const [cardDetails, setCardDetails] = useState({});
 
-  const addBoardList = (newListObj) =>
-    setBoardList((pre) => [newListObj, ...pre]);
+    const [boardLists, setBoardList] = useState([]);
 
-  const removeBoardList = (bid) =>
-    setBoardList((pre) => pre.filter(({ _id }) => _id !== bid));
+    const addBoardList = (newListObj) =>
+        setBoardList((pre) => [newListObj, ...pre]);
 
-  const addCard = (cardObj, bid) => {
-    const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
+    const removeBoardList = (bid) =>
+        setBoardList((pre) => pre.filter(({ _id }) => _id !== bid));
 
-    if (boardIndex < 0) return;
+    const addCard = (cardObj, bid) => {
+        const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
 
-    setBoardList((prev) => {
-      const tempBoard = [...prev];
+        if (boardIndex < 0) return;
 
-      if (!tempBoard[boardIndex].cards) {
-        tempBoard[boardIndex].cards = [];
-      }
+        setBoardList((prev) => {
+            const tempBoard = [...prev];
 
-      tempBoard[boardIndex].cards.push(cardObj);
+            if (!tempBoard[boardIndex].cards) {
+                tempBoard[boardIndex].cards = [];
+            }
 
-      return tempBoard;
-    });
-  };
+            tempBoard[boardIndex].cards.push(cardObj);
 
-  const removeCard = (bid, cid) => {
-    const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
-    if (boardIndex < 0) return;
-
-    const cardIndex = boardLists[boardIndex].cards.findIndex(
-      ({ _id }) => _id === cid
-    );
-    if (cardIndex < 0) return;
-
-    const tempBoard = [...boardLists];
-    tempBoard[boardIndex].cards.splice(cardIndex, 1);
-
-    setBoardList(tempBoard);
-  };
-
-  const updateCard = (bid, cid, newCard) => {
-    const copy = [...boardLists];
-    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
-    if (boardIndex < 0) return;
-    const cardIndex = copy[boardIndex].cards.findIndex(
-      ({ _id }) => _id === cid
-    );
-    if (cardIndex < 0) return;
-    copy[boardIndex].cards[cardIndex] = {
-      ...copy[boardIndex].cards[cardIndex],
-      ...newCard,
+            return tempBoard;
+        });
     };
-    setBoardList(copy);
-  };
 
-  const handleDragEnd = ({ target, targetIndex }, { source, sourceIndex }) => {
-    const board = [...boardLists];
-    const sourceBoard = board[board.findIndex(({ _id }) => _id === source)];
-    const targetBoard = board[board.findIndex(({ _id }) => _id === target)];
+    const removeCard = (bid, cid) => {
+        const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
+        if (boardIndex < 0) return;
 
-    const card = sourceBoard.cards[sourceIndex];
+        const cardIndex = boardLists[boardIndex].cards.findIndex(
+            ({ _id }) => _id === cid
+        );
+        if (cardIndex < 0) return;
 
-    sourceBoard.cards.splice(sourceIndex, 1);
-    targetBoard.cards.splice(targetIndex, 0, card);
-  };
+        const tempBoard = [...boardLists];
+        tempBoard[boardIndex].cards.splice(cardIndex, 1);
 
-  const toggleCardModal = (bid, cid) => {
-    const copy = [...boardLists];
-    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
-    const cardIndex = copy[boardIndex].cards.findIndex(
-      ({ _id }) => _id === cid
+        setBoardList(tempBoard);
+    };
+
+    const updateCard = (bid, cid, newCard) => {
+        const copy = [...boardLists];
+        const boardIndex = copy.findIndex(({ _id }) => _id === bid);
+        if (boardIndex < 0) return;
+        const cardIndex = copy[boardIndex].cards.findIndex(
+            ({ _id }) => _id === cid
+        );
+        if (cardIndex < 0) return;
+        copy[boardIndex].cards[cardIndex] = {
+            ...copy[boardIndex].cards[cardIndex],
+            ...newCard,
+        };
+        setBoardList(copy);
+    };
+
+    const handleDragEnd = (
+        { target, targetIndex },
+        { source, sourceIndex }
+    ) => {
+        const board = [...boardLists];
+        const sourceBoard = board[board.findIndex(({ _id }) => _id === source)];
+        const targetBoard = board[board.findIndex(({ _id }) => _id === target)];
+
+        const card = sourceBoard.cards[sourceIndex];
+
+        sourceBoard.cards.splice(sourceIndex, 1);
+        targetBoard.cards.splice(targetIndex, 0, card);
+    };
+
+    const toggleCardModal = (bid, cid) => {
+        const copy = [...boardLists];
+        const boardIndex = copy.findIndex(({ _id }) => _id === bid);
+        const cardIndex = copy[boardIndex].cards.findIndex(
+            ({ _id }) => _id === cid
+        );
+        copy[boardIndex].cards[cardIndex].modal =
+            !copy[boardIndex].cards[cardIndex].modal;
+        setBoardList(copy);
+    };
+
+    return (
+        <BoardCardItem.Provider
+            value={{
+                boardLists,
+                setBoardList,
+                addBoardList,
+                removeBoardList,
+                addCard,
+                updateCard,
+                removeCard,
+                handleDragEnd,
+                toggleCardModal,
+
+                cardDetails,
+                setCardDetails,
+            }}
+        >
+            {children}
+        </BoardCardItem.Provider>
     );
-    copy[boardIndex].cards[cardIndex].modal =
-      !copy[boardIndex].cards[cardIndex].modal;
-    setBoardList(copy);
-  };
-
-  return (
-    <BoardCardItem.Provider
-      value={{
-        boardLists,
-        setBoardList,
-        addBoardList,
-        removeBoardList,
-        addCard,
-        updateCard,
-        removeCard,
-        handleDragEnd,
-        toggleCardModal,
-      }}
-    >
-      {children}
-    </BoardCardItem.Provider>
-  );
 };
 
 export const useBoardCardContext = () => useContext(BoardCardItem);

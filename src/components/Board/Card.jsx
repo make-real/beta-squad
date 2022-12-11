@@ -9,6 +9,10 @@ import {
     CheckIcon,
 } from '@heroicons/react/24/outline';
 import ConfirmDialog from './ConfirmDialog';
+import { cardUpdateApiCall } from '../../hooks/useFetch';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import CardDetails from './CardDetails';
 
 // generate random color
 const randomColor = () => {
@@ -16,17 +20,19 @@ const randomColor = () => {
 };
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const Card = ({ card, listID }) => {
+const Card = ({ card, listID, listName }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
         useState(false);
-    const { updateCard, toggleCardModal } = useBoardCardContext();
+    const { updateCard, toggleCardModal, setCardDetails } =
+        useBoardCardContext();
     const [noteDone, setNoteDone] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [progress, setProgress] = useState(card?.progress);
+    const [visible, setVisible] = useState(false);
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const progressStatus = (progress) => {
         switch (progress) {
@@ -50,11 +56,6 @@ const Card = ({ card, listID }) => {
 
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
-    const handleActionDropDownClick = (e) => {
-        e.stopPropagation();
-        progress === null ? setProgress(0) : setProgress(4);
-    };
-
     // may be problem
     // useEffect(() => {
     //     const cardProgressUpdate = async () => {
@@ -74,6 +75,27 @@ const Card = ({ card, listID }) => {
     //     cardProgressUpdate();
     // }, [card, listID, progress, selectedSpaceId, updateCard]);
 
+    const handleProgressUpdate = async () => {
+        setProgress((pre) => (pre === 4 ? 0 : 4));
+
+        const cardTagObject = { ...card, progress: progress === 0 ? 4 : 0 };
+
+        try {
+            const { data } = await cardUpdateApiCall(
+                selectedSpaceId,
+                listID,
+                card._id,
+                cardTagObject
+            );
+            updateCard(listID, card._id, data.updatedCard);
+        } catch (error) {
+            console.log(error?.response?.data?.issue?.message);
+            toast.error(`${error?.response?.data?.issue?.message}`, {
+                autoClose: 3000,
+            });
+        }
+    };
+
     useEffect(() => {
         document.addEventListener('click', handleClick);
         return () => document.removeEventListener('click', handleClick);
@@ -86,6 +108,7 @@ const Card = ({ card, listID }) => {
 
     const checked = card.checkList?.filter((item) => item?.checked);
     const unchecked = card.checkList?.filter((item) => !item?.checked);
+
     return (
         <>
             <div
@@ -269,18 +292,34 @@ const Card = ({ card, listID }) => {
                         <span className="cursor-pointer">
                             <CheckCircleIcon
                                 className="w-5 h-5"
-                                onClick={handleActionDropDownClick}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleProgressUpdate();
+                                }}
                             />
                         </span>
                     </div>
 
-                    <span
-                        className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer"
-                        onClick={toggle_card_modal}
+                    <Link
+                        onClick={() => {
+                            // toggle_card_modal();
+                            setCardDetails({
+                                card: card,
+                                listID: listID,
+                                noteDone: noteDone,
+                                progress: progress,
+                                setProgress: setProgress,
+                                setBoardModal: toggle_card_modal,
+                                setNoteDone: setNoteDone,
+                            });
+                        }}
+                        to={`/projects/board/${card._id}`}
                     >
-                        <EyeIcon className="mr-2 w-5 h-5" />
-                        <p>View</p>
-                    </span>
+                        <span className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer">
+                            <EyeIcon className="mr-2 w-5 h-5" />
+                            <p>View</p>
+                        </span>
+                    </Link>
                 </div>
             </div>
 
@@ -289,11 +328,10 @@ const Card = ({ card, listID }) => {
                     listID={listID}
                     cardID={card._id}
                     setConfirmModalOpen={setConfirmModalOpen}
-                    setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />
             )}
 
-            {card.modal && (
+            {/* {card.modal && (
                 <CardModal
                     card={card}
                     listID={listID}
@@ -303,7 +341,7 @@ const Card = ({ card, listID }) => {
                     setBoardModal={toggle_card_modal}
                     setNoteDone={setNoteDone}
                 />
-            )}
+            )} */}
         </>
     );
 };
