@@ -1,25 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
-  selectedWorkspace: null,
-  workspaces: [],
+    selectedWorkspace: null,
+    workspaces: [],
+    currentWorkspace: null,
 };
 
-
 export const workspaceSlice = createSlice({
-  name: "workspace",
-  initialState,
-  reducers: {
-    addWorkSpace: (state, { payload }) => {
-      state.workspaces = payload;
+    name: "workspace",
+    initialState,
+    reducers: {
+        addWorkSpace: (state, { payload }) => {
+            state.workspaces = payload;
+        },
+        setSelectedWorkSpaceId: (state, { payload }) => {
+            state.selectedWorkspace = payload;
+            state.currentWorkspace = state.workspaces.filter((workspace) => {
+                return workspace._id === payload;
+            })[0];
+        },
     },
-    setSelectedWorkSpaceId: (state, { payload }) => {
-      state.selectedWorkspace = payload;
-    },
-  },
 });
-
 
 export const { addWorkSpace, setSelectedWorkSpaceId } = workspaceSlice.actions;
 

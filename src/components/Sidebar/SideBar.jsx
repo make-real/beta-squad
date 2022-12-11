@@ -63,6 +63,8 @@ const SideBar = () => {
   );
   const [members, setMembers] = useState([]);
 
+  console.log(userMenu);
+
   useEffect(() => {
     if (selectedWorkspace) {
       getSpaceMember();
@@ -122,17 +124,16 @@ const SideBar = () => {
     <>
       <section className={`fixed top-0 bottom-0 bg-gray-800 flex`}>
         {/* 🟨🟨🟨 always visible sidebar 🟨🟨🟨 */}
-        <div className="flex flex-col items-center bg-[#293c4f] w-[50px] pt-2  ">
+        <div className='flex flex-col items-center bg-[#293c4f] w-[50px] pt-2  '>
           {margin ? (
             <>
-              <div className="space-y-1">
+              <div className='space-y-1'>
                 {workspaces?.map((workSpace) => (
                   <Tippy
                     key={workSpace?._id}
-                    placement="right"
+                    placement='right'
                     content={workSpace?.name}
-                    className="bg-gray-600/70 text-[10px] w-40"
-                  >
+                    className='bg-gray-600/70 text-[10px] w-40'>
                     {/* if selected ==> bg-sideBarTextColor  |  hover:bg-[#4D6378]*/}
                     <div
                       className={`relative ml-1.5 mr-1 p-1.5 rounded-[5px] cursor-pointer duration-200 
@@ -143,16 +144,15 @@ const SideBar = () => {
                       }`}
                       onClick={() =>
                         dispatch(setSelectedWorkSpaceId(workSpace?._id))
-                      }
-                    >
+                      }>
                       {workSpace.logo ? (
                         <img
                           src={workSpace.logo}
-                          alt="searchIcon"
-                          className="rounded-[4px]"
+                          alt='searchIcon'
+                          className='rounded-[4px]'
                         />
                       ) : (
-                        <div className="w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold">
+                        <div className='w-10 h-10 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-300 font-bold'>
                           {workSpace.name.charAt(0)}
                         </div>
                       )}
@@ -164,44 +164,50 @@ const SideBar = () => {
               {/* ➕➕➕ Creating New Work-Space ➕➕➕ by opening Modal ➕➕➕ */}
               <div
                 onClick={() => setNewWorkSpace(true)}
-                className="w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group"
-              >
-                <Plus className="text-white duration-200 group-hover:text-purple-300 hover: " />
+                className='w-10 h-10 mt-2 bg-[#1f2e3d] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] group'>
+                <Plus className='text-white duration-200 group-hover:text-purple-300 hover: ' />
               </div>
             </>
           ) : (
             <>
-              <OpenMenuBtn
-                width={28}
-                height={28}
-                onClick={() => setMargin(true)}
-                className="cursor-pointer text-gray-400 hover:text-gray-50"
-              />
+              <span
+                className={` ${
+                  !userMenu.isOpen
+                    ? "rotate-menu-open"
+                    : console.log(userMenu.isOpen)
+                }`}>
+                <OpenMenuBtn
+                  width={28}
+                  height={28}
+                  onClick={() => setMargin(true)}
+                  className={`cursor-pointer text-gray-400 hover:text-gray-50`}
+                />
+              </span>
 
               {/* sidebar mene open command, but css disturb me :( */}
               {/* onClick={() => { setUserMenu((pre) => ({ isOpen: !pre.isOpen, sideBar: true })) }} */}
 
-              <div className="mt-3 mb-2">
+              <div className='mt-3 mb-2'>
                 <img
-                  alt="userImage"
+                  alt='userImage'
                   src={
                     userImg
                       ? userImg
                       : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                   }
-                  className="w-6 h-6 rounded-full cursor-pointer"
+                  className='w-6 h-6 rounded-full cursor-pointer'
                 />
               </div>
 
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <div className='w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center'>
                 <Search />
               </div>
 
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <div className='w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center'>
                 <Task />
               </div>
 
-              <div className="w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center">
+              <div className='w-10 h-10 mt-2 rounded-md hover:bg-[#3a4b5e] cursor-pointer flex justify-center items-center'>
                 <OverWatch />
               </div>
             </>
@@ -212,15 +218,14 @@ const SideBar = () => {
         <div
           className={`${
             !margin ? "hidden" : "w-[275px]"
-          } bg-[#202F3E] duration-200`}
-        >
-          <div className="flex items-center justify-between bg-[#162432] pr-3 pl-5">
-            <div className="flex items-center space-x-4 py-2 relative">
+          } bg-[#202F3E] duration-200`}>
+          <div className='flex items-center justify-between bg-[#162432] pr-3 pl-5'>
+            <div className='flex items-center space-x-4 py-2 relative'>
               <Dropdown
-                position="bottom left"
+                position='bottom left'
                 width={230}
                 button={
-                  <div className="cursor-pointer">
+                  <div className='cursor-pointer'>
                     <Avatar user={user} />
                   </div>
                 }
@@ -232,11 +237,11 @@ const SideBar = () => {
                 )}
               />
               <Dropdown
-                position="bottom left"
+                position='bottom left'
                 width={500}
                 button={
-                  <div className=" cursor-pointer flex justify-center items-center">
-                    <SMS className="text-[#1F2E3D] hover:text-gray-200" />
+                  <div className=' cursor-pointer flex justify-center items-center'>
+                    <SMS className='text-[#1F2E3D] hover:text-gray-200' />
                   </div>
                 }
                 menu={() => (
@@ -244,11 +249,11 @@ const SideBar = () => {
                 )}
               />
               <Dropdown
-                position="bottom left"
+                position='bottom left'
                 width={450}
                 button={
-                  <div className=" cursor-pointer flex justify-center items-center">
-                    <Bell className="text-[#1F2E3D] hover:text-gray-200" />
+                  <div className=' cursor-pointer flex justify-center items-center'>
+                    <Bell className='text-[#1F2E3D] hover:text-gray-200' />
                   </div>
                 }
                 menu={() => (
@@ -262,18 +267,17 @@ const SideBar = () => {
             {/* <p className="capitalize text-gray-500 text-sm">make real</p> */}
 
             <div
-              className="cursor-pointer"
+              className='cursor-pointer'
               onClick={() => {
                 setMargin(false);
                 setUserMenu(false);
                 setUserNotificationBell(false);
                 setUserNotificationSMS(false);
-              }}
-            >
+              }}>
               <CloseMenuBtn
                 width={24}
                 height={24}
-                className="text-gray-400 hover:text-gray-50"
+                className='text-gray-400 hover:text-gray-50'
               />
             </div>
           </div>
@@ -303,24 +307,22 @@ const SideBar = () => {
             </p>
           </div> */}
 
-          <div className="overflow-y-auto h-full">
-            <div className="flex w-full items-center m-3 justify-between pr-4">
+          <div className='overflow-y-auto h-full'>
+            <div className='flex w-full items-center m-3 justify-between pr-4'>
               {/* 🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎🔎 */}
               <div
-                className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900"
-                onClick={() => setSpaceSearchModal(true)}
-              >
-                <p className="text-sideBarTextColor font-bold w-full text-sm">
+                className='hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full active:bg-slate-900'
+                onClick={() => setSpaceSearchModal(true)}>
+                <p className='text-sideBarTextColor font-bold w-full text-sm'>
                   YOUR SPACES
                 </p>
                 <Search />
               </div>
 
               <div
-                className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200 active:bg-slate-900"
-                onClick={() => setCreateSpaceModal(true)}
-              >
-                <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor" />
+                className='flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200 active:bg-slate-900'
+                onClick={() => setCreateSpaceModal(true)}>
+                <Plus className='cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor' />
               </div>
             </div>
 
@@ -333,30 +335,28 @@ const SideBar = () => {
           </div> */}
 
             {/* 🟨🟨🟨 User Space Join List 🟨🟨🟨 */}
-            <div className="ml-3">
+            <div className='ml-3'>
               {allSpaces?.map((space) => (
                 <div
                   key={space._id}
-                  className="flex pr-2 items-center group"
+                  className='flex pr-2 items-center group'
                   onClick={() => {
                     dispatch(setSelectedSpaceId(space._id));
                     dispatch(setSelectedSpaceObject(space));
-                    navigate('/projects')
-                  }}
-                >
+                    navigate("/projects");
+                  }}>
                   {/* <DotsDouble className="w-5 h-5 invisible group-hover:visible cursor-grab" /> */}
 
                   <div
                     className={`w-full flex items-center px-2.5 py-2 mb-2 hover:bg-[#344453] space-x-3 cursor-pointer rounded-lg ${
                       selectedSpace === space._id ? "bg-gray-600" : ""
-                    } `}
-                  >
+                    } `}>
                     {space.privacy.includes("private") ? (
                       <SpaceLogoLock color={space.color || "#57BEC7"} />
                     ) : (
                       <SpaceLogo color={space.color || "#57BEC7"} />
                     )}
-                    <p className="text-sm text-sideBarTextColor font-bold">
+                    <p className='text-sm text-sideBarTextColor font-bold'>
                       {space.name}
                     </p>
                   </div>
@@ -364,16 +364,16 @@ const SideBar = () => {
               ))}
             </div>
 
-            <div className="flex w-full items-center m-3 justify-between pr-4">
-              <div className="hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full ">
-                <p className="text-sideBarTextColor font-bold w-full text-sm">
+            <div className='flex w-full items-center m-3 justify-between pr-4'>
+              <div className='hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full '>
+                <p className='text-sideBarTextColor font-bold w-full text-sm'>
                   CHATS
                 </p>{" "}
                 <Search />
               </div>
 
-              <div className="flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200">
-                <Plus className="cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor active:bg-slate-900" />
+              <div className='flex items-center justify-center cursor-pointer p-2 hover:bg-[#344453] rounded-lg duration-200'>
+                <Plus className='cursor-pointer text-gray-600 w-5 h-5 p-1 rounded-full bg-sideBarTextColor active:bg-slate-900' />
               </div>
             </div>
 
@@ -382,11 +382,10 @@ const SideBar = () => {
               {members.map((item) => (
                 <div
                   onClick={() => openChat(item._id)}
-                  className="flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group"
-                >
-                  <div className="flex items-center space-x-3">
+                  className='flex items-center justify-between p-2.5 mr-2 ml-3.5 hover:bg-[#344453] cursor-pointer rounded-lg group'>
+                  <div className='flex items-center space-x-3'>
                     <Avatar user={item} />
-                    <p className="capitalize text-sideBarTextColor font-bold text-sm">
+                    <p className='capitalize text-sideBarTextColor font-bold text-sm'>
                       {item.fullName}
                     </p>
                   </div>
