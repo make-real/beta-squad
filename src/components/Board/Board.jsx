@@ -84,7 +84,7 @@ const Board = ({ selectedSpaceId }) => {
         let boardCopy = [...boardLists];
 
         boardCopy = boardCopy.map((brd) => {
-            const filteredCard = brd.cards.filter((card) => {
+            const filteredCard = brd?.cards?.filter((card) => {
                 if (filter.assignee.length) {
                     let exist = false;
                     card.assignee.forEach((assignee) => {
@@ -101,7 +101,7 @@ const Board = ({ selectedSpaceId }) => {
         });
 
         boardCopy = boardCopy.map((brd) => {
-            const filteredCard = brd.cards.filter((card) => {
+            const filteredCard = brd?.cards?.filter((card) => {
                 if (filter.tags.length) {
                     let exist = false;
                     card.tags.forEach((tag) => {
@@ -120,11 +120,11 @@ const Board = ({ selectedSpaceId }) => {
         boardCopy = boardCopy.map((brd) => {
             let filteredCard = brd.cards;
             if (filterStatus[filter.status] === 0) {
-                filteredCard = brd.cards.filter((card) => card.progress === 0);
+                filteredCard = brd?.cards?.filter((card) => card.progress === 0);
             } else if (filterStatus[filter.status] === 4) {
-                filteredCard = brd.cards.filter((card) => card.progress === 4);
+                filteredCard = brd?.cards?.filter((card) => card.progress === 4);
             } else if (filterStatus[filter.status] === -1) {
-                filteredCard = brd.cards.filter(
+                filteredCard = brd?.cards?.filter(
                     (card) => card.progress < 4 && card.progress > 0
                 );
             }

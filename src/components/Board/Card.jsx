@@ -11,6 +11,8 @@ import {
 import ConfirmDialog from './ConfirmDialog';
 import { cardUpdateApiCall } from '../../hooks/useFetch';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import CardDetails from './CardDetails';
 
 // generate random color
 const randomColor = () => {
@@ -18,14 +20,15 @@ const randomColor = () => {
 };
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const Card = ({ card, listID }) => {
+const Card = ({ card, listID, listName }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
         useState(false);
-    const { updateCard, toggleCardModal } = useBoardCardContext();
+    const { updateCard, toggleCardModal, setCardDetails } =
+        useBoardCardContext();
     const [noteDone, setNoteDone] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [progress, setProgress] = useState(card?.progress);
+    const [visible, setVisible] = useState(false);
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
@@ -105,8 +108,6 @@ const Card = ({ card, listID }) => {
 
     const checked = card.checkList?.filter((item) => item?.checked);
     const unchecked = card.checkList?.filter((item) => !item?.checked);
-
-    console.log(card );
 
     return (
         <>
@@ -299,13 +300,26 @@ const Card = ({ card, listID }) => {
                         </span>
                     </div>
 
-                    <span
-                        className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer"
-                        onClick={toggle_card_modal}
+                    <Link
+                        onClick={() => {
+                            toggle_card_modal();
+                            setCardDetails({
+                                card: card,
+                                listID: listID,
+                                noteDone: noteDone,
+                                progress: progress,
+                                setProgress: setProgress,
+                                setBoardModal: toggle_card_modal,
+                                setNoteDone: setNoteDone,
+                            });
+                        }}
+                        to={`/projects/board/${card._id}`}
                     >
-                        <EyeIcon className="mr-2 w-5 h-5" />
-                        <p>View</p>
-                    </span>
+                        <span className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer">
+                            <EyeIcon className="mr-2 w-5 h-5" />
+                            <p>View</p>
+                        </span>
+                    </Link>
                 </div>
             </div>
 
@@ -318,7 +332,7 @@ const Card = ({ card, listID }) => {
             )}
 
             {card.modal && (
-                <CardModal
+                <CardDetails
                     card={card}
                     listID={listID}
                     noteDone={noteDone}

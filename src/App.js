@@ -13,6 +13,8 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import SingleChat from "./components/Chat/Single/Chat";
 import GroupChat from "./components/Chat/Group/Chat";
+import { CardModal } from "./components/Board";
+import CardDetails from "./components/Board/CardDetails";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -54,6 +56,7 @@ const App = () => {
         <Route path="projects" element={<ProtectedRoute> <Layout selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>}>
           <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
           <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
+          <Route path="board/:id" element={<ProtectedRoute> <CardDetails /> </ProtectedRoute>} />
           <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
           <Route path="chat/:id" element={<ProtectedRoute> <GroupChat /> </ProtectedRoute>} />
           <Route path="single-chat/:participantID" exact element={<ProtectedRoute> <SingleChat /> </ProtectedRoute>} />
