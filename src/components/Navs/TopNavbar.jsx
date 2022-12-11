@@ -11,6 +11,10 @@ import { useSelector } from "react-redux";
 import { userLogOut } from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
 import { setSelectedWorkSpaceId } from "../../store/slice/workspace";
+import {
+    setSelectedSpaceId,
+    setSelectedSpaceObject,
+} from "../../store/slice/space";
 
 const TopNav = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -108,6 +112,9 @@ const LoggedInTopNav = ({ userInfo }) => {
                                                 workspace?._id
                                             )
                                         );
+                                        dispatch(setSelectedSpaceId(null));
+                                        dispatch(setSelectedSpaceObject(null));
+                                        navigate("/projects");
                                     }}
                                     className={`${
                                         selectedWorkspaceId === workspace._id
