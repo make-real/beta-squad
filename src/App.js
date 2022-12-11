@@ -25,6 +25,10 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import SingleChat from "./components/Chat/Single/Chat";
 
+import GroupChat from "./components/Chat/Group/Chat";
+import { CardModal } from "./components/Board";
+import CardDetails from "./components/Board/CardDetails";
+
 import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
 import { useEffect } from "react";
@@ -128,6 +132,15 @@ const App = () => {
           />
         </Route>
 
+        <Route path="projects" element={<ProtectedRoute> <Layout selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>}>
+          <Route index element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
+          <Route path="kanban" element={<ProtectedRoute> <Board selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
+          <Route path="board/:id" element={<ProtectedRoute> <CardDetails /> </ProtectedRoute>} />
+          <Route path="list" element={<ProtectedRoute> <CardAsList selectedSpaceId={selectedSpaceId} /> </ProtectedRoute>} />
+          <Route path="chat/:id" element={<ProtectedRoute> <GroupChat /> </ProtectedRoute>} />
+          <Route path="single-chat/:participantID" exact element={<ProtectedRoute> <SingleChat /> </ProtectedRoute>} />
+        <Route/>
+          
         <Route
           path="projects"
           element={
@@ -177,6 +190,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
           {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
         </Route>

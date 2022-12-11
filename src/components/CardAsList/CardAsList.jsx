@@ -249,7 +249,7 @@ const CardAsList = ({ selectedSpaceId }) => {
               className="py-3 px-4 cursor-pointer"
               onClick={() => setFilterBy("name")}
             >
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <p>Card Name</p>
                 <img className="w-3 h-3 ml-2" src={sort} />
               </div>
@@ -259,7 +259,7 @@ const CardAsList = ({ selectedSpaceId }) => {
               className="py-3 px-4 text-center cursor-pointer"
               onClick={() => setFilterBy("endDate")}
             >
-              <div class="flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <p>Date</p>
                 <img className="w-3 h-3 ml-2" src={sort} />
               </div>
@@ -268,7 +268,7 @@ const CardAsList = ({ selectedSpaceId }) => {
               className="py-3 px-4 text-center cursor-pointer"
               onClick={() => setFilterBy("progress")}
             >
-              <div class="flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <p>Progress</p>
                 <img className="w-3 h-3 ml-2" src={sort} />
               </div>
