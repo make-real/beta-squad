@@ -6,9 +6,9 @@ import {
     Register,
     Login,
     Layout,
-    Profile,
+    // Profile,
     DeveloperConsole,
-    ManageWorkspace,
+    // ManageWorkspace,
     UserSettingLayout,
     Preferences,
     PageNotFound,
@@ -27,6 +27,8 @@ import SingleChat from "./components/Chat/Single/Chat";
 import GroupChat from "./components/Chat/Group/Chat";
 import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
+import ManageWorkspace from "./components/ManageWorkspace/ManageWorkspace";
+import Profile from "./components/Profile/Profile";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -69,7 +71,7 @@ const App = () => {
                     }
                 />
 
-                <Route
+                {/* <Route
                     path="settings"
                     element={
                         <ProtectedRoute>
@@ -122,6 +124,32 @@ const App = () => {
                         element={
                             <ProtectedRoute>
                                 <Tags />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Route> */}
+
+                <Route
+                    path="settings"
+                    element={
+                        <ProtectedRoute>
+                            <Layout selectedSpaceId={selectedSpaceId} />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route
+                        path="manage-workspace"
+                        element={
+                            <ProtectedRoute>
+                                <ManageWorkspace />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="profile"
+                        element={
+                            <ProtectedRoute>
+                                <Profile />
                             </ProtectedRoute>
                         }
                     />

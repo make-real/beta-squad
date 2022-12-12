@@ -31,7 +31,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     };
 
     return (
-        <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#EAECFF] h-full flex flex-col">
+        <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
             <div className="flex items-center">
                 <div
                     onClick={() => {
