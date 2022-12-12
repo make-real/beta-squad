@@ -48,6 +48,7 @@ const SideNavbar = () => {
     const { workspaces, selectedWorkspace } = useSelector(
         (state) => state.workspace
     );
+
     const [members, setMembers] = useState([]);
 
     const location = useLocation();

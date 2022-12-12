@@ -1,8 +1,8 @@
 import {
     Board,
-    Calender,
+    // Calender,
     Chat,
-    Timeline,
+    // Timeline,
     Register,
     Login,
     Layout,
@@ -29,6 +29,7 @@ import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
 import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
 import ProfileScreen from "./components/Profile/Profile";
+
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -155,7 +156,7 @@ const App = () => {
                     />
                 </Route>
 
-                <Route
+                {/* <Route
                     path="projects"
                     element={
                         <ProtectedRoute>
@@ -167,7 +168,7 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                <Home />
+                                <Chat />
                             </ProtectedRoute>
                         }
                     />
@@ -176,6 +177,14 @@ const App = () => {
                         element={
                             <ProtectedRoute>
                                 <Board selectedSpaceId={selectedSpaceId} />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="board/:id"
+                        element={
+                            <ProtectedRoute>
+                                <CardDetails />
                             </ProtectedRoute>
                         }
                     />
@@ -204,6 +213,64 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
+                </Route> */}
+                <Route
+                    path="projects"
+                    element={
+                        <ProtectedRoute>
+                            <Layout selectedSpaceId={selectedSpaceId} />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route
+                        index
+                        element={
+                            <ProtectedRoute>
+                                <Home />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="kanban"
+                        element={
+                            <ProtectedRoute>
+                                <Board selectedSpaceId={selectedSpaceId} />
+                            </ProtectedRoute>
+                        }
+                    />{' '}
+                    <Route
+                        path="board/:id"
+                        element={
+                            <ProtectedRoute>
+                                <CardDetails />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="list"
+                        element={
+                            <ProtectedRoute>
+                                <CardAsList selectedSpaceId={selectedSpaceId} />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/projects/chats"
+                        element={
+                            <ProtectedRoute>
+                                <Chat />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="single-chat/:participantID"
+                        exact
+                        element={
+                            <ProtectedRoute>
+                                <SingleChat />
+                            </ProtectedRoute>
+                        }
+                    />
                     {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
                 </Route>
@@ -212,7 +279,7 @@ const App = () => {
             </Routes>
 
             {/* theme="dark" */}
-            <ToastContainer theme="colored" style={{ fontSize: "18px" }} />
+            <ToastContainer theme="colored" style={{ fontSize: '18px' }} />
         </main>
     );
 };

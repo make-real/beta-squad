@@ -17,7 +17,7 @@ import ConfirmDialog from './ConfirmDialog';
 import AssigneeUser from '../AssigneeUser/AssigneeUser';
 import CardTags from './CardTags';
 import Button from '../Button';
-import CardProgress from './CardProgress';
+// import CardProgress from './CardProgress';
 import Editor from '../Editor';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -33,26 +33,31 @@ import {
     ChatBubbleBottomCenterTextIcon,
     FolderOpenIcon,
 } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+import { useStyleContext } from '../../context/StyleContext';
 
-const CardModal = ({
-    card,
-    listID,
-    noteDone,
-    progress,
-    setProgress,
-    setBoardModal,
-    setNoteDone,
-    progressStatus,
-    handleDataChange = () => {},
-}) => {
+const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
+    const { cardDetails } = useBoardCardContext();
+    const navigate = useNavigate();
+    const { margin } = useStyleContext();
+
+    const card = cardDetails?.card;
+    const listID = cardDetails?.listID;
+    const noteDone = cardDetails?.noteDone;
+    const progress = cardDetails?.progress;
+    const setProgress = cardDetails?.setProgress;
+    const setBoardModal = cardDetails?.setBoardModal;
+    const setNoteDone = cardDetails?.setNoteDone;
+
+    const [toggleEdit, setToggleEdit] = useState(false);
     const [localCard, setLocalCard] = useState({});
     const { updateCard, boardLists } = useBoardCardContext();
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
     const nameOfBoardList = boardLists.find(({ _id }) => _id === listID)?.name;
-    const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
-    const [modalActionToggling, setModalActionToggling] = useState(false);
+    // const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
+    // const [modalActionToggling, setModalActionToggling] = useState(false);
     const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
     const [attachFileLoading, setAttachFileLoading] = useState(false);
     const [deleteAttachFile, setDeleteAttachFile] = useState('');
@@ -92,12 +97,15 @@ const CardModal = ({
         document.addEventListener('keydown', handleEscapeKeyPress);
         return () =>
             document.removeEventListener('keydown', handleEscapeKeyPress);
-    }, []);
+    }, [localCard, setBoardModal]);
 
-    useEffect(
-        () => updateCard(listID, localCard._id, localCard),
-        [listID, card._id, localCard]
-    );
+    // useEffect(
+    //     () => updateCard(listID, localCard._id, localCard),
+    //     [listID, localCard]
+    // );
+    // useEffect(()=>{if(listID|| localCard._id|| localCard){
+    //     updateCard(listID, localCard._id, localCard)
+    // }},[listID, localCard,updateCard])
 
     const handle_card_name_update_enter_btn = async (e) => {
         console.log(e.target.value);
@@ -314,8 +322,8 @@ const CardModal = ({
         handleDataChange();
     };
 
-    const handle_open_assignee_modal = () =>
-        setOpenAssigneeModal((pre) => !pre);
+    // const handle_open_assignee_modal = () =>
+    //     setOpenAssigneeModal((pre) => !pre);
 
     const getHtml = (data) => {
         if (!data) return;
@@ -332,39 +340,86 @@ const CardModal = ({
         }
     };
 
+    const selectedSpaceObj = useSelector(
+        (state) => state.space.selectedSpaceObj
+    );
+    const checked = card?.checkList?.filter((item) => item?.checked);
+    const unchecked = card?.checkList?.filter((item) => !item?.checked);
+
+    console.log({ toggleEdit });
+
+    if (!card) {
+        return (
+            <section
+                className={`${
+                    margin ? 'ml-[325px]' : 'ml-[50px]'
+                } duration-200 p-8 pt-[100px]`}
+            >
+                <div>No card found!</div>
+            </section>
+        );
+    }
+
     return (
         <>
-            <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible">
-                <div className="flex flex-col relative bg-white w-[90%] h-[90vh] max-w-[1800px] rounded-2xl overflow-hidden p-5">
+            {/* <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible"> */}
+            <section
+                className={`duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4]`}
+            >
+                {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
+                {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
+
+                <div className="relative bg-white p-8 rounded-2xl">
                     <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
 
                     <div className="flex items-center justify-between border-b pb-4 border-[#ECECEC]">
                         {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
-                            <div
-                                onClick={() =>
-                                    setProgress((pre) => (pre === 4 ? 0 : 4))
-                                }
-                                className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200"
-                            >
-                                <RightOK />
-                                <span>Done</span>
-                            </div>
+                    <div
+                        onClick={() =>
+                            setProgress((pre) => (pre === 4 ? 0 : 4))
+                        }
+                        className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200"
+                    >
+                        <RightOK />
+                        <span>Done</span>
+                    </div>
 
-                            <div className="flex items-center px-3 pl-4">
-                                <span>Progress:</span>
-                                <div className="ml-4">
-                                    <CardProgress
-                                        progress={progress}
-                                        setProgress={setProgress}
-                                    />
-                                </div>
-                            </div>
-                        </div> */}
+                    <div className="flex items-center px-3 pl-4">
+                        <span>Progress:</span>
+                        <div className="ml-4">
+                            <CardProgress
+                                progress={progress}
+                                setProgress={setProgress}
+                            />
+                        </div>
+                    </div>
+                </div> */}
 
                         <div>
-                            <p className="font-[600] text-xl">Development</p>
+                            {toggleEdit ? (
+                                <input
+                                    title="Hit enter to save!"
+                                    type="text"
+                                    value={localCard?.name}
+                                    onChange={(e) =>
+                                        setLocalCard((pre) => ({
+                                            ...pre,
+                                            name: e.target.value,
+                                        }))
+                                    }
+                                    onKeyDown={
+                                        handle_card_name_update_enter_btn
+                                    }
+                                    className="font-[600] text-xl outline-none border rounded-lg hover:border-gray-400 text-teal-500 bg-gray-50"
+                                />
+                            ) : (
+                                <p className="font-[600] text-xl">
+                                    {card?.name || 'Development'}
+                                </p>
+                            )}
+
                             <p className="font-[400] text-sm text-[#818892]">
-                                On Progress
+                                {nameOfBoardList || 'On Progress'}
                             </p>
                         </div>
 
@@ -428,7 +483,9 @@ const CardModal = ({
                             {/* assignee */}
                             <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1">
                                 <Dropdown
+                                    position={'bottom right'}
                                     width={450}
+                                    style={{ borderRadius: '1rem' }}
                                     button={
                                         <div className="flex gap-2 ml-[15px] items-center">
                                             {localCard.assignee?.length ? (
@@ -485,7 +542,7 @@ const CardModal = ({
                                     <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                 }
                                 width="150px"
-                                style={{ borderRadius: '0.75rem' }}
+                                style={{ borderRadius: '1rem' }}
                                 menu={({ closePopup }) => (
                                     <CardSettingDropDown
                                         close={closePopup}
@@ -495,17 +552,24 @@ const CardModal = ({
                                         listID={listID}
                                         noteDone={noteDone}
                                         setNoteDone={setNoteDone}
-                                        setModalActionToggling={
-                                            setModalActionToggling
-                                        }
-                                        setCardSettingDropDownToggle={
-                                            setModalActionToggling
-                                        }
+                                        toggleEdit={toggleEdit}
+                                        setToggleEdit={setToggleEdit}
+                                        // setModalActionToggling={
+                                        //     setModalActionToggling
+                                        // }
+                                        // setCardSettingDropDownToggle={
+                                        //     setModalActionToggling
+                                        // }
                                     />
                                 )}
                             />
 
-                            <div onClick={() => setBoardModal(localCard)}>
+                            <div
+                                onClick={() => {
+                                    setBoardModal(localCard);
+                                    navigate(-1 || '/projects/kanban');
+                                }}
+                            >
                                 <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                             </div>
                         </div>
@@ -518,35 +582,39 @@ const CardModal = ({
                                 showChat ? 'w-8/12' : 'w-full'
                             } `}
                         >
-                            <div className="overflow-y-auto px-4 h-full">
+                            <div className="overflow-y-auto h-full">
                                 {/* show routing */}
                                 {/* <div className="flex items-center py-4 text-gray-400 ">
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
                                         {selectedSpace.name}
                                     </span>
-                                    <ArrowRight className="mx-2" />
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
                                         {nameOfBoardList}
                                     </span>
                                 </div> */}
 
-                                {/* change name now commented */}
-                                {/* <div className="pt-3">
-                                    <input
-                                        type="text"
-                                        value={localCard?.name}
-                                        onChange={(e) =>
-                                            setLocalCard((pre) => ({
-                                                ...pre,
-                                                name: e.target.value,
-                                            }))
-                                        }
-                                        onKeyDown={
-                                            handle_card_name_update_enter_btn
-                                        }
-                                        className="w-full p-3 outline-none border rounded-md hover:border-gray-400 text-teal-500 font-bold bg-gray-50"
-                                    />
-                                </div> */}
+                                {!!(checked.length + unchecked.length) && (
+                                    <div className="relative flex items-center">
+                                        <div className="relative flex w-full h-2 bg-slate-300 rounded-full">
+                                            <div
+                                                style={{
+                                                    backgroundColor: '#5DD2D3',
+                                                    width:
+                                                        (checked.length /
+                                                            (checked.length +
+                                                                unchecked.length)) *
+                                                            100 +
+                                                        '%',
+                                                }}
+                                                className="h-full rounded-full"
+                                            />
+                                        </div>
+                                        <p className="text-gray-400 text-sm ml-2">
+                                            {checked.length}/
+                                            {checked.length + unchecked.length}
+                                        </p>{' '}
+                                    </div>
+                                )}
 
                                 <CardTags
                                     localCard={localCard}
@@ -564,7 +632,7 @@ const CardModal = ({
                                     </div>
                                     {!editDescription ? (
                                         <div
-                                            className="text-slate-800 border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] hover:border-gray-400 min-h-[100px]"
+                                            className="border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
                                             onClick={() =>
                                                 setEditDescription(
                                                     (prev) => !prev
@@ -589,7 +657,7 @@ const CardModal = ({
                                                     }))
                                                 }
                                             />
-                                            <div className="flex gap-2">
+                                            <div className="flex gap-2 mt-2">
                                                 <Button
                                                     onClick={
                                                         handle_card_description_update_enter_btn
@@ -614,28 +682,45 @@ const CardModal = ({
                                         </>
                                     )}
                                     {/* <input
-                                            type="text"
-                                            className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"
-                                            value={localCard?.description}
-                                            onChange={(e) =>
-                                                setLocalCard((pre) => ({
-                                                ...pre,
-                                                description: e.target.value,
-                                                }))
-                                            }
-                                            onKeyDown={handle_card_description_update_enter_btn}
-                                            /> */}
+                                    type="text"
+                                    className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"
+                                    value={localCard?.description}
+                                    onChange={(e) =>
+                                        setLocalCard((pre) => ({
+                                        ...pre,
+                                        description: e.target.value,
+                                        }))
+                                    }
+                                    onKeyDown={handle_card_description_update_enter_btn}
+                                    /> */}
                                 </div>
 
                                 {/* checklist */}
                                 <div className="py-2">
                                     {/* <div className="flex items-center gap-2 py-2 cursor-pointer w-fit rounded-md duration-200 text-gray-400 group">
-                                        <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{' '}
-                                        <span>Checklist</span>
-                                    </div> */}
+                                <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{' '}
+                                <span>Checklist</span>
+                            </div> */}
                                     <div className="py-2 w-fit text-gray-400  group">
                                         <p className="text-[14px] text-[#818892]">
                                             Checklist
+                                        </p>
+                                    </div>
+
+                                    <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
+                                        <p className="font-[600]">
+                                            Task of{' '}
+                                            {localCard?.startDate &&
+                                                formatDate(
+                                                    localCard.startDate,
+                                                    'MMM, dd'
+                                                )}{' '}
+                                            -{' '}
+                                            {localCard?.endDate &&
+                                                formatDate(
+                                                    localCard.endDate,
+                                                    'MMM, dd'
+                                                )}
                                         </p>
                                     </div>
 
@@ -649,7 +734,7 @@ const CardModal = ({
                                                     >
                                                         <input
                                                             type="checkbox"
-                                                            className="w-4 h-4 cursor-pointer"
+                                                            className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF]"
                                                             defaultChecked={
                                                                 item.checked
                                                             }
@@ -670,16 +755,14 @@ const CardModal = ({
                                                                     item._id
                                                                 )
                                                             }
-                                                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                                                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200"
                                                         />
 
                                                         <Dropdown
                                                             width={120}
-                                                            position="right center"
+                                                            position="left center"
                                                             button={
-                                                                <div className="relative group cursor-pointer px-2 hover:text-red-400">
-                                                                    <DotsSingle />
-                                                                </div>
+                                                                <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                                             }
                                                             menu={() => (
                                                                 <div className="w-full">
@@ -696,8 +779,8 @@ const CardModal = ({
                                                                         </p>
                                                                     </div>
                                                                     {/* <div className="boardActionDropDownSm flex justify-center">
-                                  <p>Assign</p>
-                                </div> */}
+                          <p>Assign</p>
+                        </div> */}
                                                                 </div>
                                                             )}
                                                         />
@@ -707,7 +790,7 @@ const CardModal = ({
 
                                         {newCheckListItemJSX && (
                                             <div className="flex items-center justify-between">
-                                                <input
+                                                {/* <input
                                                     type="checkbox"
                                                     name="check"
                                                     className="w-4 h-4 cursor-pointer"
@@ -718,8 +801,9 @@ const CardModal = ({
                                                     onChange={
                                                         handle_check_list_change
                                                     }
-                                                />
+                                                /> */}
                                                 <input
+                                                    title="Hit enter to save"
                                                     type="text"
                                                     name="content"
                                                     value={
@@ -731,15 +815,13 @@ const CardModal = ({
                                                     onKeyDown={
                                                         handle_check_list_item_enter_btn
                                                     }
-                                                    className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                                                    className="flex-1 mr-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
                                                 />
                                                 <Dropdown
                                                     width={120}
                                                     position="right center"
                                                     button={
-                                                        <div className="px-2 cursor-pointer hover:text-red-400">
-                                                            <DotsSingle />
-                                                        </div>
+                                                        <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                                     }
                                                     menu={() => (
                                                         <div className="w-full">
@@ -761,7 +843,7 @@ const CardModal = ({
                                         )}
 
                                         <Button
-                                            className="bg-[#E4FFED] hover:bg-green-300"
+                                            className="bg-[#E4FFED] hover:bg-green-300 mt-2"
                                             onClick={handle_create_check_list}
                                         >
                                             <p className="flex justify-center items-center text-[15px] text-[#45BA6B]">
@@ -773,25 +855,25 @@ const CardModal = ({
                                 </div>
 
                                 {/* <div className="flex items-center gap-2 py-2 cursor-pointer w-fit rounded-md duration-200 text-gray-400 group">
-                                    <Attachment className="mt-4 mb-4 text-[#B9C3CE] group-hover:text-teal-400" />{' '}
-                                    <span>Attachments</span>
-                                </div> */}
+                            <Attachment className="mt-4 mb-4 text-[#B9C3CE] group-hover:text-teal-400" />{' '}
+                            <span>Attachments</span>
+                        </div> */}
                                 {/* <div className="mt-4 mb-4">
-                <label
-                  htmlFor="file"
-                  className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group"
-                >
-                  <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
-                  Attachments
-                  <input
-                    multiple
-                    id="file"
-                    type="file"
-                    className="hidden"
-                    onChange={handle_card_attachments}
-                  />
-                </label>
-              </div> */}
+        <label
+          htmlFor="file"
+          className="flex items-center gap-2  p-2 px-3 cursor-pointer w-fit rounded-md duration-200 text-gray-400 hover:bg-gray-200  hover:text-teal-400 group"
+        >
+          <Attachment className="text-[#B9C3CE] group-hover:text-teal-400" />
+          Attachments
+          <input
+            multiple
+            id="file"
+            type="file"
+            className="hidden"
+            onChange={handle_card_attachments}
+          />
+        </label>
+      </div> */}
 
                                 <div className="flex items-center py-2 gap-1 flex-wrap">
                                     <div className="py-2 w-fit text-gray-400  group">
@@ -835,10 +917,10 @@ const CardModal = ({
                                                         }
                                                     />
                                                     {/* <div className="text-sm pt-2">
-                          <p>
-                            By <b>{userInfo.username}</b>
-                          </p>
-                        </div> */}
+                  <p>
+                    By <b>{userInfo.username}</b>
+                  </p>
+                </div> */}
                                                 </div>
                                             )
                                         )}
@@ -910,4 +992,4 @@ const CardModal = ({
     );
 };
 
-export default CardModal;
+export default CardDetails;
