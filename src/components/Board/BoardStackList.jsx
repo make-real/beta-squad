@@ -1,16 +1,16 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
-import { AddBtn, Card, BoardListSettingDropDown } from '.';
-import { addCardIntoBoardList } from '../../hooks/useFetch';
-import { useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Dropdown from '../Dropdown';
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { AddBtn, Card, BoardListSettingDropDown } from ".";
+import { addCardIntoBoardList } from "../../hooks/useFetch";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Dropdown from "../Dropdown";
 // import Tippy from '@tippyjs/react';
 // import useAxios from '../../api';
-import 'tippy.js/dist/tippy.css';
-import Draggable from '../Draggable';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
-import CardStack from './CardStack';
+import "tippy.js/dist/tippy.css";
+import Draggable from "../Draggable";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import CardStack from "./CardStack";
 
 const BoardStackList = ({ showType, boardList }) => {
     const dropDownRef = useRef();
@@ -67,7 +67,7 @@ const BoardStackList = ({ showType, boardList }) => {
     };
 
     return (
-        <div className={`w-full mb-2 mr-3 flex flex-col`}>
+        <div className={`w-full mb-2 flex flex-col`}>
             {/* <div className="flex justify-between items-center">
                 <p>Card name</p>
                 <p>Assign</p>
@@ -135,12 +135,14 @@ const BoardStackList = ({ showType, boardList }) => {
                 />
             </div>
 
-            <AddBtn
-                showType={showType}
-                placeHolder="Enter card name"
-                btnText="card"
-                onSubmit={(text) => handleCardCreation(text)}
-            />
+            <div className="bg-[#ECECEC]/[0.4] rounded-2xl">
+                <AddBtn
+                    showType={showType}
+                    placeHolder="Enter card name"
+                    btnText="card"
+                    onSubmit={(text) => handleCardCreation(text)}
+                />
+            </div>
         </div>
     );
 };

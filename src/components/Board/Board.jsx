@@ -137,7 +137,7 @@ const Board = ({ selectedSpaceId, showType }) => {
     };
 
     return (
-        <section className={`duration-200 overflow-auto customScroll`}>
+        <section className={`duration-200 overflow-auto customScroll h-full`}>
             {selectedSpaceId ? (
                 showType === "grid" ? (
                     <div className="py-4 flex gap-3 items-start  min-w-fit h-full">

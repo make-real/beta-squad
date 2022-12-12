@@ -80,7 +80,7 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
                     className="space-x-3 px-3 py-2"
                     onClick={() => setInputToggle(true)}
                 >
-                    {showType === 'grid' ? (
+                    {/* {showType === 'grid' ? ( */}
                         <span
                             className={`flex ${
                                 btnText === 'card'
@@ -95,7 +95,7 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
                                 Add {btnText}
                             </p>
                         </span>
-                    ) : (
+                    {/* ) : (
                         <span
                             className={`flex justify-center items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
                         >
@@ -103,7 +103,7 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
                                 className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
                             />
                         </span>
-                    )}
+                    )} */}
                 </div>
             )}
         </div>
