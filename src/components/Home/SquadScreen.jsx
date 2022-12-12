@@ -70,6 +70,27 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 placeholder='Search here'
                 className=' placeholder:text-[#99A6B9] border-none outline-none'
               />
+    return (
+        <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
+            <div className="flex items-center">
+                <div
+                    onClick={() => {
+                        dispatch(setSelectedSpaceId(null));
+                        dispatch(setSelectedSpaceObject(null));
+                    }}
+                    className="mr-[8px] cursor-pointer"
+                >
+                    <img src={BackArrowIcon} alt="" />
+                </div>
+                <p className=" mr-[12px] font-medium text-[15px] text-[#818892]">
+                    {currentWorkspace?.name}
+                </p>
+                <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
+                    /
+                </p>
+                <p className="text-[#031124] text-[15px] font-medium">
+                    {selectedSpace.name}
+                </p>
             </div>
             <div className='flex items-center gap-[22px]'>
               <div

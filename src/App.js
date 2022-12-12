@@ -13,23 +13,23 @@ import {
     Preferences,
     PageNotFound,
     CardAsList,
-} from './components';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { fetchUserToken } from './util/fetchUserToken';
-import { ToastContainer } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import WorkspaceSettings from './components/UserSettings/WorkspaceSettings';
-import Tags from './components/UserSettings/Tags';
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import SingleChat from './components/Chat/Single/Chat';
+} from "./components";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { fetchUserToken } from "./util/fetchUserToken";
+import { ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+import WorkspaceSettings from "./components/UserSettings/WorkspaceSettings";
+import Tags from "./components/UserSettings/Tags";
+import "react-toastify/dist/ReactToastify.css";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import SingleChat from "./components/Chat/Single/Chat";
+import GroupChat from "./components/Chat/Group/Chat";
+import TopNav from "./components/Navs/TopNavbar";
+import Home from "./components/Home/Home";
+import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
+import ProfileScreen from "./components/Profile/Profile";
 
-import GroupChat from './components/Chat/Group/Chat';
-import CardDetails from './components/Board/CardDetails';
-
-import TopNav from './components/Navs/TopNavbar';
-import Home from './components/Home/Home';
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -72,7 +72,7 @@ const App = () => {
                     }
                 />
 
-                <Route
+                {/* <Route
                     path="settings"
                     element={
                         <ProtectedRoute>
@@ -125,6 +125,32 @@ const App = () => {
                         element={
                             <ProtectedRoute>
                                 <Tags />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Route> */}
+
+                <Route
+                    path="settings"
+                    element={
+                        <ProtectedRoute>
+                            <Layout selectedSpaceId={selectedSpaceId} />
+                        </ProtectedRoute>
+                    }
+                >
+                    <Route
+                        path="manage-workspace"
+                        element={
+                            <ProtectedRoute>
+                                <ManageWorkspaceScreen />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="profile"
+                        element={
+                            <ProtectedRoute>
+                                <ProfileScreen />
                             </ProtectedRoute>
                         }
                     />
