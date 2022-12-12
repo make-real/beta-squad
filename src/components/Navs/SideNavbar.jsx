@@ -53,6 +53,8 @@ const SideNavbar = () => {
 
     const location = useLocation();
 
+    const params = useParams();
+
     const manageWorkspacePage =
         location.pathname === "/settings/manage-workspace";
     const profilePage = location.pathname === "/settings/profile";
@@ -83,7 +85,9 @@ const SideNavbar = () => {
 
                 dispatch(addWorkSpace(data.workspaces));
 
-                dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
+                if (!currentWorkspace) {
+                    dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -95,7 +99,9 @@ const SideNavbar = () => {
     useEffect(() => {
         const getSpaceData = async () => {
             try {
-                const { data } = await get_space_data(selectedWorkspace);
+                const { data } = await get_space_data(
+                    params.id ?? selectedWorkspace
+                );
 
                 dispatch(addSpace(data.spaces));
 
