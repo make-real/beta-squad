@@ -56,7 +56,7 @@ const SideNavbar = () => {
     const manageWorkspacePage =
         location.pathname === "/settings/manage-workspace";
     const profilePage = location.pathname === "/settings/profile";
-    const defaultPage = location.pathname === "/projects";
+    const defaultPage = location.pathname.startsWith("/projects");
 
     useEffect(() => {
         if (selectedWorkspace) {
