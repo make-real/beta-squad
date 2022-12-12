@@ -7,6 +7,11 @@ import DeletingProjectModal from "./Modals/DeletingProjectModal";
 import { useSelector } from "react-redux";
 import EditSquadModal from "./Modals/EditSquadModal";
 import CreateSquadModal from "./Modals/CreateSquadModal";
+import { useDispatch } from "react-redux";
+import {
+    setSelectedSpaceId,
+    setSelectedSpaceObject,
+} from "../../../store/slice/space";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -19,6 +24,7 @@ const Projects = ({ showType }) => {
     const [editProjectData, setEditProjectData] = useState(null);
     const [showEditSquadModal, setShowEditSquadModal] = useState(false);
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+    const dispatch = useDispatch();
 
     const prepareDeleteProject = (projectData) => {
         setDeleteProjectData(projectData);
@@ -48,24 +54,30 @@ const Projects = ({ showType }) => {
         <>
             {showType === "grid" ? (
                 <div className="mt-[30px] flex items-center gap-[30px] flex-wrap">
-                    {allSpaces.map((sapce) => {
+                    {allSpaces.map((space) => {
                         return (
                             <div
                                 style={{
-                                    backgroundColor: sapce.color + "10",
-                                    borderColor: sapce.color,
+                                    backgroundColor: space.color + "10",
+                                    borderColor: space.color,
                                 }}
                                 className={`relative w-[214px] h-[110px] rounded-[16px] border flex items-center px-[17px] gap-[16px]`}
                             >
                                 <EditDeleteMenu
                                     deleteFunc={prepareDeleteProject}
                                     editFunc={prepareEditProject}
-                                    data={sapce}
+                                    data={space}
                                     className="absolute top-[10px] right-[10px]"
                                 />
-                                <FolderIcon style={{ fill: sapce.color }} />
-                                <p className="text-[#424D5B] font-semibold">
-                                    {sapce.name}
+                                <FolderIcon style={{ fill: space.color }} />
+                                <p
+                                    onClick={() => {
+                                        dispatch(setSelectedSpaceId(space._id));
+                                        dispatch(setSelectedSpaceObject(space));
+                                    }}
+                                    className="text-[#424D5B] font-semibold"
+                                >
+                                    {space.name}
                                 </p>
                             </div>
                         );
@@ -100,7 +112,21 @@ const Projects = ({ showType }) => {
                                         <FolderIcon
                                             style={{ fill: space.color }}
                                         />
-                                        <p className="text-[#424D5B] font-semibold">
+                                        <p
+                                            onClick={() => {
+                                                dispatch(
+                                                    setSelectedSpaceId(
+                                                        space._id
+                                                    )
+                                                );
+                                                dispatch(
+                                                    setSelectedSpaceObject(
+                                                        space
+                                                    )
+                                                );
+                                            }}
+                                            className="text-[#424D5B] font-semibold"
+                                        >
                                             {space.name}
                                         </p>
                                     </div>

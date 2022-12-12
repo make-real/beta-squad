@@ -12,7 +12,10 @@ const EditDeleteMenu = ({ className, data, deleteFunc, editFunc }) => {
                 className={`${className} cursor-pointer`}
             />
             <div className="group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[-10px] top-[30px] bg-white normal-shadow rounded-[16px] flex flex-col z-20">
-                <div className="flex items-center gap-[25px] px-[30px] py-[17px] hover:bg-[#FEB45E10] cursor-pointer" onClick={() => editFunc(data)}>
+                <div
+                    className="flex items-center gap-[25px] px-[30px] py-[17px] hover:bg-[#FEB45E10] cursor-pointer"
+                    onClick={() => editFunc(data)}
+                >
                     <img src={PencilIcon} />
                     <p className="font-semibold text-[#031124]">Edit</p>
                 </div>

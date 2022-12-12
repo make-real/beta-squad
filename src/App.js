@@ -14,7 +14,13 @@ import {
     PageNotFound,
     CardAsList,
 } from "./components";
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+    Routes,
+    Route,
+    Navigate,
+    useParams,
+    useNavigate,
+} from "react-router-dom";
 import { fetchUserToken } from "./util/fetchUserToken";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -30,6 +36,11 @@ import Home from "./components/Home/Home";
 import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
 import ProfileScreen from "./components/Profile/Profile";
 import CardDetails from "./components/Board/CardDetails";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
+import { get_space_data, get_workspace_data } from "./api/workSpace";
+import { addSpace } from "./store/slice/space";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -48,9 +59,41 @@ const AuthRoute = ({ children }) => {
     );
 };
 
+const ProjectIdRoute = ({ children }) => {
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
+    const dispatch = useDispatch();
+    if (!currentWorkspace) return children;
+    return <Navigate to={`/projects/${currentWorkspace._id}`} />;
+};
+
+const ProjectRoute = ({ children }) => {
+    const workspaces = useSelector((state) => state.workspace.workspaces);
+    const params = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const getSpaceData = async () => {
+            try {
+                const { data } = await get_space_data(params.id);
+                dispatch(addSpace(data.spaces));
+            } catch (error) {
+                console.log("space selection ==> ", error);
+            }
+        };
+        getSpaceData();
+    }, [dispatch, params]);
+
+    useEffect(() => {
+        dispatch(setSelectedWorkSpaceId(params.id));
+    }, [workspaces, params]);
+
+    return children;
+};
+
 const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-
     return (
         <main className="overflow-hidden">
             <Routes>
@@ -226,7 +269,19 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                <Home />
+                                <ProjectIdRoute>
+                                    <Home />
+                                </ProjectIdRoute>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path=":id"
+                        element={
+                            <ProtectedRoute>
+                                <ProjectRoute>
+                                    <Home />
+                                </ProjectRoute>
                             </ProtectedRoute>
                         }
                     />
