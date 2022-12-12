@@ -370,7 +370,7 @@ const CardDetails = ({
     return (
         <>
             <section
-                className={`fixed inset-0 duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4] flex items-center justify-center`}
+                className={`z-[999] fixed inset-0 duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4] flex items-center justify-center`}
             >
                 {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
                 {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}

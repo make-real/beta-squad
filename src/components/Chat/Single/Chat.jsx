@@ -14,6 +14,7 @@ const SingleChat = () => {
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
     );
+
     const dispatch = useDispatch();
 
     const { selectedWorkspace } = useSelector((state) => state.workspace);
