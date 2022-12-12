@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { Loader } from "../Loader";
 import images from "../../assets";
 import useAuth from "../../hooks/auth";
+import loginImg from "../../assets/images/OBJECTS.svg";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,7 +34,6 @@ const Login = () => {
       // store user (JWT token) + (user ID) into local storage...
       localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
       localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
-      
 
       // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
       setLoginUserInfo(data.loggedUser);
@@ -89,193 +90,112 @@ const Login = () => {
   });
 
   return (
-    <section className="flex">
+    <section className='flex justify-between items-center gap-10 w-[60%] mx-auto'>
       {/* left side */}
-      <div className="w-[455px] min-h-screen text-white bg-cover bg-center bg-[url('/src/assets/images/loginPage.png')]">
-        <div className="pt-[80px]">
-          <h6 className="text-2xl text-center">HeySpace</h6>
-
-          <div className="pt-8 pl-9 pr-4 text-sm relative">
-            <img
-              src={images.signIn1}
-              alt="bg"
-              className="w-52 absolute bottom-36 right-14  "
-            />
-            <img
-              src={images.signIn2}
-              alt="bg2"
-              className="w-96 absolute top-8 left-8"
-            />
-
-            <div className="pt-[70px] pb-10 px-3 mt-72">
-              <h6 className="font-bold">Hey space tip</h6>
-              <p>
-                Did someone say something brilliant? Add his/ her message into
-                to-do list. Just click on arrow icon which shows up when your
-                cursor is in the message.
-              </p>
-            </div>
+      <div className='w-[455px] min-h-screen text-white bg-cover bg-center'>
+        <div className='pt-[80px]'>
+          <div className='pt-8 pl-9 pr-4 text-sm'>
+            <img src={loginImg} alt='bg2' className='w-96 top-8 left-8' />
           </div>
         </div>
       </div>
 
       {/* right side */}
-      <div className="mx-9 pt-[60px] flex-1">
-        <div className="flex justify-end">
-          <h6 className="my-auto text-gray-400 pr-2">Don't have an account?</h6>
-
-          <Link
-            to="/register"
-            className="py-2 px-6 border-2 border-[#C595C6] text-[#C595C6]	 rounded-md "
-          >
-            sign up
-          </Link>
+      <div>
+        <div className='space-y-2 mb-8'>
+          <h2 className='font-bold text-2xl'>Login</h2>
+          <p className='text-gray-500 text-xs'>
+            Don't have an account?{" "}
+            <Link className='text-blue-600' to='/register'>
+              Register
+            </Link>
+          </p>
         </div>
 
-        <div className="w-[400px]  mx-auto mt-8">
-          <h2 className="text-center text-2xl font-bold text-cyan-800	">
-            Sign in to HeySpace
-          </h2>
-          <div
-            onClick={googleAuth}
-            className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900"
-          >
-            {gloader ? (
-              <Loader />
-            ) : (
-              <>
-                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
-                <span className="text-sm">Sign in with Google BD</span>
-              </>
-            )}
-          </div>
-          {/* <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-            render={(renderProps) => (
-              <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
-                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
-                <span className="text-sm">Sign in with Google BD</span>
-              </div>
-            )}
-            // our custom logic set in these function...
-            onSuccess={onSuccess}
-            onFailure={onFailure}
-            cookiePolicy="single_host_origin"
-            isSignedIn={true}
-          /> */}
-
-          {/* 
-          <GoogleLogin
-            clientId={"847086669844-eh638a23fs7oi7ein72gasoq45kcba91.apps.googleusercontent.com"}
-            render={(renderProps) => (
-              <button
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900"
-              >
-                <FcGoogle className="my-auto text-center mr-1.5" />{" "}
-                <span className="text-sm">Sign in with Google</span>
-              </button>
-            )}
-            onSuccess={(data) => {
-              console.log(data);
-            }}
-            onFailure={(error) => {
-              console.log(error);
-            }}
-            cookiePolicy="single_host_origin"
-          />
-          */}
-          {/* <div className="cursor-pointer flex justify-center p-1.5 mt-4 rounded-md bg-gray-50 border hover:bg-gray-200 w-full text-gray-600 hover:text-gray-900">
-            <FcGoogle className="my-auto text-center mr-1.5" />{" "}
-            <span className="text-sm">Sign in with Google</span>
-          </div> */}
-
-          <div className="border-b-2 border-gray-100 pt-5 text-gray-100 relative">
-            <span className="absolute left-1/2 top-1.5 bg-white  px-1.5 -translate-x-1/2 ">
-              or
+        <form className='flex flex-col gap-8 w-96' onSubmit={handleSubmit}>
+          <span>
+            <label className='block text-xs text-gray-500 mb-2' htmlFor='email'>
+              Email
+            </label>
+            <span className='relative'>
+              <img
+                className='absolute left-2 top-1'
+                src={images.emailIcon}
+                alt=''
+              />
+              <input
+                type='email'
+                name='email'
+                id='email'
+                className='bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-blue-600 placeholder:text-xs text-sm'
+                placeholder='Enter email address'
+                onChange={handleUserInput}
+              />
             </span>
-          </div>
-
-          <form className="space-y-5 mt-5" onSubmit={handleSubmit}>
-            <div className="text-sm relative">
-              <label htmlFor="email" className="text-gray-700">
-                Email:
-              </label>
+          </span>
+          <span>
+            <label
+              className='block text-xs text-gray-500 mb-2'
+              htmlFor='password'>
+              Password
+            </label>
+            <span className='relative'>
+              <img
+                className='absolute left-2 top-0.5'
+                src={images.lockIcon}
+                alt=''
+              />
               <input
-                required
-                type="email"
-                name="email"
-                placeholder="email@company.com"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
-                  errorInfo.email && "border-red-500"
-                }`}
+                type='password'
+                name='password'
+                id='password'
+                className='bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm'
+                placeholder='Enter password'
                 onChange={handleUserInput}
               />
-              {errorInfo.email && (
-                <span className="absolute top-[102%] right-0 text-red-500">
-                  {errorInfo.email}
-                </span>
-              )}
-            </div>
 
-            <div className="text-sm relative">
-              <label htmlFor="password" className="text-gray-700">
-                Password:
-              </label>
-              <input
-                required
-                type="password"
-                name="password"
-                placeholder="Password"
-                className={`w-full border rounded-xl py-1.5 px-2 outline-blue-100 ${
-                  errorInfo.password && "border-red-500"
-                }`}
-                onChange={handleUserInput}
+              <img
+                className='absolute right-2 top-[1px]'
+                src={images.hideIcon}
+                alt=''
               />
-              {errorInfo.password && (
-                <span className="absolute top-[102%] right-0 text-red-500">
-                  {errorInfo.password}
-                </span>
-              )}
-            </div>
-
-            <div className="text-center pt-4">
-              <button
-                type="submit"
-                className={`py-2 w-full bg-[#C595C6] text-yellow-50 rounded-lg`}
-              >
-                {loader ? <Loader dark /> : "Sign in"}
-              </button>
-            </div>
-          </form>
-
-          <div className="pt-[80px] text-center">
-            <span className="text-sm ">Companies who love HeySpace</span>
+            </span>
+            {(errorInfo.password || errorInfo.email) && (
+              <span className='flex justify-start items-center gap-1 mt-2'>
+                <RiErrorWarningLine className='text-[#FF3659]' />
+                <p className='text-xs text-[#FF3659]'>
+                  {errorInfo.password || errorInfo.email}
+                </p>
+              </span>
+            )}
+          </span>
+          <div className='flex justify-between items-center w-full'>
+            <span className='flex gap-1'>
+              <input type='checkbox' name='remember' id='remember' />
+              <p className='text-xs text-gray-500'>Remember me</p>
+            </span>
+            <button className='text-xs text-blue-600'>Forgot Password?</button>
           </div>
-
-          <div className="my-4 flex justify-between">
-            <img src={images.timeCamp} alt="" className=" w-[100px] h-7" />
-            <img src={images.remoteCamp} alt="" className=" w-[100px] h-7" />
+          <div>
+            <button className='w-96 py-2.5 text-white text-xs bg-[#6576FF] rounded'>
+              Login
+            </button>
           </div>
-        </div>
+        </form>
+        <button
+          className='w-96 py-2.5 text-[#3699FF] text-xs bg-[#E0F7FF] rounded flex justify-center items-center gap-2 mt-5'
+          onClick={googleAuth}>
+          {gloader ? (
+            <Loader />
+          ) : (
+            <>
+              <img src={images.googleIcon} alt='' /> Sign in with google
+            </>
+          )}
+        </button>
       </div>
     </section>
   );
 };
 
 export default Login;
-
-// "jwtToken": "",
-// "loggedUser": {
-//     "_id":
-//     "fullName":
-//     "username":
-//     "email":
-//     "phone":
-//     "emailVerified":
-//     "phoneVerified":
-//     "createdAt":
-//     "updatedAt":
-//     "__v":
-// }
