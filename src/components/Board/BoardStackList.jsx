@@ -67,7 +67,7 @@ const BoardStackList = ({ showType, boardList }) => {
     };
 
     return (
-        <div className={`w-full mb-2 mr-3 flex flex-col`}>
+        <div className={`w-full mb-2 flex flex-col`}>
             {/* <div className="flex justify-between items-center">
                 <p>Card name</p>
                 <p>Assign</p>
@@ -135,12 +135,14 @@ const BoardStackList = ({ showType, boardList }) => {
                 />
             </div>
 
-            <AddBtn
-                showType={showType}
-                placeHolder="Enter card name"
-                btnText="card"
-                onSubmit={(text) => handleCardCreation(text)}
-            />
+            <div className="bg-[#ECECEC]/[0.4] rounded-2xl">
+                <AddBtn
+                    showType={showType}
+                    placeHolder="Enter card name"
+                    btnText="card"
+                    onSubmit={(text) => handleCardCreation(text)}
+                />
+            </div>
         </div>
     );
 };

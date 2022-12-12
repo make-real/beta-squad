@@ -365,39 +365,13 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     return (
         <>
-            {/* <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible"> */}
             <section
-                className={`duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4]`}
+                className={`duration-200 overflow-auto customScroll p-8 bg-[#031124]/[0.4]`}
             >
-                {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
-                {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
-
                 <div className="relative bg-white p-8 rounded-2xl">
                     <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
 
                     <div className="flex items-center justify-between border-b pb-4 border-[#ECECEC]">
-                        {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
-                    <div
-                        onClick={() =>
-                            setProgress((pre) => (pre === 4 ? 0 : 4))
-                        }
-                        className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-md text-gray-400 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200"
-                    >
-                        <RightOK />
-                        <span>Done</span>
-                    </div>
-
-                    <div className="flex items-center px-3 pl-4">
-                        <span>Progress:</span>
-                        <div className="ml-4">
-                            <CardProgress
-                                progress={progress}
-                                setProgress={setProgress}
-                            />
-                        </div>
-                    </div>
-                </div> */}
-
                         <div>
                             {toggleEdit ? (
                                 <input

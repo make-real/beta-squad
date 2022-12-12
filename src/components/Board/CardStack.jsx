@@ -1,6 +1,5 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { CardModal, CardChip } from '.';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     TrashIcon,
@@ -13,32 +12,18 @@ import ConfirmDialog from './ConfirmDialog';
 import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import CardDetails from './CardDetails';
-import { draftJsToHtml } from '../../util/draftJsToHtml';
-import TaskDatePicker from '../TaskDatePicker';
 import { formatDate } from '../../util/date';
-import Dropdown from '../Dropdown';
 
 // generate random color
 const randomColor = () => {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 };
 
-const CardStack = ({
-    showType,
-    listName,
-    card,
-    listID,
-    handleDataChange = () => {},
-}) => {
-    const dropDownRef = useRef();
-    const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
-        useState(false);
+const CardStack = ({ listName, card, listID }) => {
     const { updateCard, toggleCardModal, setCardDetails } =
         useBoardCardContext();
     const [noteDone, setNoteDone] = useState(false);
     const [progress, setProgress] = useState(card?.progress);
-    const [visible, setVisible] = useState(false);
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
@@ -76,11 +61,6 @@ const CardStack = ({
         }
     };
 
-    const handleClick = (e) => {
-        if (!dropDownRef?.current?.contains(e.target))
-            setCardSettingDropDownToggle(false);
-    };
-
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
     const handleProgressUpdate = async () => {
@@ -104,37 +84,9 @@ const CardStack = ({
         }
     };
 
-    useEffect(() => {
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, []);
-
     const toggle_card_modal = () => {
         console.log('taggling........');
         toggleCardModal(listID, card._id);
-    };
-
-    const checked = card.checkList?.filter((item) => item?.checked);
-    const unchecked = card.checkList?.filter((item) => !item?.checked);
-
-    const changeDate = async (date, card) => {
-        const cardCopy = {
-            ...localCard,
-            startDate: date.start,
-            endDate: date.end,
-        };
-        setLocalCard(cardCopy);
-        try {
-            await cardUpdateApiCall(
-                selectedSpaceId,
-                listID,
-                card._id,
-                cardCopy
-            );
-            handleDataChange();
-        } catch (error) {
-            console.log(error.response.data.issue);
-        }
     };
 
     return (
@@ -179,33 +131,17 @@ const CardStack = ({
                 style={{ width: '20%' }}
                 className="relative cursor-pointer space-x-2 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400"
             >
-                <Dropdown
-                    width={418}
-                    button={
-                        localCard.startDate ? (
-                            <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
-                                {formatDate(localCard.startDate, 'MMM, dd')} -{' '}
-                                {formatDate(localCard.endDate, 'MMM, dd')}
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-between text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300 p-2 rounded-lg text-sm">
-                                <p className="mr-2">Start - End</p>
-                                <CalendarDaysIcon className="w-[14px] h-[14px] leading-5" />
-                            </div>
-                        )
-                    }
-                    menu={({ closePopup }) => (
-                        <TaskDatePicker
-                            startDate={localCard?.startDate}
-                            endDate={localCard?.endDate}
-                            onChange={(date) => {
-                                closePopup();
-                                changeDate(date, localCard);
-                            }}
-                            close={closePopup}
-                        />
-                    )}
-                />
+                {localCard.startDate ? (
+                    <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
+                        {formatDate(localCard.startDate, 'MMM, dd')} -{' '}
+                        {formatDate(localCard.endDate, 'MMM, dd')}
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-between text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300 p-2 rounded-lg text-sm">
+                        <p className="mr-2">Start - End</p>
+                        <CalendarDaysIcon className="w-[14px] h-[14px] leading-5" />
+                    </div>
+                )}
             </div>
 
             {/* progress */}
@@ -288,7 +224,6 @@ const CardStack = ({
                     setConfirmModalOpen={setConfirmModalOpen}
                 />
             )}
-
         </div>
     );
 };
