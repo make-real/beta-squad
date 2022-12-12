@@ -6,9 +6,9 @@ import {
     Register,
     Login,
     Layout,
-    // Profile,
+    Profile,
     DeveloperConsole,
-    // ManageWorkspace,
+    ManageWorkspace,
     UserSettingLayout,
     Preferences,
     PageNotFound,
@@ -27,8 +27,8 @@ import SingleChat from "./components/Chat/Single/Chat";
 import GroupChat from "./components/Chat/Group/Chat";
 import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
-import ManageWorkspace from "./components/ManageWorkspace/ManageWorkspace";
-import Profile from "./components/Profile/Profile";
+import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
+import ProfileScreen from "./components/Profile/Profile";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -141,7 +141,7 @@ const App = () => {
                         path="manage-workspace"
                         element={
                             <ProtectedRoute>
-                                <ManageWorkspace />
+                                <ManageWorkspaceScreen />
                             </ProtectedRoute>
                         }
                     />
@@ -149,7 +149,7 @@ const App = () => {
                         path="profile"
                         element={
                             <ProtectedRoute>
-                                <Profile />
+                                <ProfileScreen />
                             </ProtectedRoute>
                         }
                     />
