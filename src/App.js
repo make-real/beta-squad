@@ -29,7 +29,7 @@ import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
 import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
 import ProfileScreen from "./components/Profile/Profile";
-
+import CardDetails from "./components/Board/CardDetails";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -237,7 +237,7 @@ const App = () => {
                                 <Board selectedSpaceId={selectedSpaceId} />
                             </ProtectedRoute>
                         }
-                    />{' '}
+                    />
                     <Route
                         path="board/:id"
                         element={
@@ -279,7 +279,7 @@ const App = () => {
             </Routes>
 
             {/* theme="dark" */}
-            <ToastContainer theme="colored" style={{ fontSize: '18px' }} />
+            <ToastContainer theme="colored" style={{ fontSize: "18px" }} />
         </main>
     );
 };
