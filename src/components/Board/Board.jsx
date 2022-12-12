@@ -171,7 +171,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                                 ?.slice(0)
                                 ?.reverse()
                                 ?.map((boardList) => (
-                                    <BoardList
+                                    <BoardStackList
                                         showType={showType}
                                         key={boardList._id}
                                         boardList={boardList}

@@ -9,10 +9,11 @@ import {
     CheckIcon,
 } from '@heroicons/react/24/outline';
 import ConfirmDialog from './ConfirmDialog';
-import { cardUpdateApiCall } from '../../hooks/useFetch';
+import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import CardDetails from './CardDetails';
+import { draftJsToHtml } from '../../util/draftJsToHtml';
 
 // generate random color
 const randomColor = () => {
@@ -20,7 +21,7 @@ const randomColor = () => {
 };
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const Card = ({ card, listID }) => {
+const Card = ({ showType, card, listID }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
         useState(false);
@@ -33,6 +34,23 @@ const Card = ({ card, listID }) => {
         (state) => state.space.selectedSpaceObj
     );
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
+    const [localCard, setLocalCard] = useState({});
+
+    useEffect(() => {
+        const getCard = async () => {
+            const { data } = await getSingleCard(
+                selectedSpaceId,
+                listID,
+                card?._id
+            );
+            setLocalCard(data?.card);
+        };
+
+        getCard();
+    }, [selectedSpaceId, listID, card?._id]);
+
+    console.log({ localCard });
 
     const progressStatus = (progress) => {
         switch (progress) {
@@ -149,7 +167,9 @@ const Card = ({ card, listID }) => {
                 )}
 
                 <div className="flex justify-between items-center">
-                    <p className="text-sm mr-4 text-gray-800">{card.name}</p>
+                    <p className="text-sm mr-4 mb-2 text-gray-800 font-bold">
+                        {card.name}
+                    </p>
 
                     <div
                         style={{
@@ -169,9 +189,12 @@ const Card = ({ card, listID }) => {
                         )}
                     </div>
                 </div>
-                <p className="text-sm mr-4 text-gray-800">
-                    {card?.description || 'des'}
-                </p>
+                <div
+                    className="text-sm text-gray-800"
+                    dangerouslySetInnerHTML={{
+                        __html: draftJsToHtml(localCard?.description || ''),
+                    }}
+                />
                 <div className="pt-5 text-white flex gap-1 flex-wrap">
                     {card?.tags?.length
                         ? card?.tags?.map((tag) => (
@@ -282,7 +305,7 @@ const Card = ({ card, listID }) => {
                 )}
 
                 {/* hover element */}
-                <div className="absolute top-0 left-0 rounded-2xl w-full h-0 flex flex-col justify-center items-center bg-[#031124]/[0.6] opacity-0 group-hover:h-full group-hover:opacity-100 duration-500">
+                <div className="absolute top-0 left-0 rounded-2xl w-full h-0 flex flex-col justify-center items-center bg-[#031124]/[0.6] opacity-0 group-hover:h-full group-hover:opacity-100">
                     <div className="absolute top-2 right-2 grid grid-cols-2 gap-2 place-content-end text-white">
                         <span className="cursor-pointer">
                             <TrashIcon
@@ -315,6 +338,8 @@ const Card = ({ card, listID }) => {
                                 setProgress: setProgress,
                                 setBoardModal: toggle_card_modal,
                                 setNoteDone: setNoteDone,
+                                localCard: localCard,
+                                setLocalCard: setLocalCard,
                             });
                         }}
                         to={`/projects/board/${card._id}`}

@@ -35,6 +35,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useStyleContext } from '../../context/StyleContext';
+import { draftJsToHtml } from '../../util/draftJsToHtml';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const { cardDetails } = useBoardCardContext();
@@ -48,9 +49,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const setProgress = cardDetails?.setProgress;
     const setBoardModal = cardDetails?.setBoardModal;
     const setNoteDone = cardDetails?.setNoteDone;
+    const localCard = cardDetails?.localCard;
+    const setLocalCard = cardDetails?.setLocalCard;
 
     const [toggleEdit, setToggleEdit] = useState(false);
-    const [localCard, setLocalCard] = useState({});
+    // const [localCard, setLocalCard] = useState({});
     const { updateCard, boardLists } = useBoardCardContext();
     // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -76,18 +79,18 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     const [showChat, setShowChat] = useState(false);
 
-    useEffect(() => {
-        const getCard = async () => {
-            const { data } = await getSingleCard(
-                selectedSpaceId,
-                listID,
-                card?._id
-            );
-            setLocalCard(data?.card);
-        };
+    // useEffect(() => {
+    //     const getCard = async () => {
+    //         const { data } = await getSingleCard(
+    //             selectedSpaceId,
+    //             listID,
+    //             card?._id
+    //         );
+    //         setLocalCard(data?.card);
+    //     };
 
-        getCard();
-    }, [selectedSpaceId, listID, card?._id]);
+    //     getCard();
+    // }, [selectedSpaceId, listID, card?._id]);
 
     useEffect(() => {
         const handleEscapeKeyPress = (e) => {
@@ -639,7 +642,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                 )
                                             }
                                             dangerouslySetInnerHTML={{
-                                                __html: getHtml(
+                                                __html: draftJsToHtml(
                                                     localCard?.description
                                                         ? localCard?.description
                                                         : '{"blocks":[{"key":"naire","text":"Write Description","type":"header-three","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'

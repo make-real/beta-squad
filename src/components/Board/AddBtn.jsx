@@ -28,10 +28,10 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
         <div
             className={`${
                 btnText === 'card'
-                    ? 'w-full rounded-b-2xl pb-4'
+                    ? 'w-full rounded-b-2xl'
                     : `${
                           showType === 'grid' ? 'w-72' : 'w-full'
-                      } rounded-2xl bg-[#ECECEC]/[0.4] `
+                      } rounded-2xl bg-[#ECECEC]/[0.4]`
             }`}
         >
             {inputToggle ? (

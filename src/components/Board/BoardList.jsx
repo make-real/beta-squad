@@ -67,7 +67,7 @@ const BoardList = ({ showType, boardList }) => {
 
     return (
         <div
-            className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl`}
+            className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
         >
             <div
                 className="overflow-hidden flex justify-between items-center my-3"
@@ -94,9 +94,7 @@ const BoardList = ({ showType, boardList }) => {
                     )}
                 />
             </div>
-
             <span className="border-[1px] border-[#EEE9E9]" />
-
             <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-3">
                 <Draggable
                     listId={boardList?._id}
@@ -110,6 +108,7 @@ const BoardList = ({ showType, boardList }) => {
                             className="mb-2"
                         >
                             <Card
+                                showType={showType}
                                 key={card._id}
                                 card={card}
                                 listID={boardList?._id}
@@ -118,7 +117,7 @@ const BoardList = ({ showType, boardList }) => {
                     )}
                 />
             </div>
-
+            
             <AddBtn
                 showType={showType}
                 placeHolder="Enter card name"
