@@ -48,6 +48,7 @@ const SideNavbar = () => {
     const { workspaces, selectedWorkspace } = useSelector(
         (state) => state.workspace
     );
+    const [selectedChat, setSelectedChat] = useState(null);
 
     const [members, setMembers] = useState([]);
 
@@ -274,9 +275,15 @@ const SideNavbar = () => {
                             onClick={() => {
                                 dispatch(setSelectedSpaceId(null));
                                 dispatch(setSelectedSpaceObject(null));
+                                navigate("/projects");
+                                setSelectedChat(null);
                             }}
                             className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                                selectedSpace ? "" : "bg-[#6576FF10]"
+                                selectedChat
+                                    ? ""
+                                    : selectedSpace
+                                    ? ""
+                                    : "bg-[#6576FF10]"
                             } 
                                 ${
                                     showFullBar
@@ -364,6 +371,7 @@ const SideNavbar = () => {
                                             dispatch(
                                                 setSelectedSpaceObject(space)
                                             );
+                                            setSelectedChat(null);
                                             navigate("/projects");
                                         }}
                                     >
@@ -400,16 +408,30 @@ const SideNavbar = () => {
                             </div>
                         )}
                         {/* Chats List */}
-                        <div className="mt-[15px] flex flex-col gap-[15px]">
+                        <div className="mt-[15px] flex flex-col">
                             {members.map((member) => {
                                 return (
                                     <div
-                                        className={`flex items-center cursor-pointer gap-[10px] ${
+                                        className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
+                                            selectedChat?._id === member?._id
+                                                ? "bg-[#6576FF10]"
+                                                : ""
+                                        } ${
                                             showFullBar
                                                 ? "pl-[25px]"
                                                 : "pl-[25px] pr-[25px]"
                                         }`}
-                                        onClick={() => openChat(member._id)}
+                                        onClick={() => {
+                                            // openChat(member._id)
+                                            dispatch(setSelectedSpaceId(null));
+                                            dispatch(
+                                                setSelectedSpaceObject(null)
+                                            );
+                                            setSelectedChat(member);
+                                            navigate(
+                                                `/projects/chat/${member?._id}`
+                                            );
+                                        }}
                                     >
                                         <img
                                             src={member.avatar}

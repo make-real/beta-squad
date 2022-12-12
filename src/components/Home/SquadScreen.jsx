@@ -42,7 +42,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     }}
                     className="mr-[8px] cursor-pointer"
                 >
-                    <img src={BackArrowIcon} alt="" />
+                    <img src={BackArrowIcon} alt="back_arrow" />
                 </div>
                 <p className=" mr-[12px] font-medium text-[15px] text-[#818892]">
                     {currentWorkspace?.name}

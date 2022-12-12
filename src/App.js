@@ -286,6 +286,14 @@ const App = () => {
                         }
                     />
                     <Route
+                        path="chat/:participantID"
+                        element={
+                            <ProtectedRoute>
+                                <SingleChat />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
                         path="kanban"
                         element={
                             <ProtectedRoute>
@@ -293,14 +301,14 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
+                    {/* <Route
                         path="board/:id"
                         element={
                             <ProtectedRoute>
                                 <CardDetails />
                             </ProtectedRoute>
                         }
-                    />
+                    /> */}
                     <Route
                         path="list"
                         element={
@@ -317,7 +325,7 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
+                    {/* <Route
                         path="single-chat/:participantID"
                         exact
                         element={
@@ -325,7 +333,7 @@ const App = () => {
                                 <SingleChat />
                             </ProtectedRoute>
                         }
-                    />
+                    /> */}
                     {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
           <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
                 </Route>

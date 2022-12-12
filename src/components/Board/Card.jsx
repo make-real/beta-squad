@@ -1,23 +1,23 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
-import { CardModal, CardChip } from '.';
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { CardModal, CardChip } from ".";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import {
     TrashIcon,
     EyeIcon,
     CheckCircleIcon,
     CheckIcon,
-} from '@heroicons/react/24/outline';
-import ConfirmDialog from './ConfirmDialog';
-import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-import CardDetails from './CardDetails';
-import { draftJsToHtml } from '../../util/draftJsToHtml';
+} from "@heroicons/react/24/outline";
+import ConfirmDialog from "./ConfirmDialog";
+import { cardUpdateApiCall, getSingleCard } from "../../hooks/useFetch";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import CardDetails from "./CardDetails";
+import { draftJsToHtml } from "../../util/draftJsToHtml";
 
 // generate random color
 const randomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + Math.floor(Math.random() * 16777215).toString(16);
 };
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
@@ -33,6 +33,7 @@ const Card = ({ showType, card, listID }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const [showCardDetailsModal, setShowCardDetailsModal] = useState(false);
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const [localCard, setLocalCard] = useState({});
@@ -115,12 +116,12 @@ const Card = ({ showType, card, listID }) => {
     };
 
     useEffect(() => {
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
+        document.addEventListener("click", handleClick);
+        return () => document.removeEventListener("click", handleClick);
     }, []);
 
     const toggle_card_modal = () => {
-        console.log('taggling........');
+        console.log("taggling........");
         toggleCardModal(listID, card._id);
     };
 
@@ -149,7 +150,7 @@ const Card = ({ showType, card, listID }) => {
                 {!!card.assignee?.length && (
                     <div className="mb-3 flex">
                         {card.assignee?.map((user, i) => (
-                            <div style={{ marginLeft: i ? '-5px' : 0 }}>
+                            <div style={{ marginLeft: i ? "-5px" : 0 }}>
                                 {user.avatar ? (
                                     <img
                                         src={user.avatar}
@@ -176,7 +177,7 @@ const Card = ({ showType, card, listID }) => {
                             backgroundColor:
                                 progress === 4
                                     ? selectedSpaceObj?.color
-                                    : 'grey',
+                                    : "grey",
                         }}
                         className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
                     >
@@ -192,7 +193,7 @@ const Card = ({ showType, card, listID }) => {
                 <div
                     className="text-sm text-gray-800"
                     dangerouslySetInnerHTML={{
-                        __html: draftJsToHtml(localCard?.description || ''),
+                        __html: draftJsToHtml(localCard?.description || ""),
                     }}
                 />
                 <div className="pt-5 text-white flex gap-1 flex-wrap">
@@ -261,7 +262,7 @@ const Card = ({ showType, card, listID }) => {
                                             (checked.length +
                                                 unchecked.length)) *
                                             100 +
-                                        '%',
+                                        "%",
                                 }}
                                 className="h-full rounded-full"
                             />
@@ -327,7 +328,7 @@ const Card = ({ showType, card, listID }) => {
                         </span>
                     </div>
 
-                    <Link
+                    <div
                         onClick={() => {
                             // toggle_card_modal();
                             setCardDetails({
@@ -341,14 +342,15 @@ const Card = ({ showType, card, listID }) => {
                                 localCard: localCard,
                                 setLocalCard: setLocalCard,
                             });
+                            setShowCardDetailsModal(true);
                         }}
-                        to={`/projects/board/${card._id}`}
+                        // to={`/projects/board/${card._id}`}
                     >
                         <span className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer">
                             <EyeIcon className="mr-2 w-5 h-5" />
                             <p>View</p>
                         </span>
-                    </Link>
+                    </div>
                 </div>
             </div>
 
@@ -357,6 +359,12 @@ const Card = ({ showType, card, listID }) => {
                     listID={listID}
                     cardID={card._id}
                     setConfirmModalOpen={setConfirmModalOpen}
+                />
+            )}
+
+            {showCardDetailsModal && (
+                <CardDetails
+                    setShowCardDetailsModal={setShowCardDetailsModal}
                 />
             )}
 

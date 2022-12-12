@@ -1,8 +1,8 @@
-import { DotsSingle, UserPlus } from '../../assets/icons';
-import { useBoardCardContext } from '../../context/BoardCardContext';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { CardSettingDropDown } from '.';
+import { DotsSingle, UserPlus } from "../../assets/icons";
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { CardSettingDropDown } from ".";
 import {
     cardAttachmentUpdateApiCall,
     cardUpdateApiCall,
@@ -10,21 +10,21 @@ import {
     deleteChecklistItem,
     getSingleCard,
     updateChecklistItem,
-} from '../../hooks/useFetch';
-import { toast } from 'react-toastify';
-import Dropdown from '../Dropdown';
-import ConfirmDialog from './ConfirmDialog';
-import AssigneeUser from '../AssigneeUser/AssigneeUser';
-import CardTags from './CardTags';
-import Button from '../Button';
+} from "../../hooks/useFetch";
+import { toast } from "react-toastify";
+import Dropdown from "../Dropdown";
+import ConfirmDialog from "./ConfirmDialog";
+import AssigneeUser from "../AssigneeUser/AssigneeUser";
+import CardTags from "./CardTags";
+import Button from "../Button";
 // import CardProgress from './CardProgress';
-import Editor from '../Editor';
-import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import CardMessage from './CardComment';
-import ImgsViewer from 'react-images-viewer';
-import { formatDate } from '../../util/date';
-import TaskDatePicker from '../TaskDatePicker';
+import Editor from "../Editor";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import CardMessage from "./CardComment";
+import ImgsViewer from "react-images-viewer";
+import { formatDate } from "../../util/date";
+import TaskDatePicker from "../TaskDatePicker";
 import {
     CalendarDaysIcon,
     PlusIcon,
@@ -32,12 +32,16 @@ import {
     XMarkIcon,
     ChatBubbleBottomCenterTextIcon,
     FolderOpenIcon,
-} from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
-import { useStyleContext } from '../../context/StyleContext';
-import { draftJsToHtml } from '../../util/draftJsToHtml';
+} from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import { useStyleContext } from "../../context/StyleContext";
+import { draftJsToHtml } from "../../util/draftJsToHtml";
 
-const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
+const CardDetails = ({
+    setShowCardDetailsModal,
+    progressStatus,
+    handleDataChange = () => {},
+}) => {
     const { cardDetails } = useBoardCardContext();
     const navigate = useNavigate();
     const { margin } = useStyleContext();
@@ -63,7 +67,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // const [modalActionToggling, setModalActionToggling] = useState(false);
     const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
     const [attachFileLoading, setAttachFileLoading] = useState(false);
-    const [deleteAttachFile, setDeleteAttachFile] = useState('');
+    const [deleteAttachFile, setDeleteAttachFile] = useState("");
     const [deleteAttachFileLoading, setDeleteAttachFileLoading] =
         useState(false);
     const [editDescription, setEditDescription] = useState(false);
@@ -74,7 +78,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     const [checkListItem, setCheckListItem] = useState({
         checked: false,
-        content: '',
+        content: "",
     });
 
     const [showChat, setShowChat] = useState(false);
@@ -94,12 +98,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     useEffect(() => {
         const handleEscapeKeyPress = (e) => {
-            if (e.code === 'Escape') setBoardModal(localCard);
+            if (e.code === "Escape") setBoardModal(localCard);
         };
 
-        document.addEventListener('keydown', handleEscapeKeyPress);
+        document.addEventListener("keydown", handleEscapeKeyPress);
         return () =>
-            document.removeEventListener('keydown', handleEscapeKeyPress);
+            document.removeEventListener("keydown", handleEscapeKeyPress);
     }, [localCard, setBoardModal]);
 
     // useEffect(
@@ -113,7 +117,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const handle_card_name_update_enter_btn = async (e) => {
         console.log(e.target.value);
 
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             const cardTagObject = { ...localCard, name: localCard.name };
 
             try {
@@ -182,12 +186,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         setNewCheckListItemJSX(true);
         setCheckListItem({
             checked: false,
-            content: '',
+            content: "",
         });
     };
 
     const handle_check_list_item_enter_btn = async (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             const cardValue = { ...localCard };
 
             const checkListItemObj = { ...checkListItem };
@@ -211,7 +215,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 console.log(error.response.data.issue);
             }
 
-            setCheckListItem({ checked: '', content: '' });
+            setCheckListItem({ checked: "", content: "" });
         }
     };
 
@@ -219,7 +223,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         const { checked, name, value } = e.target;
         setCheckListItem((pre) => ({
             ...pre,
-            [name]: [name].includes('content') ? value : checked,
+            [name]: [name].includes("content") ? value : checked,
         }));
         handleDataChange();
     };
@@ -229,7 +233,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         const { type } = e.target;
         const tempCard = { ...localCard };
 
-        if (type === 'checkbox') {
+        if (type === "checkbox") {
             updatedCheckList = {
                 ...tempCard,
                 checkList: tempCard.checkList.map((item) =>
@@ -297,7 +301,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         const formData = new FormData();
 
         for (const file of files) {
-            formData.append('attachments', file);
+            formData.append("attachments", file);
         }
 
         try {
@@ -339,7 +343,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             );
             return editorHTML;
         } catch (error) {
-            return '';
+            return "";
         }
     };
 
@@ -355,7 +359,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         return (
             <section
                 className={`${
-                    margin ? 'ml-[325px]' : 'ml-[50px]'
+                    margin ? "ml-[325px]" : "ml-[50px]"
                 } duration-200 p-8 pt-[100px]`}
             >
                 <div>No card found!</div>
@@ -367,12 +371,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         <>
             {/* <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible"> */}
             <section
-                className={`duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4]`}
+                className={`z-[999] fixed inset-0 duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4] flex items-center justify-center`}
             >
                 {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
                 {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
 
-                <div className="relative bg-white p-8 rounded-2xl">
+                <div className="relative bg-white p-8 rounded-2xl h-auto w-full max-w-[1120px]">
                     <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
 
                     <div className="flex items-center justify-between border-b pb-4 border-[#ECECEC]">
@@ -417,12 +421,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 />
                             ) : (
                                 <p className="font-[600] text-xl">
-                                    {card?.name || 'Development'}
+                                    {card?.name || "Development"}
                                 </p>
                             )}
 
                             <p className="font-[400] text-sm text-[#818892]">
-                                {nameOfBoardList || 'On Progress'}
+                                {nameOfBoardList || "On Progress"}
                             </p>
                         </div>
 
@@ -436,12 +440,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                             <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
                                                 {formatDate(
                                                     localCard.startDate,
-                                                    'MMM, dd'
-                                                )}{' '}
-                                                -{' '}
+                                                    "MMM, dd"
+                                                )}{" "}
+                                                -{" "}
                                                 {formatDate(
                                                     localCard.endDate,
-                                                    'MMM, dd'
+                                                    "MMM, dd"
                                                 )}
                                             </div>
                                         ) : (
@@ -470,7 +474,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             {/* chat */}
                             <div
                                 className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg ${
-                                    showChat ? 'bg-gray-200' : ''
+                                    showChat ? "bg-gray-200" : ""
                                 }`}
                             >
                                 <span
@@ -486,9 +490,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             {/* assignee */}
                             <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1">
                                 <Dropdown
-                                    position={'bottom right'}
+                                    position={"bottom right"}
                                     width={450}
-                                    style={{ borderRadius: '1rem' }}
+                                    style={{ borderRadius: "1rem" }}
                                     button={
                                         <div className="flex gap-2 ml-[15px] items-center">
                                             {localCard.assignee?.length ? (
@@ -545,7 +549,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                 }
                                 width="150px"
-                                style={{ borderRadius: '1rem' }}
+                                style={{ borderRadius: "1rem" }}
                                 menu={({ closePopup }) => (
                                     <CardSettingDropDown
                                         close={closePopup}
@@ -570,7 +574,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             <div
                                 onClick={() => {
                                     setBoardModal(localCard);
-                                    navigate(-1 || '/projects/kanban');
+                                    // navigate(-1 || "/projects/kanban");
+                                    setShowCardDetailsModal(false);
                                 }}
                             >
                                 <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
@@ -582,7 +587,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     <div className="flex flex-1 min-h-0">
                         <div
                             className={`flex flex-col ${
-                                showChat ? 'w-8/12' : 'w-full'
+                                showChat ? "w-8/12" : "w-full"
                             } `}
                         >
                             <div className="overflow-y-auto h-full">
@@ -601,13 +606,13 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         <div className="relative flex w-full h-2 bg-slate-300 rounded-full">
                                             <div
                                                 style={{
-                                                    backgroundColor: '#5DD2D3',
+                                                    backgroundColor: "#5DD2D3",
                                                     width:
                                                         (checked.length /
                                                             (checked.length +
                                                                 unchecked.length)) *
                                                             100 +
-                                                        '%',
+                                                        "%",
                                                 }}
                                                 className="h-full rounded-full"
                                             />
@@ -615,7 +620,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         <p className="text-gray-400 text-sm ml-2">
                                             {checked.length}/
                                             {checked.length + unchecked.length}
-                                        </p>{' '}
+                                        </p>{" "}
                                     </div>
                                 )}
 
@@ -712,17 +717,17 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                                     <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
                                         <p className="font-[600]">
-                                            Task of{' '}
+                                            Task of{" "}
                                             {localCard?.startDate &&
                                                 formatDate(
                                                     localCard.startDate,
-                                                    'MMM, dd'
-                                                )}{' '}
-                                            -{' '}
+                                                    "MMM, dd"
+                                                )}{" "}
+                                            -{" "}
                                             {localCard?.endDate &&
                                                 formatDate(
                                                     localCard.endDate,
-                                                    'MMM, dd'
+                                                    "MMM, dd"
                                                 )}
                                         </p>
                                     </div>

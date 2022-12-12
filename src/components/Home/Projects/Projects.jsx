@@ -75,7 +75,7 @@ const Projects = ({ showType }) => {
                                         dispatch(setSelectedSpaceId(space._id));
                                         dispatch(setSelectedSpaceObject(space));
                                     }}
-                                    className="text-[#424D5B] font-semibold"
+                                    className="text-[#424D5B] font-semibold cursor-pointer"
                                 >
                                     {space.name}
                                 </p>
@@ -125,7 +125,7 @@ const Projects = ({ showType }) => {
                                                     )
                                                 );
                                             }}
-                                            className="text-[#424D5B] font-semibold"
+                                            className="text-[#424D5B] font-semibold cursor-pointer"
                                         >
                                             {space.name}
                                         </p>
