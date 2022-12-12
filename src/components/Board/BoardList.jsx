@@ -1,15 +1,15 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
-import { AddBtn, Card, BoardListSettingDropDown } from '.';
-import { addCardIntoBoardList } from '../../hooks/useFetch';
-import { useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Dropdown from '../Dropdown';
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { AddBtn, Card, BoardListSettingDropDown } from ".";
+import { addCardIntoBoardList } from "../../hooks/useFetch";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Dropdown from "../Dropdown";
 // import Tippy from '@tippyjs/react';
 // import useAxios from '../../api';
-import 'tippy.js/dist/tippy.css';
-import Draggable from '../Draggable';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import "tippy.js/dist/tippy.css";
+import Draggable from "../Draggable";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 
 const BoardList = ({ showType, boardList }) => {
     const dropDownRef = useRef();
@@ -74,18 +74,18 @@ const BoardList = ({ showType, boardList }) => {
                 ref={dropDownRef}
             >
                 <p className="text-[#818892] flex-1 py-1 px-4">
-                    {boardList?.name || 'New List'}
+                    {boardList?.name || "New List"}
                 </p>
 
                 <Dropdown
-                    position={['bottom right', 'top right']}
+                    position={["bottom right", "top right"]}
                     button={
                         <span className="cursor-pointer py-1 px-4 text-[#424D5B]">
                             <EllipsisHorizontalIcon className="h-5 w-6" />
                         </span>
                     }
                     width={180}
-                    style={{ borderRadius: '0.75rem' }}
+                    style={{ borderRadius: "0.75rem" }}
                     menu={({ closePopup }) => (
                         <BoardListSettingDropDown
                             close={closePopup}
@@ -117,7 +117,7 @@ const BoardList = ({ showType, boardList }) => {
                     )}
                 />
             </div>
-            
+
             <AddBtn
                 showType={showType}
                 placeHolder="Enter card name"

@@ -53,26 +53,27 @@ const SingleChat = () => {
                 </p>
                 <p className="text-[#031124] text-[15px] font-medium"></p>
             </div>
-            <div className="w-full pb-10 mx-auto">
-                <div className={`bg-[#ECECEC] pb-5 rounded-lg`}>
-                    <div
-                        style={{
-                            height: `calc(100vh - ${
-                                messageToRespond ? 245 : 145
-                            }px)`,
-                            marginTop: "70px",
-                        }}
-                        className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll`}
-                    >
-                        <PrivateTextMessage
+            <div className="mt-[40px] w-full h-full bg-white rounded-[16px] px-[60px] pt-[50px] pb-[36px]">
+                <div className="w-full mt-[38px]">
+                    <div className={`bg-[#ECECEC] pb-5 rounded-lg`}>
+                        <div
+                            style={{
+                                height: `calc(100vh - ${
+                                    messageToRespond ? 245 : 145
+                                }px)`,
+                            }}
+                            className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll`}
+                        >
+                            <PrivateTextMessage
+                                messageToRespond={messageToRespond}
+                                setMessageToRespond={setMessageToRespond}
+                            />
+                        </div>
+                        <PrivateMessageBox
                             messageToRespond={messageToRespond}
                             setMessageToRespond={setMessageToRespond}
                         />
                     </div>
-                    <PrivateMessageBox
-                        messageToRespond={messageToRespond}
-                        setMessageToRespond={setMessageToRespond}
-                    />
                 </div>
             </div>
         </div>

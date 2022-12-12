@@ -301,14 +301,14 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    {/* <Route
+                    <Route
                         path="board/:id"
                         element={
                             <ProtectedRoute>
                                 <CardDetails />
                             </ProtectedRoute>
                         }
-                    /> */}
+                    />
                     <Route
                         path="list"
                         element={

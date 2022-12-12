@@ -137,10 +137,10 @@ const Board = ({ selectedSpaceId, showType }) => {
     };
 
     return (
-        <section className={`duration-200 overflow-auto customScroll h-full`}>
+        <section className={`duration-200 overflow-auto customScroll`}>
             {selectedSpaceId ? (
                 showType === "grid" ? (
-                    <div className="py-4 flex gap-3 items-start  min-w-fit h-full">
+                    <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
                             {filterdBoardList()
                                 ?.slice(0)
@@ -165,7 +165,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                         />
                     </div>
                 ) : (
-                    <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-full">
+                    <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
                             {filterdBoardList()
                                 ?.slice(0)

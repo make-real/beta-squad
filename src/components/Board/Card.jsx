@@ -33,7 +33,6 @@ const Card = ({ showType, card, listID }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
-    const [showCardDetailsModal, setShowCardDetailsModal] = useState(false);
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const [localCard, setLocalCard] = useState({});
@@ -328,7 +327,7 @@ const Card = ({ showType, card, listID }) => {
                         </span>
                     </div>
 
-                    <div
+                    <Link
                         onClick={() => {
                             // toggle_card_modal();
                             setCardDetails({
@@ -342,15 +341,14 @@ const Card = ({ showType, card, listID }) => {
                                 localCard: localCard,
                                 setLocalCard: setLocalCard,
                             });
-                            setShowCardDetailsModal(true);
                         }}
-                        // to={`/projects/board/${card._id}`}
+                        to={`/projects/board/${card._id}`}
                     >
                         <span className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer">
                             <EyeIcon className="mr-2 w-5 h-5" />
                             <p>View</p>
                         </span>
-                    </div>
+                    </Link>
                 </div>
             </div>
 
@@ -359,12 +357,6 @@ const Card = ({ showType, card, listID }) => {
                     listID={listID}
                     cardID={card._id}
                     setConfirmModalOpen={setConfirmModalOpen}
-                />
-            )}
-
-            {showCardDetailsModal && (
-                <CardDetails
-                    setShowCardDetailsModal={setShowCardDetailsModal}
                 />
             )}
 
