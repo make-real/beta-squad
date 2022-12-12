@@ -1,12 +1,16 @@
 // import React from "react";
 import { Droppable, Draggable as DraggableElement } from 'react-beautiful-dnd';
 
-const Draggable = ({ elements, render, listId }) => {
+const Draggable = ({ showType, elements, render, listId }) => {
     return (
         <Droppable droppableId={listId}>
             {(provided) => (
                 <>
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                    <div
+                        className={`${showType === 'stack' ? 'w-full' : ''}`}
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                    >
                         {elements?.map((item, index) => (
                             <DraggableElement
                                 key={item._id}

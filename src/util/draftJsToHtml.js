@@ -5,7 +5,6 @@ import draftToHtml from 'draftjs-to-html';
 
 export const draftJsToHtml = (data) => {
     if (!data) return;
-    console.log(JSON.parse(data));
     try {
         const rowHtmlContent = EditorState.createWithContent(
             convertFromRaw(JSON.parse(data))
