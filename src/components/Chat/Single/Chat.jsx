@@ -29,7 +29,7 @@ const SingleChat = () => {
                 workspaceMembers.find((value) => value._id === participantID)
             );
         }
-    }, [workspaceMembers]);
+    }, [workspaceMembers, participantID]);
 
     useEffect(() => {
         getMessages();
