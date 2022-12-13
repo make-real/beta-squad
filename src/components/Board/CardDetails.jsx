@@ -1,8 +1,8 @@
-import { DotsSingle, UserPlus } from "../../assets/icons";
-import { useBoardCardContext } from "../../context/BoardCardContext";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { CardSettingDropDown } from ".";
+import { UserPlus } from '../../assets/icons';
+import { useBoardCardContext } from '../../context/BoardCardContext';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { CardSettingDropDown } from '.';
 import {
     cardAttachmentUpdateApiCall,
     cardUpdateApiCall,
@@ -10,32 +10,32 @@ import {
     deleteChecklistItem,
     getSingleCard,
     updateChecklistItem,
-} from "../../hooks/useFetch";
-import { toast } from "react-toastify";
-import Dropdown from "../Dropdown";
-import ConfirmDialog from "./ConfirmDialog";
-import AssigneeUser from "../AssigneeUser/AssigneeUser";
-import CardTags from "./CardTags";
-import Button from "../Button";
+} from '../../hooks/useFetch';
+import { toast } from 'react-toastify';
+import Dropdown from '../Dropdown';
+import ConfirmDialog from './ConfirmDialog';
+import AssigneeUser from '../AssigneeUser/AssigneeUser';
+import CardTags from './CardTags';
+import Button from '../Button';
 // import CardProgress from './CardProgress';
-import Editor from "../Editor";
-import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import CardMessage from "./CardComment";
-import ImgsViewer from "react-images-viewer";
-import { formatDate } from "../../util/date";
-import TaskDatePicker from "../TaskDatePicker";
+// import Editor from '../Editor';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import CardMessage from './CardComment';
+import ImgsViewer from 'react-images-viewer';
+import { formatDate } from '../../util/date';
+import TaskDatePicker from '../TaskDatePicker';
 import {
     CalendarDaysIcon,
     PlusIcon,
     EllipsisHorizontalIcon,
     XMarkIcon,
     ChatBubbleBottomCenterTextIcon,
-    FolderOpenIcon,
-} from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
-import { useStyleContext } from "../../context/StyleContext";
-import { draftJsToHtml } from "../../util/draftJsToHtml";
+} from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+import { useStyleContext } from '../../context/StyleContext';
+// import { draftJsToHtml } from '../../util/draftJsToHtml';
+import DragDrop from '../DragDrop';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const { cardDetails } = useBoardCardContext();
@@ -49,11 +49,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const setProgress = cardDetails?.setProgress;
     const setBoardModal = cardDetails?.setBoardModal;
     const setNoteDone = cardDetails?.setNoteDone;
-    const localCard = cardDetails?.localCard;
-    const setLocalCard = cardDetails?.setLocalCard;
 
     const [toggleEdit, setToggleEdit] = useState(false);
-    // const [localCard, setLocalCard] = useState({});
+    const [localCard, setLocalCard] = useState({});
     const { updateCard, boardLists } = useBoardCardContext();
     // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -63,7 +61,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // const [modalActionToggling, setModalActionToggling] = useState(false);
     const [newCheckListItemJSX, setNewCheckListItemJSX] = useState(false);
     const [attachFileLoading, setAttachFileLoading] = useState(false);
-    const [deleteAttachFile, setDeleteAttachFile] = useState("");
+    const [deleteAttachFile, setDeleteAttachFile] = useState('');
     const [deleteAttachFileLoading, setDeleteAttachFileLoading] =
         useState(false);
     const [editDescription, setEditDescription] = useState(false);
@@ -74,32 +72,32 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     const [checkListItem, setCheckListItem] = useState({
         checked: false,
-        content: "",
+        content: '',
     });
 
     const [showChat, setShowChat] = useState(false);
 
-    // useEffect(() => {
-    //     const getCard = async () => {
-    //         const { data } = await getSingleCard(
-    //             selectedSpaceId,
-    //             listID,
-    //             card?._id
-    //         );
-    //         setLocalCard(data?.card);
-    //     };
+    useEffect(() => {
+        const getCard = async () => {
+            const { data } = await getSingleCard(
+                selectedSpaceId,
+                listID,
+                card?._id
+            );
+            setLocalCard(data?.card);
+        };
 
-    //     getCard();
-    // }, [selectedSpaceId, listID, card?._id]);
+        getCard();
+    }, [selectedSpaceId, listID, card?._id]);
 
     useEffect(() => {
         const handleEscapeKeyPress = (e) => {
-            if (e.code === "Escape") setBoardModal(localCard);
+            if (e.code === 'Escape') setBoardModal(localCard);
         };
 
-        document.addEventListener("keydown", handleEscapeKeyPress);
+        document.addEventListener('keydown', handleEscapeKeyPress);
         return () =>
-            document.removeEventListener("keydown", handleEscapeKeyPress);
+            document.removeEventListener('keydown', handleEscapeKeyPress);
     }, [localCard, setBoardModal]);
 
     // useEffect(
@@ -113,7 +111,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const handle_card_name_update_enter_btn = async (e) => {
         console.log(e.target.value);
 
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
             const cardTagObject = { ...localCard, name: localCard.name };
 
             try {
@@ -134,28 +132,28 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     };
 
     const handle_card_description_update_enter_btn = async (e) => {
-        // if (e.key === "Enter") {
-        const cardTagObject = {
-            ...localCard,
-            description: localCard.description,
-        };
+        if (e.key === 'Enter' && !e.shiftKey) {
+            const cardTagObject = {
+                ...localCard,
+                description: localCard.description,
+            };
 
-        try {
-            setEditDescription(false);
-            const { data } = await cardUpdateApiCall(
-                selectedSpaceId,
-                listID,
-                card._id,
-                cardTagObject
-            );
-            if (data.updatedCard._id) {
-                toast.success(`Description updated`, { autoClose: 2000 });
-                handleDataChange();
+            try {
+                setEditDescription(false);
+                const { data } = await cardUpdateApiCall(
+                    selectedSpaceId,
+                    listID,
+                    card._id,
+                    cardTagObject
+                );
+                if (data.updatedCard._id) {
+                    toast.success(`Description updated`, { autoClose: 2000 });
+                    handleDataChange();
+                }
+            } catch (error) {
+                console.log(error?.response?.data?.issue);
             }
-        } catch (error) {
-            console.log(error?.response?.data?.issue);
         }
-        // }
     };
 
     const changeDate = async (date, card) => {
@@ -182,12 +180,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         setNewCheckListItemJSX(true);
         setCheckListItem({
             checked: false,
-            content: "",
+            content: '',
         });
     };
 
     const handle_check_list_item_enter_btn = async (e) => {
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
             const cardValue = { ...localCard };
 
             const checkListItemObj = { ...checkListItem };
@@ -211,7 +209,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 console.log(error.response.data.issue);
             }
 
-            setCheckListItem({ checked: "", content: "" });
+            setCheckListItem({ checked: '', content: '' });
         }
     };
 
@@ -219,7 +217,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         const { checked, name, value } = e.target;
         setCheckListItem((pre) => ({
             ...pre,
-            [name]: [name].includes("content") ? value : checked,
+            [name]: [name].includes('content') ? value : checked,
         }));
         handleDataChange();
     };
@@ -229,7 +227,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         const { type } = e.target;
         const tempCard = { ...localCard };
 
-        if (type === "checkbox") {
+        if (type === 'checkbox') {
             updatedCheckList = {
                 ...tempCard,
                 checkList: tempCard.checkList.map((item) =>
@@ -291,34 +289,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         }
     };
 
-    const handle_card_attachments = async (e) => {
-        const files = e.target.files;
-
-        const formData = new FormData();
-
-        for (const file of files) {
-            formData.append("attachments", file);
-        }
-
-        try {
-            setAttachFileLoading(true);
-            const { data } = await cardAttachmentUpdateApiCall(
-                selectedSpaceId,
-                listID,
-                card._id,
-                formData
-            );
-            setLocalCard((pre) => ({
-                ...pre,
-                attachments: data.updatedCard.attachments,
-            }));
-            setAttachFileLoading(false);
-            handleDataChange();
-        } catch (error) {
-            console.log(error?.response?.data?.issue);
-        }
-    };
-
     const handle_attach_delete = (file) => {
         setDeleteAttachFileLoading(true);
         setDeleteAttachFile(file);
@@ -339,7 +309,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             );
             return editorHTML;
         } catch (error) {
-            return "";
+            return '';
         }
     };
 
@@ -355,7 +325,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         return (
             <section
                 className={`${
-                    margin ? "ml-[325px]" : "ml-[50px]"
+                    margin ? 'ml-[325px]' : 'ml-[50px]'
                 } duration-200 p-8 pt-[100px]`}
             >
                 <div>No card found!</div>
@@ -375,7 +345,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 <div className="relative bg-white p-8 rounded-2xl">
                     <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
 
-                    <div className="flex items-center justify-between border-b pb-4 border-[#ECECEC]">
+                    <div className="flex items-center justify-between pb-4">
                         {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
                     <div
                         onClick={() =>
@@ -417,12 +387,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 />
                             ) : (
                                 <p className="font-[600] text-xl">
-                                    {card?.name || "Development"}
+                                    {card?.name || 'Development'}
                                 </p>
                             )}
 
                             <p className="font-[400] text-sm text-[#818892]">
-                                {nameOfBoardList || "On Progress"}
+                                {nameOfBoardList || 'On Progress'}
                             </p>
                         </div>
 
@@ -436,12 +406,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                             <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
                                                 {formatDate(
                                                     localCard.startDate,
-                                                    "MMM, dd"
-                                                )}{" "}
-                                                -{" "}
+                                                    'MMM, dd'
+                                                )}{' '}
+                                                -{' '}
                                                 {formatDate(
                                                     localCard.endDate,
-                                                    "MMM, dd"
+                                                    'MMM, dd'
                                                 )}
                                             </div>
                                         ) : (
@@ -469,8 +439,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                             {/* chat */}
                             <div
-                                className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg ${
-                                    showChat ? "bg-gray-200" : ""
+                                className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg space-x-5 ${
+                                    showChat ? 'bg-gray-200' : ''
                                 }`}
                             >
                                 <span
@@ -484,58 +454,60 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             </div>
 
                             {/* assignee */}
-                            <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1">
-                                <Dropdown
-                                    position={"bottom right"}
-                                    width={450}
-                                    style={{ borderRadius: "1rem" }}
-                                    button={
-                                        <div className="flex gap-2 ml-[15px] items-center">
-                                            {localCard.assignee?.length ? (
-                                                localCard.assignee.map(
-                                                    (user, i) => (
-                                                        <div className="ml-[-15px]">
-                                                            {user.avatar ? (
-                                                                <img
-                                                                    src={
-                                                                        user.avatar
-                                                                    }
-                                                                    alt=""
-                                                                    className="rounded-full ring-[1px] bg-white ring-[#13BEC0] p-1"
-                                                                />
-                                                            ) : (
-                                                                <p className="rounded-full ring-[1px] bg-white ring-[#13BEC0] text-[#14BCBE] font-bold grid place-items-center p-1">
-                                                                    {i ||
-                                                                        user?.fullName.charAt(
-                                                                            0
-                                                                        )}
-                                                                </p>
-                                                            )}
-                                                        </div>
+                            <div className='pl-5'>
+                                <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1 space-x-5">
+                                    <Dropdown
+                                        width={450}
+                                        button={
+                                            <div className="flex gap-2 items-center">
+                                                {localCard.assignee?.length ? (
+                                                    localCard.assignee.map(
+                                                        (user, i) => (
+                                                            <div className="ml-[-20px]">
+                                                                {user.avatar ? (
+                                                                    <img
+                                                                        src={
+                                                                            user.avatar
+                                                                        }
+                                                                        alt=""
+                                                                        className="rounded-full ring-[1px] bg-white ring-[#13BEC0] p-1"
+                                                                    />
+                                                                ) : (
+                                                                    <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                                                        <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
+                                                                            {i ||
+                                                                                user?.fullName.charAt(
+                                                                                    0
+                                                                                )}
+                                                                        </p>
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        )
                                                     )
-                                                )
-                                            ) : (
-                                                <div className="ml-[-15px]">
-                                                    <UserPlus />
+                                                ) : (
+                                                    <div className="ml-[-20px]">
+                                                        <UserPlus />
+                                                    </div>
+                                                )}
+                                                {/* <span>Assignee</span> */}
+                                                <div className="ml-[-20px]">
+                                                    <p className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                                        <PlusIcon className="h-5 w-5 text-[#14BCBE]" />
+                                                    </p>
                                                 </div>
-                                            )}
-                                            {/* <span>Assignee</span> */}
-                                            <div className="ml-[-15px]">
-                                                <p className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
-                                                    <PlusIcon className="h-5 w-5 text-[#14BCBE]" />
-                                                </p>
                                             </div>
-                                        </div>
-                                    }
-                                    menu={() => (
-                                        <AssigneeUser
-                                            listID={listID}
-                                            localCard={localCard}
-                                            spaceID={selectedSpaceId}
-                                            setLocalCard={setLocalCard}
-                                        />
-                                    )}
-                                />
+                                        }
+                                        menu={() => (
+                                            <AssigneeUser
+                                                listID={listID}
+                                                localCard={localCard}
+                                                spaceID={selectedSpaceId}
+                                                setLocalCard={setLocalCard}
+                                            />
+                                        )}
+                                    />
+                                </div>
                             </div>
 
                             {/* more */}
@@ -545,7 +517,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                 }
                                 width="150px"
-                                style={{ borderRadius: "1rem" }}
+                                style={{ borderRadius: '1rem' }}
                                 menu={({ closePopup }) => (
                                     <CardSettingDropDown
                                         close={closePopup}
@@ -570,7 +542,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             <div
                                 onClick={() => {
                                     setBoardModal(localCard);
-                                    navigate(-1 || "/projects/kanban");
+                                    navigate(-1 || '/projects/kanban');
                                 }}
                             >
                                 <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
@@ -582,7 +554,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     <div className="flex flex-1 min-h-0">
                         <div
                             className={`flex flex-col ${
-                                showChat ? "w-8/12" : "w-full"
+                                showChat ? 'w-8/12' : 'w-full'
                             } `}
                         >
                             <div className="overflow-y-auto h-full">
@@ -598,24 +570,24 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                                 {!!(checked.length + unchecked.length) && (
                                     <div className="relative flex items-center">
-                                        <div className="relative flex w-full h-2 bg-slate-300 rounded-full">
+                                        <div className="relative flex w-full h-2 bg-slate-300">
                                             <div
                                                 style={{
-                                                    backgroundColor: "#5DD2D3",
+                                                    backgroundColor: '#5DD2D3',
                                                     width:
                                                         (checked.length /
                                                             (checked.length +
                                                                 unchecked.length)) *
                                                             100 +
-                                                        "%",
+                                                        '%',
                                                 }}
-                                                className="h-full rounded-full"
+                                                className="h-full"
                                             />
                                         </div>
                                         <p className="text-gray-400 text-sm ml-2">
                                             {checked.length}/
                                             {checked.length + unchecked.length}
-                                        </p>{" "}
+                                        </p>{' '}
                                     </div>
                                 )}
 
@@ -641,48 +613,33 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                     (prev) => !prev
                                                 )
                                             }
-                                            dangerouslySetInnerHTML={{
-                                                __html: draftJsToHtml(
-                                                    localCard?.description
-                                                        ? localCard?.description
-                                                        : '{"blocks":[{"key":"naire","text":"Write Description","type":"header-three","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
-                                                ),
-                                            }}
-                                        />
+                                        >
+                                            <p>{localCard?.description}</p>
+                                        </div>
                                     ) : (
-                                        <>
-                                            <Editor
-                                                value={localCard?.description}
-                                                onChange={(e) =>
+                                        <div>
+                                            <textarea
+                                                className="w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
+                                                type="text"
+                                                defaultValue={
+                                                    localCard?.description
+                                                }
+                                                onChange={(e) => {
                                                     setLocalCard((pre) => ({
                                                         ...pre,
-                                                        description: e,
-                                                    }))
+                                                        description:
+                                                            e.target.value,
+                                                    }));
+                                                }}
+                                                onKeyDown={(e) =>
+                                                    e.key === 'Enter'
+                                                        ? handle_card_description_update_enter_btn(
+                                                              e
+                                                          )
+                                                        : null
                                                 }
                                             />
-                                            <div className="flex gap-2 mt-2">
-                                                <Button
-                                                    onClick={
-                                                        handle_card_description_update_enter_btn
-                                                    }
-                                                    onKeyDown={
-                                                        handle_card_description_update_enter_btn
-                                                    }
-                                                >
-                                                    Save
-                                                </Button>
-                                                <Button
-                                                    text
-                                                    onClick={() =>
-                                                        setEditDescription(
-                                                            false
-                                                        )
-                                                    }
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </div>
-                                        </>
+                                        </div>
                                     )}
                                     {/* <input
                                     type="text"
@@ -712,17 +669,17 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                                     <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
                                         <p className="font-[600]">
-                                            Task of{" "}
+                                            Task of{' '}
                                             {localCard?.startDate &&
                                                 formatDate(
                                                     localCard.startDate,
-                                                    "MMM, dd"
-                                                )}{" "}
-                                            -{" "}
+                                                    'MMM, dd'
+                                                )}{' '}
+                                            -{' '}
                                             {localCard?.endDate &&
                                                 formatDate(
                                                     localCard.endDate,
-                                                    "MMM, dd"
+                                                    'MMM, dd'
                                                 )}
                                         </p>
                                     </div>
@@ -929,26 +886,19 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         )}
                                 </div>
                                 <div className="py-2">
-                                    <div className="flex p-4 rounded-2xl border-2 border-dashed space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150 bg-[#ECECEC]/[0.5]">
-                                        <label
-                                            htmlFor="file"
-                                            className="flex align-middle"
-                                        >
-                                            <FolderOpenIcon className="w-5 h-5 mr-2" />
-                                            <p className="text-center mr-1">
-                                                Drop File here or
-                                            </p>
-                                            <p className="text-[#6576FF] cursor-pointer hover:text-teal-700 underline underline-offset-4 font-bold">
-                                                Browse
-                                            </p>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id="file"
-                                            onChange={handle_card_attachments}
-                                            className="hidden"
-                                        />
-                                    </div>
+                                    <DragDrop
+                                        setAttachFileLoading={
+                                            setAttachFileLoading
+                                        }
+                                        cardAttachmentUpdateApiCall={
+                                            cardAttachmentUpdateApiCall
+                                        }
+                                        selectedSpaceId={selectedSpaceId}
+                                        listID={listID}
+                                        card={card}
+                                        setLocalCard={setLocalCard}
+                                        handleDataChange={handleDataChange}
+                                    />
                                 </div>
                             </div>
                         </div>
