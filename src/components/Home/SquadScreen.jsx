@@ -15,6 +15,7 @@ import FolderIcon from "../../assets/icon_component/Folder";
 import Board from "../Board/Board";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import Chat from "../Chat/Chat";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const [selectedTab, setSelectedTab] = useState("messages");
@@ -32,7 +33,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }, [state?.tab]);
 
     const TabsScreen = {
-        messages: <p>Messages</p>,
+        messages: <Chat />,
         board: <Board selectedSpaceId={selectedSpaceId} showType={showType} />,
         members: <p>Members</p>,
     };
