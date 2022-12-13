@@ -18,6 +18,7 @@ import hideIcon from "./Hide.svg";
 import googleIcon from "./google.svg";
 import infoIcon from "./info-circle.svg";
 import warningIcon from "./warning.svg";
+import profileIcon from "./profile.svg";
 
 const images = {
   defaultList,
@@ -40,6 +41,7 @@ const images = {
   googleIcon,
   infoIcon,
   warningIcon,
+  profileIcon,
 };
 
 export default images;
