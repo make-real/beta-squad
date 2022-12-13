@@ -4,6 +4,7 @@ const initialState = {
     selectedWorkspace: null,
     workspaces: [],
     currentWorkspace: null,
+    workspaceMembers: [],
 };
 
 export const workspaceSlice = createSlice({
@@ -12,6 +13,9 @@ export const workspaceSlice = createSlice({
     reducers: {
         addWorkSpace: (state, { payload }) => {
             state.workspaces = payload;
+        },
+        addWorkspaceMembers: (state, { payload }) => {
+            state.workspaceMembers = payload;
         },
         setSelectedWorkSpaceId: (state, { payload }) => {
             state.selectedWorkspace = payload;
@@ -37,6 +41,7 @@ export const {
     setSelectedWorkSpaceId,
     removeWorkspace,
     updateWorkspace,
+    addWorkspaceMembers,
 } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

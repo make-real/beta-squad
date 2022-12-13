@@ -13,13 +13,23 @@ const SingleChat = () => {
     const { participantID } = useParams();
     const [selectedTab, setSelectedTab] = useState("messages");
     const [messageToRespond, setMessageToRespond] = useState();
+    const [selectedMember, setSelectedMember] = useState({});
+    const { selectedWorkspace } = useSelector((state) => state.workspace);
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
     );
-
+    const workspaceMembers = useSelector(
+        (state) => state.workspace.workspaceMembers
+    );
     const dispatch = useDispatch();
 
-    const { selectedWorkspace } = useSelector((state) => state.workspace);
+    useEffect(() => {
+        if (workspaceMembers) {
+            setSelectedMember(
+                workspaceMembers.find((value) => value._id === participantID)
+            );
+        }
+    }, [workspaceMembers]);
 
     useEffect(() => {
         getMessages();
@@ -63,21 +73,23 @@ const SingleChat = () => {
                 <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
                     /
                 </p>
-                <p className="text-[#031124] text-[15px] font-medium">Happy</p>
+                <p className="text-[#031124] text-[15px] font-medium">
+                    {selectedMember?.fullName}
+                </p>
             </div>
             <div className="mt-[40px] w-full h-full bg-white rounded-[16px] px-[60px] pt-[50px] pb-[36px] flex flex-col">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-[11px]">
                         <div className="relative">
                             <img
-                                src="https://images.unsplash.com/photo-1599834562135-b6fc90e642ca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGJlYXJkZWR8ZW58MHx8MHx8&w=1000&q=80"
+                                src={selectedMember?.avatar}
                                 alt=""
                                 className="w-[27px] h-[27px] rounded-full border-[2px] border-[#6576FF] object-cover"
                             />
                             <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] bottom-0 right-[-4px]"></div>
                         </div>
                         <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
-                            Happy
+                            {selectedMember?.fullName}
                         </h2>
                     </div>
 
