@@ -44,7 +44,7 @@ const AssigneeUser = ({
         if (Boolean(listID)) {
             dispatch(addListId(listID));
         }
-    }, [spaceID, listID]);
+    }, [spaceID, listID, dispatch, handleDataChange]);
 
     const handle_add_assignee_users = async (user) => {
         try {

@@ -50,6 +50,7 @@ const CardModal = ({
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
+    const [toggleEdit, setToggleEdit] = useState(false);
     const nameOfBoardList = boardLists.find(({ _id }) => _id === listID)?.name;
     const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
     const [modalActionToggling, setModalActionToggling] = useState(false);
@@ -82,7 +83,7 @@ const CardModal = ({
         };
 
         getCard();
-    }, [selectedSpaceId, listID, card?._id]);
+    }, [selectedSpaceId, listID, card?._id, setLocalCard]);
 
     useEffect(() => {
         const handleEscapeKeyPress = (e) => {
@@ -92,7 +93,7 @@ const CardModal = ({
         document.addEventListener('keydown', handleEscapeKeyPress);
         return () =>
             document.removeEventListener('keydown', handleEscapeKeyPress);
-    }, []);
+    }, [localCard, setBoardModal]);
 
     useEffect(
         () => updateCard(listID, localCard._id, localCard),
@@ -362,9 +363,30 @@ const CardModal = ({
                         </div> */}
 
                         <div>
-                            <p className="font-[600] text-xl">Development</p>
+                            {toggleEdit ? (
+                                <input
+                                    title="Hit enter to save!"
+                                    type="text"
+                                    value={localCard?.name}
+                                    onChange={(e) =>
+                                        setLocalCard((pre) => ({
+                                            ...pre,
+                                            name: e.target.value,
+                                        }))
+                                    }
+                                    onKeyDown={
+                                        handle_card_name_update_enter_btn
+                                    }
+                                    className="font-[600] text-xl outline-none border rounded-lg hover:border-gray-400 text-teal-500 bg-gray-50"
+                                />
+                            ) : (
+                                <p className="font-[600] text-xl">
+                                    {card?.name || 'Development'}
+                                </p>
+                            )}
+
                             <p className="font-[400] text-sm text-[#818892]">
-                                On Progress
+                                {nameOfBoardList || 'On Progress'}
                             </p>
                         </div>
 
@@ -430,11 +452,11 @@ const CardModal = ({
                                 <Dropdown
                                     width={450}
                                     button={
-                                        <div className="flex gap-2 ml-[15px] items-center">
+                                        <div className="flex gap-2 items-center">
                                             {localCard.assignee?.length ? (
                                                 localCard.assignee.map(
                                                     (user, i) => (
-                                                        <div className="ml-[-15px]">
+                                                        <div className="ml-[-20px]">
                                                             {user.avatar ? (
                                                                 <img
                                                                     src={
@@ -444,23 +466,25 @@ const CardModal = ({
                                                                     className="rounded-full ring-[1px] bg-white ring-[#13BEC0] p-1"
                                                                 />
                                                             ) : (
-                                                                <p className="rounded-full ring-[1px] bg-white ring-[#13BEC0] text-[#14BCBE] font-bold grid place-items-center p-1">
-                                                                    {i ||
-                                                                        user?.fullName.charAt(
-                                                                            0
-                                                                        )}
-                                                                </p>
+                                                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                                                    <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
+                                                                        {i ||
+                                                                            user?.fullName.charAt(
+                                                                                0
+                                                                            )}
+                                                                    </p>
+                                                                </span>
                                                             )}
                                                         </div>
                                                     )
                                                 )
                                             ) : (
-                                                <div className="ml-[-15px]">
+                                                <div className="ml-[-20px]">
                                                     <UserPlus />
                                                 </div>
                                             )}
                                             {/* <span>Assignee</span> */}
-                                            <div className="ml-[-15px]">
+                                            <div className="ml-[-20px]">
                                                 <p className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
                                                     <PlusIcon className="h-5 w-5 text-[#14BCBE]" />
                                                 </p>
@@ -495,6 +519,8 @@ const CardModal = ({
                                         listID={listID}
                                         noteDone={noteDone}
                                         setNoteDone={setNoteDone}
+                                        toggleEdit={toggleEdit}
+                                        setToggleEdit={setToggleEdit}
                                         setModalActionToggling={
                                             setModalActionToggling
                                         }
