@@ -13,6 +13,9 @@ import {
 } from "../../store/slice/space";
 import FolderIcon from "../../assets/icon_component/Folder";
 import Board from "../Board/Board";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import Chat from "../Chat/Chat";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const [selectedTab, setSelectedTab] = useState("messages");
@@ -20,8 +23,17 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const dispatch = useDispatch();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
+    const { state } = useLocation();
+
+    useEffect(() => {
+        if (state?.tab) {
+            setSelectedTab(state?.tab ?? "messages");
+            window.history.replaceState({}, document.title);
+        }
+    }, [state?.tab]);
+
     const TabsScreen = {
-        messages: <p>Messages</p>,
+        messages: <Chat />,
         board: <Board selectedSpaceId={selectedSpaceId} showType={showType} />,
         members: <p>Members</p>,
     };

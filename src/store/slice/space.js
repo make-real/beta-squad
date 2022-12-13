@@ -23,14 +23,25 @@ export const spaceSlice = createSlice({
             state.allSpaces = [...state.allSpaces, payload];
         },
         updateSpace: (state, { payload }) => {
-            state.allSpaces = state.allSpaces.map(space => space._id === payload._id ? payload : space);
+            state.allSpaces = state.allSpaces.map((space) =>
+                space._id === payload._id ? payload : space
+            );
         },
         removeSpace: (state, { payload }) => {
-            state.allSpaces = state.allSpaces.filter(({ _id }) => _id !== payload);
-        }
+            state.allSpaces = state.allSpaces.filter(
+                ({ _id }) => _id !== payload
+            );
+        },
     },
 });
 
-export const { addSpace, setSelectedSpaceId, addNewSpace, setSelectedSpaceObject, updateSpace, removeSpace } = spaceSlice.actions;
+export const {
+    addSpace,
+    setSelectedSpaceId,
+    addNewSpace,
+    setSelectedSpaceObject,
+    updateSpace,
+    removeSpace,
+} = spaceSlice.actions;
 
 export default spaceSlice.reducer;

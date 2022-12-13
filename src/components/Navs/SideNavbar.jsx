@@ -15,6 +15,7 @@ import {
 } from "../../api/workSpace";
 import {
     addWorkSpace,
+    addWorkspaceMembers,
     setSelectedWorkSpaceId,
 } from "../../store/slice/workspace";
 import {
@@ -71,6 +72,7 @@ const SideNavbar = () => {
         try {
             const { data } = await get_workspace_member(selectedWorkspace);
             setMembers(data?.teamMembers);
+            dispatch(addWorkspaceMembers(data?.teamMembers ?? []));
         } catch (error) {
             console.log(error);
         }
@@ -409,8 +411,8 @@ const SideNavbar = () => {
                         )}
                         {/* Chats List */}
                         <div className="mt-[15px] flex flex-col">
-                            {members.map((member) => {
-                                return (
+                            {members.map((member) =>
+                                member._id !== user._id ? (
                                     <div
                                         className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
                                             selectedChat?._id === member?._id
@@ -444,8 +446,8 @@ const SideNavbar = () => {
                                             </p>
                                         )}
                                     </div>
-                                );
-                            })}
+                                ) : null
+                            )}
                         </div>
                     </div>
                 )}
