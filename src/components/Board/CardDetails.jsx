@@ -580,7 +580,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     </span>
                                 </div> */}
 
-                                {!!(checked.length + unchecked.length) && (
+                                {!!(checked?.length + unchecked?.length) ? (
                                     <div className="relative flex items-center px-1">
                                         <div className="relative flex w-full h-2 bg-slate-300">
                                             <div
@@ -597,9 +597,19 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                             />
                                         </div>
                                         <p className="text-gray-400 text-sm ml-2">
-                                            {checked.length}/
-                                            {checked.length + unchecked.length}
-                                        </p>{' '}
+                                            {checked?.length}/
+                                            {checked?.length +
+                                                unchecked?.length}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="relative flex items-center px-1">
+                                        <div className="relative flex w-full h-2 bg-slate-300">
+                                            <div className="h-full" />
+                                        </div>
+                                        <p className="text-gray-400 text-sm ml-2">
+                                            0/0
+                                        </p>
                                     </div>
                                 )}
 
