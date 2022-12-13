@@ -52,6 +52,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const localCard = cardDetails?.localCard;
     const setLocalCard = cardDetails?.setLocalCard;
 
+    const selectedWorkspaceId = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
     const [toggleEdit, setToggleEdit] = useState(false);
     // const [localCard, setLocalCard] = useState({});
     const { updateCard, boardLists } = useBoardCardContext();
@@ -570,7 +573,16 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             <div
                                 onClick={() => {
                                     setBoardModal(localCard);
-                                    navigate(-1 || "/projects/kanban");
+                                    // Prev
+                                    // navigate(-1 || "/projects/kanban");
+                                    navigate(
+                                        `/projects/${selectedWorkspaceId}`,
+                                        {
+                                            state: {
+                                                tab: "board",
+                                            },
+                                        }
+                                    );
                                 }}
                             >
                                 <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />

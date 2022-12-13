@@ -11,6 +11,7 @@ const Home = () => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     return currentWorkspace && selectedSpaceId ? (
