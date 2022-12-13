@@ -319,8 +319,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
-    const checked = card?.checkList?.filter((item) => item?.checked);
-    const unchecked = card?.checkList?.filter((item) => !item?.checked);
+    const checked = localCard?.checkList?.filter((item) => item?.checked);
+    const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
     console.log({ toggleEdit });
 
@@ -348,7 +348,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 <div className="relative bg-white p-8 rounded-2xl">
                     <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
 
-                    <div className="flex items-center justify-between pb-4">
+                    <div className="flex items-center justify-between pb-4 px-1">
                         {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
                     <div
                         onClick={() =>
@@ -457,7 +457,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             </div>
 
                             {/* assignee */}
-                            <div className='pl-5'>
+                            <div className="pl-5">
                                 <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1 space-x-5">
                                     <Dropdown
                                         width={450}
@@ -551,7 +551,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         `/projects/${selectedWorkspaceId}`,
                                         {
                                             state: {
-                                                tab: "board",
+                                                tab: 'board',
                                             },
                                         }
                                     );
@@ -581,7 +581,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 </div> */}
 
                                 {!!(checked.length + unchecked.length) && (
-                                    <div className="relative flex items-center">
+                                    <div className="relative flex items-center px-1">
                                         <div className="relative flex w-full h-2 bg-slate-300">
                                             <div
                                                 style={{
@@ -603,15 +603,17 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     </div>
                                 )}
 
-                                <CardTags
-                                    localCard={localCard}
-                                    setLocalCard={setLocalCard}
-                                    selectedSpaceId={selectedSpaceId}
-                                    listID={listID}
-                                    handleDataChange={handleDataChange}
-                                />
+                                <div className="py-2 px-1">
+                                    <CardTags
+                                        localCard={localCard}
+                                        setLocalCard={setLocalCard}
+                                        selectedSpaceId={selectedSpaceId}
+                                        listID={listID}
+                                        handleDataChange={handleDataChange}
+                                    />
+                                </div>
 
-                                <div className="py-2">
+                                <div className="py-2 px-1">
                                     <div className="py-2 w-fit text-gray-400  group">
                                         <p className="text-[14px] text-[#818892]">
                                             Description
@@ -631,7 +633,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     ) : (
                                         <div>
                                             <textarea
-                                                className="w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
+                                                className={`w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px] focus:outline-none ${
+                                                    editDescription
+                                                        ? 'ring-[1px]'
+                                                        : ''
+                                                } focus:ring-[1px] focus:ring-violet-500`}
                                                 type="text"
                                                 defaultValue={
                                                     localCard?.description
@@ -668,7 +674,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 </div>
 
                                 {/* checklist */}
-                                <div className="py-2">
+                                <div className="py-2 px-1">
                                     {/* <div className="flex items-center gap-2 py-2 cursor-pointer w-fit rounded-md duration-200 text-gray-400 group">
                                 <CheckList className="text-[#B9C3CE] group-hover:text-teal-400" />{' '}
                                 <span>Checklist</span>
@@ -682,17 +688,19 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
                                         <p className="font-[600]">
                                             Task of{' '}
-                                            {localCard?.startDate &&
-                                                formatDate(
-                                                    localCard.startDate,
-                                                    'MMM, dd'
-                                                )}{' '}
+                                            {localCard?.startDate
+                                                ? formatDate(
+                                                      localCard.startDate,
+                                                      'MMM, dd'
+                                                  )
+                                                : 'Start'}{' '}
                                             -{' '}
-                                            {localCard?.endDate &&
-                                                formatDate(
-                                                    localCard.endDate,
-                                                    'MMM, dd'
-                                                )}
+                                            {localCard?.endDate
+                                                ? formatDate(
+                                                      localCard.endDate,
+                                                      'MMM, dd'
+                                                  )
+                                                : 'End'}
                                         </p>
                                     </div>
 
@@ -847,7 +855,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         </label>
       </div> */}
 
-                                <div className="flex items-center py-2 gap-1 flex-wrap">
+                                <div className="flex items-center py-2 px-1 gap-1 flex-wrap">
                                     <div className="py-2 w-fit text-gray-400  group">
                                         <p className="text-[14px] text-[#818892]">
                                             Attachments
@@ -897,7 +905,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                             )
                                         )}
                                 </div>
-                                <div className="py-2">
+                                <div className="py-2 px-1">
                                     <DragDrop
                                         setAttachFileLoading={
                                             setAttachFileLoading
