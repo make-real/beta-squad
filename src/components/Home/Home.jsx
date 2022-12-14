@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import WorkspaceScreen from "./WorkspaceScreen";
-import SquadScreen from "./SquadScreen";
 
 const Home = () => {
     const currentWorkspace = useSelector(
@@ -14,14 +13,15 @@ const Home = () => {
 
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-    return currentWorkspace && selectedSpaceId ? (
-        <SquadScreen
-            selectedSpace={selectedSpaceObj}
-            currentWorkspace={currentWorkspace}
-        />
-    ) : (
-        <WorkspaceScreen currentWorkspace={currentWorkspace} />
-    );
+    // return currentWorkspace && selectedSpaceId ? (
+    //     <SquadScreen
+    //         selectedSpace={selectedSpaceObj}
+    //         currentWorkspace={currentWorkspace}
+    //     />
+    // ) : (
+    //     <WorkspaceScreen currentWorkspace={currentWorkspace} />
+    // );
+    return <WorkspaceScreen currentWorkspace={currentWorkspace} />;
 };
 
 export default Home;

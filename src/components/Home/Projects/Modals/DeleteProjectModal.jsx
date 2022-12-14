@@ -42,7 +42,7 @@ const DeleteProjectModal = ({
     };
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999]">
             <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"

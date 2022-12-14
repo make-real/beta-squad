@@ -41,6 +41,11 @@ import { useDispatch } from "react-redux";
 import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
 import { get_space_data, get_workspace_data } from "./api/workSpace";
 import { addSpace } from "./store/slice/space";
+import SquadScreen from "./components/Home/SquadScreen";
+import {
+    setSelectedSpaceObject,
+    setSelectedSpaceId,
+} from "./store/slice/space";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -74,6 +79,10 @@ const ProjectRoute = ({ children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(setSelectedWorkSpaceId(params.id));
+    }, [dispatch, params]);
+
+    useEffect(() => {
         const getSpaceData = async () => {
             try {
                 const { data } = await get_space_data(params.id);
@@ -92,8 +101,32 @@ const ProjectRoute = ({ children }) => {
     return children;
 };
 
+const SquadAuth = ({ children }) => {
+    const dispatch = useDispatch();
+    const params = useParams();
+    const allSpaces = useSelector((state) => state.space.allSpaces);
+
+    useEffect(() => {
+        dispatch(setSelectedSpaceId(params.squadId));
+        dispatch(
+            setSelectedSpaceObject(
+                allSpaces.find((space) => space._id === params.squadId)
+            )
+        );
+        dispatch(setSelectedWorkSpaceId(params.id));
+    }, [params, dispatch]);
+
+    return children;
+};
+
 const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+    const currentWorkspace = useSelector(
+        (state) => state.workspace.currentWorkspace
+    );
+    const selectedSpaceObj = useSelector(
+        (state) => state.space.selectedSpaceObj
+    );
     return (
         <main className="overflow-hidden">
             <Routes>
@@ -276,6 +309,19 @@ const App = () => {
                         }
                     />
                     <Route
+                        path=":id/squad/:squadId"
+                        element={
+                            <ProtectedRoute>
+                                <SquadAuth>
+                                    <SquadScreen
+                                        currentWorkspace={currentWorkspace}
+                                        selectedSpace={selectedSpaceObj}
+                                    />
+                                </SquadAuth>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
                         path=":id"
                         element={
                             <ProtectedRoute>
@@ -286,7 +332,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="chat/:participantID"
+                        path=":id/chat/:participantID"
                         element={
                             <ProtectedRoute>
                                 <SingleChat />

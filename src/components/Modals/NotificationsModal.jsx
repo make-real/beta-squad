@@ -5,7 +5,7 @@ import NotificationIcon from "../../assets/icon_component/NotificationIcon";
 
 const NotificationsModal = ({ setShowNotificationModal }) => {
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50 py-[20px]">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999] py-[20px]">
             <div className="h-full relative w-full max-w-[70%] max-h-[90%] bg-white rounded-[16px] px-[62px] py-[50px] overflow-y-scroll no-scrollbar flex flex-col">
                 <div
                     onClick={() => setShowNotificationModal(false)}

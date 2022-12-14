@@ -7,21 +7,23 @@ import board from "./slice/board";
 import cardAsList from "./slice/cardAsList";
 import privateChat from "./slice/privateChat";
 import socket from "./slice/socket";
+import screen from "./slice/screen";
 
 const rootReducer = combineReducers({
-  workspace,
-  space,
-  userInfo,
-  message,
-  board,
-  cardAsList,
-  privateChat,
-  socket,
+    workspace,
+    space,
+    userInfo,
+    message,
+    board,
+    cardAsList,
+    privateChat,
+    screen,
+    socket,
 });
 
 const store = configureStore({
-  reducer: rootReducer,
-  devTools: true,
+    reducer: rootReducer,
+    devTools: true,
 });
 
 export default store;

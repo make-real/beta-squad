@@ -28,6 +28,7 @@ import BriefCaseIcon from "../../assets/briefcase.svg";
 import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
 import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal";
+import { toggleFullSidebar } from "../../store/slice/screen";
 
 const SideNavbar = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const SideNavbar = () => {
     );
     const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
         useState(false);
-    const [showFullBar, setShowFullBar] = useState(true);
+    const fullSidebar = useSelector((state) => state.screen.fullSidebar);
     const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
     const [newWorkSpace, setNewWorkSpace] = useState(false);
     const [createSpaceModal, setCreateSpaceModal] = useState(false);
@@ -51,7 +52,7 @@ const SideNavbar = () => {
     );
     const [selectedChat, setSelectedChat] = useState(null);
 
-    const [members, setMembers] = useState([]);
+    const members = useSelector((state) => state.workspace.workspaceMembers);
 
     const location = useLocation();
 
@@ -71,7 +72,6 @@ const SideNavbar = () => {
     const getSpaceMember = async () => {
         try {
             const { data } = await get_workspace_member(selectedWorkspace);
-            setMembers(data?.teamMembers);
             dispatch(addWorkspaceMembers(data?.teamMembers ?? []));
         } catch (error) {
             console.log(error);
@@ -88,8 +88,14 @@ const SideNavbar = () => {
 
                 dispatch(addWorkSpace(data.workspaces));
 
-                if (!currentWorkspace) {
-                    dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
+                if (params.id) {
+                    dispatch(setSelectedWorkSpaceId(params.id));
+                } else {
+                    if (!currentWorkspace) {
+                        dispatch(
+                            setSelectedWorkSpaceId(data.workspaces[0]?._id)
+                        );
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -121,24 +127,23 @@ const SideNavbar = () => {
     const openChat = (id) => {
         navigate("single-chat/" + id);
     };
-
     return (
         <>
             <div
                 className={`${
-                    showFullBar
+                    fullSidebar
                         ? "min-w-[225px] w-[225px]"
                         : "w-max items-center"
-                } bg-[#2C3782] pt-[20px] flex flex-col`}
+                } bg-[#2C3782] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
             >
                 <div
                     className={`flex items-center justify-between mb-[32px] ${
-                        showFullBar
+                        fullSidebar
                             ? "pl-[25px] pr-[10px]"
                             : "pl-[25px] pr-[25px]"
                     }`}
                 >
-                    {showFullBar && (
+                    {fullSidebar && (
                         <Link to="/" className="flex items-center gap-4">
                             <img
                                 src={LogoIcon}
@@ -152,9 +157,15 @@ const SideNavbar = () => {
                     )}
                     <div
                         className="w-max"
-                        onClick={() => setShowFullBar(!showFullBar)}
+                        onClick={() => {
+                            dispatch(toggleFullSidebar());
+                        }}
                     >
-                        <CloseMenuBtn className="text-white w-[28px] h-[28px] cursor-pointer" />
+                        <CloseMenuBtn
+                            className={`text-white w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
+                                fullSidebar ? "" : "rotate-180"
+                            }`}
+                        />
                     </div>
                 </div>
                 {/* Manage Workspace Sidebar */}
@@ -164,7 +175,7 @@ const SideNavbar = () => {
                             className={`mb-[15px] bg-[#6576FF20] flex items-center cursor-pointer py-[12px] justify-between 
                                     } 
                                 ${
-                                    showFullBar
+                                    fullSidebar
                                         ? "pl-[25px] pr-[10px]"
                                         : "pl-[25px] pr-[25px]"
                                 }`}
@@ -176,13 +187,13 @@ const SideNavbar = () => {
                                     alt=""
                                 />
 
-                                {showFullBar && (
+                                {fullSidebar && (
                                     <p className="text-[14px] text-[#C4CEFE] font-semibold">
                                         Workspaces
                                     </p>
                                 )}
                             </div>
-                            {showFullBar && (
+                            {fullSidebar && (
                                 <img
                                     onClick={() =>
                                         setShowCreateWorkspaceModal(true)
@@ -194,12 +205,15 @@ const SideNavbar = () => {
                         </div>
 
                         {workspaces?.map((workspace) => (
-                            <div className="flex flex-col gap-3">
+                            <Link
+                                to={`/projects/${workspace._id}`}
+                                className="flex flex-col gap-3"
+                            >
                                 <div
                                     className={`flex items-center gap-3 cursor-pointer py-[12px] 
                                     } 
                                 ${
-                                    showFullBar
+                                    fullSidebar
                                         ? "pl-[25px]"
                                         : "pl-[25px] pr-[25px]"
                                 }`}
@@ -217,13 +231,13 @@ const SideNavbar = () => {
                                             {workspace?.name.charAt(0)}
                                         </div>
                                     )}
-                                    {showFullBar && (
+                                    {fullSidebar && (
                                         <p className="text-[14px] text-white">
                                             {workspace?.name}
                                         </p>
                                     )}
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </>
                 )}
@@ -234,7 +248,7 @@ const SideNavbar = () => {
                         className={`mb-[15px] bg-[#6576FF20] flex items-center cursor-pointer py-[12px] justify-between 
                                     } 
                                 ${
-                                    showFullBar
+                                    fullSidebar
                                         ? "pl-[25px] pr-[10px]"
                                         : "pl-[25px] pr-[25px]"
                                 }`}
@@ -260,7 +274,7 @@ const SideNavbar = () => {
                                 </svg>
                             </div>
 
-                            {showFullBar && (
+                            {fullSidebar && (
                                 <p className="text-[14px] text-[#FFFFFF] font-semibold">
                                     Profile
                                 </p>
@@ -288,7 +302,7 @@ const SideNavbar = () => {
                                     : "bg-[#6576FF10]"
                             } 
                                 ${
-                                    showFullBar
+                                    fullSidebar
                                         ? "pl-[25px]"
                                         : "pl-[25px] pr-[25px]"
                                 }`}
@@ -306,7 +320,7 @@ const SideNavbar = () => {
                                     {currentWorkspace?.name.charAt(0)}
                                 </div>
                             )}
-                            {showFullBar && (
+                            {fullSidebar && (
                                 <p className="text-[14px] text-white">
                                     {currentWorkspace?.name}
                                 </p>
@@ -317,7 +331,7 @@ const SideNavbar = () => {
                 {/* Squad */}
                 {defaultPage && (
                     <div className="mt-[24px]">
-                        {showFullBar && (
+                        {fullSidebar && (
                             <div
                                 className={`flex items-center justify-between pl-[25px] pr-[10px]`}
                             >
@@ -362,7 +376,7 @@ const SideNavbar = () => {
                                                 ? "bg-[#6576FF10]"
                                                 : ""
                                         }  ${
-                                            showFullBar
+                                            fullSidebar
                                                 ? "pl-[25px]"
                                                 : "pl-[25px] pr-[25px]"
                                         }`}
@@ -374,14 +388,16 @@ const SideNavbar = () => {
                                                 setSelectedSpaceObject(space)
                                             );
                                             setSelectedChat(null);
-                                            navigate("/projects");
+                                            navigate(
+                                                `/projects/${selectedWorkspace}/squad/${space._id}`
+                                            );
                                         }}
                                     >
                                         <FolderIcon
                                             style={{ fill: space.color }}
                                             className={`w-[20px] h-[20px]`}
                                         />
-                                        {showFullBar && (
+                                        {fullSidebar && (
                                             <p className="text-[14px] text-[#C4CEFE]">
                                                 {space.name}
                                             </p>
@@ -395,7 +411,7 @@ const SideNavbar = () => {
                 {/* Chats */}
                 {defaultPage && (
                     <div className="mt-[50px]">
-                        {showFullBar && (
+                        {fullSidebar && (
                             <div className="flex items-center justify-between pl-[25px] pr-[10px]">
                                 <h2 className="text-[#6576FF] opacity-80">
                                     Chats
@@ -419,7 +435,7 @@ const SideNavbar = () => {
                                                 ? "bg-[#6576FF10]"
                                                 : ""
                                         } ${
-                                            showFullBar
+                                            fullSidebar
                                                 ? "pl-[25px]"
                                                 : "pl-[25px] pr-[25px]"
                                         }`}
@@ -431,7 +447,7 @@ const SideNavbar = () => {
                                             );
                                             setSelectedChat(member);
                                             navigate(
-                                                `/projects/chat/${member?._id}`
+                                                `/projects/${selectedWorkspace}/chat/${member?._id}`
                                             );
                                         }}
                                     >
@@ -440,7 +456,7 @@ const SideNavbar = () => {
                                             className="w-[28px] h-[28px] rounded-full border object-cover"
                                             alt=""
                                         />
-                                        {showFullBar && (
+                                        {fullSidebar && (
                                             <p className="text-[#C4CEFE] text-[14px]">
                                                 {member.fullName}
                                             </p>
@@ -454,11 +470,11 @@ const SideNavbar = () => {
                 {/* Footer Copyright */}
                 <p
                     className={`text-[#C4CEFE] ${
-                        showFullBar ? "text-[12px] pl-[25px]" : "text-[22px]"
+                        fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"
                     } mt-auto mb-[16px]`}
                 >
                     &copy;
-                    {showFullBar && (
+                    {fullSidebar && (
                         <span className="ml-[10px]">Taskmanager 2022</span>
                     )}
                 </p>

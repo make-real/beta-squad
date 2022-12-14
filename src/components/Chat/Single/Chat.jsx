@@ -52,7 +52,7 @@ const SingleChat = () => {
     };
 
     const TabsScreen = {
-        messages: <SingleChatScreen />,
+        messages: <SingleChatScreen participantID={participantID} />,
         board: <p>Board</p>,
     };
 
@@ -157,6 +157,7 @@ const SingleChatScreen = ({ participantID }) => {
             console.log(error);
         }
     };
+
     return (
         <div className={`bg-[#ECECEC] pb-10 rounded-lg`}>
             <div

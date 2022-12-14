@@ -12,6 +12,7 @@ import {
     setSelectedSpaceId,
     setSelectedSpaceObject,
 } from "../../../store/slice/space";
+import { useNavigate } from "react-router-dom";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -24,6 +25,7 @@ const Projects = ({ showType }) => {
     const [editProjectData, setEditProjectData] = useState(null);
     const [showEditSquadModal, setShowEditSquadModal] = useState(false);
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const prepareDeleteProject = (projectData) => {
@@ -74,6 +76,7 @@ const Projects = ({ showType }) => {
                                     onClick={() => {
                                         dispatch(setSelectedSpaceId(space._id));
                                         dispatch(setSelectedSpaceObject(space));
+                                        navigate(`squad/${space._id}`);
                                     }}
                                     className="text-[#424D5B] font-semibold cursor-pointer"
                                 >

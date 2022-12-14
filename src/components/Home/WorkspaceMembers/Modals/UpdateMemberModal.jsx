@@ -6,6 +6,9 @@ import BriefCaseIcon from "../../../../assets/briefcase.svg";
 import { useEffect } from "react";
 import { useState } from "react";
 import { WORKSPACE_ROLE } from "../../../../constant/enums";
+import { change_workspace_member_role } from "../../../../api/workSpace";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const UpdateMemberModal = ({
     setShowUpdateMemberModal,
@@ -13,10 +16,35 @@ const UpdateMemberModal = ({
     cancleUpdateMember,
 }) => {
     const [editData, setEditData] = useState({});
+    const selectedWorkspaceId = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
 
     const handleChange = (e) => {
         setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-        console.log(editData);
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            console.log(selectedWorkspaceId);
+            const { data } = await change_workspace_member_role(
+                selectedWorkspaceId,
+                {
+                    id: editData._id,
+                    role: editData.role,
+                }
+            );
+
+            // display a notification for user
+            toast.success(`Role changed successfully`, {
+                autoClose: 3000,
+            });
+        } catch (error) {
+            // error for developer for deBugging...
+            console.log(error);
+        }
+        setShowUpdateMemberModal(false);
     };
 
     useEffect(() => {
@@ -24,8 +52,8 @@ const UpdateMemberModal = ({
     }, [data]);
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50 py-[20px]">
-            <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px] h-full max-h-[600px] overflow-y-scroll no-scrollbar">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999] py-[20px]">
+            <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px] h-auto max-h-[600px] overflow-y-scroll no-scrollbar">
                 <div
                     onClick={() => setShowUpdateMemberModal(false)}
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
@@ -38,7 +66,7 @@ const UpdateMemberModal = ({
                 <p className="mt-[9px] text-[#818892] text-[14px]">
                     Update the following fields to edit member info.
                 </p>
-                <form className="mt-[28px]">
+                <form onSubmit={handleUpdate} className="mt-[28px]">
                     <p className="text-[14px] font-semibold text-[#424D5B]">
                         Name
                     </p>
@@ -46,14 +74,14 @@ const UpdateMemberModal = ({
                         <img src={ProfileCircle} alt="" />
                         <input
                             className="text-[#031124] placeholder:text-[#818892] text-[16px] border-none outline-none bg-transparent"
-                            type="email"
+                            type="text"
                             placeholder="Enter name"
                             name="fullName"
                             onChange={handleChange}
                             value={editData.fullName}
                         />
                     </div>
-                    <p className="mt-[20px] text-[14px] font-semibold text-[#424D5B]">
+                    {/* <p className="mt-[20px] text-[14px] font-semibold text-[#424D5B]">
                         Designation
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
@@ -86,7 +114,7 @@ const UpdateMemberModal = ({
                                 );
                             })}
                         </select>
-                    </div>
+                    </div> */}
                     <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
                         Member Type
                     </p>
@@ -117,19 +145,22 @@ const UpdateMemberModal = ({
                         </select>
                     </div>
                     <div className="flex items-center mt-[40px] gap-[30px]">
-                        <div
+                        <button
                             onClick={cancleUpdateMember}
                             className="bg-[#FFE7EB] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
                         >
                             <p className=" text-[14px] font-semibold text-[#FF3659]">
                                 Cancel
                             </p>
-                        </div>
-                        <div className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer">
+                        </button>
+                        <button
+                            type="submit"
+                            className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
+                        >
                             <p className=" text-[14px] font-semibold text-white">
                                 Update
                             </p>
-                        </div>
+                        </button>
                     </div>
                 </form>
             </div>

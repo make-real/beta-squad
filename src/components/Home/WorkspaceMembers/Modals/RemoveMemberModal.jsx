@@ -1,6 +1,10 @@
 import CrossIcon from "../../../../assets/cross.svg";
 import React from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { change_workspace_member_role } from "../../../../api/workSpace";
+import { useDispatch } from "react-redux";
+import { addWorkspaceMembers } from "../../../../store/slice/workspace";
 
 const RemoveMemberModal = ({
     data,
@@ -12,17 +16,45 @@ const RemoveMemberModal = ({
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
     );
-    const removeMember = () => {
+    const workspaceMembers = useSelector(
+        (state) => state.workspace.workspaceMembers
+    );
+    const dispatch = useDispatch();
+
+    const removeMember = async () => {
         setShowRemoveMemberModal(false);
-        setShowRemovedModal(true);
-        setTimeout(() => {
-            setShowRemovedModal(false);
-            setRemoveMemberData(null);
-        }, 1500);
+        try {
+            const res = await change_workspace_member_role(
+                currentWorkspace._id,
+                {
+                    id: data._id,
+                    role: "remove",
+                }
+            );
+            // display a notification for user
+            toast.success(`Member removed successfully`, {
+                autoClose: 3000,
+            });
+
+            dispatch(
+                addWorkspaceMembers(
+                    workspaceMembers.filter((member) => member._id !== data._id)
+                )
+            );
+
+            setShowRemovedModal(true);
+            setTimeout(() => {
+                setShowRemovedModal(false);
+                setRemoveMemberData(null);
+            }, 1500);
+        } catch (error) {
+            // error for developer for deBugging...
+            console.log(error);
+        }
     };
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999]">
             <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"

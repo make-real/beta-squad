@@ -58,8 +58,8 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
     console.log(memberData);
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] py-[20px] z-50">
-            <div className="relative w-[614px] h-full overflow-y-scroll no-scrollbar max-h-[500px] bg-white rounded-[16px] px-[60px] py-[40px]">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] py-[20px] z-[999]">
+            <div className="relative w-[614px] h-auto overflow-y-scroll no-scrollbar bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
                     onClick={() => setShowAddMemberModal(false)}
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
@@ -90,7 +90,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                             name="email"
                         />
                     </div>
-                    <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
+                    {/* <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
                         Member Type
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
@@ -113,7 +113,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                                 </option>
                             ))}
                         </select>
-                    </div>
+                    </div> */}
                     <button className="mt-[40px] w-full py-[17px] rounded-[8px] bg-[#6576FF] text-white">
                         Send Invitation
                     </button>

@@ -3,8 +3,6 @@ import SearchIcon from "../../assets/search.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import { useState } from "react";
-import Projects from "./Projects/Projects";
-import SquadMembers from "./SquadMembers/SquadMembers";
 import BackArrowIcon from "../../assets/back_arrow.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,14 +11,16 @@ import {
 } from "../../store/slice/space";
 import FolderIcon from "../../assets/icon_component/Folder";
 import Board from "../Board/Board";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
+import SquadMembers from "./SquadMembers/SquadMembers";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const [selectedTab, setSelectedTab] = useState("messages");
     const [showType, setShowType] = useState("grid");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const { state } = useLocation();
@@ -35,7 +35,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const TabsScreen = {
         messages: <Chat />,
         board: <Board selectedSpaceId={selectedSpaceId} showType={showType} />,
-        members: <p>Members</p>,
+        members: (
+            <SquadMembers showType={showType} selectedSpace={selectedSpace} />
+        ),
     };
 
     const TabsName = {
@@ -51,6 +53,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     onClick={() => {
                         dispatch(setSelectedSpaceId(null));
                         dispatch(setSelectedSpaceObject(null));
+                        navigate(-1);
                     }}
                     className="mr-[8px] cursor-pointer"
                 >
@@ -63,7 +66,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     /
                 </p>
                 <p className="text-[#031124] text-[15px] font-medium">
-                    {selectedSpace.name}
+                    {selectedSpace?.name}
                 </p>
             </div>
             <div className="mt-[40px] w-full h-full bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px]">
@@ -71,7 +74,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     <div className="flex items-center">
                         <FolderIcon
                             className="w-[60px]"
-                            style={{ fill: selectedSpace.color }}
+                            style={{ fill: selectedSpace?.color }}
                         />
                         <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                             {selectedSpace?.name}

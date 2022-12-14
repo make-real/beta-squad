@@ -4,7 +4,7 @@ import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import { useState } from "react";
 import Projects from "./Projects/Projects";
-import SquadMembers from "./SquadMembers/SquadMembers";
+import WorkspaceMembers from "./WorkspaceMembers/WorkspaceMembers";
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
     const [selectedTab, setSelectedTab] = useState("projects");
@@ -12,7 +12,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
 
     const Tabs = {
         projects: <Projects showType={showType} />,
-        squad_members: <SquadMembers showType={showType} />,
+        squad_members: <WorkspaceMembers showType={showType} />,
     };
 
     return (

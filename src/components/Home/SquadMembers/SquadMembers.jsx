@@ -2,61 +2,48 @@ import React from "react";
 import PlusIcon from "../../../assets/plus.svg";
 import ArrowDown from "../../../assets/arrowdown.svg";
 import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
-import AddMemberModal from "./Modals/AddMemberModal";
 import { useState } from "react";
-import UpdateMemberModal from "./Modals/UpdateMemberModal";
-import RemoveMemberModal from "./Modals/RemoveMemberModal";
-import MemberRemovedModal from "./Modals/MemberRemovedModal";
+import { get_space_members, remove_space_members } from "../../../api/space";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { get_space_members } from "../../../api/space";
-import { get_workspace_member } from "../../../api/workSpace";
+import AddMembers from "./Modals/AddMembers";
+import { toast } from "react-toastify";
 
-const SquadMembers = ({ showType }) => {
-    const selectedSpace = useSelector((state) => state.space.selectedSpace);
-    const selectedWorkspace = useSelector(
-        (state) => state.workspace.selectedWorkspace
-    );
-
-    const [members, setMembers] = useState([]);
+const SquadMembers = ({ showType, selectedSpace }) => {
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
-    const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
-    const [updateMemberData, setUpdateMemberData] = useState(null);
-    const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
-    const [removeMemberData, setRemoveMemberData] = useState(null);
-    const [showRemovedModal, setShowRemovedModal] = useState(false);
+    const [members, setMembers] = useState([]);
 
-    const prepareUpdateMember = (data) => {
-        setUpdateMemberData(data);
-        setShowUpdateMemberModal(true);
-    };
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    const prepareDeleteMember = (data) => {
-        setRemoveMemberData(data);
-        setShowRemoveMemberModal(true);
-    };
-
-    const cancelDeleteMember = () => {
-        setRemoveMemberData(null);
-        setShowRemoveMemberModal(false);
-    };
-
-    const cancleUpdateMember = () => {
-        setUpdateMemberData(null);
-        setShowUpdateMemberModal(false);
-    };
-
-    const fetchSpaceMembers = async () => {
+    const fetchSquadMembers = async () => {
         try {
-            const { data } = await get_workspace_member(selectedWorkspace);
-            setMembers(data?.teamMembers);
+            const { data } = await get_space_members(selectedSpace._id);
+            console.log(data);
+            setMembers(data?.members);
         } catch (err) {
+            toast.error(err?.message, {
+                autoClose: 3000,
+            });
             console.log("Error occured ==> ", err);
         }
     };
 
+    const removeMember = async (member) => {
+        try {
+            await remove_space_members(selectedSpace._id, member._id);
+            toast.success("Member removed", { autoClose: 3000 });
+            fetchSquadMembers();
+        } catch (err) {
+            toast.error(err?.message, { autoClose: 3000 });
+            console.log(err);
+        }
+    };
+
+    const addMembers = (smembers) => {
+        setMembers((prev) => [...prev, ...smembers]);
+    };
+
     useEffect(() => {
-        fetchSpaceMembers();
+        fetchSquadMembers();
     }, []);
 
     return (
@@ -73,13 +60,17 @@ const SquadMembers = ({ showType }) => {
                     </div>
                     {members.map((member) => {
                         return (
-                            <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                <EditDeleteMenu
-                                    deleteFunc={prepareDeleteMember}
-                                    data={member}
-                                    editFunc={prepareUpdateMember}
-                                    className="absolute top-[10px] right-[10px]"
-                                />
+                            <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] px-[13px] pt-[20px]">
+                                {members.find((m) => m._id === userInfo._id)
+                                    .role === "owner" ||
+                                    ("manager" && (
+                                        <div
+                                            onClick={() => removeMember(member)}
+                                            className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                        >
+                                            <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                        </div>
+                                    ))}
                                 <div className="flex gap-[10px]">
                                     <img
                                         src={member?.avatar}
@@ -104,8 +95,8 @@ const SquadMembers = ({ showType }) => {
                                     </div>
                                 )}
                                 {/* <p className="text-[#818892] mt-[10px]">
-                                    {member.email}
-                                </p> */}
+                            {member.email}
+                        </p> */}
                             </div>
                         );
                     })}
@@ -144,12 +135,19 @@ const SquadMembers = ({ showType }) => {
                                         <p className="text-[#818892]">
                                             {member?.email}
                                         </p>
-                                        <EditDeleteMenu
-                                            data={member}
-                                            deleteFunc={prepareDeleteMember}
-                                            editFunc={prepareUpdateMember}
-                                            className="absolute top-[10px] right-[10px]"
-                                        />
+                                        {members.find(
+                                            (m) => m._id === userInfo._id
+                                        ).role === "owner" ||
+                                            ("manager" && (
+                                                <div
+                                                    onClick={() =>
+                                                        removeMember(member)
+                                                    }
+                                                    className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                                >
+                                                    <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                                </div>
+                                            ))}
                                     </div>
                                 );
                             })}
@@ -159,27 +157,12 @@ const SquadMembers = ({ showType }) => {
             )}
 
             {showAddMemberModal && (
-                <AddMemberModal setShowAddMemberModal={setShowAddMemberModal} />
-            )}
-            {showUpdateMemberModal && (
-                <UpdateMemberModal
-                    data={updateMemberData}
-                    setShowUpdateMemberModal={setShowUpdateMemberModal}
-                    cancleUpdateMember={cancleUpdateMember}
+                <AddMembers
+                    addMembers={addMembers}
+                    selectedSpace={selectedSpace}
+                    setShowAddMemberModal={setShowAddMemberModal}
                 />
             )}
-
-            {showRemoveMemberModal && (
-                <RemoveMemberModal
-                    data={removeMemberData}
-                    setShowRemoveMemberModal={setShowRemoveMemberModal}
-                    cancelDeletion={cancelDeleteMember}
-                    setShowRemovedModal={setShowRemovedModal}
-                    setRemoveMemberData={setRemoveMemberData}
-                />
-            )}
-
-            {showRemovedModal && <MemberRemovedModal data={removeMemberData} />}
         </>
     );
 };
