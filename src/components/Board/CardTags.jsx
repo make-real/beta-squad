@@ -7,10 +7,6 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 
 const colorStyles = {
-    container: (provided, state) => ({
-        ...provided,
-        padding: '2px',
-    }),
     control: (provided, state) => ({
         ...provided,
         borderWidth: 0,
@@ -29,8 +25,6 @@ const colorStyles = {
         ...provided,
         marginLeft: '-10px',
     }),
-
-  
 };
 
 const CardTags = (props) => {

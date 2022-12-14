@@ -50,8 +50,6 @@ const Card = ({ showType, card, listID }) => {
         getCard();
     }, [selectedSpaceId, listID, card?._id]);
 
-    console.log({ localCard });
-
     const progressStatus = (progress) => {
         switch (progress) {
             case 4:
@@ -167,7 +165,7 @@ const Card = ({ showType, card, listID }) => {
                 )}
 
                 <div className="flex justify-between items-center">
-                    <p className="text-sm mr-4 mb-2 text-gray-800 font-bold">
+                    <p className="text-sm mr-4 mb-2 text-gray-800 font-bold truncate">
                         {card.name}
                     </p>
 
@@ -189,12 +187,9 @@ const Card = ({ showType, card, listID }) => {
                         )}
                     </div>
                 </div>
-                <div
-                    className="text-sm text-gray-800"
-                    dangerouslySetInnerHTML={{
-                        __html: draftJsToHtml(localCard?.description || ''),
-                    }}
-                />
+                <div className="text-sm text-gray-800">
+                    <p className="truncate">{localCard?.description || ''}</p>
+                </div>
                 <div className="pt-5 text-white flex gap-1 flex-wrap">
                     {card?.tags?.length
                         ? card?.tags?.map((tag) => (
@@ -250,7 +245,7 @@ const Card = ({ showType, card, listID }) => {
                     )} */}
                 </div>
 
-                {!!(checked.length + unchecked.length) && (
+                {!!(checked?.length + unchecked?.length) && (
                     <div className="relative flex items-center mt-3">
                         <div className="relative flex w-[100px] h-2 bg-slate-300 rounded-full">
                             <div
@@ -267,7 +262,8 @@ const Card = ({ showType, card, listID }) => {
                             />
                         </div>
                         <p className="text-gray-400 text-sm ml-2">
-                            {checked.length}/{checked.length + unchecked.length}
+                            {checked?.length}/
+                            {checked?.length + unchecked?.length}
                         </p>
                         {/* <div
                                 className={`w-8 h-8 grid place-items-center rounded-md cursor-pointer hover:bg-gray-300 hover:text-teal-400 text-[#B9C3CE] ${
