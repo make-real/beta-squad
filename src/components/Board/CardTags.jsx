@@ -158,7 +158,7 @@ const CardTags = (props) => {
         getTags();
     }, [userSelectedWorkSpaceId, createNewTag, localCard?.tags]);
     return (
-        <div className="py-2 relative">
+        <div className="pb-2 relative">
             {/* <div
                 onClick={() => setShowTags((pre) => !pre)}
                 className="flex items-center gap-2 py-2 cursor-pointer w-fit rounded-md duration-200 text-gray-400  group"

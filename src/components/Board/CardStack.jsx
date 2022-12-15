@@ -99,7 +99,7 @@ const CardStack = ({ listName, card, listID }) => {
             {/* message indicator */}
             <span
                 className="absolute -top-1 right-1 h-3 w-3 rounded-full"
-                style={{ backgroundColor: randomColor() }}
+                style={{ backgroundColor: '#FF3659' }}
             />
 
             {/* card name */}
@@ -152,7 +152,9 @@ const CardStack = ({ listName, card, listID }) => {
                 <div
                     style={{
                         backgroundColor:
-                            progress === 4 ? selectedSpaceObj?.color : 'grey',
+                            progress === 4
+                                ? '#54CC7C'
+                                : selectedSpaceObj?.color,
                     }}
                     className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
                 >
@@ -171,7 +173,7 @@ const CardStack = ({ listName, card, listID }) => {
             </div>
 
             {/* hover element */}
-            <div className="absolute top-0 left-0 rounded-2xl w-full h-0 flex flex-col justify-center items-center bg-[#031124]/[0.6] opacity-0 group-hover:h-full group-hover:opacity-100">
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-2xl w-full h-0 flex flex-col justify-center items-center bg-[#031124]/[0.6] opacity-0 group-hover:h-full group-hover:opacity-100 duration-100 ease-in-out">
                 <div className="absolute top-2 right-2 grid grid-cols-2 gap-2 place-content-end text-white">
                     <span className="cursor-pointer">
                         <TrashIcon
