@@ -133,7 +133,7 @@ const LoggedInTopNav = ({ userInfo }) => {
                                     >
                                         {workspace?.logo ? (
                                             <img
-                                                src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
+                                                src={workspace.logo}
                                                 alt=""
                                                 className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
                                             />

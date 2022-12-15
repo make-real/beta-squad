@@ -11,8 +11,26 @@ import { updateWorkspace } from "../../../store/slice/workspace";
 
 const EditWorkspaceModal = ({ cancelFunc, data }) => {
     const [editedData, setEditedData] = useState({});
+    const [logoDataURL, setLogoDataURL] = useState();
 
     const dispatch = useDispatch();
+
+    const handleLogo = (e) => {
+        const files = e.target.files;
+        if (files.length <= 0) return;
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = () => {
+            setLogoDataURL(fileReader.result.toString());
+            setEditedData((prev) => ({
+                ...prev,
+                logo: files[0],
+            }));
+        };
+
+        fileReader.readAsDataURL(files[0]);
+    };
 
     useEffect(() => {
         setEditedData(data);
@@ -28,12 +46,13 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
         const newData = { name: editedData.name };
 
         if (editedData.logo) {
-            newData = { ...newData, logo: editedData.logo };
+            newData.logo = editedData.logo;
         }
 
         try {
             const res = await update_workspace(data._id, newData);
             // display a notification for user
+            editedData.logo = logoDataURL;
             dispatch(updateWorkspace(editedData));
             cancelFunc();
         } catch (error) {
@@ -75,7 +94,7 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
                             {editedData?.logo ? (
                                 <>
                                     <img
-                                        src={editedData.logo}
+                                        src={logoDataURL || editedData.logo}
                                         className="w-full h-full rounded-full object-cover border-[3px] border-[#6576FF40]"
                                     />
                                     <label
@@ -94,7 +113,12 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
                                 </label>
                             )}
                         </div>
-                        <input type="file" id="workspace_logo" hidden />
+                        <input
+                            onChange={handleLogo}
+                            type="file"
+                            id="workspace_logo"
+                            hidden
+                        />
                     </>
                     <p className="text-[#818892] text-[14px] font-semibold mt-[30px]">
                         Work Space Name

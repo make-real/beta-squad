@@ -11,6 +11,26 @@ import { useDispatch } from "react-redux";
 const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
     const [workspaceCreated, setWorkspaceCreated] = useState(false);
     const [workspaceData, setWorkspaceData] = useState({});
+    const [logo, setLogo] = useState({
+        image: null,
+        dataURL: null,
+    });
+
+    const handleLogo = (e) => {
+        const files = e.target.files;
+        if (files.length <= 0) return;
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = () => {
+            setLogo((prev) => ({
+                image: files[0],
+                dataURL: fileReader.result.toString(),
+            }));
+        };
+
+        fileReader.readAsDataURL(files[0]);
+    };
 
     const dispatch = useDispatch();
 
@@ -18,9 +38,11 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
         e.preventDefault();
         try {
             // its a POST method | object send into backend/server
-            const { data } = await workspaceCreation({
+            const createData = {
                 name: workspaceData.name,
-            });
+            };
+            if (logo.image) createData.image = logo.image;
+            const { data } = await workspaceCreation(createData);
 
             // get all Work-Space data & send into redux store...
             // for live re-fetching/load data at SideBar for navigation...
@@ -44,7 +66,7 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
     };
 
     return (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50 py-[20px]">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999] py-[20px]">
             {workspaceCreated ? (
                 <div className="h-full relative w-[614px] max-h-[300px] bg-white rounded-[16px] px-[60px] py-[40px] overflow-y-scroll no-scrollbar flex items-center justify-center flex-col">
                     <div
@@ -88,9 +110,22 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
                                 htmlFor="workspace_logo"
                                 className="mt-[13px] w-[60px] h-[60px] rounded-full bg-[#ECECEC] flex items-center justify-center cursor-pointer"
                             >
-                                <img src={PlusIcon} alt="" />
+                                {logo.image ? (
+                                    <img
+                                        className="w-full h-full rounded-full object-cover"
+                                        src={logo.dataURL}
+                                        alt=""
+                                    />
+                                ) : (
+                                    <img src={PlusIcon} alt="" />
+                                )}
                             </label>
-                            <input type="file" id="workspace_logo" hidden />
+                            <input
+                                onChange={handleLogo}
+                                type="file"
+                                id="workspace_logo"
+                                hidden
+                            />
                         </>
                         <p className="text-[#818892] text-[14px] font-semibold mt-[30px]">
                             Work Space Name

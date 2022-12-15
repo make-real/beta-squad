@@ -13,6 +13,7 @@ import {
     setSelectedSpaceObject,
 } from "../../../store/slice/space";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -24,6 +25,7 @@ const Projects = ({ showType }) => {
     const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
     const [editProjectData, setEditProjectData] = useState(null);
     const [showEditSquadModal, setShowEditSquadModal] = useState(false);
+    const workspaces = useSelector((state) => state.workspace.workspaces);
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -52,10 +54,18 @@ const Projects = ({ showType }) => {
         }));
     };
 
+    useEffect(() => {
+        window.onload = () => {
+            if (workspaces.length <= 0) {
+                navigate("/settings/manage-workspace");
+            }
+        };
+    }, [workspaces]);
+
     return (
         <>
             {showType === "grid" ? (
-                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap overflow-y-scroll h-full no-scrollbar">
+                <div className="mt-[30px] flex gap-[30px] flex-wrap overflow-y-scroll h-full no-scrollbar">
                     {allSpaces.map((space) => {
                         return (
                             <div
@@ -97,7 +107,7 @@ const Projects = ({ showType }) => {
                 </div>
             ) : (
                 showType === "stack" && (
-                    <div className="flex flex-wrap items-center gap-[10px] mt-[30px] overflow-y-scroll h-full no-scrollbar max-h-[550px]">
+                    <div className="flex flex-col gap-[10px] mt-[30px] overflow-y-scroll h-full no-scrollbar max-h-[550px]">
                         <div
                             onClick={() => setShowCreateSquadModal(true)}
                             className="w-full min-h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"

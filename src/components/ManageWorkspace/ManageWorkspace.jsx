@@ -127,7 +127,7 @@ const ManageWorkspace = () => {
                                         <div className="flex items-center gap-[10px]">
                                             {workspace?.logo ? (
                                                 <img
-                                                    src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
+                                                    src={workspace.logo}
                                                     alt=""
                                                     className="w-[40px] h-[40px] rounded-full object-cover"
                                                 />
