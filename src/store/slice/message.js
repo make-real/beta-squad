@@ -39,10 +39,18 @@ export const messageSlice = createSlice({
         return m;
       });
     },
+    makeSendingFailed: (state, { payload }) => {
+      state.messages = state.messages.map((i) => {
+        if (i._id === payload) {
+          i.sendingFailed = true;
+        }
+
+        return i;
+      });
+    },
   },
 });
 
-export const { addBulkMessage, addSingleMessage, addReaction, removeMessage } =
-  messageSlice.actions;
+export const { addBulkMessage, addSingleMessage, makeSendingFailed, addReaction, removeMessage } = messageSlice.actions;
 
 export default messageSlice.reducer;

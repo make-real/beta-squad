@@ -78,6 +78,10 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
 
   const handleSendMessage = async () => {
     setMessageToRespond();
+
+
+    
+
     try {
       const text = String(input).trim();
       if (text === "") {
@@ -87,12 +91,36 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
       if (custom) {
         await onComment({ text });
       } else {
-        const { data } = await send_single_message(userSelectedWorkSpaceId, {
+        const obj = {
+          sender: {
+            _id: "62eeda054cd94215aec5d5bd",
+            fullName: "Shanta",
+            username: "coder.shanta",
+            avatar: "https://res.cloudinary.com/duaxe7mr0/raw/upload/v1661418500/jmrigyblvvxhbpfqkexy.jpg",
+          },
+          to: participantID,
+          chatHeaderRef: messageToRespond?._id,
+          content: {
+            text: text,
+            attachments: [],
+            mentionedUsers: [],
+          },
+          seenBy: [],
+          reactions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          __v: 0,
+        };
+
+        dispatch(addSingleMessagePrivate(obj));
+
+        await send_single_message(userSelectedWorkSpaceId, {
           sendTo: participantID,
           textMessage: text,
           replayOf: messageToRespond?._id,
         });
       }
+
       setInput("");
     } catch (error) {
       console.log(error);

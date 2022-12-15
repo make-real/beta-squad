@@ -31,7 +31,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
     }
   };
 
-  const reaction = msg.reactions.find((r) => r?.reactor?._id === userId)?.reaction;
+  const reaction = msg.reactions?.find((r) => r?.reactor?._id === userId)?.reaction;
 
   const handleDelete = async () => {
     try {
@@ -79,7 +79,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
 
 
 
-            {msg.seen.find((i) => i._id === participantID) ? <img src={tickIcon} alt="" /> : ""}
+            {msg.seen?.find((i) => i._id === participantID) ? <img src={tickIcon} alt="" /> : ""}
 
           </small>
         </div>
@@ -269,7 +269,7 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
 
   useEffect(() => {
     socket?.on("NEW_CHAT_MESSAGE_RECEIVED", (msg) => {
-      if (msg?.sender?._id === participantID || msg?.sender?._id === userId) {
+      if (msg?.sender?._id === participantID) {
         dispatch(addSingleMessagePrivate(msg));
       }
     });
