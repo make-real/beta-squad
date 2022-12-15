@@ -471,7 +471,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                         (user, i) => (
                                                             <div className="ml-[-20px]">
                                                                 {user.avatar ? (
-<<<<<<< HEAD
                                                                     <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
                                                                         <img
                                                                             src={
@@ -481,15 +480,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                                             className="h-5 w-5 text-[#14BCBE] flex justify-center items-center"
                                                                         />
                                                                     </span>
-=======
-                                                                    <img
-                                                                        src={
-                                                                            user.avatar
-                                                                        }
-                                                                        alt=""
-                                                                        className="w-[46px] h-[46px] rounded-full ring-[1px] bg-white ring-[#13BEC0] p-1"
-                                                                    />
->>>>>>> 0e568ccadf6a2fe184b8c972b191e77c71954461
                                                                 ) : (
                                                                     <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
                                                                         <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
