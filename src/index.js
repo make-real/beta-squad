@@ -25,6 +25,8 @@ requestNotificationPermission();
 
 let socket;
 
+const userId = JSON.parse(localStorage.getItem("userId"));
+
 if (token) {
   socket = io(config.BASE_URL, {
     auth: {
@@ -41,9 +43,11 @@ if (token) {
     const { space } = store.getState();
 
     if (msg.to === space.selectedSpace) {
+      if (userId === msg.sender._id) return;
+
       store.dispatch(addSingleMessage(msg));
     } else {
-      sentLocalNotification("New message recived.");
+      sentLocalNotification("New message received.");
     }
   });
 

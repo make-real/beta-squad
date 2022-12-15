@@ -403,7 +403,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             {/* date */}
                             <div className="ml-3 relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400">
                                 <Dropdown
-                                    width={418}
+                                    width={350}
+                                    style={{ borderRadius: '1rem' }}
                                     button={
                                         localCard.startDate ? (
                                             <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
@@ -458,9 +459,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                             {/* assignee */}
                             <div className="pl-5">
-                                <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1 space-x-5">
+                                <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1 space-x-5 pl-[25px]">
                                     <Dropdown
+                                        position={'bottom right'}
                                         width={450}
+                                        style={{ borderRadius: '1rem' }}
                                         button={
                                             <div className="flex gap-2 items-center">
                                                 {localCard.assignee?.length ? (
@@ -468,13 +471,15 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                         (user, i) => (
                                                             <div className="ml-[-20px]">
                                                                 {user.avatar ? (
-                                                                    <img
-                                                                        src={
-                                                                            user.avatar
-                                                                        }
-                                                                        alt=""
-                                                                        className="w-[46px] h-[46px] rounded-full ring-[1px] bg-white ring-[#13BEC0] p-1"
-                                                                    />
+                                                                    <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                                                        <img
+                                                                            src={
+                                                                                user.avatar
+                                                                            }
+                                                                            alt=""
+                                                                            className="h-5 w-5 text-[#14BCBE] flex justify-center items-center"
+                                                                        />
+                                                                    </span>
                                                                 ) : (
                                                                     <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
                                                                         <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">

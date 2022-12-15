@@ -37,7 +37,7 @@ const Message = ({
         }
     };
 
-    const reaction = msg.reactions.find(
+    const reaction = msg.reactions?.find(
         (r) => r?.reactor?._id === userId
     )?.reaction;
 

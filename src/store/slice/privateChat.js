@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { unionBy } from "lodash";
 
 const initialState = {
-  messages: []
+  messages: [],
 };
 
 const privateChatSlice = createSlice({
@@ -12,9 +13,7 @@ const privateChatSlice = createSlice({
       state.messages = payload;
     },
     addSingleMessagePrivate: (state, { payload }) => {
-      console.log(state.messages.length);
       state.messages.push(payload);
-      console.log(state.messages.length);
     },
     removeMessagePrivate: (state, { payload }) => {
       state.messages = state.messages.filter((m) => m._id !== payload);
