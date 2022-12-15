@@ -1,14 +1,14 @@
-import { useBoardCardContext } from "../../context/BoardCardContext";
-import { addBoardListApiCall, moveCard } from "../../hooks/useFetch";
-import { AddBtn, BoardList } from ".";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import useAxios from "../../api/index";
-import images from "../../assets";
-import { useSelector } from "react-redux";
-import { filterStatus } from "../../store/slice/board";
-import BoardStackList from "./BoardStackList";
+import { useBoardCardContext } from '../../context/BoardCardContext';
+import { addBoardListApiCall, moveCard } from '../../hooks/useFetch';
+import { AddBtn, BoardList } from '.';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
+import useAxios from '../../api/index';
+import images from '../../assets';
+import { useSelector } from 'react-redux';
+import { filterStatus } from '../../store/slice/board';
+import BoardStackList from './BoardStackList';
 
 const Board = ({ selectedSpaceId, showType }) => {
     const { handleDragEnd, boardLists, setBoardList, addBoardList } =
@@ -139,7 +139,7 @@ const Board = ({ selectedSpaceId, showType }) => {
     return (
         <section className={`duration-200 overflow-auto customScroll`}>
             {selectedSpaceId ? (
-                showType === "grid" ? (
+                showType === 'grid' ? (
                     <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
                             {filterdBoardList()

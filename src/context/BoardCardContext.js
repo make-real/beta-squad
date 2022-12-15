@@ -75,6 +75,7 @@ export const BoardCardContext = ({ children }) => {
 
         sourceBoard.cards.splice(sourceIndex, 1);
         targetBoard.cards.splice(targetIndex, 0, card);
+        setBoardList(board);
     };
 
     const toggleCardModal = (bid, cid) => {
