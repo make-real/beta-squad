@@ -55,7 +55,7 @@ const Projects = ({ showType }) => {
     return (
         <>
             {showType === "grid" ? (
-                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap">
+                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap overflow-y-scroll h-full no-scrollbar">
                     {allSpaces.map((space) => {
                         return (
                             <div
@@ -97,54 +97,45 @@ const Projects = ({ showType }) => {
                 </div>
             ) : (
                 showType === "stack" && (
-                    <div className="h-full overflow-y-scroll no-scrollbar mt-[30px]">
-                        <div className="flex flex-col items-center gap-[10px]">
-                            {allSpaces.map((space) => {
-                                return (
-                                    <div
-                                        style={{
-                                            backgroundColor: space.color + "10",
-                                        }}
-                                        className={`relative w-full h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
-                                    >
-                                        <EditDeleteMenu
-                                            data={space}
-                                            deleteFunc={prepareDeleteProject}
-                                            className="absolute top-[10px] right-[10px]"
-                                        />
-                                        <FolderIcon
-                                            style={{ fill: space.color }}
-                                        />
-                                        <p
-                                            onClick={() => {
-                                                dispatch(
-                                                    setSelectedSpaceId(
-                                                        space._id
-                                                    )
-                                                );
-                                                dispatch(
-                                                    setSelectedSpaceObject(
-                                                        space
-                                                    )
-                                                );
-                                            }}
-                                            className="text-[#424D5B] font-semibold cursor-pointer"
-                                        >
-                                            {space.name}
-                                        </p>
-                                    </div>
-                                );
-                            })}
-
-                            <div
-                                onClick={() => setShowCreateSquadModal(true)}
-                                className="w-full h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
-                            >
-                                <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
-                                    <img src={PlusIcon} alt="" />
-                                </div>
+                    <div className="flex flex-wrap items-center gap-[10px] mt-[30px] overflow-y-scroll h-full no-scrollbar max-h-[550px]">
+                        <div
+                            onClick={() => setShowCreateSquadModal(true)}
+                            className="w-full min-h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+                        >
+                            <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
+                                <img src={PlusIcon} alt="" />
                             </div>
                         </div>
+                        {allSpaces.map((space) => {
+                            return (
+                                <div
+                                    style={{
+                                        backgroundColor: space.color + "10",
+                                    }}
+                                    className={`relative w-full min-h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
+                                >
+                                    <EditDeleteMenu
+                                        data={space}
+                                        deleteFunc={prepareDeleteProject}
+                                        className="absolute top-[10px] right-[10px]"
+                                    />
+                                    <FolderIcon style={{ fill: space.color }} />
+                                    <p
+                                        onClick={() => {
+                                            dispatch(
+                                                setSelectedSpaceId(space._id)
+                                            );
+                                            dispatch(
+                                                setSelectedSpaceObject(space)
+                                            );
+                                        }}
+                                        className="text-[#424D5B] font-semibold cursor-pointer"
+                                    >
+                                        {space.name}
+                                    </p>
+                                </div>
+                            );
+                        })}
                     </div>
                 )
             )}

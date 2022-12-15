@@ -87,7 +87,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                     let exist = false;
                     card.assignee.forEach((assignee) => {
                         if (!exist) {
-                            exist = filter.assignee.includes(assignee._id);
+                            exist = filter.assignee.includes(assignee?._id);
                         }
                     });
                     return exist;
@@ -104,7 +104,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                     let exist = false;
                     card.tags.forEach((tag) => {
                         if (!exist) {
-                            exist = filter.tags.includes(tag._id);
+                            exist = filter.tags.includes(tag?._id);
                         }
                     });
                     return exist;
@@ -148,7 +148,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                                 ?.map((boardList) => (
                                     <BoardList
                                         showType={showType}
-                                        key={boardList._id}
+                                        key={boardList?._id}
                                         boardList={boardList}
                                     />
                                 ))}
@@ -173,7 +173,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                                 ?.map((boardList) => (
                                     <BoardStackList
                                         showType={showType}
-                                        key={boardList._id}
+                                        key={boardList?._id}
                                         boardList={boardList}
                                     />
                                 ))}
