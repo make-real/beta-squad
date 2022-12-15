@@ -91,10 +91,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
         const obj = {
           _id: msgID,
           sender: {
-            _id: "62eeda054cd94215aec5d5bd",
-            fullName: "Shanta",
-            username: "coder.shanta",
-            avatar: "https://res.cloudinary.com/duaxe7mr0/raw/upload/v1661418500/jmrigyblvvxhbpfqkexy.jpg",
+            _id: user._id,
+            fullName: user.fullName,
+            username: user.username,
+            avatar: user.avatar,
           },
           to: selectedSpaceId,
           chatHeaderRef: messageToRespond?._id,
