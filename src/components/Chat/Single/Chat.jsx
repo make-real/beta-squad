@@ -53,7 +53,7 @@ const SingleChat = () => {
 
     const TabsScreen = {
         messages: <SingleChatScreen participantID={participantID} />,
-        board: <p>Board</p>,
+        board: <></>,
     };
 
     const TabsName = {

@@ -63,7 +63,8 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                             <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] px-[13px] pt-[20px]">
                                 {members.find((m) => m._id === userInfo._id)
                                     .role === "owner" ||
-                                    ("manager" && (
+                                    "manager" ||
+                                    ("admin" && (
                                         <div
                                             onClick={() => removeMember(member)}
                                             className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"

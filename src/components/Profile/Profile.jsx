@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { update_user } from "../../api/auth";
 import BackArrowIcon from "../../assets/back_arrow.svg";

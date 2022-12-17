@@ -159,7 +159,7 @@ const Register = () => {
                                 />
                                 <input
                                     type="text"
-                                    name="text"
+                                    name="fullName"
                                     id="name"
                                     className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-blue-600 placeholder:text-xs text-sm"
                                     placeholder="Enter full name"
