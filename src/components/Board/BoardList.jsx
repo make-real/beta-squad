@@ -95,7 +95,7 @@ const BoardList = ({ showType, boardList }) => {
                 />
             </div>
             <span className="border-[1px] border-[#EEE9E9]" />
-            <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-3">
+            <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-2">
                 <Draggable
                     listId={boardList?._id}
                     elements={boardList?.cards}

@@ -553,7 +553,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     // Prev
                                     // navigate(-1 || "/projects/kanban");
                                     navigate(
-                                        `/projects/${selectedWorkspaceId}`,
+                                        `/projects/${selectedWorkspaceId}/squad/${selectedSpaceId}`,
                                         {
                                             state: {
                                                 tab: 'board',

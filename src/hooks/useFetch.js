@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import config from "../config";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import config from '../config';
 
 // Backend || Server ==> URL Address
 const api = axios.create({ baseURL: config.API_URL });
@@ -11,7 +11,7 @@ const api = axios.create({ baseURL: config.API_URL });
 // send user auth automatically every time with every request...
 api.interceptors.request.use((req) => {
     // 1st ==> get user token from LocalStorage, that server send to client...
-    const serverSendToken = JSON.parse(localStorage.getItem("jwt"));
+    const serverSendToken = JSON.parse(localStorage.getItem('jwt'));
 
     if (serverSendToken) {
         // 2nd ==> send this token from LocalStorage into server for user id tracking...
@@ -59,11 +59,11 @@ const useFetch = (endPoint) => {
 // 3) Login
 // 4) Logout
 export const userSignUp = (userInfo) =>
-    api.post("/user-auth/sign-up", userInfo);
-export const userSignIn = (userInfo) => api.post("/user-auth/login", userInfo);
-export const userLogOut = (_) => api.delete("/user-auth/logout");
+    api.post('/user-auth/sign-up', userInfo);
+export const userSignIn = (userInfo) => api.post('/user-auth/login', userInfo);
+export const userLogOut = (_) => api.delete('/user-auth/logout');
 export const accountVerification = (code) =>
-    api.post("/user-auth/account-verification", code);
+    api.post('/user-auth/account-verification', code);
 
 // GET Methods
 export const getUserProfileInfo = (userId) =>
@@ -74,11 +74,11 @@ export const getUserBySearch = (userQuery) =>
 // 🟨🟨🟨 Work-Space
 // POST ==> Work-Space Create
 export const workspaceCreation = (newWorkSpaceObj) =>
-    api.post("/workspaces", newWorkSpaceObj);
+    api.post('/workspaces', newWorkSpaceObj);
 
 // 🟨🟨🟨 Space
 // POST ==> Space Create --- under specific Work-Space reference ID
-export const spaceCreation = (newSpaceObj) => api.post("/spaces", newSpaceObj);
+export const spaceCreation = (newSpaceObj) => api.post('/spaces', newSpaceObj);
 
 // 🟨🟨🟨 Board List
 // POST ==> (Board) List Create --- under specific Space reference ID
@@ -106,7 +106,7 @@ export const cardUpdateApiCall = (
 
 export const cardAttachmentUpdateApiCall = (spaceId, listId, cardId, cardObj) =>
     api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 'Content-Type': 'multipart/form-data' },
     });
 
 export const createChecklistItem = (spaceId, listId, cardId, newChecklist) =>
@@ -132,7 +132,7 @@ export const deleteChecklistItem = (spaceId, listId, cardId, checklistId) =>
         `/spaces/${spaceId}/board/${listId}/card/${cardId}/checklist/${checklistId}`
     );
 
-export const getAllUser = () => api.get("/users");
+export const getAllUser = () => api.get('/users');
 
 export const getSpaceMembers = (spaceId) =>
     api.get(`/spaces/${spaceId}/members`);
@@ -140,9 +140,10 @@ export const getSpaceMembers = (spaceId) =>
 export const getSingleCard = (spaceId, listId, cardId) =>
     api.get(`/spaces/${spaceId}/board/${listId}/card/${cardId}`);
 
-export const moveCard = (spaceId, listId, cardId, newListId) =>
+export const moveCard = (spaceId, listId, cardId, newListId, order) =>
     api.put(`/spaces/${spaceId}/board/${listId}/card/${cardId}/move`, {
         newListId,
+        order,
     });
 
 export const getCardAsList = (spaceId) => api.get(`/spaces/${spaceId}/row`);

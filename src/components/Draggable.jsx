@@ -7,7 +7,7 @@ const Draggable = ({ showType, elements, render, listId }) => {
             {(provided) => (
                 <>
                     <div
-                        className={`${showType === 'stack' ? 'w-full' : ''}`}
+                        className={`p-1 ${showType === 'stack' ? 'w-full' : ''}`}
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >
