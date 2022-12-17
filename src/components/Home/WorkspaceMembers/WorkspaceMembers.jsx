@@ -75,45 +75,43 @@ const SquadMembers = ({ showType }) => {
                     </div>
                     {members.map((member) => {
                         return (
-                            userInfo._id !== member._id && (
-                                <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                    {members.find((m) => m._id === userInfo._id)
-                                        .role === "owner" && (
-                                        <EditDeleteMenu
-                                            deleteFunc={prepareDeleteMember}
-                                            data={member}
-                                            editFunc={prepareUpdateMember}
-                                            className="absolute top-[10px] right-[10px]"
-                                        />
-                                    )}
-                                    <div className="flex gap-[10px]">
-                                        <img
-                                            src={member?.avatar}
-                                            alt=""
-                                            className="w-[50px] h-[50px] object-cover rounded-full"
-                                        />
-                                        <div>
-                                            <h2 className="text-[#424D5B] font-semibold">
-                                                {member?.fullName}
-                                            </h2>
-                                            <p className="text-[#818892]">
-                                                {member?.username}
-                                            </p>
-                                        </div>
+                            <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
+                                {members.find((m) => m._id === userInfo._id)
+                                    .role === "owner" && (
+                                    <EditDeleteMenu
+                                        deleteFunc={prepareDeleteMember}
+                                        data={member}
+                                        editFunc={prepareUpdateMember}
+                                        className="absolute top-[10px] right-[10px]"
+                                    />
+                                )}
+                                <div className="flex gap-[10px]">
+                                    <img
+                                        src={member?.avatar}
+                                        alt=""
+                                        className="w-[50px] h-[50px] object-cover rounded-full"
+                                    />
+                                    <div>
+                                        <h2 className="text-[#424D5B] font-semibold">
+                                            {member?.fullName}
+                                        </h2>
+                                        <p className="text-[#818892]">
+                                            {member?.username}
+                                        </p>
                                     </div>
-                                    {member?.designation && (
-                                        <div className="flex items-center gap-[16px] mt-[13px]">
-                                            <p className="text-[#818892]">
-                                                {member.designation}
-                                            </p>
-                                            <img src={ArrowDown} alt="" />
-                                        </div>
-                                    )}
-                                    {/* <p className="text-[#818892] mt-[10px]">
+                                </div>
+                                {member?.designation && (
+                                    <div className="flex items-center gap-[16px] mt-[13px]">
+                                        <p className="text-[#818892]">
+                                            {member.designation}
+                                        </p>
+                                        <img src={ArrowDown} alt="" />
+                                    </div>
+                                )}
+                                {/* <p className="text-[#818892] mt-[10px]">
                                     {member.email}
                                 </p> */}
-                                </div>
-                            )
+                            </div>
                         );
                     })}
                 </div>
@@ -131,43 +129,37 @@ const SquadMembers = ({ showType }) => {
                             </div>
                             {members.map((member) => {
                                 return (
-                                    userInfo._id !== member._id && (
-                                        <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
-                                            <div className="flex items-center gap-[10px]">
-                                                <img
-                                                    src={member.avatar}
-                                                    alt=""
-                                                    className="w-[50px] h-[50px] object-cover rounded-full"
-                                                />
-                                                <h2 className="text-[#424D5B] font-semibold">
-                                                    {member.fullName}
-                                                </h2>
-                                            </div>
-                                            <div className="flex items-center gap-[16px]">
-                                                <p className="text-[#818892]">
-                                                    {member?.designation}
-                                                </p>
-                                                {/* <img src={ArrowDown} alt="" /> */}
-                                            </div>
-                                            <p className="text-[#818892]">
-                                                {member?.email}
-                                            </p>
-                                            {members.find(
-                                                (m) => m._id === userInfo._id
-                                            ).role === "owner" && (
-                                                <EditDeleteMenu
-                                                    deleteFunc={
-                                                        prepareDeleteMember
-                                                    }
-                                                    data={member}
-                                                    editFunc={
-                                                        prepareUpdateMember
-                                                    }
-                                                    className="absolute top-[10px] right-[10px]"
-                                                />
-                                            )}
+                                    <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+                                        <div className="flex items-center gap-[10px]">
+                                            <img
+                                                src={member.avatar}
+                                                alt=""
+                                                className="w-[50px] h-[50px] object-cover rounded-full"
+                                            />
+                                            <h2 className="text-[#424D5B] font-semibold">
+                                                {member.fullName}
+                                            </h2>
                                         </div>
-                                    )
+                                        <div className="flex items-center gap-[16px]">
+                                            <p className="text-[#818892]">
+                                                {member?.designation}
+                                            </p>
+                                            {/* <img src={ArrowDown} alt="" /> */}
+                                        </div>
+                                        <p className="text-[#818892]">
+                                            {member?.email}
+                                        </p>
+                                        {members.find(
+                                            (m) => m._id === userInfo._id
+                                        ).role === "owner" && (
+                                            <EditDeleteMenu
+                                                deleteFunc={prepareDeleteMember}
+                                                data={member}
+                                                editFunc={prepareUpdateMember}
+                                                className="absolute top-[10px] right-[10px]"
+                                            />
+                                        )}
+                                    </div>
                                 );
                             })}
                         </div>

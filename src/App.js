@@ -308,19 +308,31 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
-                        path=":id/squad/:squadId"
-                        element={
-                            <ProtectedRoute>
-                                <SquadAuth>
-                                    <SquadScreen
-                                        currentWorkspace={currentWorkspace}
-                                        selectedSpace={selectedSpaceObj}
-                                    />
-                                </SquadAuth>
-                            </ProtectedRoute>
-                        }
-                    />
+
+                    <Route path=":id/squad/:squadId">
+                        <Route
+                            index
+                            element={
+                                <ProtectedRoute>
+                                    <SquadAuth>
+                                        <SquadScreen
+                                            currentWorkspace={currentWorkspace}
+                                            selectedSpace={selectedSpaceObj}
+                                        />
+                                    </SquadAuth>
+                                </ProtectedRoute>
+                            }
+                        />
+                        {/* <Route
+                            path="board/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <CardDetails />
+                                </ProtectedRoute>
+                            }
+                        /> */}
+                    </Route>
+
                     <Route
                         path=":id"
                         element={

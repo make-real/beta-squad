@@ -341,9 +341,9 @@ const SideNavbar = () => {
                                 <div className="flex items-center gap-2">
                                     <div
                                         className="w-max"
-                                        onClick={() =>
-                                            setSpaceSearchModal(true)
-                                        }
+                                        // onClick={() =>
+                                        //     setSpaceSearchModal(true)
+                                        // }
                                     >
                                         <img
                                             src={SearchIcon}
