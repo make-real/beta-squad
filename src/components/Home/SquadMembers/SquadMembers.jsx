@@ -59,19 +59,21 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                         </div>
                     </div>
                     {members.map((member) => {
+                        const user = members.find(
+                            (m) => m._id === userInfo._id
+                        );
                         return (
                             <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] px-[13px] pt-[20px]">
-                                {members.find((m) => m._id === userInfo._id)
-                                    .role === "owner" ||
-                                    "manager" ||
-                                    ("admin" && (
-                                        <div
-                                            onClick={() => removeMember(member)}
-                                            className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                                        >
-                                            <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                                        </div>
-                                    ))}
+                                {user.role === "owner" ||
+                                user.role === "manager" ||
+                                user.role === "admin" ? (
+                                    <div
+                                        onClick={() => removeMember(member)}
+                                        className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                    >
+                                        <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                    </div>
+                                ) : null}
                                 <div className="flex gap-[10px]">
                                     <img
                                         src={member?.avatar}
@@ -115,8 +117,23 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                                 </div>
                             </div>
                             {members.map((member) => {
+                                const user = members.find(
+                                    (m) => m._id === userInfo._id
+                                );
                                 return (
                                     <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+                                        {user.role === "owner" ||
+                                        user.role === "manager" ||
+                                        user.role === "admin" ? (
+                                            <div
+                                                onClick={() =>
+                                                    removeMember(member)
+                                                }
+                                                className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                            >
+                                                <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                            </div>
+                                        ) : null}
                                         <div className="flex items-center gap-[10px]">
                                             <img
                                                 src={member.avatar}
@@ -136,19 +153,6 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                                         <p className="text-[#818892]">
                                             {member?.email}
                                         </p>
-                                        {members.find(
-                                            (m) => m._id === userInfo._id
-                                        ).role === "owner" ||
-                                            ("manager" && (
-                                                <div
-                                                    onClick={() =>
-                                                        removeMember(member)
-                                                    }
-                                                    className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                                                >
-                                                    <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                                                </div>
-                                            ))}
                                     </div>
                                 );
                             })}

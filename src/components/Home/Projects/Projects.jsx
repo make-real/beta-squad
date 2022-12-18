@@ -14,6 +14,7 @@ import {
 } from "../../../store/slice/space";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { squadBorderClassName } from "../../../constant/data";
 
 const Projects = ({ showType }) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
@@ -71,10 +72,20 @@ const Projects = ({ showType }) => {
                             <div
                                 style={{
                                     backgroundColor: space.color + "10",
-                                    borderColor: space.color,
+                                    // borderColor: space.color,
                                 }}
-                                className={`relative w-[214px] h-[110px] rounded-[16px] border flex items-center px-[17px] gap-[16px]`}
+                                className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
+                                    squadBorderClassName[space.color]
+                                }`}
                             >
+                                <div
+                                    onClick={() => {
+                                        dispatch(setSelectedSpaceId(space._id));
+                                        dispatch(setSelectedSpaceObject(space));
+                                        navigate(`squad/${space._id}`);
+                                    }}
+                                    className="absolute inset-0 w-full h-full cursor-pointer"
+                                ></div>
                                 <EditDeleteMenu
                                     deleteFunc={prepareDeleteProject}
                                     editFunc={prepareEditProject}
@@ -82,14 +93,7 @@ const Projects = ({ showType }) => {
                                     className="absolute top-[10px] right-[10px]"
                                 />
                                 <FolderIcon style={{ fill: space.color }} />
-                                <p
-                                    onClick={() => {
-                                        dispatch(setSelectedSpaceId(space._id));
-                                        dispatch(setSelectedSpaceObject(space));
-                                        navigate(`squad/${space._id}`);
-                                    }}
-                                    className="text-[#424D5B] font-semibold cursor-pointer"
-                                >
+                                <p className="text-[#424D5B] font-semibold cursor-pointer">
                                     {space.name}
                                 </p>
                             </div>
@@ -124,13 +128,7 @@ const Projects = ({ showType }) => {
                                     }}
                                     className={`relative w-full min-h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
                                 >
-                                    <EditDeleteMenu
-                                        data={space}
-                                        deleteFunc={prepareDeleteProject}
-                                        className="absolute top-[10px] right-[10px]"
-                                    />
-                                    <FolderIcon style={{ fill: space.color }} />
-                                    <p
+                                    <div
                                         onClick={() => {
                                             dispatch(
                                                 setSelectedSpaceId(space._id)
@@ -138,9 +136,19 @@ const Projects = ({ showType }) => {
                                             dispatch(
                                                 setSelectedSpaceObject(space)
                                             );
+                                            navigate(`squad/${space._id}`);
                                         }}
-                                        className="text-[#424D5B] font-semibold cursor-pointer"
-                                    >
+                                        className="absolute inset-0 w-full h-full cursor-pointer"
+                                    ></div>
+                                    <EditDeleteMenu
+                                        data={space}
+                                        editFunc={prepareEditProject}
+                                        deleteFunc={prepareDeleteProject}
+                                        className="absolute top-[10px] right-[10px]"
+                                        boxClassName="right-[30px]"
+                                    />
+                                    <FolderIcon style={{ fill: space.color }} />
+                                    <p className="text-[#424D5B] font-semibold cursor-pointer">
                                         {space.name}
                                     </p>
                                 </div>
