@@ -19,8 +19,8 @@ import CardTags from './CardTags';
 import Button from '../Button';
 // import CardProgress from './CardProgress';
 // import Editor from '../Editor';
-import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+// import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
+// import draftToHtml from 'draftjs-to-html';
 import CardMessage from './CardComment';
 import ImgsViewer from 'react-images-viewer';
 import { formatDate } from '../../util/date';
@@ -180,7 +180,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     };
 
     const handle_create_check_list = () => {
-        setNewCheckListItemJSX(true);
+        setNewCheckListItemJSX(!newCheckListItemJSX);
         setCheckListItem({
             checked: false,
             content: '',
@@ -188,10 +188,14 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     };
 
     const handle_check_list_item_enter_btn = async (e) => {
-        if (e.key === 'Enter') {
-            const cardValue = { ...localCard };
+        // if (e.key === 'Enter') {
 
-            const checkListItemObj = { ...checkListItem };
+        const cardValue = { ...localCard };
+
+        const checkListItemObj = { ...checkListItem };
+
+        if (checkListItemObj.content.length > 0) {
+            setNewCheckListItemJSX(false);
 
             const cardCheckList = {
                 ...cardValue,
@@ -208,7 +212,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     checkListItemObj
                 );
                 handleDataChange();
+                toast.success('List item added', { autoClose: 2000 });
             } catch (error) {
+                toast.error('List item not added', { autoClose: 2000 });
+
                 console.log(error.response.data.issue);
             }
 
@@ -288,7 +295,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             );
             toast.success(data?.message, { autoClose: 2000 });
         } catch (error) {
-            console.log(error?.response?.data?.issue?.message);
+            toast.error(JSON.stringify(error?.response?.data?.issue), {
+                autoClose: 2000,
+            });
+            console.log(error?.response.data?.issue);
         }
     };
 
@@ -301,20 +311,20 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // const handle_open_assignee_modal = () =>
     //     setOpenAssigneeModal((pre) => !pre);
 
-    const getHtml = (data) => {
-        if (!data) return;
-        try {
-            const rowHtmlContent = EditorState.createWithContent(
-                convertFromRaw(JSON.parse(data))
-            );
-            const editorHTML = draftToHtml(
-                convertToRaw(rowHtmlContent.getCurrentContent())
-            );
-            return editorHTML;
-        } catch (error) {
-            return '';
-        }
-    };
+    // const getHtml = (data) => {
+    //     if (!data) return;
+    //     try {
+    //         const rowHtmlContent = EditorState.createWithContent(
+    //             convertFromRaw(JSON.parse(data))
+    //         );
+    //         const editorHTML = draftToHtml(
+    //             convertToRaw(rowHtmlContent.getCurrentContent())
+    //         );
+    //         return editorHTML;
+    //     } catch (error) {
+    //         return '';
+    //     }
+    // };
 
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
@@ -372,7 +382,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                         <div className="w-2/4">
                             {toggleEdit ? (
                                 <input
-                                    title="Hit enter to save!"
                                     type="text"
                                     value={localCard?.name}
                                     onChange={(e) =>
@@ -444,14 +453,20 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 <span
                                     className={`rounded-full ring-[1px] p-1 ${
                                         showChat
-                                            ? 'bg-[#54CC7C]'
-                                            : 'bg-gray-200'
-                                    } ring-[#ECECEC] text-black font-bold grid place-items-center`}
+                                            ? 'bg-[#54CC7C] ring-[#ECECEC]'
+                                            : 'ring-[#54CC7C]'
+                                    } text-black font-bold grid place-items-center`}
                                     onClick={() =>
                                         setShowChat((showChat) => !showChat)
                                     }
                                 >
-                                    <ChatBubbleBottomCenterTextIcon className="w-5 h-5 text-white" />
+                                    <ChatBubbleBottomCenterTextIcon
+                                        className={`w-5 h-5 ${
+                                            showChat
+                                                ? 'text-white'
+                                                : 'text-[#54CC7C]'
+                                        } `}
+                                    />
                                 </span>
                             </div>
 
@@ -475,7 +490,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                                                 user.avatar
                                                                             }
                                                                             alt=""
-                                                                            className="h-5 w-5 text-[#14BCBE] flex justify-center items-center"
+                                                                            className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
                                                                         />
                                                                     </span>
                                                                 ) : (
@@ -729,7 +744,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                             defaultChecked={
                                                                 item.checked
                                                             }
-                                                            onChange={(e) =>
+                                                            onBlur={(e) =>
                                                                 handle_check_list_update_on_change(
                                                                     e,
                                                                     item._id
@@ -739,8 +754,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                                                         <input
                                                             type="text"
-                                                            value={item.content}
-                                                            onChange={(e) =>
+                                                            defaultValue={
+                                                                item.content
+                                                            }
+                                                            onBlur={(e) =>
                                                                 handle_check_list_update_on_change(
                                                                     e,
                                                                     item._id
@@ -793,8 +810,14 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                         handle_check_list_change
                                                     }
                                                 /> */}
+
                                                 <input
-                                                    title="Hit enter to save"
+                                                    title="Please save list to check"
+                                                    type="checkbox"
+                                                    className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF]"
+                                                    checked={false}
+                                                />
+                                                <input
                                                     type="text"
                                                     name="content"
                                                     value={
@@ -803,14 +826,14 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                     onChange={
                                                         handle_check_list_change
                                                     }
-                                                    onKeyDown={
+                                                    onBlur={
                                                         handle_check_list_item_enter_btn
                                                     }
-                                                    className="flex-1 mr-2 my-2 px-2 py-0.5 rounded-md border outline-none border-gray-300 focus:border-teal-600 duration-200"
+                                                    className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-teal-600 duration-200"
                                                 />
                                                 <Dropdown
                                                     width={120}
-                                                    position="right center"
+                                                    position="left center"
                                                     button={
                                                         <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
                                                     }
@@ -839,7 +862,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         >
                                             <p className="flex justify-center items-center text-[15px] text-[#45BA6B]">
                                                 <PlusIcon className="w-5 h-5 mr-2" />
-                                                Add item
+                                                {newCheckListItemJSX
+                                                    ? 'Remove Item'
+                                                    : 'Add item'}
                                             </p>
                                         </Button>
                                     </div>

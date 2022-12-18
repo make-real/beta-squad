@@ -99,7 +99,7 @@ const AssigneeUser = ({
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-2xl p-8 text-[#818892]"
         >
-            <div className="flex flex-col items-start justify-between">
+            <div className="flex flex-col items-start justify-between mb-8">
                 <p className="font-bold text-xl">Assign Member</p>
                 <p className="text-sm text-[#818892]">
                     Assign member to development.
@@ -125,7 +125,7 @@ const AssigneeUser = ({
                     {localCardAssigne?.map((user) => (
                         <div
                             key={user?._id}
-                            className="relative group flex items-center px-3 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Remove'] after:absolute after:text-themeColor after:right-4"
+                            className="relative group flex items-center px-3 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg after:absolute after:text-themeColor after:right-4"
                             onClick={() => handle_remove_assignee_users(user)}
                         >
                             <MinusIcon className="w-4 h-4 text-white bg-[#FF3659] rounded-full" />
@@ -134,7 +134,7 @@ const AssigneeUser = ({
                                     <img
                                         src={user.avatar}
                                         alt=""
-                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center"
+                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
                             ) : (
@@ -154,7 +154,7 @@ const AssigneeUser = ({
             )}
 
             {filterMember()?.length > 0 && (
-                <div className="mt-2 overflow-y-auto customScroll pb-2">
+                <div className="mt-2 pt-2 overflow-y-auto customScroll pb-2 border-t border-[#ECECEC]">
                     <div className="flex justify-start items-center">
                         <Member />
                         <p className="text-[#6576FF] py-1 text-base ml-2">
@@ -173,7 +173,7 @@ const AssigneeUser = ({
                                     <img
                                         src={user.avatar}
                                         alt=""
-                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center"
+                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
                             ) : (
