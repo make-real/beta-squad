@@ -43,7 +43,7 @@ if (token) {
     const { space } = store.getState();
 
     if (msg.to === space.selectedSpace) {
-      if (userId === msg.sender._id) return;
+      if (userId === msg?.sender?._id) return;
 
       store.dispatch(addSingleMessage(msg));
     } else {

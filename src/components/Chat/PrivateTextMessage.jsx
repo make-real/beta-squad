@@ -54,18 +54,18 @@ const Message = ({
     return (
         <div
             className={`flex ${
-                msg.sender._id === userId ? "flex-row-reverse self-end" : ""
+                msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""
             } pl-6 pr-14 py-5 relative user-box
       `}
         >
             <div
                 className={`w-10 h-10	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[100]  ${
-                    msg.sender._id === userId
+                    msg?.sender?._id === userId
                         ? "-ml-6 border-[#6576FF]"
                         : "border-white"
                 }`}
             >
-                {msg.sender.avatar ? (
+                {msg?.sender?.avatar ? (
                     <img
                         src={msg?.sender?.avatar}
                         alt=""
@@ -83,28 +83,28 @@ const Message = ({
                     maxWidth: forComment ? "400px" : "900px",
                 }}
                 className={`relative ${
-                    msg.sender._id === userId
+                    msg?.sender?._id === userId
                         ? "bg-[#6576FF] text-white"
                         : "bg-slate-100 text-[#031124] mr-3"
                 }  p-3 rounded-lg ml-3 shadow-md`}
             >
                 <div
                     className={`flex flex-row justify-between text-xs pb-2 ${
-                        msg.sender._id === userId
+                        msg?.sender?._id === userId
                             ? "text-white border-b border-white pr-6 flex-row-reverse"
                             : "text-[#54CC7C] border-b border-[#f3dfdf] pl-6"
                     }`}
                 >
                     <h6
                         className={`font-bold ${
-                            msg.sender._id === userId ? "hidden" : ""
+                            msg?.sender?._id === userId ? "hidden" : ""
                         }`}
                     >
                         {msg?.sender?.fullName}
                     </h6>
                     <small
                         className={`flex gap-2 ${
-                            msg.sender._id === userId ? "text-white" : "ml-5"
+                            msg?.sender?._id === userId ? "text-white" : "ml-5"
                         }`}
                     >
                         {moment(msg.createdAt).fromNow()}
@@ -125,7 +125,7 @@ const Message = ({
                         />
                         <span
                             className={`${
-                                msg.sender._id === userId
+                                msg?.sender?._id === userId
                                     ? "text-white"
                                     : "text-[#031124]"
                             }`}
@@ -153,7 +153,7 @@ const Message = ({
                 )}
                 <p
                     className={`text-sm pt-1 ${
-                        msg.sender._id === userId
+                        msg?.sender?._id === userId
                             ? "text-white"
                             : "text-[#031124] pl-5"
                     }`}
@@ -170,7 +170,7 @@ const Message = ({
                             >
                                 {data?.reaction}
                                 <p className="tooltip-text select-none">
-                                    {data.reactor.fullName}
+                                    {data?.reactor?.fullName}
                                 </p>
                             </p>
                         ))}
@@ -230,7 +230,7 @@ const Message = ({
                     <p className="tooltip-text">Respond to this message</p>
                 </div>
 
-                {msg.sender._id === userId && (
+                {msg?.sender?._id === userId && (
                     <div className="px-1.5 hover:text-teal-400 tooltip-box group cursor-pointer">
                         <BiDotsVerticalRounded
                             className="text-[18px]"

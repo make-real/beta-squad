@@ -164,7 +164,7 @@ const AssigneeUser = ({
                     {filterMember().map((user) => (
                         <div
                             key={user?._id}
-                            className="relative group flex items-center px-3 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg hover:after:content-['Assign'] after:absolute after:text-themeColor after:right-2"
+                            className="relative group flex items-center px-3 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg after:absolute after:text-themeColor after:right-2"
                             onClick={() => handle_add_assignee_users(user)}
                         >
                             <PlusIcon className="w-4 h-4 text-white bg-[#54CC7C] rounded-full" />

@@ -12,6 +12,9 @@ export const BoardCardContext = ({ children }) => {
     const addBoardList = (newListObj) =>
         setBoardList((pre) => [newListObj, ...pre]);
 
+    const updateBoardList = (newListObj) =>
+        setBoardList((pre) => [newListObj, ...pre]);
+
     const removeBoardList = (bid) =>
         setBoardList((pre) => pre.filter(({ _id }) => _id !== bid));
 
@@ -95,6 +98,7 @@ export const BoardCardContext = ({ children }) => {
                 boardLists,
                 setBoardList,
                 addBoardList,
+                updateBoardList,
                 removeBoardList,
                 addCard,
                 updateCard,

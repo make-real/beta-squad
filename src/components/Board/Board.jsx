@@ -56,6 +56,7 @@ const Board = ({ selectedSpaceId, showType }) => {
     };
 
     const dragEnd = async (result) => {
+        console.log({ result, index: result.destination.index });
         try {
             handleDragEnd(
                 {
@@ -71,7 +72,8 @@ const Board = ({ selectedSpaceId, showType }) => {
                 selectedSpaceId,
                 result.source.droppableId,
                 result.draggableId,
-                result.destination.droppableId
+                result.destination.droppableId,
+                Number(result.destination.index) + 1
             );
         } catch (error) {
             console.log(error);
