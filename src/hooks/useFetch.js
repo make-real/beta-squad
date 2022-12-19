@@ -149,5 +149,9 @@ export const moveCard = (spaceId, listId, cardId, newListId, order) =>
         newListId,
         order,
     });
+export const updateCardOrder = (spaceId, listId, cardId, order) =>
+    api.put(`/spaces/${spaceId}/board/${listId}/card/${cardId}/order`, {
+        order,
+    });
 
 export const getCardAsList = (spaceId) => api.get(`/spaces/${spaceId}/row`);

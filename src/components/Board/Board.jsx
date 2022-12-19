@@ -1,5 +1,9 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { addBoardListApiCall, moveCard } from '../../hooks/useFetch';
+import {
+    addBoardListApiCall,
+    moveCard,
+    updateCardOrder,
+} from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
@@ -60,25 +64,37 @@ const Board = ({ selectedSpaceId, showType }) => {
     };
 
     const dragEnd = async (result) => {
-        console.log({ result, index: result.destination.index });
+        const destination = result.destination;
+        const source = result.source;
+
         try {
             handleDragEnd(
                 {
-                    target: result.destination.droppableId,
-                    targetIndex: result.destination.index,
+                    target: destination.droppableId,
+                    targetIndex: destination.index,
                 },
                 {
-                    source: result.source.droppableId,
-                    sourceIndex: result.source.index,
+                    source: source.droppableId,
+                    sourceIndex: source.index,
                 }
             );
-            await moveCard(
-                selectedSpaceId,
-                result.source.droppableId,
-                result.draggableId,
-                result.destination.droppableId,
-                Number(result.destination.index) + 1
-            );
+
+            if (destination.droppableId === source.droppableId) {
+                await updateCardOrder(
+                    selectedSpaceId,
+                    source.droppableId,
+                    result.draggableId,
+                    Number(destination.index) + 1
+                );
+            } else {
+                await moveCard(
+                    selectedSpaceId,
+                    source.droppableId,
+                    result.draggableId,
+                    destination.droppableId,
+                    Number(destination.index) + 1
+                );
+            }
         } catch (error) {
             console.log(error);
         }
