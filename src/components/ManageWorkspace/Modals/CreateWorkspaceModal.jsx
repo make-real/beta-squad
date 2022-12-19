@@ -38,10 +38,9 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
         e.preventDefault();
         try {
             // its a POST method | object send into backend/server
-            const createData = {
-                name: workspaceData.name,
-            };
-            if (logo.image) createData.image = logo.image;
+            const createData = new FormData();
+            createData.append("name", workspaceData.name);
+            if (logo.image) createData.append("logo", logo.image);
             const { data } = await workspaceCreation(createData);
 
             // get all Work-Space data & send into redux store...
