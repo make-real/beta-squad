@@ -13,6 +13,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 
 const BoardList = ({ showType, boardList }) => {
     const [toggleEdit, setToggleEdit] = useState(false);
+    const [cardLoading, setCardLoading] = useState(false);
 
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -39,6 +40,7 @@ const BoardList = ({ showType, boardList }) => {
     // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {
+        setCardLoading(true);
         const cardObject = { name: text };
 
         try {
@@ -52,6 +54,7 @@ const BoardList = ({ showType, boardList }) => {
             // update user UI...
             addCard(data?.card, boardList?._id);
 
+            setCardLoading(false);
             // display a notification for user
             toast.success(`${data?.card?.name} - card created`, {
                 autoClose: 3000,
@@ -59,6 +62,8 @@ const BoardList = ({ showType, boardList }) => {
         } catch (error) {
             // error for developer for deBugging...
             console.log(error);
+
+            setCardLoading(false);
 
             // error for user at notification...
             toast.error(error?.response?.data?.issue?.message, {
@@ -166,6 +171,7 @@ const BoardList = ({ showType, boardList }) => {
             </div>
 
             <AddBtn
+                loading={cardLoading}
                 showType={showType}
                 placeHolder="Enter card name"
                 btnText="card"

@@ -1,10 +1,11 @@
 // import { Plus } from '../../assets/icons';
 import { useState } from 'react';
 import { Bars2Icon, PlusIcon } from '@heroicons/react/24/outline';
+import { ClipLoader } from 'react-spinners';
 
 // This <Component /> called by 🟨🟨🟨 Board.jsx 🟨🟨🟨
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
+const AddBtn = ({ loading, showType, onSubmit, btnText, placeHolder }) => {
     const [userInput, setUserInput] = useState('');
     const [inputToggle, setInputToggle] = useState(false);
 
@@ -16,7 +17,8 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
 
         // Reset input field + Close User Input Window after user input something
         setUserInput('');
-        setInputToggle(false);
+
+        setInputToggle(!loading);
     };
 
     // handle keyBoard enter button press
@@ -69,9 +71,15 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
                         <button
                             primary="true"
                             type="submit"
-                            className="w-40 p-2 duration-200 text-white font-bold bg-[#6576FF] hover:bg-[#323f9e] rounded-lg"
+                            className="w-40 p-2 duration-200 text-white font-bold bg-[#6576FF] hover:bg-[#323f9e] rounded-lg flex justify-center items-center 
+                        "
                         >
                             Add
+                            {loading && (
+                                <div className={'flex justify-center ml-2'}>
+                                    <ClipLoader color="#36d7b7" size="20" />
+                                </div>
+                            )}
                         </button>
                     </div>
                 </form>
@@ -81,20 +89,18 @@ const AddBtn = ({ showType, onSubmit, btnText, placeHolder }) => {
                     onClick={() => setInputToggle(true)}
                 >
                     {/* {showType === 'grid' ? ( */}
-                        <span
-                            className={`flex ${
-                                btnText === 'card'
-                                    ? 'justify-center'
-                                    : 'justify-start'
-                            } items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
-                        >
-                            <PlusIcon
-                                className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
-                            />
-                            <p className="text-[#818892] text-sm">
-                                Add {btnText}
-                            </p>
-                        </span>
+                    <span
+                        className={`flex ${
+                            btnText === 'card'
+                                ? 'justify-center'
+                                : 'justify-start'
+                        } items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
+                    >
+                        <PlusIcon
+                            className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full mr-2`}
+                        />
+                        <p className="text-[#818892] text-sm">Add {btnText}</p>
+                    </span>
                     {/* ) : (
                         <span
                             className={`flex justify-center items-center hover:bg-white transition duration-300 ease-in-out rounded-2xl p-2 cursor-pointer`}
