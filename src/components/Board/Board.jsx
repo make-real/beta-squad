@@ -2,7 +2,7 @@ import { useBoardCardContext } from '../../context/BoardCardContext';
 import { addBoardListApiCall, moveCard } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import useAxios from '../../api/index';
 import images from '../../assets';
@@ -32,15 +32,18 @@ const Board = ({ selectedSpaceId, showType }) => {
         fetchData();
     }, [selectedSpaceId, setBoardList]);
 
+    const [listLoading, setListLoading] = useState(false);
+
     const handleBoardListCreation = async (selectedSpaceId, text) => {
         const listObject = { name: text };
+        setListLoading(true);
 
         try {
             const { data } = await addBoardListApiCall(
                 selectedSpaceId,
                 listObject
             );
-
+            setListLoading(false);
             addBoardList(data.list);
 
             toast.success(`${data?.list?.name} - list create successfully`, {
@@ -49,6 +52,7 @@ const Board = ({ selectedSpaceId, showType }) => {
         } catch (error) {
             console.log(error.response.data);
 
+            setListLoading(false);
             toast.error(error?.response?.data?.issue?.message, {
                 autoClose: 3000,
             });
@@ -158,6 +162,7 @@ const Board = ({ selectedSpaceId, showType }) => {
 
                         {/*  + Add a list | Button UI */}
                         <AddBtn
+                            loading={listLoading}
                             showType={showType}
                             placeHolder="Add list name..."
                             btnText="list"
@@ -183,6 +188,7 @@ const Board = ({ selectedSpaceId, showType }) => {
 
                         {/*  + Add a list | Button UI */}
                         <AddBtn
+                            loading={listLoading}
                             showType={showType}
                             placeHolder="Add list name..."
                             btnText="list"
