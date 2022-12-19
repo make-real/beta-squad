@@ -186,7 +186,11 @@ const CardStack = ({ listName, card, listID }) => {
                     </span>
                     <span className="cursor-pointer">
                         <CheckCircleIcon
-                            className="w-5 h-5"
+                            className={`w-5 h-5 ${
+                                progress === 4
+                                    ? 'bg-[#54CC7C] rounded-full'
+                                    : ''
+                            }`}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 handleProgressUpdate();

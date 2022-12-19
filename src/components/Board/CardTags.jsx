@@ -13,6 +13,11 @@ const colorStyles = {
         borderRadius: '1rem',
         backgroundColor: 'rgba(236,236,236,0.5)',
     }),
+    menu: (provided, state) => ({
+        ...provided,
+        borderRadius: '1rem',
+        padding: '8px',
+    }),
     valueContainer: (provided, state) => ({
         ...provided,
         padding: '8px',
@@ -191,13 +196,14 @@ const CardTags = (props) => {
                             {...innerProps}
                             {...innerRef}
                             key={data._id}
-                            className="pl-3 py-2 hover:bg-gray-300 flex items-center cursor-pointer"
+                            className="pl-3 mx-2 py-2 hover:bg-[rgba(236,236,236,0.5)] flex items-center cursor-pointer rounded-2xl"
                         >
                             <span
-                                className={`px-2 py-1 w-fit rounded-full`}
+                                className={`px-2 py-1 w-fit rounded-full text-sm`}
                                 style={{
-                                    backgroundColor: data.color,
-                                    fontSize: '13px',
+                                    color: data?.color,
+                                    backgroundColor: `${data?.color}10`,
+                                    border: `1px solid ${data?.color}`,
                                 }}
                             >
                                 {data?.name}
@@ -215,10 +221,11 @@ const CardTags = (props) => {
                             className="mr-1 cursor-pointer"
                         >
                             <span
-                                className={`px-2 py-1 w-fit rounded-full text-white`}
+                                className={`px-2 py-1 w-fit rounded-full text-sm`}
                                 style={{
-                                    backgroundColor: data.color,
-                                    fontSize: '13px',
+                                    color: data?.color,
+                                    backgroundColor: `${data?.color}10`,
+                                    border: `1px solid ${data?.color}`,
                                 }}
                             >
                                 {data?.name}

@@ -85,6 +85,10 @@ export const spaceCreation = (newSpaceObj) => api.post('/spaces', newSpaceObj);
 export const addBoardListApiCall = (spaceId, newBoardList) =>
     api.post(`/spaces/${spaceId}/board`, newBoardList);
 
+// UPDATE ==> (Board) List --- under specific Space reference ID
+export const boardListUpdate = (spaceId, listId, name) =>
+    api.patch(`/spaces/${spaceId}/board/${listId}`, { name });
+
 // DELETE ==> (Board) List --- under specific Space reference ID
 export const boardListDelete = (spaceId, listId) =>
     api.delete(`/spaces/${spaceId}/board/${listId}`);
