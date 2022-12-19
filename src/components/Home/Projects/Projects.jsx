@@ -12,7 +12,7 @@ import {
     setSelectedSpaceId,
     setSelectedSpaceObject,
 } from "../../../store/slice/space";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { squadBorderClassName } from "../../../constant/data";
 
@@ -55,10 +55,14 @@ const Projects = ({ showType }) => {
         }));
     };
 
+    const { id } = useParams();
+
     useEffect(() => {
         window.onload = () => {
-            if (workspaces.length <= 0) {
-                navigate("/settings/manage-workspace");
+            if (!id) {
+                if (workspaces.length <= 0) {
+                    navigate("/settings/manage-workspace");
+                }
             }
         };
     }, [workspaces]);
