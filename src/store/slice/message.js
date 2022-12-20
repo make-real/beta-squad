@@ -51,6 +51,12 @@ export const messageSlice = createSlice({
   },
 });
 
-export const { addBulkMessage, addSingleMessage, makeSendingFailed, addReaction, removeMessage } = messageSlice.actions;
+export const {
+  addBulkMessage,
+  addSingleMessage,
+  makeSendingFailed,
+  addReaction,
+  removeMessage,
+} = messageSlice.actions;
 
 export default messageSlice.reducer;
