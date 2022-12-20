@@ -16,19 +16,21 @@ import {
     setSelectedSpaceObject,
 } from "../../store/slice/space";
 import NotificationsModal from "../Modals/NotificationsModal";
-import BackArrowIcon from "../../assets/back_arrow.svg";
+import LeftArrow from "../../assets/left_arrow.svg";
 import VerticalDots from "../../assets/vertical_dots.svg";
 import HorizontalDots from "../../assets/horizontal_dots.svg";
 import BellIcon from "../../assets/icon_component/NotificationIcon";
+import { toggleFullSidebar } from "../../store/slice/screen";
 
 const TopNav = () => {
-    const [userInfo, setUserInfo] = useState(null);
+    // const [userInfo, setUserInfo] = useState(null);
+    const userInfo = useSelector((state) => state.userInfo.userInfo);
     const [jwt, setJwt] = useState(null);
 
     useEffect(() => {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         const jwt = JSON.parse(localStorage.getItem("jwt"));
-        setUserInfo(userInfo);
+        // setUserInfo(userInfo);
         setJwt(jwt);
     }, []);
 
@@ -81,6 +83,7 @@ const LoggedInTopNav = ({ userInfo }) => {
     const [showDropDownMenu, setShowDropDownMenu] = useState(false);
     const workspaces = useSelector((state) => state.workspace.workspaces);
     const [showNotificationModal, setShowNotificationModal] = useState(false);
+    const [showNotificationBox, setShowNotificationBox] = useState(false);
     const isProjectScreen = useLocation().pathname.startsWith("/projects");
     const [selectedNotificationTab, setSelectedNotificationTab] =
         useState("all");
@@ -90,6 +93,10 @@ const LoggedInTopNav = ({ userInfo }) => {
     const [selectedMember, setSelectedMember] = useState(null);
 
     const { participantID } = useParams();
+
+    const isManageWorkspaceScreen =
+        useLocation().pathname.search("manage-workspace") !== -1;
+    const isProfileScreen = useLocation().pathname.search("profile") !== -1;
 
     useEffect(() => {
         if (workspaceMembers) {
@@ -110,6 +117,10 @@ const LoggedInTopNav = ({ userInfo }) => {
             console.log(error);
         }
 
+        dispatch(setSelectedWorkSpaceId(null));
+        dispatch(setSelectedSpaceObject({}));
+        dispatch(setSelectedSpaceId(null));
+        dispatch(setSelectedSpaceObject({}));
         localStorage.clear();
         navigate("/");
     };
@@ -132,9 +143,9 @@ const LoggedInTopNav = ({ userInfo }) => {
                                 dispatch(setSelectedSpaceObject({}));
                                 navigate(`/projects/${selectedWorkspaceId}`);
                             }}
-                            className="mr-[8px] cursor-pointer"
+                            className="mr-[20px] cursor-pointer"
                         >
-                            <img src={BackArrowIcon} alt="back_arrow" />
+                            <img src={LeftArrow} alt="back_arrow" />
                         </div>
                         <p className="mr-[12px] font-medium text-[15px] text-[#818892]">
                             {currentWorkspace?.name}
@@ -154,9 +165,9 @@ const LoggedInTopNav = ({ userInfo }) => {
                                 dispatch(setSelectedSpaceObject({}));
                                 navigate(`/projects/${selectedWorkspaceId}`);
                             }}
-                            className="mr-[8px] cursor-pointer"
+                            className="mr-[20px] cursor-pointer"
                         >
-                            <img src={BackArrowIcon} alt="back_arrow" />
+                            <img src={LeftArrow} alt="back_arrow" />
                         </div>
                         <p className="mr-[12px] font-medium text-[15px] text-[#818892]">
                             {currentWorkspace?.name}
@@ -168,6 +179,18 @@ const LoggedInTopNav = ({ userInfo }) => {
                             {selectedMember?.fullName}
                         </p>
                     </div>
+                ) : isProjectScreen && selectedWorkspaceId ? (
+                    <h1 className="font-medium text-[18px] text-[#031124]">
+                        {currentWorkspace?.name}
+                    </h1>
+                ) : isManageWorkspaceScreen ? (
+                    <h1 className="font-medium text-[18px] text-[#031124]">
+                        Workspace
+                    </h1>
+                ) : isProfileScreen ? (
+                    <h1 className="font-medium text-[18px] text-[#031124]">
+                        Profile
+                    </h1>
                 ) : (
                     <div></div>
                 )}
@@ -234,7 +257,13 @@ const LoggedInTopNav = ({ userInfo }) => {
                                 <p className="text-[#818892] text-[15px] font-medium">
                                     Earlier
                                 </p>
-                                <p className="text-[#6576FF] text-[15px] cursor-pointer">
+                                <p
+                                    onClick={() => {
+                                        setShowNotificationBox(true);
+                                        setShowNotificationModal(false);
+                                    }}
+                                    className="text-[#6576FF] text-[15px] cursor-pointer"
+                                >
                                     See All
                                 </p>
                             </div>
@@ -378,11 +407,11 @@ const LoggedInTopNav = ({ userInfo }) => {
                 </div>
             </div>
 
-            {/* {showNotificationModal && (
+            {showNotificationBox && (
                 <NotificationsModal
-                    setShowNotificationModal={setShowNotificationModal}
+                    setShowNotificationModal={setShowNotificationBox}
                 />
-            )} */}
+            )}
         </>
     );
 };

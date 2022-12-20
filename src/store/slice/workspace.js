@@ -14,12 +14,15 @@ export const workspaceSlice = createSlice({
         addWorkSpace: (state, { payload }) => {
             state.workspaces = payload;
         },
+        addOneWorkspace: (state, { payload }) => {
+            state.workspaces = [...state.workspaces, payload];
+        },
         addWorkspaceMembers: (state, { payload }) => {
             state.workspaceMembers = payload;
         },
         setSelectedWorkSpaceId: (state, { payload }) => {
             state.selectedWorkspace = payload;
-            state.currentWorkspace = state.workspaces.filter((workspace) => {
+            state.currentWorkspace = state.workspaces?.filter((workspace) => {
                 return workspace._id === payload;
             })[0];
         },
@@ -42,6 +45,7 @@ export const {
     removeWorkspace,
     updateWorkspace,
     addWorkspaceMembers,
+    addOneWorkspace,
 } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

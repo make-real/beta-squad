@@ -1,32 +1,38 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { get_my_profile } from "../api/auth";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../store/slice/userInfo";
 
 const UserInfo = createContext();
 
 export const UserInfoContext = ({ children }) => {
-  const [loginUserInfo, setLoginUserInfo] = useState(
-    {} || JSON.parse(localStorage.getItem("userInfo"))
-  );
+    const [loginUserInfo, setLoginUserInfo] = useState(
+        {} || JSON.parse(localStorage.getItem("userInfo"))
+    );
 
-  useEffect(() => {
-    const getUserInfo = async () => {
-      if (!JSON.parse(localStorage.getItem("jwt"))) return;
-      const { data } = await get_my_profile();
-      setLoginUserInfo(data.user);
-    };
-    getUserInfo();
-  }, []);
+    const dispatch = useDispatch();
 
-  useEffect(
-    () => localStorage.setItem("userInfo", JSON.stringify(loginUserInfo)),
-    [loginUserInfo]
-  );
+    useEffect(() => {
+        const getUserInfo = async () => {
+            if (!JSON.parse(localStorage.getItem("jwt"))) return;
+            const { data } = await get_my_profile();
+            setLoginUserInfo(data.user);
+        };
+        getUserInfo();
+    }, []);
 
-  return (
-    <UserInfo.Provider value={{ loginUserInfo, setLoginUserInfo }}>
-      {children}
-    </UserInfo.Provider>
-  );
+    useEffect(() => {
+        if (!localStorage.getItem("userInfo")) {
+            localStorage.setItem("userInfo", JSON.stringify(loginUserInfo));
+        }
+        dispatch(setUserInfo(loginUserInfo));
+    }, [loginUserInfo]);
+
+    return (
+        <UserInfo.Provider value={{ loginUserInfo, setLoginUserInfo }}>
+            {children}
+        </UserInfo.Provider>
+    );
 };
 
 export const useUserInfoContext = () => useContext(UserInfo);

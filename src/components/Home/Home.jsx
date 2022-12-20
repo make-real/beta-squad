@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import WorkspaceScreen from "./WorkspaceScreen";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Home = () => {
     const currentWorkspace = useSelector(
@@ -12,6 +13,20 @@ const Home = () => {
     );
 
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
+    const allWorkspaces = useSelector((state) => state.workspace.workspaces);
+
+    const params = useParams();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!params.id) {
+            if (allWorkspaces?.length === 0) {
+                navigate("/settings/manage-workspace");
+            }
+        }
+    }, [allWorkspaces]);
 
     // return currentWorkspace && selectedSpaceId ? (
     //     <SquadScreen

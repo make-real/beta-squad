@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import { add_workspace_member } from "../../../../api/workSpace";
 import CrossIcon from "../../../../assets/cross.svg";
 import InboxIcon from "../../../../assets/inbox.svg";
+import { validateEmail } from "../../../../util/helpers";
 import TaguserIcon from "../../../../assets/tag_user.svg";
 import { WORKSPACE_ROLE } from "../../../../constant/enums";
-import { validateEmail } from "../../../../util/helpers";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
     const currentWorkspace = useSelector(

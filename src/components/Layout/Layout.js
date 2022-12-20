@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { NavBar, SideBar } from "../";
 import SideNavbar from "../Navs/SideNavbar";
 import TopNavbar from "../Navs/TopNavbar";
+import { useEffect } from "react";
 // import SideBar from "../Sidebar/SideBar";
 
 const Layout = ({ selectedSpaceId }) => {
     const fullSidebar = useSelector((state) => state.screen.fullSidebar);
+
     return (
         <div className="flex min-h-screen">
             {/* <NavBar selectedSpaceId={selectedSpaceId} /> */}

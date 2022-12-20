@@ -20,6 +20,7 @@ export const squadBorderClassName = {
     "#7dd3fc": "squad-7",
     "#1e40af": "squad-8",
     "#db2777": "squad-9",
+    "#7850fc": "squad-10",
 };
 
 export const oneDayTimes = [
