@@ -38,7 +38,7 @@ import { useStyleContext } from '../../context/StyleContext';
 import DragDrop from '../DragDrop';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
-    const { cardDetails } = useBoardCardContext();
+    const { cardDetails, setCardDetails } = useBoardCardContext();
     const navigate = useNavigate();
     const { margin } = useStyleContext();
 
@@ -122,6 +122,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 card._id,
                 cardTagObject
             );
+
+
             if (data.updatedCard._id) {
                 toast.success(`Card name updated`, { autoClose: 2000 });
                 handleDataChange();
@@ -395,7 +397,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 />
                             ) : (
                                 <p className="font-[600] text-xl">
-                                    {card?.name || 'Development'}
+                                    {localCard?.name || 'Development'}
                                 </p>
                             )}
 
