@@ -76,7 +76,7 @@ const BoardList = ({ showType, boardList }) => {
         try {
             await boardListUpdate(selectedSpaceId, listId, text);
 
-            updateBoardList(text);
+            updateBoardList(listId, text);
 
             setToggleEdit(false);
 
@@ -102,7 +102,7 @@ const BoardList = ({ showType, boardList }) => {
             >
                 {toggleEdit ? (
                     <input
-                        title="Hit enter to save!"
+                        autoFocus
                         type="text"
                         defaultValue={boardList?.name}
                         onBlur={(e) =>

@@ -127,6 +127,19 @@ const SideNavbar = () => {
     const openChat = (id) => {
         navigate("single-chat/" + id);
     };
+
+    const isFirstTime =
+        (workspaces?.length === 1 && allSpaces?.length === 0) ||
+        (allSpaces[0]?.name === "Onboarding" &&
+            [...members.filter((m) => m?._id !== user?._id)].length === 0);
+
+    const firstTimeSquad =
+        (allSpaces?.length === 0 || allSpaces[0]?.name === "Onboarding") &&
+        allSpaces.length === 1;
+
+    const firstTimeMember =
+        [...members.filter((m) => m?._id !== user?._id)].length === 0;
+
     return (
         <>
             <div
@@ -339,7 +352,7 @@ const SideNavbar = () => {
                                     Your Squad
                                 </h2>
                                 <div className="flex items-center gap-2">
-                                    <div
+                                    {/* <div
                                         className="w-max"
                                         // onClick={() =>
                                         //     setSpaceSearchModal(true)
@@ -350,7 +363,7 @@ const SideNavbar = () => {
                                             alt="search"
                                             className="cursor-pointer"
                                         />
-                                    </div>
+                                    </div> */}
                                     <div
                                         className="w-max"
                                         onClick={() =>
@@ -367,106 +380,122 @@ const SideNavbar = () => {
                             </div>
                         )}
                         {/* Squads List */}
-                        <div className="mt-[20px] flex flex-col">
-                            {allSpaces.map((space) => {
-                                return (
-                                    <div
-                                        className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                                            selectedSpace === space._id
-                                                ? "bg-[#6576FF10]"
-                                                : ""
-                                        }  ${
-                                            fullSidebar
-                                                ? "pl-[25px]"
-                                                : "pl-[25px] pr-[25px]"
-                                        }`}
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedSpaceId(space._id)
-                                            );
-                                            dispatch(
-                                                setSelectedSpaceObject(space)
-                                            );
-                                            setSelectedChat(null);
-                                            navigate(
-                                                `/projects/${selectedWorkspace}/squad/${space._id}`
-                                            );
-                                        }}
-                                    >
-                                        <FolderIcon
-                                            style={{ fill: space.color }}
-                                            className={`w-[20px] h-[20px]`}
-                                        />
-                                        {fullSidebar && (
-                                            <p className="text-[14px] text-[#C4CEFE]">
-                                                {space.name}
-                                            </p>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        {
+                            // (!isFirstTime || !firstTimeSquad) &&
+                            <div className="mt-[20px] flex flex-col">
+                                {allSpaces.map((space) => {
+                                    return (
+                                        <div
+                                            className={`flex items-center gap-3 cursor-pointer py-[10px] ${
+                                                selectedSpace === space._id
+                                                    ? "bg-[#6576FF10]"
+                                                    : ""
+                                            }  ${
+                                                fullSidebar
+                                                    ? "pl-[25px]"
+                                                    : "pl-[25px] pr-[25px]"
+                                            }`}
+                                            onClick={() => {
+                                                dispatch(
+                                                    setSelectedSpaceId(
+                                                        space._id
+                                                    )
+                                                );
+                                                dispatch(
+                                                    setSelectedSpaceObject(
+                                                        space
+                                                    )
+                                                );
+                                                setSelectedChat(null);
+                                                navigate(
+                                                    `/projects/${selectedWorkspace}/squad/${space._id}`
+                                                );
+                                            }}
+                                        >
+                                            <FolderIcon
+                                                style={{
+                                                    fill: space.color,
+                                                }}
+                                                className={`w-[20px] h-[20px]`}
+                                            />
+                                            {fullSidebar && (
+                                                <p className="text-[14px] text-[#C4CEFE]">
+                                                    {space.name}
+                                                </p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        }
                     </div>
                 )}
                 {/* Chats */}
-                {defaultPage && (
-                    <div className="mt-[50px]">
-                        {fullSidebar && (
-                            <div className="flex items-center justify-between pl-[25px] pr-[10px]">
-                                <h2 className="text-[#6576FF] opacity-80">
-                                    Chats
-                                </h2>
-                                <div className="flex items-center gap-2">
-                                    <img
-                                        src={SearchIcon}
-                                        alt="search"
-                                        className="cursor-pointer"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                        {/* Chats List */}
-                        <div className="mt-[15px] flex flex-col">
-                            {members.map((member) =>
-                                member._id !== user._id ? (
-                                    <div
-                                        className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
-                                            selectedChat?._id === member?._id
-                                                ? "bg-[#6576FF10]"
-                                                : ""
-                                        } ${
-                                            fullSidebar
-                                                ? "pl-[25px]"
-                                                : "pl-[25px] pr-[25px]"
-                                        }`}
-                                        onClick={() => {
-                                            // openChat(member._id)
-                                            dispatch(setSelectedSpaceId(null));
-                                            dispatch(
-                                                setSelectedSpaceObject(null)
-                                            );
-                                            setSelectedChat(member);
-                                            navigate(
-                                                `/projects/${selectedWorkspace}/chat/${member?._id}`
-                                            );
-                                        }}
-                                    >
+                {
+                    // !isFirstTime ||
+                    // !firstTimeMember &&
+                    defaultPage && (
+                        <div className="mt-[50px]">
+                            {fullSidebar && (
+                                <div className="flex items-center justify-between pl-[25px] pr-[10px]">
+                                    <h2 className="text-[#6576FF] opacity-80">
+                                        Chats
+                                    </h2>
+                                    <div className="flex items-center gap-2">
                                         <img
-                                            src={member.avatar}
-                                            className="w-[28px] h-[28px] rounded-full border object-cover"
-                                            alt=""
+                                            src={SearchIcon}
+                                            alt="search"
+                                            className="cursor-pointer"
                                         />
-                                        {fullSidebar && (
-                                            <p className="text-[#C4CEFE] text-[14px]">
-                                                {member.fullName}
-                                            </p>
-                                        )}
                                     </div>
-                                ) : null
+                                </div>
                             )}
+                            {/* Chats List */}
+                            <div className="mt-[15px] flex flex-col">
+                                {members.map((member) =>
+                                    member?._id !== user?._id ? (
+                                        <div
+                                            className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
+                                                selectedChat?._id ===
+                                                member?._id
+                                                    ? "bg-[#6576FF10]"
+                                                    : ""
+                                            } ${
+                                                fullSidebar
+                                                    ? "pl-[25px]"
+                                                    : "pl-[25px] pr-[25px]"
+                                            }`}
+                                            onClick={() => {
+                                                // openChat(member._id)
+                                                dispatch(
+                                                    setSelectedSpaceId(null)
+                                                );
+                                                dispatch(
+                                                    setSelectedSpaceObject(null)
+                                                );
+                                                setSelectedChat(member);
+                                                navigate(
+                                                    `/projects/${selectedWorkspace}/chat/${member?._id}`
+                                                );
+                                            }}
+                                        >
+                                            <img
+                                                src={member.avatar}
+                                                className="w-[28px] h-[28px] rounded-full border object-cover"
+                                                alt=""
+                                            />
+                                            {fullSidebar && (
+                                                <p className="text-[#C4CEFE] text-[14px]">
+                                                    {member.fullName}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ) : null
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
                 {/* Footer Copyright */}
                 <p
                     className={`text-[#C4CEFE] ${

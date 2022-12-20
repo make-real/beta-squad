@@ -46,6 +46,7 @@ import {
     setSelectedSpaceObject,
     setSelectedSpaceId,
 } from "./store/slice/space";
+import { initFullSidebar } from "./store/slice/screen";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -127,6 +128,12 @@ const App = () => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(initFullSidebar());
+    }, []);
+
     return (
         <main className="overflow-hidden">
             <Routes>

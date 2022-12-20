@@ -9,11 +9,18 @@ export const screen = createSlice({
     initialState,
     reducers: {
         toggleFullSidebar: (state, { payload }) => {
+            localStorage.setItem(
+                "fullSidebar",
+                !state.fullSidebar ? "show" : "hide"
+            );
             state.fullSidebar = !state.fullSidebar;
+        },
+        initFullSidebar: (state, action) => {
+            state.fullSidebar = localStorage.getItem("fullSidebar") === "show";
         },
     },
 });
 
-export const { toggleFullSidebar } = screen.actions;
+export const { toggleFullSidebar, initFullSidebar } = screen.actions;
 
 export default screen.reducer;

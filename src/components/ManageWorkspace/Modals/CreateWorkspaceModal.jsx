@@ -4,7 +4,7 @@ import CrossIcon from "../../../assets/cross.svg";
 import PlusIcon from "../../../assets/plus.svg";
 import GreenTick from "../../../assets/green_tick.svg";
 import { workspaceCreation } from "../../../hooks/useFetch";
-import { addWorkSpace } from "../../../store/slice/workspace";
+import { addOneWorkspace, addWorkSpace } from "../../../store/slice/workspace";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 
@@ -45,7 +45,7 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
 
             // get all Work-Space data & send into redux store...
             // for live re-fetching/load data at SideBar for navigation...
-            dispatch(addWorkSpace(data.workspaces));
+            dispatch(addOneWorkspace(data.workspace));
 
             // display a success notification for user...
             toast.success(

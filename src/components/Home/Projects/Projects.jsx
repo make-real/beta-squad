@@ -76,7 +76,6 @@ const Projects = ({ showType }) => {
                             <div
                                 style={{
                                     backgroundColor: space.color + "10",
-                                    // borderColor: space.color,
                                 }}
                                 className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
                                     squadBorderClassName[space.color]

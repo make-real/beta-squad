@@ -19,9 +19,13 @@ export const userInfoSlice = createSlice({
         getUserToken: (state, { payload }) => {
             state.jwtToken = payload;
         },
+        setUserInfo: (state, { payload }) => {
+            state.userInfo = payload;
+        },
     },
 });
 
-export const { getUserInfo, getUserId, getUserToken } = userInfoSlice.actions;
+export const { getUserInfo, getUserId, getUserToken, setUserInfo } =
+    userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

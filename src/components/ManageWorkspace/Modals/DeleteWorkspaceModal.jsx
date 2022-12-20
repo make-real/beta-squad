@@ -7,8 +7,10 @@ import { delete_workspace } from "../../../api/workSpace";
 import { removeWorkspace } from "../../../store/slice/workspace";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const DeleteWorkspaceModal = ({ data, cancelFunc }) => {
+    const workspaces = useSelector((state) => state.workspace.workspaces);
     const [deleted, setDeleted] = useState(false);
 
     const dispatch = useDispatch();
@@ -17,7 +19,13 @@ const DeleteWorkspaceModal = ({ data, cancelFunc }) => {
         e.preventDefault();
 
         try {
+            let isLast = workspaces.length === 1;
             const res = await delete_workspace(data._id);
+
+            if (isLast) {
+                localStorage.setItem("hasWorkspace", "no");
+            }
+
             // display a notification for user
             dispatch(removeWorkspace(data._id));
             setDeleted(true);
@@ -34,7 +42,7 @@ const DeleteWorkspaceModal = ({ data, cancelFunc }) => {
     };
 
     return deleted ? (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999]">
             <div className="relative w-[500px] h-[300px] bg-white rounded-[16px] flex items-center flex-col justify-center">
                 <div
                     onClick={cancelFunc}
@@ -52,7 +60,7 @@ const DeleteWorkspaceModal = ({ data, cancelFunc }) => {
             </div>
         </div>
     ) : (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-50">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] z-[999]">
             <div className="relative w-[614px] bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
