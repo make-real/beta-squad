@@ -140,7 +140,7 @@ const PrivateMessageBox = ({
           },
         };
         const { data } = await api(config);
-        dispatch(addSingleMessagePrivate(data.message));
+        // dispatch(addSingleMessagePrivate(data.message));
         console.log(data);
       }
 

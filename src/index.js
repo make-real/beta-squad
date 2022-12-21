@@ -40,10 +40,12 @@ if (token) {
   });
 
   socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
+    console.log(msg);
+
     const { space } = store.getState();
 
     if (msg.to === space.selectedSpace) {
-      if (userId === msg?.sender?._id) return;
+      if (userId === msg?.sender?._id && Boolean(msg?.content?.text)) return;
 
       store.dispatch(addSingleMessage(msg));
     } else {
