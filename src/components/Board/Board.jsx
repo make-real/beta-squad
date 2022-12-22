@@ -1,18 +1,18 @@
-import { useBoardCardContext } from "../../context/BoardCardContext";
+import { useBoardCardContext } from '../../context/BoardCardContext';
 import {
     addBoardListApiCall,
     moveCard,
     updateCardOrder,
-} from "../../hooks/useFetch";
-import { AddBtn, BoardList } from ".";
-import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
-import useAxios from "../../api/index";
-import images from "../../assets";
-import { useSelector } from "react-redux";
-import { filterStatus } from "../../store/slice/board";
-import BoardStackList from "./BoardStackList";
+} from '../../hooks/useFetch';
+import { AddBtn, BoardList } from '.';
+import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import useAxios from '../../api/index';
+import images from '../../assets';
+import { useSelector } from 'react-redux';
+import { filterStatus } from '../../store/slice/board';
+import BoardStackList from './BoardStackList';
 
 const Board = ({ selectedSpaceId, showType }) => {
     const { handleDragEnd, boardLists, setBoardList, addBoardList } =
@@ -64,8 +64,7 @@ const Board = ({ selectedSpaceId, showType }) => {
     };
 
     const dragEnd = async (result) => {
-        const destination = result.destination;
-        const source = result.source;
+        const { destination, source, draggableId, type } = result;
 
         try {
             handleDragEnd(
@@ -76,21 +75,24 @@ const Board = ({ selectedSpaceId, showType }) => {
                 {
                     source: source.droppableId,
                     sourceIndex: source.index,
-                }
+                },
+                type
             );
 
-            if (destination.droppableId === source.droppableId) {
+            if (type === 'column') {
+                console.log(result);
+            } else if (destination.droppableId === source.droppableId) {
                 await updateCardOrder(
                     selectedSpaceId,
                     source.droppableId,
-                    result.draggableId,
+                    draggableId,
                     Number(destination.index) + 1
                 );
             } else {
                 await moveCard(
                     selectedSpaceId,
                     source.droppableId,
-                    result.draggableId,
+                    draggableId,
                     destination.droppableId,
                     Number(destination.index) + 1
                 );
@@ -158,22 +160,41 @@ const Board = ({ selectedSpaceId, showType }) => {
         return boardCopy;
     };
 
+    // reduce problem
+    // console.log(filterdBoardList()?.slice(0)?.reverse());
+
     return (
         <section className={`duration-200 overflow-auto customScroll h-full`}>
             {selectedSpaceId ? (
-                showType === "grid" ? (
+                showType === 'grid' ? (
                     <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
-                            {filterdBoardList()
-                                ?.slice(0)
-                                ?.reverse()
-                                ?.map((boardList) => (
-                                    <BoardList
-                                        showType={showType}
-                                        key={boardList?._id}
-                                        boardList={boardList}
-                                    />
-                                ))}
+                            <Droppable
+                                droppableId="all-columns"
+                                direction="horizontal"
+                                type="column"
+                            >
+                                {(provided) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className="flex items-start"
+                                    >
+                                        {filterdBoardList()
+                                            ?.reverse()
+                                            ?.slice(0)
+                                            ?.map((boardList, index) => (
+                                                <BoardList
+                                                    showType={showType}
+                                                    key={boardList?._id}
+                                                    boardList={boardList}
+                                                    listIndex={index}
+                                                />
+                                            ))}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
                         </DragDropContext>
 
                         {/*  + Add a list | Button UI */}

@@ -8,7 +8,7 @@ import Dropdown from "../Dropdown";
 // import Tippy from '@tippyjs/react';
 // import useAxios from '../../api';
 import "tippy.js/dist/tippy.css";
-import Draggable from "../Draggable";
+import Draggable from "../DraggableElement";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import CardStack from "./CardStack";
 
