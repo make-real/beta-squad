@@ -70,7 +70,7 @@ const Projects = ({ showType }) => {
     return (
         <>
             {showType === "grid" ? (
-                <div className="mt-[30px] flex gap-[30px] flex-wrap overflow-y-scroll h-full no-scrollbar">
+                <div className="mt-[30px] flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar items-start">
                     {allSpaces.map((space) => {
                         if (space.name === "Onboarding") return;
                         return (

@@ -64,7 +64,7 @@ const SquadMembers = ({ showType }) => {
     return (
         <>
             {showType === "grid" ? (
-                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
+                <div className="mt-[30px] flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
                     <div
                         onClick={() => setShowAddMemberModal(true)}
                         className="w-[297px] h-[162px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
