@@ -123,11 +123,6 @@ const Card = ({ showType, card, listID }) => {
     const checked = card.checkList?.filter((item) => item?.checked);
     const unchecked = card.checkList?.filter((item) => !item?.checked);
 
-    // generate random color
-    function randomColor() {
-        return '#' + Math.floor(Math.random() * 16777215).toString(16);
-    }
-
     return (
         <>
             <div
@@ -139,7 +134,7 @@ const Card = ({ showType, card, listID }) => {
                 {/* top-right shape */}
                 <span
                     className="absolute top-0 left-0 h-4 w-4 rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
-                    style={{ backgroundColor: randomColor() }}
+                    style={{ backgroundColor: card?.color }}
                 />
                 {/* message indicator */}
                 <span
@@ -172,7 +167,7 @@ const Card = ({ showType, card, listID }) => {
                         {card.name}
                     </p>
 
-                    <div
+                    {/* <div
                         style={{
                             backgroundColor:
                                 progress === 4
@@ -188,7 +183,7 @@ const Card = ({ showType, card, listID }) => {
                                 {progressStatus(progress)}%
                             </span>
                         )}
-                    </div>
+                    </div> */}
                 </div>
                 <div className="text-sm text-gray-800">
                     <p className="truncate">{localCard?.description || ''}</p>

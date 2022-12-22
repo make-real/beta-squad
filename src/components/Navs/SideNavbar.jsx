@@ -140,6 +140,37 @@ const SideNavbar = () => {
     const firstTimeMember =
         [...members.filter((m) => m?._id !== user?._id)].length === 0;
 
+    const squadOnDrop = (e) => {
+        e.preventDefault();
+        e.target.classList.remove("border-b-2");
+        e.target.classList.remove("border-[#6576FF]");
+
+        const targetId = e.target.getAttribute("data-id");
+        const draggedId = e.dataTransfer.getData("id");
+
+        const newOrder = [...allSpaces];
+
+        const targetIndex = newOrder.indexOf(
+            newOrder.find((s) => s._id === targetId)
+        );
+        const draggedIndex = newOrder.indexOf(
+            newOrder.find((s) => s._id === draggedId)
+        );
+
+        newOrder.splice(
+            targetIndex,
+            1,
+            allSpaces.find((s) => s._id === draggedId)
+        );
+        newOrder.splice(
+            draggedIndex,
+            1,
+            allSpaces.find((s) => s._id === targetId)
+        );
+
+        dispatch(addSpace(newOrder));
+    };
+
     return (
         <>
             <div
@@ -379,13 +410,49 @@ const SideNavbar = () => {
                                 </div>
                             </div>
                         )}
+                        {!fullSidebar && (
+                            <h1 className="text-[#6576FF80] text-center">
+                                Squad
+                            </h1>
+                        )}
                         {/* Squads List */}
                         {
                             // (!isFirstTime || !firstTimeSquad) &&
                             <div className="mt-[20px] flex flex-col">
                                 {allSpaces.map((space) => {
+                                    if (space.name === "Onboarding") return;
                                     return (
                                         <div
+                                            draggable={true}
+                                            onDragStart={(e) => {
+                                                e.dataTransfer.setData(
+                                                    "id",
+                                                    e.target.getAttribute(
+                                                        "data-id"
+                                                    )
+                                                );
+                                            }}
+                                            onDragOver={(e) => {
+                                                e.preventDefault();
+                                            }}
+                                            onDragLeave={(e) => {
+                                                e.target.classList.remove(
+                                                    "border-b-2"
+                                                );
+                                                e.target.classList.remove(
+                                                    "border-[#6576FF]"
+                                                );
+                                            }}
+                                            onDragEnter={(e) => {
+                                                e.target.classList.add(
+                                                    "border-b-2"
+                                                );
+                                                e.target.classList.add(
+                                                    "border-[#6576FF]"
+                                                );
+                                            }}
+                                            onDrop={squadOnDrop}
+                                            data-id={space._id}
                                             className={`flex items-center gap-3 cursor-pointer py-[10px] ${
                                                 selectedSpace === space._id
                                                     ? "bg-[#6576FF10]"
@@ -416,10 +483,10 @@ const SideNavbar = () => {
                                                 style={{
                                                     fill: space.color,
                                                 }}
-                                                className={`w-[20px] h-[20px]`}
+                                                className={`w-[20px] h-[20px] pointer-events-none`}
                                             />
                                             {fullSidebar && (
-                                                <p className="text-[14px] text-[#C4CEFE]">
+                                                <p className="text-[14px] text-[#C4CEFE] pointer-events-none">
                                                     {space.name}
                                                 </p>
                                             )}
@@ -449,6 +516,11 @@ const SideNavbar = () => {
                                         />
                                     </div>
                                 </div>
+                            )}
+                            {!fullSidebar && (
+                                <h1 className="text-[#6576FF80] text-center">
+                                    Chats
+                                </h1>
                             )}
                             {/* Chats List */}
                             <div className="mt-[15px] flex flex-col">
