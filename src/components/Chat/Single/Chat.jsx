@@ -108,7 +108,7 @@ const SingleChat = () => {
                         })}
                     </div>
                 </div>
-                <div className="w-full mt-[40px] h-full">
+                <div className="w-full mt-[40px] h-full max-h-[600px]">
                     {TabsScreen[selectedTab]}
                 </div>
             </div>
@@ -145,18 +145,24 @@ const SingleChatScreen = ({ participantID }) => {
     };
 
     return (
-        <div className={`bg-[#ECECEC] pb-10 rounded-lg`}>
+        <div className={`bg-[#ECECEC] pb-5 rounded-lg h-full flex flex-col `}>
             <div
                 // Previous
-                style={{
-                    height: `calc(100vh - ${messageToRespond ? 245 : 145}px)`,
-                    // marginTop: "70px",
-                }}
+                style={
+                    {
+                        // height: `calc(100vh - ${messageToRespond ? 245 : 145}px)`,
+                        // marginTop: "70px",
+                    }
+                }
                 // now
                 // style={{
                 //     height: `calc(100% - ${messageToRespond ? 170 : 70}px)`,
                 // }}
-                className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll`}
+                className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll flex-1 ${
+                    messageToRespond
+                        ? "h-[calc(100%-245)px]"
+                        : "h-[calc(100%-145)px]"
+                }`}
             >
                 <PrivateTextMessage
                     messageToRespond={messageToRespond}
