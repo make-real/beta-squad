@@ -14,11 +14,6 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../util/date';
 
-// generate random color
-const randomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
-};
-
 const CardStack = ({ listName, card, listID }) => {
     const { updateCard, toggleCardModal, setCardDetails } =
         useBoardCardContext();
@@ -94,7 +89,7 @@ const CardStack = ({ listName, card, listID }) => {
             {/* top-right shape */}
             <span
                 className="absolute top-0 left-0 h-4 w-4 rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
-                style={{ backgroundColor: randomColor() }}
+                style={{ backgroundColor: card?.color }}
             />
             {/* message indicator */}
             <span
