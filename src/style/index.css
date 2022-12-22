@@ -46,6 +46,10 @@
     }
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     font-family: "Varela Round", sans-serif;
 }

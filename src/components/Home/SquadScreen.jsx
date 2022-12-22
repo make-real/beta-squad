@@ -86,7 +86,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-[40px]">
+                <div className="mt-[40px] flex flex-col h-full">
                     <div className="flex items-center gap-[45px]">
                         {Object.keys(TabsName).map((value) => {
                             return (
@@ -104,7 +104,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         })}
                     </div>
                     <div className="w-full h-[1px] bg-[#ECECEC]"></div>
-                    {TabsScreen[selectedTab]}
+                    <div className="h-full max-h-[600px]">
+                        {TabsScreen[selectedTab]}
+                    </div>
                 </div>
             </div>
         </div>

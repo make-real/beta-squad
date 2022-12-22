@@ -10,7 +10,7 @@ const Layout = ({ selectedSpaceId }) => {
     const fullSidebar = useSelector((state) => state.screen.fullSidebar);
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen no-scrollbar">
             {/* <NavBar selectedSpaceId={selectedSpaceId} /> */}
             {/* <SideBar /> */}
             <div className="z-[159]">
