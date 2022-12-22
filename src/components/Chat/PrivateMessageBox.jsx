@@ -20,11 +20,18 @@ import { useParams } from "react-router-dom";
 import { send_single_message } from "../../api/chat";
 import { addSingleMessagePrivate } from "../../store/slice/privateChat";
 
-const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }) => {
+const PrivateMessageBox = ({
+  messageToRespond,
+  setMessageToRespond,
+  custom,
+  onComment,
+}) => {
   const [input, setInput] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-  const userSelectedWorkSpaceId = useSelector((state) => state.workspace.selectedWorkspace);
+  const userSelectedWorkSpaceId = useSelector(
+    (state) => state.workspace.selectedWorkspace
+  );
   const [audio, setAudio] = useState(null);
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
@@ -79,9 +86,6 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
   const handleSendMessage = async () => {
     setMessageToRespond();
 
-
-    
-
     try {
       const text = String(input).trim();
       if (text === "") {
@@ -91,34 +95,13 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
       if (custom) {
         await onComment({ text });
       } else {
-        const obj = {
-          sender: {
-            _id: "62eeda054cd94215aec5d5bd",
-            fullName: "Shanta",
-            username: "coder.shanta",
-            avatar: "https://res.cloudinary.com/duaxe7mr0/raw/upload/v1661418500/jmrigyblvvxhbpfqkexy.jpg",
-          },
-          to: participantID,
-          chatHeaderRef: messageToRespond?._id,
-          content: {
-            text: text,
-            attachments: [],
-            mentionedUsers: [],
-          },
-          seenBy: [],
-          reactions: [],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0,
-        };
-
-        dispatch(addSingleMessagePrivate(obj));
-
-        await send_single_message(userSelectedWorkSpaceId, {
+        const { data } = await send_single_message(userSelectedWorkSpaceId, {
           sendTo: participantID,
           textMessage: text,
           replayOf: messageToRespond?._id,
         });
+
+        // dispatch(addSingleMessagePrivate(data.message));
       }
 
       setInput("");
@@ -150,12 +133,14 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
             "content-type": "multipart/form-data",
           },
           onUploadProgress: function (progressEvent) {
-            let UpPer = parseInt((progressEvent.loaded * 100) / progressEvent.total);
+            let UpPer = parseInt(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
             setUploadPercentage(UpPer);
           },
         };
         const { data } = await api(config);
-        dispatch(addSingleMessagePrivate(data.message));
+        // dispatch(addSingleMessagePrivate(data.message));
         console.log(data);
       }
 
@@ -187,12 +172,14 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
             "content-type": "multipart/form-data",
           },
           onUploadProgress: function (progressEvent) {
-            let UpPer = parseInt((progressEvent.loaded * 100) / progressEvent.total);
+            let UpPer = parseInt(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
             setUploadPercentage(UpPer);
           },
         };
         const { data } = await api(config);
-        dispatch(addSingleMessagePrivate(data.message));
+        // dispatch(addSingleMessagePrivate(data.message));
         setUploadPercentage(0);
       }
     } catch (error) {
@@ -200,7 +187,8 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
     }
   };
 
-  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } = useReactMediaRecorder({ audio: true });
+  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } =
+    useReactMediaRecorder({ audio: true });
 
   const handleStartRecording = async () => {
     try {
@@ -209,7 +197,9 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
       });
 
       if (permission?.state === "denied") {
-        alert("Microphone permission is required. Go to site settings and give microphone permission for this site.");
+        alert(
+          "Microphone permission is required. Go to site settings and give microphone permission for this site."
+        );
       } else {
         setAudioSent(false);
         setRecording(true);
@@ -241,86 +231,120 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
           width: `${uploadPercentage}%`,
           height: "2px",
           transition: "1s all",
-        }}
-      ></div>
+        }}></div>
 
       {/* <div>
         Demo mot dfdfdf sdsdfdsf afadsfadsfads asdfasdfadsf 
       </div> */}
 
-      <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
-        <div className="w-full h-full flex justify-center align-middle">
-          <div className={`w-full ${messageToRespond && "border-[0.5px] border-white p-3 rounded-md"}`}>
+      <div className='px-3 mt-[10px] relative text-gray-300 flex w-full'>
+        <div className='w-full h-full flex justify-center align-middle'>
+          <div
+            className={`w-full ${
+              messageToRespond && "border-[0.5px] border-white p-3 rounded-md"
+            }`}>
             {messageToRespond && (
-              <div className="flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md">
+              <div className='flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md'>
                 <div>
-                  <p className="text-bold text-themeColor text-sm mb-1">{messageToRespond?.sender?.fullName}</p>
+                  <p className='text-bold text-themeColor text-sm mb-1'>
+                    {messageToRespond?.sender?.fullName}
+                  </p>
                   {messageToRespond?.content?.text ? (
                     <p
-                      className="text-sm text-gray-900"
+                      className='text-sm text-gray-900'
                       dangerouslySetInnerHTML={{
                         __html: populateUsers(messageToRespond?.content),
-                      }}
-                    ></p>
+                      }}></p>
                   ) : Boolean(messageToRespond?.content?.voice) ? (
-                    <p className="text-sm">Voice</p>
+                    <p className='text-sm'>Voice</p>
                   ) : (
-                    <p className="text-sm">Attachment</p>
+                    <p className='text-sm'>Attachment</p>
                   )}
                 </div>
-                <div className="cursor-pointer" onClick={() => setMessageToRespond()}>
+                <div
+                  className='cursor-pointer'
+                  onClick={() => setMessageToRespond()}>
                   <MdClose />
                 </div>
               </div>
             )}
             {!isRecording ? (
-              <div className="w-full flex relative shadow-md border bg-white rounded-lg px-3 py-2">
+              <div className='w-full flex relative shadow-md border bg-white rounded-lg px-3 py-2'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   singleLine={true}
-                  onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" ? handleSendMessage() : null
+                  }
                   classNames={classNames}
-                  customSuggestionsContainer={(children) => <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm">{children}</div>}
+                  customSuggestionsContainer={(children) => (
+                    <div className='bg-white absolute bottom-6 min-w-[300px] shadow-sm'>
+                      {children}
+                    </div>
+                  )}
                   allowSuggestionsAboveCursor={true}
                   inputRef={inputRef}
-                  autoFocus
-                >
+                  autoFocus>
                   <Mention
                     className={classNames.mentions__mention}
-                    trigger="@"
+                    trigger='@'
                     data={users}
-                    markup="{{__id__}}"
+                    markup='{{__id__}}'
                     renderSuggestion={(entry) => {
                       return (
-                        <h1 className={"bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"}>
+                        <h1
+                          className={
+                            "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
+                          }>
                           {entry.display}
                         </h1>
                       );
                     }}
-                    displayTransform={(id) => users.find((user) => user.id === id).display}
+                    displayTransform={(id) =>
+                      users.find((user) => user.id === id).display
+                    }
                   />
                 </MentionsInput>
-                <div className="text-gray-400 flex mt-[5px]">
+                <div className='text-gray-400 flex mt-[5px]'>
                   {/* {isRecording ? (
                   
                 ) : ( */}
-                  <div className="px-2 cursor-pointer relative">
-                    <BiMicrophone size={20} className="duration-300  hover:text-teal-400 mt-[-2px]" onClick={handleStartRecording} />
+                  <div className='px-2 cursor-pointer relative'>
+                    <BiMicrophone
+                      size={20}
+                      className='duration-300  hover:text-teal-400 mt-[-2px]'
+                      onClick={handleStartRecording}
+                    />
                   </div>
                   {/* )} */}
 
-                  <label className="px-1.5 cursor-pointer relative" htmlFor="userInputFile" onClick={() => handleAttach()}>
-                    <ImAttachment className="duration-300  hover:text-teal-400 " onClick={() => handleAttach()} />
-                    <input type="file" id="userInputFile" className="hidden" multiple onChange={onMediaFilePicked} />
+                  <label
+                    className='px-1.5 cursor-pointer relative'
+                    htmlFor='userInputFile'
+                    onClick={() => handleAttach()}>
+                    <ImAttachment
+                      className='duration-300  hover:text-teal-400 '
+                      onClick={() => handleAttach()}
+                    />
+                    <input
+                      type='file'
+                      id='userInputFile'
+                      className='hidden'
+                      multiple
+                      onChange={onMediaFilePicked}
+                    />
                   </label>
-                  <div className="px-2 cursor-pointer relative">
-                    <GoMention className="duration-300  hover:text-teal-400" onClick={handleMention} />
+                  <div className='px-2 cursor-pointer relative'>
+                    <GoMention
+                      className='duration-300  hover:text-teal-400'
+                      onClick={handleMention}
+                    />
                   </div>
-                  <div className="px-2 cursor-pointer duration-300  hover:text-teal-400 relative">
+                  <div className='px-2 cursor-pointer duration-300  hover:text-teal-400 relative'>
                     <BsEmojiSmile onClick={() => handleEmoji()} />
                     {showEmojis && (
-                      <div className="absolute  right-0 bottom-8">
+                      <div className='absolute  right-0 bottom-8'>
                         <Picker onEmojiClick={onEmojiClick} />
                       </div>
                     )}
@@ -328,11 +352,11 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                 </div>
               </div>
             ) : (
-              <div className="w-full flex align-middle">
-                <div className="mr-5 my-auto">
+              <div className='w-full flex align-middle'>
+                <div className='mr-5 my-auto'>
                   <MdDeleteOutline
                     size={30}
-                    className="duration-300 text-red-400"
+                    className='duration-300 text-red-400'
                     onClick={() => {
                       setRecording(false);
                       setAudioSent(false);
@@ -341,17 +365,17 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                   />
                 </div>
 
-                <div className="flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative">
+                <div className='flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative'>
                   {/* <span className="text-xs ">Recording...</span> */}
                   {Array.from({ length: 20 }).map(() => (
-                    <ScaleLoader width={2} color="#36d7b7" />
+                    <ScaleLoader width={2} color='#36d7b7' />
                   ))}
                 </div>
 
-                <div className="ml-5 my-auto">
+                <div className='ml-5 my-auto'>
                   <BiSend
                     size={30}
-                    className="duration-300 text-teal-400  hover:text-teal-500"
+                    className='duration-300 text-teal-400  hover:text-teal-500'
                     onClick={() => {
                       setRecording(false);
                       setAudioSent(true);

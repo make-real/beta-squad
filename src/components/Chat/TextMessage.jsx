@@ -30,7 +30,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
     }
   };
 
-  const reaction = msg.reactions.find((r) => r?.reactor?._id === userId)?.reaction;
+  const reaction = msg?.reactions?.find((r) => r?.reactor?._id === userId)?.reaction;
 
   const handleDelete = async () => {
     try {
@@ -42,42 +42,45 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
 
   return (
     <div
-      className={`flex ${msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""} pl-6 pr-14 py-5 relative user-box
+      className={`flex ${msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""} pl-6 pr-8 py-5 relative user-box
       `}
     >
-      <div
+      {/* <div
         className={`w-10 h-10 border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[50]  ${
-          msg?.sender?._id === userId ? "-ml-6 border-[#6576FF]" : "border-white"
-        }`}
-      >
+          msg?.sender?._id === userId
+            ? "-ml-6 border-[#6576FF]"
+            : "border-white"
+        }`}>
         {msg?.sender?.avatar ? (
-          <img src={msg?.sender?.avatar} alt="" className="rounded-full" />
+          <img src={msg?.sender?.avatar} alt='' className='rounded-full' />
         ) : (
-          <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">{msg?.sender?.fullName.slice(0, 1)}</h6>
+          <h6 className='text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white'>
+            {msg?.sender?.fullName.slice(0, 1)}
+          </h6>
         )}
-      </div>
+      </div> */}
 
       <div
         style={{
           maxWidth: forComment ? "400px" : "900px",
         }}
-        className={`relative ${
-          msg?.sender?._id === userId ? "bg-[#6576FF] text-white" : "bg-slate-100 text-[#031124] mr-3"
-        }  p-3 rounded-lg ml-3 shadow-md`}
+        className={`relative ${msg?.sender?._id === userId ? "bg-slate-100 " : "bg-[#F5F5F5] text-[#7C04EC] mr-3"}  p-3 rounded-lg ml-3 shadow-md`}
       >
         <div
           className={`flex flex-row justify-between text-xs pb-2 ${
-            msg?.sender?._id === userId ? "text-white border-b border-white pr-6 flex-row-reverse" : "text-[#54CC7C] border-b border-[#f3dfdf] pl-6"
+            msg?.sender?._id === userId ? "text-[#ACB0B6] border-b border-white flex-row-reverse" : "text-[#031124] border-b border-white"
           }`}
         >
-          <h6 className={`font-bold ${msg?.sender?._id === userId ? "hidden" : ""}`}>{msg?.sender?.fullName}</h6>
-          <small className={`flex gap-2 ${msg?.sender?._id === userId ? "text-white" : "ml-5"}`}>
-            {moment(msg.createdAt).fromNow()} {msg?.sender?._id === userId ? <img src={tickIcon} alt="" /> : ""}
+          <h6 className={`font-bold text-[#7C04EC] ${msg?.sender?._id === userId ? "hidden" : ""}`}>{msg?.sender?.fullName}</h6>
+          <small
+            className={`flex flex-row-reverse gap-2 ${msg?.sender?._id === userId ? "text-[#ACB0B6] font-[400]" : "ml-5 text-[#ACB0B6] font-[400]"}`}
+          >
+            {moment(msg?.createdAt).fromNow()} {msg?.sender?._id === userId ? <img src={tickIcon} alt="" /> : <img src={images.clockIcon} alt="" />}
           </small>
         </div>
 
-        {msg.replayOf && (
-          <div className="mb-2 border-l-4 pl-3 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper">
+        {msg?.replayOf && (
+          <div className="mb-2 border-l-4 pl-3 border-blue-500 bg-slate-200 text-neutral-500 p-3 rounded-md mentioned-message-wrapper">
             <RenderAttachment message={msg.replayOf} scrollToBottom={scrollToBottom} />
             <span className={`${msg?.sender?._id === userId ? "text-white" : "text-[#031124]"}`}>
               <p
@@ -95,7 +98,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
           <RenderAttachment message={msg} scrollToBottom={scrollToBottom} small={forComment} />
         )}
         <p
-          className={`text-sm pt-1 ${msg?.sender?._id === userId ? "text-white" : "text-[#031124] pl-5"}`}
+          className={`text-sm pt-1 ${msg?.sender?._id === userId ? "text-[#031124]" : "text-[#031124]"}`}
           dangerouslySetInnerHTML={{
             __html: populateUsers(msg?.content),
           }}
@@ -116,7 +119,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
       </div>
 
       <div className="flex flex-row-reverse h-fit text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
-        <div className="px-1.5 hover:text-teal-400 tooltip-box cursor-pointer">
+        <div className="px-1.5 hover:text-blue-500 tooltip-box cursor-pointer">
           <BsEmojiSmile onClick={() => setShowReactEmojis(!showReactEmojis)} />
           <p className="tooltip-text select-none">Add a reaction</p>
 
@@ -149,13 +152,13 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
             </div>
           )}
         </div>
-        <div onClick={() => setMessageToRespond(msg)} className="px-1.5 hover:text-teal-400 tooltip-box cursor-pointer">
+        <div onClick={() => setMessageToRespond(msg)} className="px-1.5 hover:text-blue-500 tooltip-box cursor-pointer">
           <RiArrowGoForwardLine />
           <p className="tooltip-text">Respond to this message</p>
         </div>
 
         {msg?.sender?._id === userId && (
-          <div className="px-1.5 hover:text-teal-400 tooltip-box group cursor-pointer">
+          <div className="px-1.5 hover:text-blue-500 tooltip-box group cursor-pointer">
             <BiDotsVerticalRounded className="text-[18px]" onClick={handleDelete} />
 
             <div className="group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[30%] top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm">
@@ -177,8 +180,9 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
 
 const RenderAttachment = ({ message, scrollToBottom, small }) => {
   try {
-    message?.content?.attachments?.map((src, idx) => {
+    return message?.content?.attachments?.map((src, idx) => {
       const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
+
       console.log(src);
 
       if (["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)) {
