@@ -64,7 +64,7 @@ const SquadMembers = ({ showType }) => {
     return (
         <>
             {showType === "grid" ? (
-                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap">
+                <div className="mt-[30px] flex items-center gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
                     <div
                         onClick={() => setShowAddMemberModal(true)}
                         className="w-[297px] h-[162px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
@@ -117,7 +117,7 @@ const SquadMembers = ({ showType }) => {
                 </div>
             ) : (
                 showType === "stack" && (
-                    <div className="h-full overflow-y-scroll no-scrollbar mt-[30px]">
+                    <div className="h-full overflow-y-scroll no-scrollbar mt-[30px] max-h-[650px]">
                         <div className="flex flex-col items-center gap-[10px]">
                             <div
                                 onClick={() => setShowAddMemberModal(true)}
