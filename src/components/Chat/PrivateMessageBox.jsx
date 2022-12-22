@@ -32,6 +32,7 @@ const PrivateMessageBox = ({
   const userSelectedWorkSpaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const [audio, setAudio] = useState(null);
   const inputRef = useRef();
   const [users, setUsers] = useState([]);
@@ -84,6 +85,7 @@ const PrivateMessageBox = ({
   };
 
   const handleSendMessage = async () => {
+    const msgID = Date.now();
     setMessageToRespond();
 
     try {
@@ -95,13 +97,35 @@ const PrivateMessageBox = ({
       if (custom) {
         await onComment({ text });
       } else {
-        const { data } = await send_single_message(userSelectedWorkSpaceId, {
+        const obj = {
+          _id: msgID,
+          sender: {
+            _id: "6385f93ae63eabf483bb732c",
+            fullName: user?.fullName,
+            username: user?.username,
+            avatar: user?.avatar,
+          },
+          to: selectedSpaceId,
+          chatHeaderRef: messageToRespond?._id,
+          content: {
+            text: text,
+            attachments: [],
+            mentionedUsers: [],
+          },
+          seenBy: [],
+          reactions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          __v: 0,
+        };
+
+        dispatch(addSingleMessagePrivate(obj));
+
+        await send_single_message(userSelectedWorkSpaceId, {
           sendTo: participantID,
           textMessage: text,
           replayOf: messageToRespond?._id,
         });
-
-        // dispatch(addSingleMessagePrivate(data.message));
       }
 
       setInput("");
@@ -111,6 +135,7 @@ const PrivateMessageBox = ({
   };
 
   const uploadAudioFile = async (url) => {
+    const msgId = new Date();
     setMessageToRespond();
     try {
       const formData = new FormData();
@@ -139,8 +164,31 @@ const PrivateMessageBox = ({
             setUploadPercentage(UpPer);
           },
         };
+
+        // const obj = {
+        //   _id: msgId,
+        //   sender: {
+        //     _id: "6385f93ae63eabf483bb732c",
+        //     fullName: user?.fullName,
+        //     username: user?.username,
+        //     avatar: user?.avatar,
+        //   },
+        //   to: selectedSpaceId,
+        //   chatHeaderRef: messageToRespond?._id,
+        //   content: {
+        //     attachments: [...formData],
+        //     mentionedUsers: [],
+        //   },
+        //   seenBy: [],
+        //   reactions: [],
+        //   createdAt: new Date(),
+        //   updatedAt: new Date(),
+        //   __v: 0,
+        // };
+
+        // dispatch(addSingleMessagePrivate(obj));
+
         const { data } = await api(config);
-        // dispatch(addSingleMessagePrivate(data.message));
         console.log(data);
       }
 
@@ -179,7 +227,7 @@ const PrivateMessageBox = ({
           },
         };
         const { data } = await api(config);
-        // dispatch(addSingleMessagePrivate(data.message));
+        dispatch(addSingleMessagePrivate(data.message));
         setUploadPercentage(0);
       }
     } catch (error) {
@@ -227,7 +275,7 @@ const PrivateMessageBox = ({
     <>
       <div
         style={{
-          background: "rgb(107, 199, 220)",
+          background: "rgb(101, 118, 255)",
           width: `${uploadPercentage}%`,
           height: "2px",
           transition: "1s all",
@@ -244,9 +292,9 @@ const PrivateMessageBox = ({
               messageToRespond && "border-[0.5px] border-white p-3 rounded-md"
             }`}>
             {messageToRespond && (
-              <div className='flex mb-2 justify-between border-l-4 border-themeColor bg-slate-200 text-neutral-500 p-3 rounded-md'>
+              <div className='flex mb-2 justify-between border-l-4 border-blue-500 bg-blue-200 text-neutral-500 p-3 rounded-md'>
                 <div>
-                  <p className='text-bold text-themeColor text-sm mb-1'>
+                  <p className='text-bold text-blue-500 text-sm mb-1'>
                     {messageToRespond?.sender?.fullName}
                   </p>
                   {messageToRespond?.content?.text ? (
@@ -269,7 +317,7 @@ const PrivateMessageBox = ({
               </div>
             )}
             {!isRecording ? (
-              <div className='w-full flex relative shadow-md border bg-white rounded-lg px-3 py-2'>
+              <div className='w-full flex relative z-[9999] shadow-md border bg-white rounded-lg px-3 py-2'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -295,7 +343,7 @@ const PrivateMessageBox = ({
                       return (
                         <h1
                           className={
-                            "bg-white text-sm px-5 py-2 hover:bg-themeColor hover:text-white border-[0.2px] border-gray-300"
+                            "bg-white text-sm px-5 py-2 hover:bg-blue-500 hover:text-white border-[0.2px] border-gray-300"
                           }>
                           {entry.display}
                         </h1>
@@ -313,7 +361,7 @@ const PrivateMessageBox = ({
                   <div className='px-2 cursor-pointer relative'>
                     <BiMicrophone
                       size={20}
-                      className='duration-300  hover:text-teal-400 mt-[-2px]'
+                      className='duration-300 hover:text-blue-500 mt-[-2px]'
                       onClick={handleStartRecording}
                     />
                   </div>
@@ -324,7 +372,7 @@ const PrivateMessageBox = ({
                     htmlFor='userInputFile'
                     onClick={() => handleAttach()}>
                     <ImAttachment
-                      className='duration-300  hover:text-teal-400 '
+                      className='duration-300  hover:text-blue-500 '
                       onClick={() => handleAttach()}
                     />
                     <input
@@ -337,11 +385,11 @@ const PrivateMessageBox = ({
                   </label>
                   <div className='px-2 cursor-pointer relative'>
                     <GoMention
-                      className='duration-300  hover:text-teal-400'
+                      className='duration-300  hover:text-blue-500'
                       onClick={handleMention}
                     />
                   </div>
-                  <div className='px-2 cursor-pointer duration-300  hover:text-teal-400 relative'>
+                  <div className='px-2 cursor-pointer duration-300  hover:text-blue-500 relative'>
                     <BsEmojiSmile onClick={() => handleEmoji()} />
                     {showEmojis && (
                       <div className='absolute  right-0 bottom-8'>
@@ -368,14 +416,14 @@ const PrivateMessageBox = ({
                 <div className='flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative'>
                   {/* <span className="text-xs ">Recording...</span> */}
                   {Array.from({ length: 20 }).map(() => (
-                    <ScaleLoader width={2} color='#36d7b7' />
+                    <ScaleLoader width={2} color='#6576FF' />
                   ))}
                 </div>
 
                 <div className='ml-5 my-auto'>
                   <BiSend
                     size={30}
-                    className='duration-300 text-teal-400  hover:text-teal-500'
+                    className='duration-300 text-blue-500  hover:text-blue-600'
                     onClick={() => {
                       setRecording(false);
                       setAudioSent(true);
