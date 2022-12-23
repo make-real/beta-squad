@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { addListId } from '../../store/slice/cardAsList';
 import { useSelector } from 'react-redux';
-import Button from '../Button';
 import { Member } from '../../assets/icons/svg/Member';
 import {
     MagnifyingGlassIcon,
@@ -50,7 +49,7 @@ const AssigneeUser = ({
         if (Boolean(listID)) {
             dispatch(addListId(listID));
         }
-    }, [spaceID, listID, dispatch, handleDataChange]);
+    }, [spaceID, listID]);
 
     const handle_add_assignee_users = async (user) => {
         try {
@@ -89,9 +88,19 @@ const AssigneeUser = ({
     };
 
     const filterMember = () => {
-        return allUserForAssignee.filter(
+        const users = allUserForAssignee.filter(
             ({ _id }) => !localCard?.assignee?.some((user) => user._id === _id)
         );
+        if (searchUserForAssignee) {
+            return users.filter(
+                (user) =>
+                    user?.fullName
+                        ?.toLowerCase()
+                        ?.indexOf(searchUserForAssignee.toLowerCase()) !== -1
+            );
+        } else {
+            return users;
+        }
     };
 
     return (
@@ -153,15 +162,15 @@ const AssigneeUser = ({
                 </div>
             )}
 
-            {filterMember()?.length > 0 && (
-                <div className="mt-2 pt-2 overflow-y-auto customScroll pb-2 border-t border-[#ECECEC]">
-                    <div className="flex justify-start items-center">
-                        <Member />
-                        <p className="text-[#6576FF] py-1 text-base ml-2">
-                            Add New Member
-                        </p>
-                    </div>
-                    {filterMember().map((user) => (
+            <div className="mt-2 pt-2 overflow-y-auto customScroll pb-2 border-t border-[#ECECEC]">
+                <div className="flex justify-start items-center">
+                    <Member />
+                    <p className="text-[#6576FF] py-1 text-base ml-2">
+                        Add New Member
+                    </p>
+                </div>
+                {filterMember()?.length > 0 ? (
+                    filterMember().map((user) => (
                         <div
                             key={user?._id}
                             className="relative group flex items-center px-3 py-2 hover:bg-gray-200 space-x-3 cursor-pointer rounded-lg after:absolute after:text-themeColor after:right-2"
@@ -187,9 +196,11 @@ const AssigneeUser = ({
                                 {user?.fullName}
                             </span>
                         </div>
-                    ))}
-                </div>
-            )}
+                    ))
+                ) : (
+                    <p className="text-center p-2">No use found!</p>
+                )}
+            </div>
         </div>
     );
 };

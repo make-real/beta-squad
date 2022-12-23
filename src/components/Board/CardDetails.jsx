@@ -123,7 +123,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 cardTagObject
             );
 
-
             if (data.updatedCard._id) {
                 toast.success(`Card name updated`, { autoClose: 2000 });
                 handleDataChange();
@@ -356,7 +355,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
 
                 <div className="relative bg-white p-8 rounded-2xl">
-                    <span className="absolute top-0 left-0 bg-[#5DD2D3] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8" />
+                    <span
+                        className={`absolute top-0 left-0 rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8`}
+                        style={{ backgroundColor: card?.color }}
+                    />
 
                     <div className="flex items-center justify-between pb-4 px-1">
                         {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
@@ -651,18 +653,18 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         </p>
                                     </div>
                                     {!editDescription ? (
-                                        <div
-                                            className="border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
+                                        <textarea
+                                            className="w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
+                                            type="text"
+                                            defaultValue={
+                                                localCard?.description
+                                            }
                                             onClick={() =>
                                                 setEditDescription(
                                                     (prev) => !prev
                                                 )
                                             }
-                                        >
-                                            <p className="truncate">
-                                                {localCard?.description}
-                                            </p>
-                                        </div>
+                                        />
                                     ) : (
                                         <textarea
                                             className={`w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px] focus:outline-none ${
@@ -713,7 +715,24 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         </p>
                                     </div>
 
-                                    <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
+                                    {localCard?.startDate &&
+                                        localCard?.endDate && (
+                                            <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
+                                                <p className="font-[600]">
+                                                    Task of{' '}
+                                                    {formatDate(
+                                                        localCard.startDate,
+                                                        'MMM, dd'
+                                                    )}{' '}
+                                                    -{' '}
+                                                    {formatDate(
+                                                        localCard.endDate,
+                                                        'MMM, dd'
+                                                    )}
+                                                </p>
+                                            </div>
+                                        )}
+                                    {/* <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
                                         <p className="font-[600]">
                                             Task of{' '}
                                             {localCard?.startDate
@@ -730,7 +749,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                   )
                                                 : 'End'}
                                         </p>
-                                    </div>
+                                    </div> */}
 
                                     <div className="">
                                         {localCard?.checkList?.length > 0 &&

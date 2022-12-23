@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react';
 const BoardCardItem = createContext();
 
 export const BoardCardContext = ({ children }) => {
-    const [target, setTarget] = useState({ bid: '', cid: '' });
+    // const [target, setTarget] = useState({ bid: '', cid: '' });
 
     const [cardDetails, setCardDetails] = useState({});
 
@@ -71,9 +71,21 @@ export const BoardCardContext = ({ children }) => {
 
     const handleDragEnd = (
         { target, targetIndex },
-        { source, sourceIndex }
+        { source, sourceIndex },
+        type
     ) => {
         const board = [...boardLists];
+
+        if (type === 'column') {
+            const list = board[sourceIndex];
+
+            board.splice(sourceIndex, 1);
+            board.splice(targetIndex, 0, list);
+
+            setBoardList(board);
+            return;
+        }
+
         const sourceBoard = board[board.findIndex(({ _id }) => _id === source)];
         const targetBoard = board[board.findIndex(({ _id }) => _id === target)];
 
