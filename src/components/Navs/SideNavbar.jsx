@@ -157,16 +157,19 @@ const SideNavbar = () => {
             newOrder.find((s) => s._id === draggedId)
         );
 
+        newOrder.splice(draggedIndex, 1);
         newOrder.splice(
             targetIndex,
-            1,
+            0,
             allSpaces.find((s) => s._id === draggedId)
         );
-        newOrder.splice(
-            draggedIndex,
-            1,
-            allSpaces.find((s) => s._id === targetId)
-        );
+
+        console.log(newOrder);
+        // newOrder.splice(
+        //     draggedIndex,
+        //     1,
+        //     allSpaces.find((s) => s._id === targetId)
+        // );
 
         dispatch(addSpace(newOrder));
     };
