@@ -27,7 +27,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                         `/spaces/${selectedSpaceId}/board?getCards=true`
                     );
 
-                    setBoardList(data.lists);
+                    setBoardList(data.lists?.reverse()?.slice(0));
                 }
             } catch (error) {
                 console.log(error);
@@ -180,17 +180,16 @@ const Board = ({ selectedSpaceId, showType }) => {
                                         ref={provided.innerRef}
                                         className="flex items-start"
                                     >
-                                        {filterdBoardList()
-                                            ?.reverse()
-                                            ?.slice(0)
-                                            ?.map((boardList, index) => (
+                                        {filterdBoardList()?.map(
+                                            (boardList, index) => (
                                                 <BoardList
                                                     showType={showType}
                                                     key={boardList?._id}
                                                     boardList={boardList}
                                                     listIndex={index}
                                                 />
-                                            ))}
+                                            )
+                                        )}
                                         {provided.placeholder}
                                     </div>
                                 )}

@@ -10,7 +10,7 @@ export const BoardCardContext = ({ children }) => {
     const [boardLists, setBoardList] = useState([]);
 
     const addBoardList = (newListObj) =>
-        setBoardList((pre) => [newListObj, ...pre]);
+        setBoardList((pre) => [...pre, newListObj]);
 
     const updateBoardList = (id, text) => {
         setBoardList((pre) =>
