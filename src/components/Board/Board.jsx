@@ -210,16 +210,31 @@ const Board = ({ selectedSpaceId, showType }) => {
                 ) : (
                     <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
-                            {filterdBoardList()
-                                ?.slice(0)
-                                ?.reverse()
-                                ?.map((boardList) => (
-                                    <BoardStackList
-                                        showType={showType}
-                                        key={boardList?._id}
-                                        boardList={boardList}
-                                    />
-                                ))}
+                            <Droppable
+                                droppableId="all-columns"
+                                direction="horizontal"
+                                type="column"
+                            >
+                                {(provided) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className="flex flex-col items-start w-full"
+                                    >
+                                        {filterdBoardList()?.map(
+                                            (boardList, index) => (
+                                                <BoardStackList
+                                                    showType={showType}
+                                                    key={boardList?._id}
+                                                    boardList={boardList}
+                                                    listIndex={index}
+                                                />
+                                            )
+                                        )}{' '}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
                         </DragDropContext>
 
                         {/*  + Add a list | Button UI */}
