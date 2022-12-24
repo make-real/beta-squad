@@ -11,7 +11,7 @@ import {
     getSingleCard,
     updateChecklistItem,
 } from '../../hooks/useFetch';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import Dropdown from '../Dropdown';
 import ConfirmDialog from './ConfirmDialog';
 import AssigneeUser from '../AssigneeUser/AssigneeUser';
@@ -124,7 +124,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             );
 
             if (data.updatedCard._id) {
-                toast.success(`Card name updated`, { autoClose: 2000 });
+                // toast.success(`Card name updated`, { autoClose: 2000 });
                 handleDataChange();
 
                 setToggleEdit(false);
@@ -151,7 +151,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 cardTagObject
             );
             if (data.updatedCard._id) {
-                toast.success(`Description updated`, { autoClose: 2000 });
+                // toast.success(`Description updated`, { autoClose: 2000 });
                 handleDataChange();
             }
         } catch (error) {
@@ -190,37 +190,66 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     const handle_check_list_item_enter_btn = async (e) => {
         // if (e.key === 'Enter') {
+        //     const cardValue = { ...localCard };
 
-        const cardValue = { ...localCard };
+        //     const checkListItemObj = { ...checkListItem };
 
-        const checkListItemObj = { ...checkListItem };
+        //     if (checkListItemObj.content.length > 0) {
+        //         setNewCheckListItemJSX(false);
 
-        if (checkListItemObj.content.length > 0) {
-            setNewCheckListItemJSX(false);
+        //         const cardCheckList = {
+        //             ...cardValue,
+        //             checkList: [...cardValue.checkList, checkListItemObj],
+        //         };
 
-            const cardCheckList = {
-                ...cardValue,
-                checkList: [...cardValue.checkList, checkListItemObj],
-            };
+        //         setLocalCard(cardCheckList);
 
-            setLocalCard(cardCheckList);
+        //         try {
+        //             await createChecklistItem(
+        //                 selectedSpaceId,
+        //                 listID,
+        //                 card._id,
+        //                 checkListItemObj
+        //             );
+        //             handleDataChange();
+        //             // toast.success('List item added', { autoClose: 2000 });
+        //         } catch (error) {
+        //             // toast.error('List item not added', { autoClose: 2000 });
 
-            try {
-                await createChecklistItem(
-                    selectedSpaceId,
-                    listID,
-                    card._id,
-                    checkListItemObj
-                );
-                handleDataChange();
-                toast.success('List item added', { autoClose: 2000 });
-            } catch (error) {
-                toast.error('List item not added', { autoClose: 2000 });
+        //             console.log(error.response.data.issue);
+        //         }
 
-                console.log(error.response.data.issue);
+        //         setCheckListItem({ checked: '', content: '' });
+        //     }
+        // }
+
+        if (e.key === 'Enter') {
+            const cardValue = { ...localCard };
+
+            const checkListItemObj = { ...checkListItem };
+
+            if (checkListItemObj.content.length > 0) {
+                const cardCheckList = {
+                    ...cardValue,
+                    checkList: [...cardValue.checkList, checkListItemObj],
+                };
+
+                setLocalCard(cardCheckList);
+
+                try {
+                    await createChecklistItem(
+                        selectedSpaceId,
+                        listID,
+                        card._id,
+                        checkListItemObj
+                    );
+                    handleDataChange();
+                } catch (error) {
+                    console.log(error.response.data.issue);
+                }
+
+                setCheckListItem({ checked: '', content: '' });
             }
-
-            setCheckListItem({ checked: '', content: '' });
         }
     };
 
@@ -278,6 +307,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     };
 
     const handle_remove_check_list_item = async (itemId) => {
+        if (!itemId) return;
+
         const tempCard = { ...localCard };
 
         const updatedCheckList = {
@@ -294,11 +325,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 card._id,
                 itemId
             );
-            toast.success(data?.message, { autoClose: 2000 });
+            // toast.success(data?.message, { autoClose: 2000 });
         } catch (error) {
-            toast.error(JSON.stringify(error?.response?.data?.issue), {
-                autoClose: 2000,
-            });
+            // toast.error(JSON.stringify(error?.response?.data?.issue), {
+            //     autoClose: 2000,
+            // });
             console.log(error?.response.data?.issue);
         }
     };
@@ -847,9 +878,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                     onChange={
                                                         handle_check_list_change
                                                     }
-                                                    onBlur={
+                                                    onKeyDown={
                                                         handle_check_list_item_enter_btn
                                                     }
+                                                    // onBlur={
+                                                    //     handle_check_list_item_enter_btn
+                                                    // }
                                                     className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-teal-600 duration-200"
                                                 />
                                                 <Dropdown
@@ -883,9 +917,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         >
                                             <p className="flex justify-center items-center text-[15px] text-[#45BA6B]">
                                                 <PlusIcon className="w-5 h-5 mr-2" />
-                                                {newCheckListItemJSX
-                                                    ? 'Remove Item'
-                                                    : 'Add item'}
+                                                Add item
                                             </p>
                                         </Button>
                                     </div>

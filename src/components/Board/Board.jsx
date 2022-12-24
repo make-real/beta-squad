@@ -5,7 +5,7 @@ import {
     updateCardOrder,
 } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import useAxios from '../../api/index';
@@ -50,16 +50,16 @@ const Board = ({ selectedSpaceId, showType }) => {
             setListLoading(false);
             addBoardList(data.list);
 
-            toast.success(`${data?.list?.name} - list create successfully`, {
-                autoClose: 3000,
-            });
+            // toast.success(`${data?.list?.name} - list create successfully`, {
+            //     autoClose: 3000,
+            // });
         } catch (error) {
             console.log(error.response.data);
 
             setListLoading(false);
-            toast.error(error?.response?.data?.issue?.message, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.response?.data?.issue?.message, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -221,6 +221,19 @@ const Board = ({ selectedSpaceId, showType }) => {
                                         ref={provided.innerRef}
                                         className="flex flex-col items-start w-full"
                                     >
+                                        <div className="flex justify-center items-center w-full text-[#818892] text-center">
+                                            <p style={{ width: '25%' }}>
+                                                Card name
+                                            </p>
+                                            <p style={{ width: '25%' }}>
+                                                Assign
+                                            </p>
+                                            <p style={{ width: '15%' }}>Date</p>
+                                            <p style={{ width: '10%' }}>
+                                                Progress
+                                            </p>
+                                            <p style={{ width: '20%' }}>List</p>
+                                        </div>
                                         {filterdBoardList()?.map(
                                             (boardList, index) => (
                                                 <BoardStackList

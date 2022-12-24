@@ -73,19 +73,12 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
                     className={`w-full mb-2 flex flex-col`}
                 >
                     {/* <div className="flex justify-between items-center">
-                <p>Card name</p>
-                <p>Assign</p>
-                <p>Date</p>
-                <p>Progress</p>
-                <p>List</p>
-            </div>
-            <div className="flex justify-between items-center">
-                <p>{boardList?.name || 'New List'}</p>
-                <p>Assign</p>
-                <p>Date</p>
-                <p>Progress</p>
-                <p>List</p>
-            </div> */}
+                        <p>{boardList?.name || 'New List'}</p>
+                        <p>Assign</p>
+                        <p>Date</p>
+                        <p>Progress</p>
+                        <p>List</p>
+                    </div> */}
                     {/* <div
                 className="overflow-hidden flex justify-between items-center my-3"
                 ref={dropDownRef}

@@ -3,7 +3,7 @@ import { AddBtn, Card, BoardListSettingDropDown } from '.';
 import { addCardIntoBoardList, boardListUpdate } from '../../hooks/useFetch';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import Dropdown from '../Dropdown';
 // import Tippy from '@tippyjs/react';
 // import useAxios from '../../api';
@@ -57,9 +57,9 @@ const BoardList = ({ showType, listIndex, boardList }) => {
 
             setCardLoading(false);
             // display a notification for user
-            toast.success(`${data?.card?.name} - card created`, {
-                autoClose: 3000,
-            });
+            // toast.success(`${data?.card?.name} - card created`, {
+            //     autoClose: 3000,
+            // });
         } catch (error) {
             // error for developer for deBugging...
             console.log(error);
@@ -67,9 +67,9 @@ const BoardList = ({ showType, listIndex, boardList }) => {
             setCardLoading(false);
 
             // error for user at notification...
-            toast.error(error?.response?.data?.issue?.message, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.response?.data?.issue?.message, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -81,15 +81,15 @@ const BoardList = ({ showType, listIndex, boardList }) => {
 
             setToggleEdit(false);
 
-            toast.success(`${text} - list updated successfully`, {
-                autoClose: 3000,
-            });
+            // toast.success(`${text} - list updated successfully`, {
+            //     autoClose: 3000,
+            // });
         } catch (error) {
             console.log(error.response);
 
-            toast.error(error?.response?.data?.issue?.message, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.response?.data?.issue?.message, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
