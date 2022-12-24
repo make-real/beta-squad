@@ -27,7 +27,8 @@ const Board = ({ selectedSpaceId, showType }) => {
                         `/spaces/${selectedSpaceId}/board?getCards=true`
                     );
 
-                    setBoardList(data.lists?.reverse()?.slice(0));
+                    setBoardList(data.lists);
+                    // setBoardList(data.lists?.reverse()?.slice(0));
                 }
             } catch (error) {
                 console.log(error);
