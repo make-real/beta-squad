@@ -123,7 +123,7 @@ const CardStack = ({ listName, card, listID }) => {
 
             {/* date */}
             <div
-                style={{ width: '20%' }}
+                style={{ width: '15%' }}
                 className="relative cursor-pointer space-x-2 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400"
             >
                 {localCard.startDate ? (
@@ -141,7 +141,7 @@ const CardStack = ({ listName, card, listID }) => {
 
             {/* progress */}
             <div
-                style={{ width: '5%' }}
+                style={{ width: '10%' }}
                 className="flex justify-center items-center"
             >
                 <div
