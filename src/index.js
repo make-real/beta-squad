@@ -11,8 +11,15 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
-import { addReaction, addSingleMessage, removeMessage } from "./store/slice/message";
-import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
+import {
+  addReaction,
+  addSingleMessage,
+  removeMessage,
+} from "./store/slice/message";
+import {
+  requestNotificationPermission,
+  sentLocalNotification,
+} from "./util/helpers";
 import config from "./config";
 import { addSocket } from "./store/slice/socket";
 
