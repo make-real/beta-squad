@@ -21,6 +21,8 @@ import VerticalDots from "../../assets/vertical_dots.svg";
 import HorizontalDots from "../../assets/horizontal_dots.svg";
 import BellIcon from "../../assets/icon_component/NotificationIcon";
 import { toggleFullSidebar } from "../../store/slice/screen";
+import { get_notifications } from "../../api/notification";
+import { useRef } from "react";
 
 const TopNav = () => {
     // const [userInfo, setUserInfo] = useState(null);
@@ -84,6 +86,12 @@ const LoggedInTopNav = ({ userInfo }) => {
     const workspaces = useSelector((state) => state.workspace.workspaces);
     const [showNotificationModal, setShowNotificationModal] = useState(false);
     const [showNotificationBox, setShowNotificationBox] = useState(false);
+    const [notifications, setNotifications] = useState({
+        seen: null,
+        unseen: null,
+        all: null,
+        count: 0,
+    });
     const isProjectScreen = useLocation().pathname.startsWith("/projects");
     const [selectedNotificationTab, setSelectedNotificationTab] =
         useState("all");
@@ -97,6 +105,8 @@ const LoggedInTopNav = ({ userInfo }) => {
     const isManageWorkspaceScreen =
         useLocation().pathname.search("manage-workspace") !== -1;
     const isProfileScreen = useLocation().pathname.search("profile") !== -1;
+    const userMenuDropDownRef = useRef();
+    const notificationDropDownRef = useRef();
 
     useEffect(() => {
         if (workspaceMembers) {
@@ -125,9 +135,88 @@ const LoggedInTopNav = ({ userInfo }) => {
         navigate("/");
     };
 
+    const fetchNotification = async () => {
+        try {
+            const { data } = await get_notifications();
+            const seenNotifications = data.notifications.filter(
+                (n) => n.seen === true
+            );
+            const unseenNotifications = data.notifications.filter(
+                (n) => n.seen === false
+            );
+            setNotifications({
+                seen: seenNotifications,
+                unseen: unseenNotifications,
+                all: data.notifications,
+                count: data.notifications?.length,
+            });
+        } catch (err) {
+            console.log(err);
+            setNotifications({ seen: null, unseen: null, all: null, count: 0 });
+        }
+    };
+
+    useEffect(() => {
+        fetchNotification();
+    }, []);
+
+    const handleClickOutside = (ref, event, updateFn) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            updateFn(false);
+        }
+    };
+
+    // Auto close user drop down menu
+    useEffect(() => {
+        document.addEventListener(
+            "click",
+            (e) =>
+                handleClickOutside(userMenuDropDownRef, e, setShowDropDownMenu),
+            true
+        );
+        return () => {
+            document.removeEventListener(
+                "click",
+                (e) =>
+                    handleClickOutside(
+                        userMenuDropDownRef,
+                        e,
+                        setShowDropDownMenu
+                    ),
+                true
+            );
+        };
+    }, []);
+
+    // Auto close notification drop down menu
+    useEffect(() => {
+        document.addEventListener(
+            "click",
+            (e) =>
+                handleClickOutside(
+                    notificationDropDownRef,
+                    e,
+                    setShowNotificationModal
+                ),
+            true
+        );
+        return () => {
+            document.removeEventListener(
+                "click",
+                (e) =>
+                    handleClickOutside(
+                        userMenuDropDownRef,
+                        e,
+                        setShowNotificationModal
+                    ),
+                true
+            );
+        };
+    }, []);
+
     const NotificationTabs = {
-        all: <AllNotification />,
-        unread: <UnreadNotification />,
+        all: <AllNotification notifications={notifications.seen} />,
+        unread: <UnreadNotification notifications={notifications.unseen} />,
     };
 
     return (
@@ -208,6 +297,7 @@ const LoggedInTopNav = ({ userInfo }) => {
 
                         {/* Notifications Dropdown Menu */}
                         <div
+                            ref={notificationDropDownRef}
                             className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                                 showNotificationModal
                                     ? "scale-100 pointer-events-auto"
@@ -218,7 +308,9 @@ const LoggedInTopNav = ({ userInfo }) => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-[#031124] text-[20px] font-bold leading-[30px]">
                                     Notifications{" "}
-                                    <span className="font-normal">(20)</span>
+                                    <span className="font-normal">
+                                        ({notifications.count ?? 0})
+                                    </span>
                                 </h1>
                                 <div className="cursor-pointer">
                                     <img src={VerticalDots} alt="" />
@@ -300,6 +392,7 @@ const LoggedInTopNav = ({ userInfo }) => {
                     </div>
                     {/* User Dropdown Menu */}
                     <div
+                        ref={userMenuDropDownRef}
                         className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                             showDropDownMenu
                                 ? "scale-100 pointer-events-auto"
@@ -410,16 +503,34 @@ const LoggedInTopNav = ({ userInfo }) => {
             {showNotificationBox && (
                 <NotificationsModal
                     setShowNotificationModal={setShowNotificationBox}
+                    notifications={notifications.all}
                 />
             )}
         </>
     );
 };
 
-const AllNotification = () => {
+const AllNotification = ({ notifications }) => {
     return (
         <div className="flex flex-col gap-[4px]">
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
+            {notifications?.map((notification) => {
+                return (
+                    <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
+                        <div className="flex items-center gap-[17px]">
+                            <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
+                                <BellIcon style={{ fill: "#FB397F" }} />
+                            </div>
+                            <p className="text-[#031124]">
+                                {notification.message}
+                            </p>
+                        </div>
+                        {/* <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
+                            <img src={HorizontalDots} alt="" />
+                        </div> */}
+                    </div>
+                );
+            })}
+            {/* <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
                 <div className="flex items-center gap-[17px]">
                     <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                         <BellIcon style={{ fill: "#13E5C0" }} />
@@ -456,14 +567,31 @@ const AllNotification = () => {
                         designer.
                     </p>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
-const UnreadNotification = () => {
+const UnreadNotification = ({ notifications }) => {
     return (
         <div className="flex flex-col gap-[4px]">
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#F2FAFF] rounded-[10px]">
+            {notifications?.map((notification) => {
+                return (
+                    <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
+                        <div className="flex items-center gap-[17px]">
+                            <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
+                                <BellIcon style={{ fill: "#FB397F" }} />
+                            </div>
+                            <p className="text-[#031124]">
+                                {notification.message}
+                            </p>
+                        </div>
+                        {/* <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
+                            <img src={HorizontalDots} alt="" />
+                        </div> */}
+                    </div>
+                );
+            })}
+            {/* <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#F2FAFF] rounded-[10px]">
                 <div className="flex items-center gap-[14px]">
                     <img
                         src="https://thumbs.dreamstime.com/b/nice-to-talk-smart-person-indoor-shot-attractive-interesting-caucasian-guy-smiling-broadly-nice-to-112345489.jpg"
@@ -500,7 +628,7 @@ const UnreadNotification = () => {
                         it now. ( Deadline 18.12.2022)
                     </p>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
