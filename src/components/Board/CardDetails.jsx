@@ -31,6 +31,8 @@ import {
     EllipsisHorizontalIcon,
     XMarkIcon,
     ChatBubbleBottomCenterTextIcon,
+    CheckCircleIcon,
+    StopCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useStyleContext } from '../../context/StyleContext';
@@ -790,19 +792,21 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                         className="flex items-center justify-between"
                                                         key={item._id}
                                                     >
-                                                        <input
-                                                            type="checkbox"
-                                                            className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF]"
-                                                            defaultChecked={
-                                                                item.checked
-                                                            }
-                                                            onBlur={(e) =>
-                                                                handle_check_list_update_on_change(
-                                                                    e,
-                                                                    item._id
-                                                                )
-                                                            }
-                                                        />
+                                                        <label>
+                                                            <input
+                                                                type="checkbox"
+                                                                className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF] accent-[#6576FF] focus:ring-red-900 leading-none"
+                                                                defaultChecked={
+                                                                    item.checked
+                                                                }
+                                                                onBlur={(e) =>
+                                                                    handle_check_list_update_on_change(
+                                                                        e,
+                                                                        item._id
+                                                                    )
+                                                                }
+                                                            />
+                                                        </label>
 
                                                         <input
                                                             type="text"
