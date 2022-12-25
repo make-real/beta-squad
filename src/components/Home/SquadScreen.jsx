@@ -2,6 +2,8 @@ import React from "react";
 import SearchIcon from "../../assets/search.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
+import VideoCallIcon from "../../assets/video_call.svg";
+import AudioCallIcon from "../../assets/audio_call.svg";
 import { useState } from "react";
 import BackArrowIcon from "../../assets/back_arrow.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,22 +70,35 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                 className=" placeholder:text-[#99A6B9] border-none outline-none"
                             />
                         </div>
-                        <div className="flex items-center gap-[22px]">
-                            <div
-                                className="cursor-pointer"
-                                onClick={() => setShowType("grid")}
-                            >
-                                <GridIcon isSelected={showType === "grid"} />
+                        {selectedTab === "messages" ? (
+                            <div className="flex items-center gap-[22px]">
+                                <div className="cursor-pointer">
+                                    <img src={VideoCallIcon} alt="video_call" />
+                                </div>
+                                <div className="cursor-pointer">
+                                    <img src={AudioCallIcon} alt="audio_call" />
+                                </div>
                             </div>
-                            <div
-                                className="cursor-pointer"
-                                onClick={() => setShowType("stack")}
-                            >
-                                <RowVerticalIcon
-                                    isSelected={showType === "stack"}
-                                />
+                        ) : (
+                            <div className="flex items-center gap-[22px]">
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => setShowType("grid")}
+                                >
+                                    <GridIcon
+                                        isSelected={showType === "grid"}
+                                    />
+                                </div>
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => setShowType("stack")}
+                                >
+                                    <RowVerticalIcon
+                                        isSelected={showType === "stack"}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
                 <div className="mt-[40px] flex flex-col h-full">

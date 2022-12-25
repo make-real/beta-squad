@@ -18,6 +18,7 @@ import { workspaceCreation } from "../../hooks/useFetch";
 import { addOneWorkspace, addWorkSpace } from "../../store/slice/workspace";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import LoadingScreen from "../Loading/LoadingScreen";
 
 const ManageWorkspace = () => {
     const [showType, setShowType] = useState("grid");
@@ -30,10 +31,12 @@ const ManageWorkspace = () => {
     const [deleteWorkspaceData, setDeleteWorkspaceData] = useState(null);
     const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
         useState(false);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const setupAll = async () => {
         const temp = [];
+        setLoading(true);
         for (let i = 0; i < allWorkspaces.length; i++) {
             const {
                 data: { teamMembers },
@@ -44,6 +47,9 @@ const ManageWorkspace = () => {
             temp.push({ ...allWorkspaces[i], teamMembers, spaces });
         }
         setWorkspaces(temp);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -81,7 +87,9 @@ const ManageWorkspace = () => {
 
     return (
         <>
-            {!hasWorkspace ? (
+            {loading ? (
+                <LoadingScreen />
+            ) : !hasWorkspace && allWorkspaces.length === 0 ? (
                 <CreateWorkspace />
             ) : (
                 <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
@@ -260,8 +268,11 @@ const CreateWorkspace = () => {
                 `${data?.workspace?.name} : work space created successfully`,
                 { autoClose: 3000 }
             );
+            localStorage.removeItem("stepFinished");
             localStorage.setItem("hasWorkspace", "yes");
-            navigate(`/projects/${data.workspace._id}`);
+            navigate(`/projects/${data.workspace._id}`, {
+                state: { isFirstTime: true },
+            });
         } catch (error) {
             // display error notification for developers...
             console.log(error.response?.data?.issue);

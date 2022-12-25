@@ -66,14 +66,18 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                             <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] px-[13px] pt-[20px]">
                                 {user.role === "owner" ||
                                 user.role === "manager" ||
-                                user.role === "admin" ? (
-                                    <div
-                                        onClick={() => removeMember(member)}
-                                        className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                                    >
-                                        <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                                    </div>
-                                ) : null}
+                                user.role === "admin"
+                                    ? userInfo._id !== member._id && (
+                                          <div
+                                              onClick={() =>
+                                                  removeMember(member)
+                                              }
+                                              className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                          >
+                                              <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                          </div>
+                                      )
+                                    : null}
                                 <div className="flex gap-[10px]">
                                     <img
                                         src={member?.avatar}
@@ -124,16 +128,18 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                                     <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                                         {user.role === "owner" ||
                                         user.role === "manager" ||
-                                        user.role === "admin" ? (
-                                            <div
-                                                onClick={() =>
-                                                    removeMember(member)
-                                                }
-                                                className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                                            >
-                                                <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                                            </div>
-                                        ) : null}
+                                        user.role === "admin"
+                                            ? userInfo._id !== member._id && (
+                                                  <div
+                                                      onClick={() =>
+                                                          removeMember(member)
+                                                      }
+                                                      className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                                                  >
+                                                      <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                                  </div>
+                                              )
+                                            : null}
                                         <div className="flex items-center gap-[10px]">
                                             <img
                                                 src={member.avatar}

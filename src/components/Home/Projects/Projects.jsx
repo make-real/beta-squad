@@ -28,6 +28,9 @@ const Projects = ({ showType }) => {
     const [showEditSquadModal, setShowEditSquadModal] = useState(false);
     const workspaces = useSelector((state) => state.workspace.workspaces);
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+    const selectedWorkspace = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -57,15 +60,15 @@ const Projects = ({ showType }) => {
 
     const { id } = useParams();
 
-    useEffect(() => {
-        window.onload = () => {
-            if (!id) {
-                if (workspaces.length <= 0) {
-                    navigate("/settings/manage-workspace");
-                }
-            }
-        };
-    }, [workspaces]);
+    // useEffect(() => {
+    //     window.onload = () => {
+    //         if (!id) {
+    //             if (workspaces.length <= 0) {
+    //                 navigate("/settings/manage-workspace");
+    //             }
+    //         }
+    //     };
+    // }, [workspaces]);
 
     return (
         <>
@@ -86,7 +89,9 @@ const Projects = ({ showType }) => {
                                     onClick={() => {
                                         dispatch(setSelectedSpaceId(space._id));
                                         dispatch(setSelectedSpaceObject(space));
-                                        navigate(`squad/${space._id}`);
+                                        navigate(
+                                            `/projects/${selectedWorkspace}/squad/${space._id}`
+                                        );
                                     }}
                                     className="absolute inset-0 w-full h-full cursor-pointer"
                                 ></div>
@@ -140,7 +145,9 @@ const Projects = ({ showType }) => {
                                             dispatch(
                                                 setSelectedSpaceObject(space)
                                             );
-                                            navigate(`squad/${space._id}`);
+                                            navigate(
+                                                `/projects/${selectedWorkspace}/squad/${space._id}`
+                                            );
                                         }}
                                         className="absolute inset-0 w-full h-full cursor-pointer"
                                     ></div>

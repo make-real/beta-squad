@@ -15,7 +15,9 @@ const NotificationsModal = ({ setShowNotificationModal, notifications }) => {
                 </div>
                 <h1 className="text-[#031124] font-bold text-[30px]">
                     Notifications
-                    <span className="font-light ml-[8px]">(10)</span>
+                    <span className="font-light ml-[8px]">
+                        ({notifications?.length ?? 0})
+                    </span>
                 </h1>
                 <div className="h-full overflow-y-scroll no-scrollbar mt-[40px]">
                     <div className="flex flex-col gap-[4px]">
