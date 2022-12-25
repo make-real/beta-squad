@@ -47,6 +47,7 @@ import {
     setSelectedSpaceId,
 } from "./store/slice/space";
 import { initFullSidebar } from "./store/slice/screen";
+import NavigateUser from "./components/Home/NavigateUser";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -56,7 +57,7 @@ const ProtectedRoute = ({ children }) => {
 
 const AuthRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
-    if (jwt) return <Navigate to="/projects" />;
+    if (jwt) return <Navigate to="/home" />;
     return (
         <>
             <TopNav />
@@ -65,14 +66,14 @@ const AuthRoute = ({ children }) => {
     );
 };
 
-const ProjectIdRoute = ({ children }) => {
-    const currentWorkspace = useSelector(
-        (state) => state.workspace.currentWorkspace
-    );
-    const dispatch = useDispatch();
-    if (!currentWorkspace) return children;
-    return <Navigate to={`/projects/${currentWorkspace._id}`} />;
-};
+// const ProjectIdRoute = ({ children }) => {
+//     const currentWorkspace = useSelector(
+//         (state) => state.workspace.currentWorkspace
+//     );
+//     const dispatch = useDispatch();
+//     if (!currentWorkspace) return children;
+//     return <Navigate to={`/projects/${currentWorkspace._id}`} />;
+// };
 
 const ProjectRoute = ({ children }) => {
     const workspaces = useSelector((state) => state.workspace.workspaces);
@@ -152,6 +153,15 @@ const App = () => {
                         <AuthRoute>
                             <Register />
                         </AuthRoute>
+                    }
+                />
+
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute>
+                            <NavigateUser />
+                        </ProtectedRoute>
                     }
                 />
 
@@ -309,9 +319,9 @@ const App = () => {
                         index
                         element={
                             <ProtectedRoute>
-                                <ProjectIdRoute>
-                                    <Home />
-                                </ProjectIdRoute>
+                                {/* <ProjectIdRoute> */}
+                                <Home />
+                                {/* </ProjectIdRoute> */}
                             </ProtectedRoute>
                         }
                     />

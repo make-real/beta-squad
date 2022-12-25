@@ -18,6 +18,7 @@ import { add_workspace_member } from "../../api/workSpace";
 import CrossIcon from "../../assets/cross.svg";
 import InboxIcon from "../../assets/inbox.svg";
 import { validateEmail } from "../../util/helpers";
+import { useLocation } from "react-router-dom";
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
     const [selectedTab, setSelectedTab] = useState("projects");
@@ -34,110 +35,123 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
         squad_members: <WorkspaceMembers showType={showType} />,
     };
 
+    // const location = useLocation();
+
+    // console.log(location.state);
+
     const isFirstTime =
-        (workspaces?.length === 1 && allSpaces?.length === 0) ||
-        (allSpaces[0]?.name === "Onboarding" &&
-            [...members.filter((m) => m._id !== userInfo._id)].length === 0);
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : (workspaces?.length === 1 && allSpaces?.length === 0) ||
+              (allSpaces[0]?.name === "Onboarding" &&
+                  [...members.filter((m) => m._id !== userInfo._id)].length ===
+                      0);
 
     const showCreateSquadScreen =
-        allSpaces?.length === 0 ||
-        (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : allSpaces?.length === 0 ||
+              (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
     const showAddMemberScreen =
-        [...members.filter((m) => m._id !== userInfo._id)].length === 0;
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
 
     return (
         <>
-            {/* {isFirstTime || showCreateSquadScreen || showAddMemberScreen ? (
+            {isFirstTime || showCreateSquadScreen || showAddMemberScreen ? (
                 <FirstTimeScreen
                     allSpaces={allSpaces}
                     members={members}
                     userInfo={userInfo}
                 />
-            ) : ( */}
-            <div className="relative pt-[45px] px-[63px] bg-[#F9F9FF] h-full flex flex-col no-scrollbar">
-                <div className="mt-[20px] w-full h-full max-h-[80%] flex flex-col bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px] overflow-hidden">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            {currentWorkspace?.logo ? (
-                                <div className="mr-[12px] w-[32px] h-[32px] ">
+            ) : (
+                <div className="relative pt-[40px] px-[40px] bg-[#F9F9FF] h-full flex flex-col no-scrollbar">
+                    <div className="mt-[20px] w-full h-full max-h-[80%] flex flex-col bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px] overflow-hidden">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                {currentWorkspace?.logo ? (
+                                    <div className="mr-[12px] w-[32px] h-[32px] ">
+                                        <img
+                                            src={currentWorkspace.logo}
+                                            alt=""
+                                            className="w-[30px] h-[30px] border border-[#6576FF] rounded-full mr-[12px]"
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="mr-[12px] w-10 h-10 bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-100 font-bold border">
+                                        {currentWorkspace?.name.charAt(0)}
+                                    </div>
+                                )}
+                                <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
+                                    {currentWorkspace?.name}
+                                </h2>
+                                <div className="w-[9px] h-[9px] bg-[#FF3659] rounded-full"></div>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="flex items-center gap-[12px]">
                                     <img
-                                        src={currentWorkspace.logo}
-                                        alt=""
-                                        className="w-[30px] h-[30px] border border-[#6576FF] rounded-full mr-[12px]"
+                                        src={SearchIcon}
+                                        alt="search"
+                                        className=""
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Search here"
+                                        className=" placeholder:text-[#99A6B9] border-none outline-none"
                                     />
                                 </div>
-                            ) : (
-                                <div className="mr-[12px] w-10 h-10 bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-[5px] shadow-xl hover:bg-[#4D6378] text-gray-100 font-bold border">
-                                    {currentWorkspace?.name.charAt(0)}
-                                </div>
-                            )}
-                            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
-                                {currentWorkspace?.name}
-                            </h2>
-                            <div className="w-[9px] h-[9px] bg-[#FF3659] rounded-full"></div>
-                        </div>
-                        <div className="flex items-center">
-                            <div className="flex items-center gap-[12px]">
-                                <img
-                                    src={SearchIcon}
-                                    alt="search"
-                                    className=""
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Search here"
-                                    className=" placeholder:text-[#99A6B9] border-none outline-none"
-                                />
-                            </div>
-                            <div className="flex items-center gap-[22px]">
-                                <div
-                                    className="cursor-pointer"
-                                    onClick={() => setShowType("grid")}
-                                >
-                                    <GridIcon
-                                        isSelected={showType === "grid"}
-                                    />
-                                </div>
-                                <div
-                                    className="cursor-pointer"
-                                    onClick={() => setShowType("stack")}
-                                >
-                                    <RowVerticalIcon
-                                        isSelected={showType === "stack"}
-                                    />
+                                <div className="flex items-center gap-[22px]">
+                                    <div
+                                        className="cursor-pointer"
+                                        onClick={() => setShowType("grid")}
+                                    >
+                                        <GridIcon
+                                            isSelected={showType === "grid"}
+                                        />
+                                    </div>
+                                    <div
+                                        className="cursor-pointer"
+                                        onClick={() => setShowType("stack")}
+                                    >
+                                        <RowVerticalIcon
+                                            isSelected={showType === "stack"}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="mt-[40px] h-full flex flex-col overflow-hidden">
-                        <div className="flex items-center gap-[45px]">
-                            <h2
-                                onClick={() => setSelectedTab("projects")}
-                                className={`${
-                                    selectedTab === "projects"
-                                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                                        : "text-[#818892]"
-                                } text-[19px] font-medium  pb-[10px] cursor-pointer`}
-                            >
-                                Projects
-                            </h2>
-                            <h2
-                                onClick={() => setSelectedTab("squad_members")}
-                                className={`${
-                                    selectedTab === "squad_members"
-                                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                                        : "text-[#818892]"
-                                } text-[19px] font-medium  pb-[10px] cursor-pointer`}
-                            >
-                                Squad Members
-                            </h2>
+                        <div className="mt-[40px] h-full flex flex-col overflow-hidden">
+                            <div className="flex items-center gap-[45px]">
+                                <h2
+                                    onClick={() => setSelectedTab("projects")}
+                                    className={`${
+                                        selectedTab === "projects"
+                                            ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                                            : "text-[#818892]"
+                                    } text-[19px] font-medium  pb-[10px] cursor-pointer`}
+                                >
+                                    Projects
+                                </h2>
+                                <h2
+                                    onClick={() =>
+                                        setSelectedTab("squad_members")
+                                    }
+                                    className={`${
+                                        selectedTab === "squad_members"
+                                            ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                                            : "text-[#818892]"
+                                    } text-[19px] font-medium  pb-[10px] cursor-pointer`}
+                                >
+                                    Squad Members
+                                </h2>
+                            </div>
+                            <div className="w-full h-[1px] bg-[#ECECEC]"></div>
+                            {Tabs[selectedTab]}
                         </div>
-                        <div className="w-full h-[1px] bg-[#ECECEC]"></div>
-                        {Tabs[selectedTab]}
                     </div>
                 </div>
-            </div>
-            {/* )} */}
+            )}
         </>
     );
 };
@@ -372,6 +386,8 @@ const AddMemberModal = () => {
             toast.success(`Member added`, {
                 autoClose: 3000,
             });
+            window.location.reload();
+            localStorage.setItem("stepFinished", true);
         } catch (error) {
             // error for developer for deBugging...
             // console.log(error.response.data);
@@ -394,7 +410,13 @@ const AddMemberModal = () => {
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
             <div className="relative w-[614px] h-auto overflow-y-scroll no-scrollbar bg-white rounded-[16px] px-[60px] py-[40px]">
-                <div className="w-max absolute top-[30px] right-[30px] cursor-pointer">
+                <div
+                    onClick={() => {
+                        window.location.reload();
+                        localStorage.setItem("stepFinished", true);
+                    }}
+                    className="w-max absolute top-[30px] right-[30px] cursor-pointer"
+                >
                     <img src={CrossIcon} alt="" />
                 </div>
                 <h1 className="text-[#031124] text-[30px] font-bold">

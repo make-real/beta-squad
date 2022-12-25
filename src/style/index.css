@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -46,12 +47,12 @@
     }
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
     display: none;
 }
 
 body {
-    font-family: "Varela Round", sans-serif;
+    font-family: "Lexend", sans-serif;
 }
 
 .customScroll::-webkit-scrollbar {

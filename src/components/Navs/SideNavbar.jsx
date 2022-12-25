@@ -129,16 +129,24 @@ const SideNavbar = () => {
     };
 
     const isFirstTime =
-        (workspaces?.length === 1 && allSpaces?.length === 0) ||
-        (allSpaces[0]?.name === "Onboarding" &&
-            [...members.filter((m) => m?._id !== user?._id)].length === 0);
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : (workspaces?.length === 1 && allSpaces?.length === 0) ||
+              (allSpaces[0]?.name === "Onboarding" &&
+                  [...members.filter((m) => m?._id !== user?._id)].length ===
+                      0);
 
     const firstTimeSquad =
-        (allSpaces?.length === 0 || allSpaces[0]?.name === "Onboarding") &&
-        allSpaces.length === 1;
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : (allSpaces?.length === 0 ||
+                  allSpaces[0]?.name === "Onboarding") &&
+              allSpaces.length === 1;
 
     const firstTimeMember =
-        [...members.filter((m) => m?._id !== user?._id)].length === 0;
+        JSON.parse(localStorage.getItem("stepFinished")) === true
+            ? false
+            : [...members.filter((m) => m?._id !== user?._id)].length === 0;
 
     const squadOnDrop = (e) => {
         e.preventDefault();
@@ -163,14 +171,6 @@ const SideNavbar = () => {
             0,
             allSpaces.find((s) => s._id === draggedId)
         );
-
-        console.log(newOrder);
-        // newOrder.splice(
-        //     draggedIndex,
-        //     1,
-        //     allSpaces.find((s) => s._id === targetId)
-        // );
-
         dispatch(addSpace(newOrder));
     };
 
@@ -419,8 +419,7 @@ const SideNavbar = () => {
                             </h1>
                         )}
                         {/* Squads List */}
-                        {
-                            // (!isFirstTime || !firstTimeSquad) &&
+                        {(!isFirstTime || !firstTimeSquad) && (
                             <div className="mt-[20px] flex flex-col">
                                 {allSpaces.map((space) => {
                                     if (space.name === "Onboarding") return;
@@ -497,80 +496,80 @@ const SideNavbar = () => {
                                     );
                                 })}
                             </div>
-                        }
+                        )}
                     </div>
                 )}
                 {/* Chats */}
-                {
-                    // !isFirstTime ||
-                    // !firstTimeMember &&
-                    defaultPage && (
-                        <div className="mt-[50px]">
-                            {fullSidebar && (
-                                <div className="flex items-center justify-between pl-[25px] pr-[10px]">
-                                    <h2 className="text-[#6576FF] opacity-80">
-                                        Chats
-                                    </h2>
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={SearchIcon}
-                                            alt="search"
-                                            className="cursor-pointer"
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                            {!fullSidebar && (
-                                <h1 className="text-[#6576FF80] text-center">
-                                    Chats
-                                </h1>
-                            )}
-                            {/* Chats List */}
-                            <div className="mt-[15px] flex flex-col">
-                                {members.map((member) =>
-                                    member?._id !== user?._id ? (
-                                        <div
-                                            className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
-                                                selectedChat?._id ===
-                                                member?._id
-                                                    ? "bg-[#6576FF10]"
-                                                    : ""
-                                            } ${
-                                                fullSidebar
-                                                    ? "pl-[25px]"
-                                                    : "pl-[25px] pr-[25px]"
-                                            }`}
-                                            onClick={() => {
-                                                // openChat(member._id)
-                                                dispatch(
-                                                    setSelectedSpaceId(null)
-                                                );
-                                                dispatch(
-                                                    setSelectedSpaceObject(null)
-                                                );
-                                                setSelectedChat(member);
-                                                navigate(
-                                                    `/projects/${selectedWorkspace}/chat/${member?._id}`
-                                                );
-                                            }}
-                                        >
-                                            <img
-                                                src={member.avatar}
-                                                className="w-[28px] h-[28px] rounded-full border object-cover"
-                                                alt=""
-                                            />
-                                            {fullSidebar && (
-                                                <p className="text-[#C4CEFE] text-[14px]">
-                                                    {member.fullName}
-                                                </p>
-                                            )}
-                                        </div>
-                                    ) : null
-                                )}
-                            </div>
-                        </div>
-                    )
-                }
+                {!isFirstTime || !firstTimeMember
+                    ? defaultPage && (
+                          <div className="mt-[50px]">
+                              {fullSidebar && (
+                                  <div className="flex items-center justify-between pl-[25px] pr-[10px]">
+                                      <h2 className="text-[#6576FF] opacity-80">
+                                          Chats
+                                      </h2>
+                                      <div className="flex items-center gap-2">
+                                          <img
+                                              src={SearchIcon}
+                                              alt="search"
+                                              className="cursor-pointer"
+                                          />
+                                      </div>
+                                  </div>
+                              )}
+                              {!fullSidebar && (
+                                  <h1 className="text-[#6576FF80] text-center">
+                                      Chats
+                                  </h1>
+                              )}
+                              {/* Chats List */}
+                              <div className="mt-[15px] flex flex-col">
+                                  {members.map((member) =>
+                                      member?._id !== user?._id ? (
+                                          <div
+                                              className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
+                                                  selectedChat?._id ===
+                                                  member?._id
+                                                      ? "bg-[#6576FF10]"
+                                                      : ""
+                                              } ${
+                                                  fullSidebar
+                                                      ? "pl-[25px]"
+                                                      : "pl-[25px] pr-[25px]"
+                                              }`}
+                                              onClick={() => {
+                                                  // openChat(member._id)
+                                                  dispatch(
+                                                      setSelectedSpaceId(null)
+                                                  );
+                                                  dispatch(
+                                                      setSelectedSpaceObject(
+                                                          null
+                                                      )
+                                                  );
+                                                  setSelectedChat(member);
+                                                  navigate(
+                                                      `/projects/${selectedWorkspace}/chat/${member?._id}`
+                                                  );
+                                              }}
+                                          >
+                                              <img
+                                                  src={member.avatar}
+                                                  className="w-[28px] h-[28px] rounded-full border object-cover"
+                                                  alt=""
+                                              />
+                                              {fullSidebar && (
+                                                  <p className="text-[#C4CEFE] text-[14px]">
+                                                      {member.fullName}
+                                                  </p>
+                                              )}
+                                          </div>
+                                      ) : null
+                                  )}
+                              </div>
+                          </div>
+                      )
+                    : null}
                 {/* Footer Copyright */}
                 <p
                     className={`text-[#C4CEFE] ${

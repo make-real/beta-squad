@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import ConfirmDialog from './ConfirmDialog';
 import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
@@ -104,9 +104,9 @@ const Card = ({ showType, card, listID }) => {
             updateCard(listID, card._id, data.updatedCard);
         } catch (error) {
             console.log(error?.response?.data?.issue?.message);
-            toast.error(`${error?.response?.data?.issue?.message}`, {
-                autoClose: 3000,
-            });
+            // toast.error(`${error?.response?.data?.issue?.message}`, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -162,28 +162,29 @@ const Card = ({ showType, card, listID }) => {
                     </div>
                 )}
 
-                <div className="flex justify-between items-center">
-                    <p className="text-sm mr-4 mb-2 text-gray-800 font-bold truncate">
+                <div className="flex justify-between items-center mb-2">
+                    <p className="text-sm mr-4 text-gray-800 font-bold truncate">
                         {card.name}
                     </p>
 
-                    {/* <div
+                    <div
                         style={{
-                            backgroundColor:
-                                progress === 4
-                                    ? '#54CC7C'
-                                    : selectedSpaceObj?.color,
+                            backgroundColor: progress === 4 && '#54CC7C',
+                            // progress === 4
+                            //     ? '#54CC7C'
+                            //     : selectedSpaceObj?.color,
                         }}
                         className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
                     >
-                        {progress === 4 ? (
+                        {progress === 4 && <CheckIcon className="w-4 h-4" />}
+                        {/* {progress === 4 ? (
                             <CheckIcon className="w-4 h-4" />
                         ) : (
                             <span className="text-[8px] text-center">
                                 {progressStatus(progress)}%
                             </span>
-                        )}
-                    </div> */}
+                        )} */}
+                    </div>
                 </div>
                 <div className="text-sm text-gray-800">
                     <p className="truncate">{localCard?.description || ''}</p>
