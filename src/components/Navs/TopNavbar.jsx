@@ -37,7 +37,7 @@ const TopNav = () => {
     }, []);
 
     return (
-        <div className="bg-white py-[15px] px-[50px] shadow-md min-h-[70px] max-h-[70px] w-full flex">
+        <div className="bg-white shadow-md min-h-[70px] max-h-[70px] w-full flex">
             {jwt ? (
                 <LoggedInTopNav userInfo={userInfo} />
             ) : (
@@ -58,7 +58,7 @@ const NotLoggedInTopNav = () => {
     console.log(location.pathname === "/register");
     console.log(currentPage);
     return (
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full py-[15px] px-[50px]">
             <div className="flex items-center gap-2">
                 <img src={LogoIcon} alt="logo" />
                 <h1 className="text-[#6576FF] text-[20px]">TaskM</h1>
@@ -222,7 +222,7 @@ const LoggedInTopNav = ({ userInfo }) => {
     return (
         <>
             <div
-                className={`relative flex items-center w-full justify-between`}
+                className={`relative py-[15px] pl-[19px] pr-[66px] flex items-center w-full justify-between`}
             >
                 {isProjectScreen && selectedSpaceId ? (
                     <div className="flex items-center">
