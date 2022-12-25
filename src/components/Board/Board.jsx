@@ -3,6 +3,7 @@ import {
     addBoardListApiCall,
     moveCard,
     updateCardOrder,
+    updateListOrder,
 } from '../../hooks/useFetch';
 import { AddBtn, BoardList } from '.';
 // import { toast } from 'react-toastify';
@@ -66,6 +67,7 @@ const Board = ({ selectedSpaceId, showType }) => {
 
     const dragEnd = async (result) => {
         const { destination, source, draggableId, type } = result;
+        console.log(result);
 
         try {
             handleDragEnd(
@@ -81,7 +83,11 @@ const Board = ({ selectedSpaceId, showType }) => {
             );
 
             if (type === 'column') {
-                console.log(result);
+                await updateListOrder(
+                    selectedSpaceId,
+                    draggableId,
+                    Number(destination.index) + 1
+                );
             } else if (destination.droppableId === source.droppableId) {
                 await updateCardOrder(
                     selectedSpaceId,
