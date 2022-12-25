@@ -92,7 +92,7 @@ const ManageWorkspace = () => {
             ) : !hasWorkspace && allWorkspaces.length === 0 ? (
                 <CreateWorkspace />
             ) : (
-                <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
+                <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
                     <div className="mt-[20px] w-full h-full bg-white rounded-[16px] px-[62px] pt-[50px] pb-[20px]">
                         <div className="flex items-center justify-between">
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">

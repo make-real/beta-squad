@@ -69,7 +69,7 @@ const SingleChat = () => {
     };
 
     return (
-        <div className="relative pt-[45px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
+        <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
             <div className="mt-[20px] w-full h-full bg-white rounded-[16px] px-[60px] pt-[50px] pb-[36px] flex flex-col">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-[11px]">

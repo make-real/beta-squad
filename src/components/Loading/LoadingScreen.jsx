@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingGif from "../../assets/loading.webp";
+import LoadingGif from "../../assets/loading.gif";
 
 const LoadingScreen = () => {
     return (
