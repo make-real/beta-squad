@@ -47,6 +47,7 @@ const Home = () => {
         if (shouldChangeRoute) {
             navigate("/settings/manage-workspace");
         } else {
+            localStorage.setItem("hasWorkspace", "yes");
             localStorage.setItem("stepFinished", true);
             navigate("/projects");
         }

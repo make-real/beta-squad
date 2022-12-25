@@ -22,7 +22,7 @@ function useAuth() {
             setLoader(false);
             localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
             localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
-            localStorage.setItem("fullSidebar", true);
+            localStorage.setItem("fullSidebar", "show");
             setLoginUserInfo(data.loggedUser);
             navigate("/projects");
         } catch (error) {
