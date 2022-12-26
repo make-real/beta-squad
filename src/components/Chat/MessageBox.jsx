@@ -38,6 +38,7 @@ const MessageBox = ({
   const [audioSent, setAudioSent] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const userId = JSON.parse(localStorage.getItem("userId"));
 
   // console.log(messageToRespond);
 
@@ -98,7 +99,7 @@ const MessageBox = ({
         const obj = {
           _id: msgID,
           sender: {
-            _id: "62eeda054cd94215aec5d5bd",
+            _id: userId,
             fullName: user?.fullName,
             username: user?.username,
             avatar: user?.avatar,
