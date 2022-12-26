@@ -6,7 +6,8 @@ const Chat = () => {
   const [messageToRespond, setMessageToRespond] = useState();
   return (
     <div className='w-full pb-10 mx-auto mt-[40px] h-full'>
-      <div className={`bg-[#ECECEC] pb-5 rounded-lg h-full flex flex-col`}>
+      <div
+        className={`border border-[#ECECEC] pb-5 rounded-lg h-full flex flex-col`}>
         <div
           style={
             {

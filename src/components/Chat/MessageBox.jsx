@@ -287,11 +287,11 @@ const MessageBox = ({
               </div>
             )}
             {!isRecording ? (
-              <div className='w-full flex relative z-[9999] shadow-md border bg-white rounded-lg px-3 py-2'>
+              <div className='w-full flex items-stretch justify-between relative border bg-[#ececec] rounded-md px-3 py-2'>
                 <MentionsInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  singleLine={true}
+                  singleLine={input.length >= 50 ? false : true}
                   onKeyDown={(e) =>
                     e.key === "Enter" ? handleSendMessage() : null
                   }
@@ -325,9 +325,6 @@ const MessageBox = ({
                   />
                 </MentionsInput>
                 <div className='text-gray-400 flex mt-[5px]'>
-                  {/* {isRecording ? (
-                  
-                ) : ( */}
                   <div className='px-2 cursor-pointer relative'>
                     <BiMicrophone
                       size={20}

@@ -77,7 +77,7 @@ const Message = ({
           msg?.sender?._id === userId
             ? "bg-slate-100 "
             : "bg-[#F5F5F5] text-[#7C04EC] mr-3"
-        }  p-3 rounded-tl-lg rounded-tr-lg rounded-br-lg ml-3 shadow-md`}>
+        }  p-3 rounded-tl-lg rounded-tr-lg rounded-br-lg ml-3`}>
         <div
           className={`flex flex-row justify-between text-xs pb-2 ${
             msg?.sender?._id === userId
@@ -93,7 +93,7 @@ const Message = ({
           <small
             className={`flex flex-row-reverse gap-2 ${
               msg?.sender?._id === userId
-                ? "text-[#ACB0B6] font-[400]"
+                ? "text-[#ACB0B6] font-[400] mr-auto"
                 : "ml-5 text-[#ACB0B6] font-[400]"
             }`}>
             {moment(msg?.createdAt).fromNow()}{" "}
