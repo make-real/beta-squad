@@ -37,13 +37,10 @@ const CardTags = (props) => {
         localCard,
         setLocalCard,
         selectedSpaceId,
+        selectedWorkspaceId,
         listID,
         handleDataChange,
     } = props || {};
-
-    const userSelectedWorkSpaceId = useSelector(
-        (state) => state.workspace.selectedWorkspace
-    );
 
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
@@ -118,7 +115,7 @@ const CardTags = (props) => {
         try {
             // POST Method for creating tag's inside a specific workSpace
             const { data } = await create_tag({
-                workSpaceId: userSelectedWorkSpaceId,
+                workSpaceId: selectedWorkspaceId,
                 name: name,
                 color: randomColor,
             });
@@ -146,7 +143,9 @@ const CardTags = (props) => {
         const getTags = async () => {
             try {
                 // GET Method || For fetching all tag's under specific workShop
-                const { data } = await get_tags(userSelectedWorkSpaceId);
+                const { data } = await get_tags({
+                    workSpaceId: selectedWorkspaceId,
+                });
 
                 // tags
                 const remainTag = data?.tags.filter(
@@ -161,7 +160,7 @@ const CardTags = (props) => {
         };
 
         getTags();
-    }, [userSelectedWorkSpaceId, localCard?.tags]);
+    }, [selectedWorkspaceId, localCard?.tags]);
 
     return (
         <div className="pb-2 relative">

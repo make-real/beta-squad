@@ -1,17 +1,17 @@
-import { useBoardCardContext } from "../../context/BoardCardContext";
-import { CardModal, CardChip } from ".";
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useBoardCardContext } from '../../context/BoardCardContext';
+import { CardModal, CardChip } from '.';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
     TrashIcon,
     EyeIcon,
     CheckCircleIcon,
     CheckIcon,
-} from "@heroicons/react/24/outline";
-import ConfirmDialog from "./ConfirmDialog";
-import { cardUpdateApiCall, getSingleCard } from "../../hooks/useFetch";
+} from '@heroicons/react/24/outline';
+import ConfirmDialog from './ConfirmDialog';
+import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
 // import { toast } from 'react-toastify';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
@@ -22,7 +22,6 @@ const Card = ({ showType, card, listID }) => {
         useState(false);
     const { updateCard, toggleCardModal, setCardDetails } =
         useBoardCardContext();
-    const [noteDone, setNoteDone] = useState(false);
     const [progress, setProgress] = useState(card?.progress);
     const [visible, setVisible] = useState(false);
     const selectedSpaceObj = useSelector(
@@ -111,12 +110,12 @@ const Card = ({ showType, card, listID }) => {
     };
 
     useEffect(() => {
-        document.addEventListener("click", handleClick);
-        return () => document.removeEventListener("click", handleClick);
+        document.addEventListener('click', handleClick);
+        return () => document.removeEventListener('click', handleClick);
     }, []);
 
     const toggle_card_modal = () => {
-        console.log("taggling........");
+        console.log('taggling........');
         toggleCardModal(listID, card._id);
     };
 
@@ -139,13 +138,13 @@ const Card = ({ showType, card, listID }) => {
                 {/* message indicator */}
                 <span
                     className="absolute -top-1 right-1 h-3 w-3 rounded-full"
-                    style={{ backgroundColor: "#FF3659" }}
+                    style={{ backgroundColor: '#FF3659' }}
                 />
 
                 {!!card.assignee?.length && (
                     <div className="mb-3 flex">
                         {card.assignee?.map((user, i) => (
-                            <div style={{ marginLeft: i ? "-5px" : 0 }}>
+                            <div style={{ marginLeft: i ? '-5px' : 0 }}>
                                 {user.avatar ? (
                                     <img
                                         src={user.avatar}
@@ -169,7 +168,7 @@ const Card = ({ showType, card, listID }) => {
 
                     <div
                         style={{
-                            backgroundColor: progress === 4 && "#54CC7C",
+                            backgroundColor: progress === 4 && '#54CC7C',
                             // progress === 4
                             //     ? '#54CC7C'
                             //     : selectedSpaceObj?.color,
@@ -187,7 +186,7 @@ const Card = ({ showType, card, listID }) => {
                     </div>
                 </div>
                 <div className="text-sm text-gray-800">
-                    <p className="truncate">{localCard?.description || ""}</p>
+                    <p className="truncate">{localCard?.description || ''}</p>
                 </div>
                 <div className="pt-5 text-white flex gap-1 flex-wrap">
                     {card?.tags?.length
@@ -255,7 +254,7 @@ const Card = ({ showType, card, listID }) => {
                                             (checked.length +
                                                 unchecked.length)) *
                                             100 +
-                                        "%",
+                                        '%',
                                 }}
                                 className="h-full rounded-full"
                             />
@@ -315,8 +314,8 @@ const Card = ({ showType, card, listID }) => {
                             <CheckCircleIcon
                                 className={`w-5 h-5 ${
                                     progress === 4
-                                        ? "bg-[#54CC7C] rounded-full"
-                                        : ""
+                                        ? 'bg-[#54CC7C] rounded-full'
+                                        : ''
                                 }`}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -331,14 +330,7 @@ const Card = ({ showType, card, listID }) => {
                             // toggle_card_modal();
                             setCardDetails({
                                 card: card,
-                                listID: listID,
-                                noteDone: noteDone,
-                                progress: progress,
-                                setProgress: setProgress,
                                 setBoardModal: toggle_card_modal,
-                                setNoteDone: setNoteDone,
-                                localCard: localCard,
-                                setLocalCard: setLocalCard,
                             });
                         }}
                         to={`/projects/${selectedWorkspaceId}/squad/${selectedSpaceId}/board/${card._id}`}

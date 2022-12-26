@@ -34,29 +34,27 @@ import {
     CheckCircleIcon,
     StopCircleIcon,
 } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStyleContext } from '../../context/StyleContext';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 import DragDrop from '../DragDrop';
+import { ClipLoader } from 'react-spinners';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
-    const { cardDetails, setCardDetails } = useBoardCardContext();
+    const { workspace_id, squadId: listID, id } = useParams();
+
     const navigate = useNavigate();
     const { margin } = useStyleContext();
 
-    const card = cardDetails?.card;
-    const listID = cardDetails?.listID;
-    const noteDone = cardDetails?.noteDone;
-    const progress = cardDetails?.progress;
-    const setProgress = cardDetails?.setProgress;
-    const setBoardModal = cardDetails?.setBoardModal;
-    const setNoteDone = cardDetails?.setNoteDone;
+    const [localCard, setLocalCard] = useState({});
+
+    const [noteDone, setNoteDone] = useState(false);
+    const [progress, setProgress] = useState(localCard?.progress);
 
     const selectedWorkspaceId = useSelector(
         (state) => state.workspace.selectedWorkspace
     );
     const [toggleEdit, setToggleEdit] = useState(false);
-    const [localCard, setLocalCard] = useState({});
     const { updateCard, boardLists } = useBoardCardContext();
     // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -84,26 +82,22 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     useEffect(() => {
         const getCard = async () => {
-            const { data } = await getSingleCard(
-                selectedSpaceId,
-                listID,
-                card?._id
-            );
+            const { data } = await getSingleCard(workspace_id, listID, id);
             setLocalCard(data?.card);
         };
 
         getCard();
-    }, [selectedSpaceId, listID, card?._id]);
+    }, [workspace_id, listID, id]);
 
-    useEffect(() => {
-        const handleEscapeKeyPress = (e) => {
-            if (e.code === 'Escape') setBoardModal(localCard);
-        };
+    // useEffect(() => {
+    //     const handleEscapeKeyPress = (e) => {
+    //         if (e.code === 'Escape') setBoardModal(localCard);
+    //     };
 
-        document.addEventListener('keydown', handleEscapeKeyPress);
-        return () =>
-            document.removeEventListener('keydown', handleEscapeKeyPress);
-    }, [localCard, setBoardModal]);
+    //     document.addEventListener('keydown', handleEscapeKeyPress);
+    //     return () =>
+    //         document.removeEventListener('keydown', handleEscapeKeyPress);
+    // }, [localCard, setBoardModal]);
 
     // useEffect(
     //     () => updateCard(listID, localCard._id, localCard),
@@ -121,7 +115,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             const { data } = await cardUpdateApiCall(
                 selectedSpaceId,
                 listID,
-                card._id,
+                localCard._id,
                 cardTagObject
             );
 
@@ -149,7 +143,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             const { data } = await cardUpdateApiCall(
                 selectedSpaceId,
                 listID,
-                card._id,
+                localCard._id,
                 cardTagObject
             );
             if (data.updatedCard._id) {
@@ -182,77 +176,14 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         }
     };
 
+    const [cLLoading, setCLLoading] = useState(false);
+
     const handle_create_check_list = () => {
         setNewCheckListItemJSX(!newCheckListItemJSX);
         setCheckListItem({
             checked: false,
             content: '',
         });
-    };
-
-    const handle_check_list_item_enter_btn = async (e) => {
-        // if (e.key === 'Enter') {
-        //     const cardValue = { ...localCard };
-
-        //     const checkListItemObj = { ...checkListItem };
-
-        //     if (checkListItemObj.content.length > 0) {
-        //         setNewCheckListItemJSX(false);
-
-        //         const cardCheckList = {
-        //             ...cardValue,
-        //             checkList: [...cardValue.checkList, checkListItemObj],
-        //         };
-
-        //         setLocalCard(cardCheckList);
-
-        //         try {
-        //             await createChecklistItem(
-        //                 selectedSpaceId,
-        //                 listID,
-        //                 card._id,
-        //                 checkListItemObj
-        //             );
-        //             handleDataChange();
-        //             // toast.success('List item added', { autoClose: 2000 });
-        //         } catch (error) {
-        //             // toast.error('List item not added', { autoClose: 2000 });
-
-        //             console.log(error.response.data.issue);
-        //         }
-
-        //         setCheckListItem({ checked: '', content: '' });
-        //     }
-        // }
-
-        if (e.key === 'Enter') {
-            const cardValue = { ...localCard };
-
-            const checkListItemObj = { ...checkListItem };
-
-            if (checkListItemObj.content.length > 0) {
-                const cardCheckList = {
-                    ...cardValue,
-                    checkList: [...cardValue.checkList, checkListItemObj],
-                };
-
-                setLocalCard(cardCheckList);
-
-                try {
-                    await createChecklistItem(
-                        selectedSpaceId,
-                        listID,
-                        card._id,
-                        checkListItemObj
-                    );
-                    handleDataChange();
-                } catch (error) {
-                    console.log(error.response.data.issue);
-                }
-
-                setCheckListItem({ checked: '', content: '' });
-            }
-        }
     };
 
     const handle_check_list_change = (e) => {
@@ -262,6 +193,42 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             [name]: [name].includes('content') ? value : checked,
         }));
         handleDataChange();
+    };
+
+    const handle_check_list_item_enter_btn = async (e) => {
+        setCLLoading(true);
+        if (e.key === 'Enter') {
+            const cardValue = { ...localCard };
+
+            const checkListItemObj = { ...checkListItem };
+
+            if (checkListItemObj.content.length > 0) {
+                try {
+                    const { data } = await createChecklistItem(
+                        selectedSpaceId,
+                        listID,
+                        localCard._id,
+                        checkListItemObj
+                    );
+                    handleDataChange();
+
+                    const cardCheckList = {
+                        ...cardValue,
+                        checkList: [
+                            ...cardValue.checkList,
+                            data?.checkListItem,
+                        ],
+                    };
+
+                    setLocalCard(cardCheckList);
+                } catch (error) {
+                    console.log(error.response.data.issue);
+                }
+
+                setCheckListItem({ checked: '', content: '' });
+            }
+        }
+        setCLLoading(false);
     };
 
     const handle_check_list_update_on_change = async (e, itemId) => {
@@ -299,7 +266,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             await updateChecklistItem(
                 selectedSpaceId,
                 listID,
-                card._id,
+                localCard._id,
                 itemId,
                 updatedCheckListItemObj
             );
@@ -324,7 +291,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             const { data } = await deleteChecklistItem(
                 selectedSpaceId,
                 listID,
-                card._id,
+                localCard._id,
                 itemId
             );
             // toast.success(data?.message, { autoClose: 2000 });
@@ -366,7 +333,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const checked = localCard?.checkList?.filter((item) => item?.checked);
     const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
-    if (!card) {
+    if (!localCard) {
         return (
             <section
                 className={`${
@@ -390,7 +357,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 <div className="relative bg-white p-8 rounded-2xl">
                     <span
                         className={`absolute top-0 left-0 rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8`}
-                        style={{ backgroundColor: card?.color }}
+                        style={{ backgroundColor: localCard?.color }}
                     />
 
                     <div className="flex items-center justify-between pb-4 px-1">
@@ -579,7 +546,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                 menu={({ closePopup }) => (
                                     <CardSettingDropDown
                                         close={closePopup}
-                                        cardID={card._id}
+                                        cardID={localCard._id}
                                         progress={progress}
                                         setProgress={setProgress}
                                         listID={listID}
@@ -599,7 +566,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                             <div
                                 onClick={() => {
-                                    setBoardModal(localCard);
+                                    // setBoardModal(localCard);
                                     // Prev
                                     // navigate(-1 || "/projects/kanban");
                                     navigate(
@@ -674,6 +641,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         localCard={localCard}
                                         setLocalCard={setLocalCard}
                                         selectedSpaceId={selectedSpaceId}
+                                        selectedWorkspaceId={
+                                            selectedWorkspaceId
+                                        }
                                         listID={listID}
                                         handleDataChange={handleDataChange}
                                     />
@@ -799,7 +769,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                                 defaultChecked={
                                                                     item.checked
                                                                 }
-                                                                onBlur={(e) =>
+                                                                onClick={(e) =>
                                                                     handle_check_list_update_on_change(
                                                                         e,
                                                                         item._id
@@ -867,13 +837,21 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                     }
                                                 /> */}
 
+                                                {cLLoading ? (
+                                                    <ClipLoader
+                                                        color="#36d7b7"
+                                                        size="20"
+                                                    />
+                                                ) : (
+                                                    <input
+                                                        title="Please save list to check"
+                                                        type="checkbox"
+                                                        className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF]"
+                                                        checked={false}
+                                                    />
+                                                )}
                                                 <input
-                                                    title="Please save list to check"
-                                                    type="checkbox"
-                                                    className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF]"
-                                                    checked={false}
-                                                />
-                                                <input
+                                                    title="Press enter to save and continue"
                                                     type="text"
                                                     name="content"
                                                     value={
@@ -885,9 +863,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                     onKeyDown={
                                                         handle_check_list_item_enter_btn
                                                     }
-                                                    // onBlur={
-                                                    //     handle_check_list_item_enter_btn
-                                                    // }
                                                     className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-teal-600 duration-200"
                                                 />
                                                 <Dropdown
@@ -1008,7 +983,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                         }
                                         selectedSpaceId={selectedSpaceId}
                                         listID={listID}
-                                        card={card}
+                                        card={localCard}
                                         setLocalCard={setLocalCard}
                                         handleDataChange={handleDataChange}
                                     />
@@ -1016,7 +991,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             </div>
                         </div>
                         {showChat ? (
-                            <CardMessage listId={listID} cardId={card._id} />
+                            <CardMessage
+                                listId={listID}
+                                cardId={localCard._id}
+                            />
                         ) : null}
                     </div>
                 </div>
