@@ -4,7 +4,7 @@ import { cardUpdateApiCall } from '../../hooks/useFetch';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 const colorStyles = {
     control: (provided, state) => ({
@@ -45,13 +45,10 @@ const CardTags = (props) => {
         (state) => state.workspace.selectedWorkspace
     );
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    // const [value, setValue] = useState();
     const { updateCard } = useBoardCardContext();
-    const [showTags, setShowTags] = useState(false);
-    const [tagsFromAPI, setTagsFromAPI] = useState([]);
-    const [createNewTag, setCreateNewTag] = useState({
-        name: '',
-        color: '#47b9ea',
-    });
 
     // 🟩🟩🟩
     const handle_add_tags = async (tag) => {
@@ -59,7 +56,7 @@ const CardTags = (props) => {
         setLocalCard((pre) => ({ ...pre, tags: [...pre.tags, tag] }));
 
         // remove from drop-down ui of tag's list
-        setTagsFromAPI((pre) => pre.filter((data) => data?._id !== tag?._id));
+        setOptions((pre) => pre.filter((data) => data?._id !== tag?._id));
 
         const cardTagObject = { ...localCard, tagId: tag._id };
 
@@ -87,7 +84,7 @@ const CardTags = (props) => {
         }));
 
         // remove from drop-down ui of tag's list
-        setTagsFromAPI((pre) => [...pre, tag]);
+        setOptions((pre) => [...pre, tag]);
 
         const tempTagObject = { ...localCard };
         const cardTagRemoved = { ...tempTagObject, removeTagId: tag._id };
@@ -110,15 +107,22 @@ const CardTags = (props) => {
     };
 
     // 🟩🟩🟩
-    const handle_new_tag_creation = async (e) => {
-        e.preventDefault();
+    const handle_new_tag_creation = async (name) => {
+        setIsLoading(true);
+        // e.preventDefault();
+
+        const randomColor =
+            '#' +
+            (((1 << 24) * Math.random()) | 0).toString(16).padStart(6, '0');
 
         try {
             // POST Method for creating tag's inside a specific workSpace
             const { data } = await create_tag({
                 workSpaceId: userSelectedWorkSpaceId,
-                ...createNewTag,
+                name: name,
+                color: randomColor,
             });
+
             const { data: updateCard } = await cardUpdateApiCall(
                 selectedSpaceId,
                 listID,
@@ -127,7 +131,7 @@ const CardTags = (props) => {
             );
             // console.log(updateCard.updatedCard);
             setLocalCard(updateCard.updatedCard);
-            setTagsFromAPI((pre) =>
+            setOptions((pre) =>
                 pre.filter((data) => data?._id !== data?.tag?._id)
             );
             handleDataChange();
@@ -135,11 +139,7 @@ const CardTags = (props) => {
             console.log(error);
         }
 
-        // close drop down tag container...
-        setShowTags(false);
-
-        // clear input field
-        setCreateNewTag((pre) => ({ ...pre, name: '' }));
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -154,14 +154,15 @@ const CardTags = (props) => {
                         !localCard?.tags?.some((tag) => tag._id === _id)
                 );
 
-                setTagsFromAPI(remainTag);
+                setOptions(remainTag);
             } catch (error) {
                 console.log(error);
             }
         };
 
         getTags();
-    }, [userSelectedWorkSpaceId, createNewTag, localCard?.tags]);
+    }, [userSelectedWorkSpaceId, localCard?.tags]);
+
     return (
         <div className="pb-2 relative">
             {/* <div
@@ -176,10 +177,13 @@ const CardTags = (props) => {
                 <p className="text-[14px] text-[#818892]">Tags</p>
             </div>
 
-            <Select
+            <CreatableSelect
+                isClearable
+                isDisabled={isLoading}
+                isLoading={isLoading}
                 styles={colorStyles}
                 isMulti
-                options={tagsFromAPI}
+                options={options}
                 value={localCard?.tags || []}
                 onChange={(_, e) => {
                     if (e.action === 'select-option') {
@@ -188,6 +192,7 @@ const CardTags = (props) => {
                         handle_delete_tags(e.removedValue);
                     }
                 }}
+                onCreateOption={handle_new_tag_creation}
                 getOptionLabel={(option) => option.name}
                 getOptionValue={(option) => option.name}
                 components={{
