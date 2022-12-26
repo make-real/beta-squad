@@ -15,6 +15,9 @@ export const spaceSlice = createSlice({
         },
         setSelectedSpaceId: (state, { payload }) => {
             state.selectedSpace = payload;
+            state.selectedSpaceObj = state.allSpaces.find(
+                (s) => s._id === payload
+            );
         },
         setSelectedSpaceObject: (state, { payload }) => {
             state.selectedSpaceObj = payload;

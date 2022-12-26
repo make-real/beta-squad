@@ -1,19 +1,19 @@
-import { useBoardCardContext } from '../../context/BoardCardContext';
+import { useBoardCardContext } from "../../context/BoardCardContext";
 import {
     addBoardListApiCall,
     moveCard,
     updateCardOrder,
     updateListOrder,
-} from '../../hooks/useFetch';
-import { AddBtn, BoardList } from '.';
+} from "../../hooks/useFetch";
+import { AddBtn, BoardList } from ".";
 // import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import useAxios from '../../api/index';
-import images from '../../assets';
-import { useSelector } from 'react-redux';
-import { filterStatus } from '../../store/slice/board';
-import BoardStackList from './BoardStackList';
+import { useEffect, useState } from "react";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import useAxios from "../../api/index";
+import images from "../../assets";
+import { useSelector } from "react-redux";
+import { filterStatus } from "../../store/slice/board";
+import BoardStackList from "./BoardStackList";
 
 const Board = ({ selectedSpaceId, showType }) => {
     const { handleDragEnd, boardLists, setBoardList, addBoardList } =
@@ -82,7 +82,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                 type
             );
 
-            if (type === 'column') {
+            if (type === "column") {
                 await updateListOrder(
                     selectedSpaceId,
                     draggableId,
@@ -173,7 +173,7 @@ const Board = ({ selectedSpaceId, showType }) => {
     return (
         <section className={`duration-200 overflow-auto customScroll h-full`}>
             {selectedSpaceId ? (
-                showType === 'grid' ? (
+                showType === "grid" ? (
                     <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
                             <Droppable
@@ -229,17 +229,17 @@ const Board = ({ selectedSpaceId, showType }) => {
                                         className="flex flex-col items-start w-full"
                                     >
                                         <div className="flex justify-center items-center w-full text-[#818892] text-center">
-                                            <p style={{ width: '25%' }}>
+                                            <p style={{ width: "25%" }}>
                                                 Card name
                                             </p>
-                                            <p style={{ width: '25%' }}>
+                                            <p style={{ width: "25%" }}>
                                                 Assign
                                             </p>
-                                            <p style={{ width: '15%' }}>Date</p>
-                                            <p style={{ width: '10%' }}>
+                                            <p style={{ width: "15%" }}>Date</p>
+                                            <p style={{ width: "10%" }}>
                                                 Progress
                                             </p>
-                                            <p style={{ width: '20%' }}>List</p>
+                                            <p style={{ width: "20%" }}>List</p>
                                         </div>
                                         {filterdBoardList()?.map(
                                             (boardList, index) => (
@@ -250,7 +250,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                                                     listIndex={index}
                                                 />
                                             )
-                                        )}{' '}
+                                        )}{" "}
                                         {provided.placeholder}
                                     </div>
                                 )}

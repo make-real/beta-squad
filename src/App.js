@@ -81,13 +81,13 @@ const ProjectRoute = ({ children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setSelectedWorkSpaceId(params.id));
+        dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [dispatch, params]);
 
     useEffect(() => {
         const getSpaceData = async () => {
             try {
-                const { data } = await get_space_data(params.id);
+                const { data } = await get_space_data(params.workspace_id);
                 dispatch(addSpace(data.spaces));
             } catch (error) {
                 console.log("space selection ==> ", error);
@@ -97,7 +97,7 @@ const ProjectRoute = ({ children }) => {
     }, [dispatch, params]);
 
     useEffect(() => {
-        dispatch(setSelectedWorkSpaceId(params.id));
+        dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [workspaces, params]);
 
     return children;
@@ -115,8 +115,20 @@ const SquadAuth = ({ children }) => {
                 allSpaces.find((space) => space._id === params.squadId)
             )
         );
-        dispatch(setSelectedWorkSpaceId(params.id));
+        dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [params, dispatch]);
+
+    return children;
+};
+
+const CardRoute = ({ children }) => {
+    const params = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setSelectedWorkSpaceId(params.workspace_id));
+        dispatch(setSelectedSpaceId(params.squadId));
+    }, []);
 
     return children;
 };
@@ -129,6 +141,7 @@ const App = () => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const fetchSpaces = async () => {};
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -326,7 +339,7 @@ const App = () => {
                         }
                     />
 
-                    <Route path=":id/squad/:squadId">
+                    <Route path=":workspace_id/squad/:squadId">
                         <Route
                             index
                             element={
@@ -351,7 +364,7 @@ const App = () => {
                     </Route>
 
                     <Route
-                        path=":id"
+                        path=":workspace_id"
                         element={
                             <ProtectedRoute>
                                 <ProjectRoute>
@@ -361,7 +374,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path=":id/chat/:participantID"
+                        path=":workspace_id/chat/:participantID"
                         element={
                             <ProtectedRoute>
                                 <SingleChat />
@@ -377,10 +390,12 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="board/:id"
+                        path=":workspace_id/squad/:squadId/board/:id"
                         element={
                             <ProtectedRoute>
-                                <CardDetails />
+                                <CardRoute>
+                                    <CardDetails />
+                                </CardRoute>
                             </ProtectedRoute>
                         }
                     />

@@ -29,6 +29,7 @@ import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
 import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal";
 import { toggleFullSidebar } from "../../store/slice/screen";
+import { getAvatarUrl } from "../../util/getAvatarUrl";
 
 const SideNavbar = () => {
     const navigate = useNavigate();
@@ -47,8 +48,9 @@ const SideNavbar = () => {
     const [userNotificationBell, setUserNotificationBell] = useState(false);
     const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
-    const { workspaces, selectedWorkspace } = useSelector(
-        (state) => state.workspace
+    const workspaces = useSelector((state) => state.workspace.workspaces);
+    const selectedWorkspace = useSelector(
+        (state) => state.workspace.selectedWorkspace
     );
     const [selectedChat, setSelectedChat] = useState(null);
 
@@ -79,6 +81,7 @@ const SideNavbar = () => {
     };
 
     const user = JSON.parse(localStorage.getItem("userInfo"));
+    const userId = JSON.parse(localStorage.getItem("userId"));
     const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
     useEffect(() => {
@@ -88,8 +91,8 @@ const SideNavbar = () => {
 
                 dispatch(addWorkSpace(data.workspaces));
 
-                if (params.id) {
-                    dispatch(setSelectedWorkSpaceId(params.id));
+                if (params.workspace_id) {
+                    dispatch(setSelectedWorkSpaceId(params.workspace_id));
                 } else {
                     if (!currentWorkspace) {
                         dispatch(
@@ -109,7 +112,7 @@ const SideNavbar = () => {
         const getSpaceData = async () => {
             try {
                 const { data } = await get_space_data(
-                    params.id ?? selectedWorkspace
+                    params.workspace_id ?? selectedWorkspace
                 );
 
                 dispatch(addSpace(data.spaces));
@@ -122,7 +125,7 @@ const SideNavbar = () => {
         };
 
         getSpaceData();
-    }, [dispatch, selectedWorkspace]);
+    }, [dispatch, selectedWorkspace, params]);
 
     const openChat = (id) => {
         navigate("single-chat/" + id);
@@ -338,7 +341,7 @@ const SideNavbar = () => {
                             onClick={() => {
                                 dispatch(setSelectedSpaceId(null));
                                 dispatch(setSelectedSpaceObject(null));
-                                navigate("/projects");
+                                navigate(`/projects/${selectedWorkspace}`);
                                 setSelectedChat(null);
                             }}
                             className={`flex items-center gap-3 cursor-pointer py-[10px] ${
@@ -525,7 +528,7 @@ const SideNavbar = () => {
                               {/* Chats List */}
                               <div className="mt-[15px] flex flex-col">
                                   {members.map((member) =>
-                                      member?._id !== user?._id ? (
+                                      member?._id !== userId ? (
                                           <div
                                               className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
                                                   selectedChat?._id ===
@@ -554,7 +557,12 @@ const SideNavbar = () => {
                                               }}
                                           >
                                               <img
-                                                  src={member.avatar}
+                                                  src={
+                                                      member?.avatar ??
+                                                      getAvatarUrl(
+                                                          member?.fullName
+                                                      )
+                                                  }
                                                   className="w-[28px] h-[28px] rounded-full border object-cover"
                                                   alt=""
                                               />

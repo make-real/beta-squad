@@ -22,7 +22,7 @@ export const UserInfoContext = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (!localStorage.getItem("userInfo")) {
+        if (!JSON.parse(localStorage.getItem("userInfo"))) {
             localStorage.setItem("userInfo", JSON.stringify(loginUserInfo));
         }
         dispatch(setUserInfo(loginUserInfo));

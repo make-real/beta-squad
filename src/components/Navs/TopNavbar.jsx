@@ -23,10 +23,10 @@ import BellIcon from "../../assets/icon_component/NotificationIcon";
 import { toggleFullSidebar } from "../../store/slice/screen";
 import { get_notifications } from "../../api/notification";
 import { useRef } from "react";
+import { getAvatarUrl } from "../../util/getAvatarUrl";
 
 const TopNav = () => {
     // const [userInfo, setUserInfo] = useState(null);
-    const userInfo = useSelector((state) => state.userInfo.userInfo);
     const [jwt, setJwt] = useState(null);
 
     useEffect(() => {
@@ -38,11 +38,7 @@ const TopNav = () => {
 
     return (
         <div className="bg-white shadow-md min-h-[70px] max-h-[70px] w-full flex">
-            {jwt ? (
-                <LoggedInTopNav userInfo={userInfo} />
-            ) : (
-                <NotLoggedInTopNav />
-            )}
+            {jwt ? <LoggedInTopNav /> : <NotLoggedInTopNav />}
         </div>
     );
 };
@@ -73,7 +69,9 @@ const NotLoggedInTopNav = () => {
     );
 };
 
-const LoggedInTopNav = ({ userInfo }) => {
+const LoggedInTopNav = () => {
+    const userInfo = useSelector((state) => state.userInfo.userInfo);
+
     const selectedWorkspaceId = useSelector(
         (state) => state.workspace.selectedWorkspace
     );
@@ -376,7 +374,10 @@ const LoggedInTopNav = ({ userInfo }) => {
                             </p>
                         </div>
                         <img
-                            src={userInfo?.avatar}
+                            src={
+                                userInfo?.avatar ??
+                                getAvatarUrl(userInfo?.fullName)
+                            }
                             alt=""
                             className="w-[35px] h-[35px] rounded-full"
                         />
@@ -422,7 +423,9 @@ const LoggedInTopNav = ({ userInfo }) => {
                                                 dispatch(
                                                     setSelectedSpaceObject(null)
                                                 );
-                                                navigate("/projects");
+                                                navigate(
+                                                    `/projects/${workspace._id}`
+                                                );
                                                 setShowDropDownMenu(false);
                                             }}
                                             className={`${

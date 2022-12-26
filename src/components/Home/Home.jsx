@@ -26,12 +26,17 @@ const Home = () => {
 
     const [shouldChangeRoute, setShouldChangeRoute] = useState(false);
 
+    const [tmpData, setTmpData] = useState(null);
+
     useEffect(() => {
         const getWorkSpaceData = async () => {
             setLoading(true);
             try {
                 const { data } = await get_workspace_data();
                 setShouldChangeRoute(data.workspaces.length === 0);
+                if (data.workspaces.length !== 0) {
+                    setTmpData(data.workspaces[0]);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -41,7 +46,7 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        if (params.id) return;
+        if (params.workspace_id) return;
         if (loading) return;
         console.log("should", shouldChangeRoute);
         if (shouldChangeRoute) {
@@ -49,7 +54,7 @@ const Home = () => {
         } else {
             localStorage.setItem("hasWorkspace", "yes");
             localStorage.setItem("stepFinished", true);
-            navigate("/projects");
+            navigate(`/projects/${tmpData._id}`);
         }
     }, [shouldChangeRoute, loading]);
 
