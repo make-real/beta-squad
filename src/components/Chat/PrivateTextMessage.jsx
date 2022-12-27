@@ -57,7 +57,7 @@ const Message = ({
     <div
       className={`flex ${
         msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""
-      } pl-6 pr-8 py-5 relative user-box
+      } pl-6 pr-8 py-1.5 relative user-box
       `}>
       {/* <div
                 className={`w-10 h-10	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[100]  ${

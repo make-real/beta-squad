@@ -22,6 +22,9 @@ const CardStack = ({ listName, card, listID }) => {
     const selectedSpaceObj = useSelector(
         (state) => state.space.selectedSpaceObj
     );
+    const selectedWorkspaceId = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    );
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const [localCard, setLocalCard] = useState({});
@@ -195,21 +198,7 @@ const CardStack = ({ listName, card, listID }) => {
                 </div>
 
                 <Link
-                    onClick={() => {
-                        // toggle_card_modal();
-                        setCardDetails({
-                            card: card,
-                            listID: listID,
-                            noteDone: noteDone,
-                            progress: progress,
-                            setProgress: setProgress,
-                            setBoardModal: toggle_card_modal,
-                            setNoteDone: setNoteDone,
-                            localCard: localCard,
-                            setLocalCard: setLocalCard,
-                        });
-                    }}
-                    to={`/projects/board/${card._id}`}
+                    to={`/projects/${selectedWorkspaceId}/squad/${selectedSpaceId}/board/${card._id}`}
                 >
                     <span className="flex justify-center items-center p-2 rounded-xl bg-[#031124]/[0.4] hover:bg-[#031124]/[0.6] duration-300 text-white cursor-pointer">
                         <EyeIcon className="mr-2 w-5 h-5" />

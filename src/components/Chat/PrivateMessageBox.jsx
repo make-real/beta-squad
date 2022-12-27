@@ -44,6 +44,8 @@ const PrivateMessageBox = ({
   const { participantID } = useParams();
   const dispatch = useDispatch();
 
+  const userId = JSON.parse(localStorage.getItem("userId"));
+
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
       const loadUsers = async () => {
@@ -100,7 +102,7 @@ const PrivateMessageBox = ({
         const obj = {
           _id: msgID,
           sender: {
-            _id: "6385f93ae63eabf483bb732c",
+            _id: userId,
             fullName: user?.fullName,
             username: user?.username,
             avatar: user?.avatar,

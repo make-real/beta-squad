@@ -48,11 +48,13 @@ const Message = ({
     }
   };
 
+  console.log(msg);
+
   return (
     <div
       className={`flex ${
         msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""
-      } pl-6 pr-8 py-5 relative user-box
+      } pl-6 pr-8 py-1.5 relative user-box
       `}>
       {/* <div
         className={`w-10 h-10 border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[50]  ${
@@ -113,7 +115,9 @@ const Message = ({
             />
             <span
               className={`${
-                msg?.sender?._id === userId ? "text-white" : "text-[#031124]"
+                msg?.sender?._id === userId
+                  ? "text-[#031124]"
+                  : "text-[#031124]"
               }`}>
               <p
                 className={`text-sm block`}
@@ -211,10 +215,10 @@ const Message = ({
             />
 
             <div className='group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[30%] top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm'>
-              <div className='flex items-center gap-[15px] px-5 w-32 py-[10px] hover:bg-[#FEB45E10] cursor-pointer'>
+              {/* <div className='flex items-center gap-[15px] px-5 w-32 py-[10px] hover:bg-[#FEB45E10] cursor-pointer'>
                 <img src={PencilIcon} className='w-4 h-auto' />
                 <p className='font-semibold text-[#031124]'>Edit</p>
-              </div>
+              </div> */}
               <div
                 onClick={handleDelete}
                 className='flex items-center gap-[15px] px-5 w-32 py-[17px] hover:bg-[#FB397F10] cursor-pointer'>
@@ -240,16 +244,35 @@ const RenderAttachment = ({ message, scrollToBottom, small }) => {
         ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)
       ) {
         return (
-          <img
-            onLoad={scrollToBottom}
-            key={idx}
-            src={src}
-            alt=''
-            style={{
-              maxWidth: small ? "150px" : "200px",
-              marginBottom: "10px",
-            }}
-          />
+          <div className='flex justify-center items-center gap-3'>
+            {message?.content?.attachments?.length >= 2 ? (
+              <span className='flex justify-between gap-3 items-center'>
+                <img
+                  onLoad={scrollToBottom}
+                  key={idx}
+                  src={src}
+                  alt=''
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                />
+              </span>
+            ) : (
+              <img
+                onLoad={scrollToBottom}
+                key={idx}
+                src={src}
+                alt=''
+                style={{
+                  maxWidth: small ? "150px" : "200px",
+                  marginBottom: "10px",
+                }}
+              />
+            )}
+          </div>
         );
       } else {
         return (
