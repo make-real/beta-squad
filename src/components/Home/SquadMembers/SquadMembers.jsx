@@ -60,14 +60,14 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                     </div>
                     {members.map((member) => {
                         const user = members.find(
-                            (m) => m._id === userInfo._id
+                            (m) => m?._id === userInfo?._id
                         );
                         return (
                             <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] px-[13px] pt-[20px]">
-                                {user.role === "owner" ||
-                                user.role === "manager" ||
-                                user.role === "admin"
-                                    ? userInfo._id !== member._id && (
+                                {user?.role === "owner" ||
+                                user?.role === "manager" ||
+                                user?.role === "admin"
+                                    ? userInfo?._id !== member?._id && (
                                           <div
                                               onClick={() =>
                                                   removeMember(member)
@@ -96,7 +96,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                                 {member?.designation && (
                                     <div className="flex items-center gap-[16px] mt-[13px]">
                                         <p className="text-[#818892]">
-                                            {member.designation}
+                                            {member?.designation}
                                         </p>
                                         <img src={ArrowDown} alt="" />
                                     </div>
@@ -122,14 +122,14 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                             </div>
                             {members.map((member) => {
                                 const user = members.find(
-                                    (m) => m._id === userInfo._id
+                                    (m) => m?._id === userInfo?._id
                                 );
                                 return (
                                     <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
-                                        {user.role === "owner" ||
-                                        user.role === "manager" ||
-                                        user.role === "admin"
-                                            ? userInfo._id !== member._id && (
+                                        {user?.role === "owner" ||
+                                        user?.role === "manager" ||
+                                        user?.role === "admin"
+                                            ? userInfo?._id !== member?._id && (
                                                   <div
                                                       onClick={() =>
                                                           removeMember(member)
@@ -142,12 +142,12 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                                             : null}
                                         <div className="flex items-center gap-[10px]">
                                             <img
-                                                src={member.avatar}
+                                                src={member?.avatar}
                                                 alt=""
                                                 className="w-[50px] h-[50px] object-cover rounded-full"
                                             />
                                             <h2 className="text-[#424D5B] font-semibold">
-                                                {member.fullName}
+                                                {member?.fullName}
                                             </h2>
                                         </div>
                                         <div className="flex items-center gap-[16px]">

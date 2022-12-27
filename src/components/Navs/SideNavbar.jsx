@@ -194,7 +194,10 @@ const SideNavbar = () => {
                     }`}
                 >
                     {fullSidebar && (
-                        <Link to="/" className="flex items-center gap-4">
+                        <Link
+                            to={`/projects/${selectedWorkspace}`}
+                            className="flex items-center gap-4"
+                        >
                             <img
                                 src={LogoIcon}
                                 alt=""

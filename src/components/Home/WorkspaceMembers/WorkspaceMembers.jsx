@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { get_space_members } from "../../../api/space";
 import { get_workspace_member } from "../../../api/workSpace";
+import { getAvatarUrl } from "../../../util/getAvatarUrl";
 
 const SquadMembers = ({ showType }) => {
     const selectedSpace = useSelector((state) => state.space.selectedSpace);
@@ -74,20 +75,29 @@ const SquadMembers = ({ showType }) => {
                         </div>
                     </div>
                     {members.map((member) => {
+                        const user = members.find(
+                            (m) => m?._id === userInfo?._id
+                        );
                         return (
                             <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                {members.find((m) => m._id === userInfo._id)
-                                    .role === "owner" && (
-                                    <EditDeleteMenu
-                                        deleteFunc={prepareDeleteMember}
-                                        data={member}
-                                        editFunc={prepareUpdateMember}
-                                        className="absolute top-[10px] right-[10px]"
-                                    />
-                                )}
+                                {user?.role === "owner" ||
+                                user?.role === "manager" ||
+                                user?.role === "admin"
+                                    ? userInfo?._id !== member?._id && (
+                                          <EditDeleteMenu
+                                              deleteFunc={prepareDeleteMember}
+                                              data={member}
+                                              editFunc={prepareUpdateMember}
+                                              className="absolute top-[10px] right-[10px]"
+                                          />
+                                      )
+                                    : null}
                                 <div className="flex gap-[10px]">
                                     <img
-                                        src={member?.avatar}
+                                        src={
+                                            member?.avatar ??
+                                            getAvatarUrl(member?.fullName)
+                                        }
                                         alt=""
                                         className="w-[50px] h-[50px] object-cover rounded-full"
                                     />
@@ -128,16 +138,41 @@ const SquadMembers = ({ showType }) => {
                                 </div>
                             </div>
                             {members.map((member) => {
+                                const user = members.find(
+                                    (m) => m?._id === userInfo?._id
+                                );
                                 return (
                                     <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+                                        {user?.role === "owner" ||
+                                        user?.role === "manager" ||
+                                        user?.role === "admin"
+                                            ? userInfo?._id !== member?._id && (
+                                                  <EditDeleteMenu
+                                                      deleteFunc={
+                                                          prepareDeleteMember
+                                                      }
+                                                      data={member}
+                                                      editFunc={
+                                                          prepareUpdateMember
+                                                      }
+                                                      className="absolute top-[10px] right-[10px]"
+                                                  />
+                                              )
+                                            : null}
+
                                         <div className="flex items-center gap-[10px]">
                                             <img
-                                                src={member.avatar}
+                                                src={
+                                                    member?.avatar ??
+                                                    getAvatarUrl(
+                                                        member?.fullName
+                                                    )
+                                                }
                                                 alt=""
                                                 className="w-[50px] h-[50px] object-cover rounded-full"
                                             />
                                             <h2 className="text-[#424D5B] font-semibold">
-                                                {member.fullName}
+                                                {member?.fullName}
                                             </h2>
                                         </div>
                                         <div className="flex items-center gap-[16px]">
@@ -149,16 +184,6 @@ const SquadMembers = ({ showType }) => {
                                         <p className="text-[#818892]">
                                             {member?.email}
                                         </p>
-                                        {members.find(
-                                            (m) => m._id === userInfo._id
-                                        ).role === "owner" && (
-                                            <EditDeleteMenu
-                                                deleteFunc={prepareDeleteMember}
-                                                data={member}
-                                                editFunc={prepareUpdateMember}
-                                                className="absolute top-[10px] right-[10px]"
-                                            />
-                                        )}
                                     </div>
                                 );
                             })}
