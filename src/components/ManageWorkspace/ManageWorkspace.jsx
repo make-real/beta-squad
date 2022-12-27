@@ -286,7 +286,7 @@ const CreateWorkspace = () => {
 
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
-            <div className="h-full relative w-[614px] max-h-[535px] bg-white rounded-[16px] px-[60px] py-[40px] overflow-y-scroll no-scrollbar">
+            <div className="h-full relative w-[614px] max-h-[535px] bg-white rounded-[16px] px-[66px] py-[40px] overflow-y-scroll no-scrollbar">
                 <h1 className="text-[#031124] text-[30px] font-bold">
                     Let's Create a Workspace
                 </h1>

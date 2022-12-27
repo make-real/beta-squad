@@ -93,7 +93,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className="relative pt-[43px] px-[63px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
+            <div className="relative pt-[40px] pl-[38px] pr-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
                 {/* <div className="flex items-center">
                     <Link to="/projects" className="cursor-pointer">
                         <img src={BackArrowIcon} alt="" />
@@ -102,7 +102,7 @@ const Profile = () => {
                         Profile
                     </p>
                 </div> */}
-                <div className="mt-[20px] w-full h-full bg-white rounded-[16px] pt-[50px] pb-[50px] px-[62px] flex flex-col">
+                <div className="mt-[20px] w-full h-full bg-white rounded-[16px] pt-[40px] pb-[50px] px-[66px] flex flex-col">
                     <h1 className="text-[#424D5B] text-[20px] leading-[25px] font-semibold">
                         Profile
                     </h1>

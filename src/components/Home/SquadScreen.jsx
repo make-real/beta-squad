@@ -12,6 +12,7 @@ import {
     setSelectedSpaceObject,
 } from "../../store/slice/space";
 import FolderIcon from "../../assets/icon_component/Folder";
+import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import Board from "../Board/Board";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -52,9 +53,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
             <div className="mt-[20px] w-full h-full bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px]">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-[10px]">
                         <FolderIcon
-                            className="w-[60px]"
+                            className="w-[20px] h-[20px]"
                             style={{ fill: selectedSpace?.color }}
                         />
                         <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
@@ -102,7 +103,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     </div>
                 </div>
                 <div className="mt-[40px] flex flex-col h-full">
-                    <div className="flex items-center gap-[45px]">
+                    <div className="flex items-center gap-[50px]">
                         {Object.keys(TabsName).map((value) => {
                             return (
                                 <h2

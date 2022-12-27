@@ -7,6 +7,7 @@ import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import FolderIcon from "../../assets/icon_component/Folder";
+import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     get_space_data,
@@ -383,10 +384,10 @@ const SideNavbar = () => {
                 )}
                 {/* Squad */}
                 {defaultPage && (
-                    <div className="mt-[24px]">
+                    <div className="mt-[16px]">
                         {fullSidebar && (
                             <div
-                                className={`flex items-center justify-between pl-[25px] pr-[10px]`}
+                                className={`flex items-center justify-between pl-[17px] pr-[10px]`}
                             >
                                 <h2 className="text-[#6576FF] opacity-80">
                                     Your Squad
@@ -426,7 +427,7 @@ const SideNavbar = () => {
                         )}
                         {/* Squads List */}
                         {(!isFirstTime || !firstTimeSquad) && (
-                            <div className="mt-[20px] flex flex-col">
+                            <div className="mt-[10px] flex flex-col">
                                 {allSpaces.map((space) => {
                                     if (space.name === "Onboarding") return;
                                     return (
@@ -487,12 +488,21 @@ const SideNavbar = () => {
                                                 );
                                             }}
                                         >
-                                            <FolderIcon
-                                                style={{
-                                                    fill: space.color,
-                                                }}
-                                                className={`w-[20px] h-[20px] pointer-events-none`}
-                                            />
+                                            {space.privacy === "public" ? (
+                                                <FolderIcon
+                                                    style={{
+                                                        fill: space.color,
+                                                    }}
+                                                    className={`w-[20px] h-[20px] pointer-events-none`}
+                                                />
+                                            ) : (
+                                                <PrivateFolderIcon
+                                                    style={{
+                                                        fill: space.color,
+                                                    }}
+                                                    className={`w-[20px] h-[20px] pointer-events-none`}
+                                                />
+                                            )}
                                             {fullSidebar && (
                                                 <p className="text-[14px] text-[#C4CEFE] pointer-events-none">
                                                     {space.name}
@@ -508,9 +518,9 @@ const SideNavbar = () => {
                 {/* Chats */}
                 {!isFirstTime || !firstTimeMember
                     ? defaultPage && (
-                          <div className="mt-[50px]">
+                          <div className="mt-[44px]">
                               {fullSidebar && (
-                                  <div className="flex items-center justify-between pl-[25px] pr-[10px]">
+                                  <div className="flex items-center justify-between pl-[17px] pr-[10px]">
                                       <h2 className="text-[#6576FF] opacity-80">
                                           Chats
                                       </h2>
@@ -529,7 +539,7 @@ const SideNavbar = () => {
                                   </h1>
                               )}
                               {/* Chats List */}
-                              <div className="mt-[15px] flex flex-col">
+                              <div className="mt-[10px] flex flex-col">
                                   {members.map((member) =>
                                       member?._id !== userId ? (
                                           <div

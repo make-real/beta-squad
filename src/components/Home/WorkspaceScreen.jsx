@@ -67,7 +67,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 />
             ) : (
                 <div className="relative pt-[40px] px-[40px] bg-[#F9F9FF] h-full flex flex-col no-scrollbar">
-                    <div className="mt-[20px] w-full h-full max-h-[80%] flex flex-col bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px] overflow-hidden">
+                    <div className="mt-[20px] w-full h-full max-h-[80%] flex flex-col bg-white rounded-[16px] px-[66px] pt-[43px] pb-[20px] overflow-hidden">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 {currentWorkspace?.logo ? (
@@ -122,7 +122,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                             </div>
                         </div>
                         <div className="mt-[40px] h-full flex flex-col overflow-hidden">
-                            <div className="flex items-center gap-[45px]">
+                            <div className="flex items-center gap-[50px]">
                                 <h2
                                     onClick={() => setSelectedTab("projects")}
                                     className={`${
