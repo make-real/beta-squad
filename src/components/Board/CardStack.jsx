@@ -42,8 +42,6 @@ const CardStack = ({ listName, card, listID }) => {
         getCard();
     }, [selectedSpaceId, listID, card?._id]);
 
-    console.log({ localCard });
-
     const progressStatus = (progress) => {
         switch (progress) {
             case 4:
@@ -88,7 +86,7 @@ const CardStack = ({ listName, card, listID }) => {
     };
 
     return (
-        <div className="relative group bg-[#ECECEC]/[0.4] w-full flex justify-between items-center p-2 rounded-2xl">
+        <div className="relative group bg-[#FFFFFF] w-full flex justify-between items-center p-2 rounded-2xl transition duration-300 ease-in-out">
             {/* top-right shape */}
             <span
                 className="absolute top-0 left-0 h-4 w-4 rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
@@ -101,12 +99,12 @@ const CardStack = ({ listName, card, listID }) => {
             />
 
             {/* card name */}
-            <div style={{ width: '25%' }}>
+            <div style={{ width: '30%' }}>
                 <p className="text-sm text-gray-800 font-bold">{card.name}</p>
             </div>
 
             {/* assign */}
-            <div className="flex" style={{ width: '25%' }}>
+            <div className="flex" style={{ width: '40%' }}>
                 {card.assignee?.map((user, i) => (
                     <div style={{ marginLeft: i ? '-5px' : 0 }}>
                         {user.avatar ? (
@@ -126,7 +124,7 @@ const CardStack = ({ listName, card, listID }) => {
 
             {/* date */}
             <div
-                style={{ width: '15%' }}
+                style={{ width: '20%' }}
                 className="relative cursor-pointer space-x-2 hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400"
             >
                 {localCard.startDate ? (
@@ -164,10 +162,6 @@ const CardStack = ({ listName, card, listID }) => {
                         </span>
                     )}
                 </div>
-            </div>
-
-            <div style={{ width: '20%' }}>
-                <p>{listName}</p>
             </div>
 
             {/* hover element */}
