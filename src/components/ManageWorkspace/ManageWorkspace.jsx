@@ -1,89 +1,89 @@
-import React from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import EditDeleteMenu from "../DropDown/EditDeleteMenu";
-import { useEffect } from "react";
-import PlusIcon from "../../assets/plus.svg";
-import { get_space_data, get_workspace_member } from "../../api/workSpace";
-import CreateWorkspaceModal from "./Modals/CreateWorkspaceModal";
-import EditWorkspaceModal from "./Modals/EditWorkspaceModal";
-import DeleteWorkspaceModal from "./Modals/DeleteWorkspaceModal";
-import { useNavigate } from "react-router-dom";
-import CrossIcon from "../../assets/cross.svg";
+import React from 'react'
+import SearchIcon from '../../assets/search.svg'
+import GridIcon from '../../assets/icon_component/Grid'
+import RowVerticalIcon from '../../assets/icon_component/RowVertical'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import EditDeleteMenu from '../DropDown/EditDeleteMenu'
+import { useEffect } from 'react'
+import PlusIcon from '../../assets/plus.svg'
+import { get_space_data, get_workspace_member } from '../../api/workSpace'
+import CreateWorkspaceModal from './Modals/CreateWorkspaceModal'
+import EditWorkspaceModal from './Modals/EditWorkspaceModal'
+import DeleteWorkspaceModal from './Modals/DeleteWorkspaceModal'
+import { useNavigate } from 'react-router-dom'
+import CrossIcon from '../../assets/cross.svg'
 
-import { workspaceCreation } from "../../hooks/useFetch";
-import { addOneWorkspace, addWorkSpace } from "../../store/slice/workspace";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import LoadingScreen from "../Loading/LoadingScreen";
+import { workspaceCreation } from '../../hooks/useFetch'
+import { addOneWorkspace, addWorkSpace } from '../../store/slice/workspace'
+import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import LoadingScreen from '../Loading/LoadingScreen'
 
 const ManageWorkspace = () => {
-    const [showType, setShowType] = useState("grid");
-    const allWorkspaces = useSelector((state) => state.workspace.workspaces);
-    const [workspaces, setWorkspaces] = useState([]);
+    const [showType, setShowType] = useState('grid')
+    const allWorkspaces = useSelector((state) => state.workspace.workspaces)
+    const [workspaces, setWorkspaces] = useState([])
     const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
-        useState(false);
-    const [editWorkspaceData, setEditWorkspaceData] = useState(null);
-    const [showEditWorkspaceModal, setShowEditWorkspaceModal] = useState(false);
-    const [deleteWorkspaceData, setDeleteWorkspaceData] = useState(null);
+        useState(false)
+    const [editWorkspaceData, setEditWorkspaceData] = useState(null)
+    const [showEditWorkspaceModal, setShowEditWorkspaceModal] = useState(false)
+    const [deleteWorkspaceData, setDeleteWorkspaceData] = useState(null)
     const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
-        useState(false);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+        useState(false)
+    const [loading, setLoading] = useState(true)
+    const navigate = useNavigate()
 
     const setupAll = async () => {
-        const temp = [];
-        setLoading(true);
+        const temp = []
+        setLoading(true)
         for (let i = 0; i < allWorkspaces.length; i++) {
             const {
                 data: { teamMembers },
-            } = await get_workspace_member(allWorkspaces[i]._id);
+            } = await get_workspace_member(allWorkspaces[i]._id)
             const {
                 data: { spaces },
-            } = await get_space_data(allWorkspaces[i]._id);
-            temp.push({ ...allWorkspaces[i], teamMembers, spaces });
+            } = await get_space_data(allWorkspaces[i]._id)
+            temp.push({ ...allWorkspaces[i], teamMembers, spaces })
         }
-        setWorkspaces(temp);
+        setWorkspaces(temp)
         setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-    };
+            setLoading(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (allWorkspaces) {
-            setupAll();
+            setupAll()
         }
-    }, [allWorkspaces]);
+    }, [allWorkspaces])
 
     const prepareEditWorkspace = (data) => {
-        setEditWorkspaceData(data);
-        setShowEditWorkspaceModal(true);
-    };
+        setEditWorkspaceData(data)
+        setShowEditWorkspaceModal(true)
+    }
 
     const cancelEditWorkspace = () => {
-        setEditWorkspaceData(null);
-        setShowEditWorkspaceModal(false);
-    };
+        setEditWorkspaceData(null)
+        setShowEditWorkspaceModal(false)
+    }
 
     const prepareDeleteWorkspace = (data) => {
-        setDeleteWorkspaceData(data);
-        setShowDeleteWorkspaceModal(true);
-    };
+        setDeleteWorkspaceData(data)
+        setShowDeleteWorkspaceModal(true)
+    }
 
     const cancelDeleteWorkspace = () => {
-        setDeleteWorkspaceData(null);
-        setShowDeleteWorkspaceModal(false);
-    };
+        setDeleteWorkspaceData(null)
+        setShowDeleteWorkspaceModal(false)
+    }
 
     const hasWorkspace =
-        localStorage.getItem("hasWorkspace") === "yes"
+        localStorage.getItem('hasWorkspace') === 'yes'
             ? true
-            : localStorage.getItem("hasWorkspace") === "no"
+            : localStorage.getItem('hasWorkspace') === 'no'
             ? false
-            : workspaces?.length > 0;
+            : workspaces?.length > 0
 
     return (
         <>
@@ -93,7 +93,7 @@ const ManageWorkspace = () => {
                 <CreateWorkspace />
             ) : (
                 <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
-                    <div className="mt-[20px] w-full h-full bg-white rounded-[16px] px-[62px] pt-[50px] pb-[20px]">
+                    <div className="w-full h-full bg-white rounded-[16px] px-[62px] pt-[50px] pb-[20px]">
                         <div className="flex items-center justify-between">
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                                 Workspace
@@ -135,7 +135,7 @@ const ManageWorkspace = () => {
                             {workspaces.map((workspace, i) => {
                                 return (
                                     <div
-                                        key={workspace._id + "-" + i}
+                                        key={workspace._id + '-' + i}
                                         className="relative w-[215px] min-h-[156px] bg-[#67BFFF10] rounded-[16px] pb-[20px]"
                                     >
                                         <div className="absolute h-[6px] w-[37%] bg-[#67BFFF] rounded-bl-[4px] rounded-br-[4px] left-[31px] top-0"></div>
@@ -176,16 +176,16 @@ const ManageWorkspace = () => {
                                                 </h2>
                                             </div>
                                             <p className="mt-[10px] text-[#818892] text-[16px]">
-                                                {workspace.spaces?.length}{" "}
+                                                {workspace.spaces?.length}{' '}
                                                 Projects
                                             </p>
                                             <p className="mt-[4px] text-[#818892] text-[16px]">
-                                                {workspace.teamMembers?.length}{" "}
+                                                {workspace.teamMembers?.length}{' '}
                                                 Squad members
                                             </p>
                                         </div>
                                     </div>
-                                );
+                                )
                             })}
                             <div
                                 onClick={() =>
@@ -220,69 +220,69 @@ const ManageWorkspace = () => {
                 />
             )}
         </>
-    );
-};
+    )
+}
 
 const CreateWorkspace = () => {
-    const [workspaceData, setWorkspaceData] = useState({});
+    const [workspaceData, setWorkspaceData] = useState({})
     const [logo, setLogo] = useState({
         image: null,
         dataURL: null,
-    });
+    })
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleLogo = (e) => {
-        const files = e.target.files;
-        if (files.length <= 0) return;
+        const files = e.target.files
+        if (files.length <= 0) return
 
-        const fileReader = new FileReader();
+        const fileReader = new FileReader()
 
         fileReader.onload = () => {
             setLogo((prev) => ({
                 image: files[0],
                 dataURL: fileReader.result.toString(),
-            }));
-        };
+            }))
+        }
 
-        fileReader.readAsDataURL(files[0]);
-    };
+        fileReader.readAsDataURL(files[0])
+    }
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
     const handleCreation = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
             // its a POST method | object send into backend/server
-            const createData = new FormData();
-            createData.append("name", workspaceData.name);
-            if (logo.image) createData.append("logo", logo.image);
-            const { data } = await workspaceCreation(createData);
+            const createData = new FormData()
+            createData.append('name', workspaceData.name)
+            if (logo.image) createData.append('logo', logo.image)
+            const { data } = await workspaceCreation(createData)
 
             // get all Work-Space data & send into redux store...
             // for live re-fetching/load data at SideBar for navigation...
-            dispatch(addOneWorkspace(data.workspace));
+            dispatch(addOneWorkspace(data.workspace))
 
             // display a success notification for user...
             toast.success(
                 `${data?.workspace?.name} : work space created successfully`,
                 { autoClose: 3000 }
-            );
-            localStorage.removeItem("stepFinished");
-            localStorage.setItem("hasWorkspace", "yes");
+            )
+            localStorage.removeItem('stepFinished')
+            localStorage.setItem('hasWorkspace', 'yes')
             navigate(`/projects/${data.workspace._id}`, {
                 state: { isFirstTime: true },
-            });
+            })
         } catch (error) {
             // display error notification for developers...
-            console.log(error.response?.data?.issue);
+            console.log(error.response?.data?.issue)
 
             // display error notification for users...
             toast.error(error.response?.data?.name, {
                 autoClose: 3000,
-            });
+            })
         }
-    };
+    }
 
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
@@ -351,7 +351,7 @@ const CreateWorkspace = () => {
                 </form>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ManageWorkspace;
+export default ManageWorkspace

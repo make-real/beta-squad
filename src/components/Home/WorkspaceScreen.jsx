@@ -1,61 +1,61 @@
-import React from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
-import { useState } from "react";
-import Projects from "./Projects/Projects";
-import WorkspaceMembers from "./WorkspaceMembers/WorkspaceMembers";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from 'react'
+import SearchIcon from '../../assets/search.svg'
+import GridIcon from '../../assets/icon_component/Grid'
+import RowVerticalIcon from '../../assets/icon_component/RowVertical'
+import { useState } from 'react'
+import Projects from './Projects/Projects'
+import WorkspaceMembers from './WorkspaceMembers/WorkspaceMembers'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { boxHexColorCodes } from "../../constant/data";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { spaceCreation } from "../../hooks/useFetch";
-import { addNewSpace } from "../../store/slice/space";
+import { boxHexColorCodes } from '../../constant/data'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { spaceCreation } from '../../hooks/useFetch'
+import { addNewSpace } from '../../store/slice/space'
 
-import { add_workspace_member } from "../../api/workSpace";
-import CrossIcon from "../../assets/cross.svg";
-import InboxIcon from "../../assets/inbox.svg";
-import { validateEmail } from "../../util/helpers";
-import { useLocation } from "react-router-dom";
+import { add_workspace_member } from '../../api/workSpace'
+import CrossIcon from '../../assets/cross.svg'
+import InboxIcon from '../../assets/inbox.svg'
+import { validateEmail } from '../../util/helpers'
+import { useLocation } from 'react-router-dom'
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
-    const [selectedTab, setSelectedTab] = useState("projects");
-    const [showType, setShowType] = useState("grid");
-    const members = useSelector((state) => state.workspace.workspaceMembers);
-    const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+    const [selectedTab, setSelectedTab] = useState('projects')
+    const [showType, setShowType] = useState('grid')
+    const members = useSelector((state) => state.workspace.workspaceMembers)
+    const { selectedSpace, allSpaces } = useSelector((state) => state.space)
     const { workspaces, selectedWorkspace } = useSelector(
         (state) => state.workspace
-    );
-    const userInfo = useSelector((state) => state.userInfo.userInfo);
+    )
+    const userInfo = useSelector((state) => state.userInfo.userInfo)
 
     const Tabs = {
         projects: <Projects showType={showType} />,
         squad_members: <WorkspaceMembers showType={showType} />,
-    };
+    }
 
     // const location = useLocation();
 
     // console.log(location.state);
 
     const isFirstTime =
-        JSON.parse(localStorage.getItem("stepFinished")) === true
+        JSON.parse(localStorage.getItem('stepFinished')) === true
             ? false
             : (workspaces?.length === 1 && allSpaces?.length === 0) ||
-              (allSpaces[0]?.name === "Onboarding" &&
+              (allSpaces[0]?.name === 'Onboarding' &&
                   [...members.filter((m) => m._id !== userInfo._id)].length ===
-                      0);
+                      0)
 
     const showCreateSquadScreen =
-        JSON.parse(localStorage.getItem("stepFinished")) === true
+        JSON.parse(localStorage.getItem('stepFinished')) === true
             ? false
             : allSpaces?.length === 0 ||
-              (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
+              (allSpaces[0]?.name === 'Onboarding' && allSpaces.length === 1)
     const showAddMemberScreen =
-        JSON.parse(localStorage.getItem("stepFinished")) === true
+        JSON.parse(localStorage.getItem('stepFinished')) === true
             ? false
-            : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
+            : [...members.filter((m) => m._id !== userInfo._id)].length === 0
 
     return (
         <>
@@ -66,8 +66,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                     userInfo={userInfo}
                 />
             ) : (
-                <div className="relative pt-[40px] px-[40px] bg-[#F9F9FF] h-full flex flex-col no-scrollbar">
-                    <div className="mt-[20px] w-full h-full max-h-[80%] flex flex-col bg-white rounded-[16px] px-[66px] pt-[43px] pb-[20px] overflow-hidden">
+                <div className="relative pt-[40px] px-[40px] bg-[#F9F9FF] h-full flex flex-col no-scrollbar pb-[60px]">
+                    <div className="w-full h-full flex flex-col bg-white rounded-[16px] px-[66px] pt-[40px] pb-[20px] overflow-hidden">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 {currentWorkspace?.logo ? (
@@ -104,18 +104,18 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                                 <div className="flex items-center gap-[22px]">
                                     <div
                                         className="cursor-pointer"
-                                        onClick={() => setShowType("grid")}
+                                        onClick={() => setShowType('grid')}
                                     >
                                         <GridIcon
-                                            isSelected={showType === "grid"}
+                                            isSelected={showType === 'grid'}
                                         />
                                     </div>
                                     <div
                                         className="cursor-pointer"
-                                        onClick={() => setShowType("stack")}
+                                        onClick={() => setShowType('stack')}
                                     >
                                         <RowVerticalIcon
-                                            isSelected={showType === "stack"}
+                                            isSelected={showType === 'stack'}
                                         />
                                     </div>
                                 </div>
@@ -124,23 +124,23 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                         <div className="mt-[40px] h-full flex flex-col overflow-hidden">
                             <div className="flex items-center gap-[50px]">
                                 <h2
-                                    onClick={() => setSelectedTab("projects")}
+                                    onClick={() => setSelectedTab('projects')}
                                     className={`${
-                                        selectedTab === "projects"
-                                            ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                                            : "text-[#818892]"
+                                        selectedTab === 'projects'
+                                            ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
+                                            : 'text-[#818892]'
                                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                 >
                                     Projects
                                 </h2>
                                 <h2
                                     onClick={() =>
-                                        setSelectedTab("squad_members")
+                                        setSelectedTab('squad_members')
                                     }
                                     className={`${
-                                        selectedTab === "squad_members"
-                                            ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                                            : "text-[#818892]"
+                                        selectedTab === 'squad_members'
+                                            ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
+                                            : 'text-[#818892]'
                                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                 >
                                     Squad Members
@@ -153,83 +153,83 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 </div>
             )}
         </>
-    );
-};
+    )
+}
 
-export default WorkspaceScreen;
+export default WorkspaceScreen
 
 const FirstTimeScreen = ({ allSpaces, members, userInfo }) => {
     const showCreateSquadScreen =
         allSpaces?.length === 0 ||
-        (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
+        (allSpaces[0]?.name === 'Onboarding' && allSpaces.length === 1)
     const showAddMemberScreen =
-        [...members.filter((m) => m?._id !== userInfo._id)].length === 0;
+        [...members.filter((m) => m?._id !== userInfo._id)].length === 0
 
     return showCreateSquadScreen ? (
         <CreateSquadModal />
     ) : (
         showAddMemberScreen && <AddMemberModal />
-    );
-};
+    )
+}
 
 const CreateSquadModal = () => {
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
-    );
-    const [selectedColor, setSelectedColor] = useState("#C654FC");
+    )
+    const [selectedColor, setSelectedColor] = useState('#C654FC')
     const [createNewSpace, setCreateNewSpace] = useState({
         workspaceId: currentWorkspace?._id,
-        name: "",
-        color: "",
-        privacy: "",
-        description: "",
-    });
-    const dispatch = useDispatch();
+        name: '',
+        color: '',
+        privacy: '',
+        description: '',
+    })
+    const dispatch = useDispatch()
 
     const handleSpaceCreation = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         try {
-            const { data } = await spaceCreation(createNewSpace);
+            const { data } = await spaceCreation(createNewSpace)
 
             // display a notification for user
             toast.success(`${data?.space?.name} - space created successfully`, {
                 autoClose: 3000,
-            });
+            })
 
             // add this space into user allSpace [array]... & send back to parent component...
-            dispatch(addNewSpace(data?.space));
+            dispatch(addNewSpace(data?.space))
         } catch (error) {
             // error for developer for deBugging...
-            console.log(error.response.data);
+            console.log(error.response.data)
 
             // error for user at notification...
             toast.error(error?.response?.data?.issue?.name, {
                 autoClose: 3000,
-            });
+            })
         }
 
         // reset all input fields...
-        setCreateNewSpace({ name: "", color: "", privacy: "" });
-    };
+        setCreateNewSpace({ name: '', color: '', privacy: '' })
+    }
 
     const handleChange = (e, privacy) => {
         if (privacy) {
             setCreateNewSpace((prev) => ({
                 ...prev,
                 privacy: privacy,
-            }));
-            return;
+            }))
+            return
         }
         setCreateNewSpace((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
-        }));
-    };
+        }))
+    }
 
     useEffect(() => {
-        setCreateNewSpace((prev) => ({ ...prev, color: selectedColor }));
-    }, [selectedColor]);
+        setCreateNewSpace((prev) => ({ ...prev, color: selectedColor }))
+    }, [selectedColor])
 
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
@@ -254,7 +254,7 @@ const CreateSquadModal = () => {
                         name="name"
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
-                        Add Purpose{" "}
+                        Add Purpose{' '}
                         <span className="inline-block ml-[12px] font-light">
                             (Optional)
                         </span>
@@ -275,13 +275,13 @@ const CreateSquadModal = () => {
                             return (
                                 <div
                                     onClick={() => {
-                                        setSelectedColor(color);
+                                        setSelectedColor(color)
                                     }}
                                     style={{ backgroundColor: color }}
                                     className={`relative rounded-[4px] cursor-pointer ${
                                         selectedColor === color
                                             ? `w-[22px] h-[22px] border-[2px] border-white`
-                                            : "w-[16px] h-[16px]"
+                                            : 'w-[16px] h-[16px]'
                                     }`}
                                 >
                                     {selectedColor === color && (
@@ -293,7 +293,7 @@ const CreateSquadModal = () => {
                                         ></div>
                                     )}
                                 </div>
-                            );
+                            )
                         })}
                     </div>
                     <p className="text-[#818892] text-[14px] font-semibold mt-[35px]">
@@ -306,7 +306,7 @@ const CreateSquadModal = () => {
                                 name="privacy"
                                 id="squad_privacy_public"
                                 className="accent-[#6576FF]"
-                                onChange={() => handleChange(null, "public")}
+                                onChange={() => handleChange(null, 'public')}
                             />
                             <label
                                 htmlFor="squad_privacy_public"
@@ -327,7 +327,7 @@ const CreateSquadModal = () => {
                                 name="privacy"
                                 id="squad_privacy_private"
                                 className="accent-[#6576FF]"
-                                onChange={() => handleChange(null, "private")}
+                                onChange={() => handleChange(null, 'private')}
                             />
                             <label
                                 htmlFor="squad_privacy_private"
@@ -359,61 +359,61 @@ const CreateSquadModal = () => {
                 </form>
             </div>
         </div>
-    );
-};
+    )
+}
 
 const AddMemberModal = () => {
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
-    );
+    )
     const [memberData, setMemberData] = useState({
-        email: "",
-        role: "",
-    });
+        email: '',
+        role: '',
+    })
 
     const addMember = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        if (!validateEmail(memberData.email)) return;
+        if (!validateEmail(memberData.email)) return
 
         try {
             const { data } = await add_workspace_member(
                 currentWorkspace._id,
                 memberData.email
-            );
+            )
 
             // display a notification for user
             toast.success(`Member added`, {
                 autoClose: 3000,
-            });
-            window.location.reload();
-            localStorage.setItem("stepFinished", true);
+            })
+            window.location.reload()
+            localStorage.setItem('stepFinished', true)
         } catch (error) {
             // error for developer for deBugging...
             // console.log(error.response.data);
-            console.log(error);
+            console.log(error)
 
             // error for user at notification...
             toast.error(error?.message, {
                 autoClose: 3000,
-            });
+            })
         }
 
         // reset all input fields...
-        setMemberData({ name: "", color: "", privacy: "" });
-    };
+        setMemberData({ name: '', color: '', privacy: '' })
+    }
 
     const handleChange = (e) => {
-        setMemberData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
+        setMemberData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    }
 
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
             <div className="relative w-[614px] h-auto overflow-y-scroll no-scrollbar bg-white rounded-[16px] px-[60px] py-[40px]">
                 <div
                     onClick={() => {
-                        window.location.reload();
-                        localStorage.setItem("stepFinished", true);
+                        window.location.reload()
+                        localStorage.setItem('stepFinished', true)
                     }}
                     className="w-max absolute top-[30px] right-[30px] cursor-pointer"
                 >
@@ -423,7 +423,7 @@ const AddMemberModal = () => {
                     Add Member
                 </h1>
                 <p className="mt-[9px] text-[#818892] text-[14px]">
-                    Enter email to add member to{" "}
+                    Enter email to add member to{' '}
                     <span className="text-[#6576FF]">
                         {currentWorkspace?.name}
                     </span>
@@ -473,5 +473,5 @@ const AddMemberModal = () => {
                 </form>
             </div>
         </div>
-    );
-};
+    )
+}

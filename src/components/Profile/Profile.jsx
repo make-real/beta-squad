@@ -1,95 +1,92 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { update_user } from "../../api/auth";
-import BackArrowIcon from "../../assets/back_arrow.svg";
-import GalleryIcon from "../../assets/gallery.svg";
-import DeleteProfileModal from "./Modals/DeleteProfileModal";
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { update_user } from '../../api/auth'
+import BackArrowIcon from '../../assets/back_arrow.svg'
+import GalleryIcon from '../../assets/gallery.svg'
+import DeleteProfileModal from './Modals/DeleteProfileModal'
 
 const Profile = () => {
-    const [userData, setUserData] = useState(null);
-    const [showDeleteProfileModal, setShowDeleteProfileModal] = useState(false);
+    const [userData, setUserData] = useState(null)
+    const [showDeleteProfileModal, setShowDeleteProfileModal] = useState(false)
     const [avatar, setAvatar] = useState({
         image: null,
         dataURL: null,
-    });
-    const [success, setSuccess] = useState();
-    const [error, setError] = useState();
-    const navigate = useNavigate();
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    })
+    const [success, setSuccess] = useState()
+    const [error, setError] = useState()
+    const navigate = useNavigate()
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
     const handleChange = (e) => {
-        setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
+        setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    }
 
     const handleAvatar = (e) => {
-        const files = e.target.files;
-        if (files.length <= 0) return;
+        const files = e.target.files
+        if (files.length <= 0) return
 
-        const fileReader = new FileReader();
+        const fileReader = new FileReader()
 
         fileReader.onload = () => {
             setAvatar(() => ({
                 image: files[0],
                 dataURL: fileReader.result.toString(),
-            }));
-        };
+            }))
+        }
 
-        fileReader.readAsDataURL(files[0]);
-    };
+        fileReader.readAsDataURL(files[0])
+    }
 
     const handleSave = async () => {
-        let data = new FormData();
+        let data = new FormData()
         if (userData.current_password) {
             if (!userData?.new_password || !userData?.confirm_password) {
                 setError(
-                    "Please provide new password or make the present password field empty"
-                );
-                return;
+                    'Please provide new password or make the present password field empty'
+                )
+                return
             }
             if (userData?.new_password !== userData?.confirm_password) {
-                setError("New Password doesn't match with confirm password");
-                return;
+                setError("New Password doesn't match with confirm password")
+                return
             } else {
-                data.append(
-                    "current_password",
-                    userData.current_password ?? ""
-                );
-                data.append("new_password", userData.new_password);
+                data.append('current_password', userData.current_password ?? '')
+                data.append('new_password', userData.new_password)
             }
         }
-        if (userData.fullName.toString().trim() === "") {
-            setError("Name field can' be empty");
-            return;
+        if (userData.fullName.toString().trim() === '') {
+            setError("Name field can' be empty")
+            return
         }
-        setError("");
+        setError('')
         if (avatar.image) {
-            data.append("avatar", avatar.image);
+            data.append('avatar', avatar.image)
         }
-        data.append("fullName", userData.fullName);
-        data.append("email", userData.email);
+        data.append('fullName', userData.fullName)
+        data.append('email', userData.email)
 
-        console.log(data);
+        console.log(data)
 
         try {
-            const { data: resData } = await update_user(data);
-            setSuccess(true);
+            const { data: resData } = await update_user(data)
+            setSuccess(true)
 
-            console.log(resData);
+            console.log(resData)
 
             setTimeout(() => {
-                setSuccess(false);
-            }, 1000);
+                setSuccess(false)
+            }, 1000)
         } catch (err) {
-            setError(err.message);
-            console.log(err);
+            setError(err.message)
+            console.log(err)
         }
-    };
+    }
 
     useEffect(() => {
-        setUserData(userInfo);
-    }, []);
+        setUserData(userInfo)
+    }, [])
 
     return (
         <>
@@ -102,7 +99,7 @@ const Profile = () => {
                         Profile
                     </p>
                 </div> */}
-                <div className="mt-[20px] w-full h-full bg-white rounded-[16px] pt-[40px] pb-[50px] px-[66px] flex flex-col">
+                <div className="w-full h-full bg-white rounded-[16px] pt-[40px] pb-[50px] px-[66px] flex flex-col">
                     <h1 className="text-[#424D5B] text-[20px] leading-[25px] font-semibold">
                         Profile
                     </h1>
@@ -198,7 +195,7 @@ const Profile = () => {
                             </p>
                             <div className="flex items-center gap-[30px]">
                                 <button
-                                    onClick={() => navigate("/")}
+                                    onClick={() => navigate('/')}
                                     className="bg-[#ECECEC] text-[14px] text-[#818892] font-semibold py-[17px] px-[92px] rounded-[8px]"
                                 >
                                     Cancel
@@ -207,17 +204,17 @@ const Profile = () => {
                                     onClick={handleSave}
                                     className={`${
                                         success
-                                            ? "bg-green-500"
-                                            : "bg-[#6576FF]"
+                                            ? 'bg-green-500'
+                                            : 'bg-[#6576FF]'
                                     } ${
-                                        error ? "bg-red-400" : "bg-[#6576FF]"
+                                        error ? 'bg-red-400' : 'bg-[#6576FF]'
                                     } text-[14px] text-white font-semibold py-[17px] px-[92px] rounded-[8px]`}
                                 >
                                     {success
-                                        ? "Saved !"
+                                        ? 'Saved !'
                                         : error
-                                        ? "Try again"
-                                        : "Save"}
+                                        ? 'Try again'
+                                        : 'Save'}
                                 </button>
                             </div>
                         </div>
@@ -231,7 +228,7 @@ const Profile = () => {
                 />
             )}
         </>
-    );
-};
+    )
+}
 
-export default Profile;
+export default Profile

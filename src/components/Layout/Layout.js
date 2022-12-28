@@ -1,13 +1,13 @@
-import { useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
-import { NavBar, SideBar } from "../";
-import SideNavbar from "../Navs/SideNavbar";
-import TopNavbar from "../Navs/TopNavbar";
-import { useEffect } from "react";
+import { useSelector } from 'react-redux'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { NavBar, SideBar } from '../'
+import SideNavbar from '../Navs/SideNavbar'
+import TopNavbar from '../Navs/TopNavbar'
+import { useEffect } from 'react'
 // import SideBar from "../Sidebar/SideBar";
 
 const Layout = ({ selectedSpaceId }) => {
-    const fullSidebar = useSelector((state) => state.screen.fullSidebar);
+    const fullSidebar = useSelector((state) => state.screen.fullSidebar)
 
     return (
         <div className="flex min-h-screen no-scrollbar">
@@ -16,24 +16,24 @@ const Layout = ({ selectedSpaceId }) => {
             <div className="z-[159]">
                 <SideNavbar />
             </div>
-            <div className="w-full flex flex-col">
+            <div className="w-full flex flex-col h-screen">
                 <div
                     className={`w-full fixed z-[150] top-0 ${
-                        fullSidebar ? "pl-[225px]" : "pl-[78px]"
+                        fullSidebar ? 'pl-[225px]' : 'pl-[78px]'
                     }`}
                 >
                     <TopNavbar />
                 </div>
                 <div
                     className={`h-full ${
-                        fullSidebar ? "pl-[225px]" : "pl-[78px]"
-                    } mt-[70px]`}
+                        fullSidebar ? 'pl-[225px]' : 'pl-[78px]'
+                    } pt-[70px]`}
                 >
                     <Outlet />
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Layout;
+export default Layout
