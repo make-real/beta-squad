@@ -96,7 +96,7 @@ const Message = ({
             className={`flex flex-row-reverse gap-2 ${
               msg?.sender?._id === userId
                 ? "text-[#ACB0B6] font-[400] mr-auto"
-                : "ml-5 text-[#ACB0B6] font-[400]"
+                : "ml-auto text-[#ACB0B6] font-[400] w-24"
             }`}>
             {moment(msg?.createdAt).fromNow()}{" "}
             {msg?.sender?._id === userId ? (
