@@ -92,8 +92,8 @@ const ManageWorkspace = () => {
             ) : !hasWorkspace && allWorkspaces.length === 0 ? (
                 <CreateWorkspace />
             ) : (
-                <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
-                    <div className="w-full h-full bg-white rounded-[16px] px-[62px] pt-[50px] pb-[20px]">
+                <div className="relative pt-[40px] px-[40px] pb-[40px] bg-[#F9F9FF] h-full flex flex-col">
+                    <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px]">
                         <div className="flex items-center justify-between">
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                                 Workspace
@@ -131,7 +131,7 @@ const ManageWorkspace = () => {
                             </div> */}
                             </div>
                         </div>
-                        <div className="mt-[40px] flex gap-[30px] flex-wrap">
+                        <div className="mt-[30px] flex gap-[30px] flex-wrap">
                             {workspaces.map((workspace, i) => {
                                 return (
                                     <div
@@ -286,7 +286,7 @@ const CreateWorkspace = () => {
 
     return (
         <div className="flex items-center justify-center h-full bg-[#F9F9FF]">
-            <div className="h-full relative w-[614px] max-h-[535px] bg-white rounded-[16px] px-[66px] py-[40px] overflow-y-scroll no-scrollbar">
+            <div className="h-full relative w-[614px] max-h-[535px] bg-white rounded-[16px] px-[40px] py-[40px] overflow-y-scroll no-scrollbar">
                 <h1 className="text-[#031124] text-[30px] font-bold">
                     Let's Create a Workspace
                 </h1>

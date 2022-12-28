@@ -51,8 +51,14 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
     return (
         <div className="bg-[#F9F9FF] w-full h-full">
-            <div className="relative pt-[40px] px-[40px] pb-[60px] bg-[#F9F9FF] h-full flex flex-col">
-                <div className="w-full h-full bg-white rounded-[16px] px-[64px] pt-[50px] pb-[20px] flex flex-col">
+            <div
+                className={`relative ${
+                    selectedTab === 'messages' || selectedTab === 'board'
+                        ? 'pt-[40px]'
+                        : 'pt-[40px]'
+                } px-[40px] pb-[40px] bg-[#F9F9FF] h-full flex flex-col`}
+            >
+                <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px] flex flex-col">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-[10px]">
                             <FolderIcon
@@ -113,7 +119,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                             )}
                         </div>
                     </div>
-                    <div className="mt-[40px] flex flex-col h-full">
+                    <div className="mt-[30px] flex flex-col h-full">
                         <div className="flex items-center gap-[50px]">
                             {Object.keys(TabsName).map((value) => {
                                 return (
@@ -131,7 +137,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                             })}
                         </div>
                         <div className="w-full h-[1px] bg-[#ECECEC]"></div>
-                        <div className="h-full w-full pb-16 mx-auto mt-[30px]  overflow-hidden">
+                        <div
+                            className={`h-full w-full pb-16 mx-auto mt-[30px]  overflow-hidden`}
+                        >
                             {TabsScreen[selectedTab]}
                         </div>
                     </div>
