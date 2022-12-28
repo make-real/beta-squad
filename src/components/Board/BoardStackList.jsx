@@ -10,7 +10,11 @@ import DraggableElement from '../DraggableElement';
 import CardStack from './CardStack';
 import { Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import {
+    ChevronDownIcon,
+    ChevronUpIcon,
+    PlusIcon,
+} from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import useCollapse from 'react-collapsed';
 
@@ -21,6 +25,7 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
 
     const [expanded, setExpanded] = useState(false);
     const { getToggleProps, getCollapseProps } = useCollapse({ expanded });
+    const [showAddBtn, setShowAddBtn] = useState(false);
 
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -81,32 +86,48 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
                 <div
                     {...provided.draggableProps}
                     ref={provided.innerRef}
-                    className={`w-full mb-2 flex flex-col bg-[#ECECEC]/[0.4] p-2 rounded-2xl`}
+                    className={`w-full mb-1 flex flex-col bg-[#ECECEC]/[0.4] p-1 rounded-2xl`}
                 >
                     <div
-                        {...provided.dragHandleProps}
-                        {...getToggleProps({
-                            onClick: () => setExpanded((x) => !x),
-                        })}
-                        className="overflow-hidden flex justify-between items-center my-3 py-1 px-4"
+                        className="overflow-hidden flex justify-between items-center my-2 py-1 px-4"
                         // ref={dropDownRef}
                     >
-                        <p className="text-[#818892]">
+                        <p
+                            {...provided.dragHandleProps}
+                            className="text-[#818892]"
+                        >
                             {boardList?.name || 'Development'}
                         </p>
 
-                        <div>
-                            {expanded ? (
-                                <ChevronUpIcon className="w-5 h-5 text-[#818892] delay-700" />
-                            ) : (
-                                <ChevronDownIcon className="w-5 h-5 text-[#818892] delay-700" />
-                            )}
+                        <div className="flex justify-between items-center">
+                            <button
+                                onClick={() => setShowAddBtn(!showAddBtn)}
+                                className="flex justify-between items-center text-[#818892]"
+                            >
+                                <PlusIcon className="w-4 h-4" />{' '}
+                                <p className="text-[15px] font-[200] ml-2">
+                                    Add card
+                                </p>
+                            </button>
+
+                            <button
+                                {...getToggleProps({
+                                    onClick: () => setExpanded((x) => !x),
+                                })}
+                                className="ml-5"
+                            >
+                                {expanded ? (
+                                    <ChevronUpIcon className="w-5 h-5 text-[#818892] delay-700" />
+                                ) : (
+                                    <ChevronDownIcon className="w-5 h-5 text-[#818892] delay-700" />
+                                )}
+                            </button>
                         </div>
                     </div>
-                    <span className="border-[1px] border-[#EEE9E9]" />
+
                     <div
                         {...getCollapseProps()}
-                        className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-1 w-full"
+                        className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-1 w-full border-t border-[#EEE9E9]"
                     >
                         <DraggableElement
                             showType={showType}
@@ -118,7 +139,7 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
                                     snapshot={snapshot}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className="mb-2 w-full"
+                                    className="mb-1 w-full"
                                 >
                                     <motion.div
                                         animate={expanded ? 'open' : 'closed'}
@@ -137,14 +158,14 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
                         />
                     </div>
 
-                    <div className="bg-[#ECECEC]/[0.4] rounded-2xl">
+                    {showAddBtn && (
                         <AddBtn
                             showType={showType}
                             placeHolder="Enter card name"
                             btnText="card"
                             onSubmit={(text) => handleCardCreation(text)}
                         />
-                    </div>
+                    )}
                 </div>
             )}
         </Draggable>
