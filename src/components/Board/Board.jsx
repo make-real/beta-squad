@@ -225,19 +225,6 @@ const Board = ({ selectedSpaceId, showType }) => {
                                         ref={provided.innerRef}
                                         className="flex flex-col items-start w-full"
                                     >
-                                        {/* <div className="flex justify-center items-center w-full text-[#818892] text-center">
-                                            <p style={{ width: '25%' }}>
-                                                Card name
-                                            </p>
-                                            <p style={{ width: '25%' }}>
-                                                Assign
-                                            </p>
-                                            <p style={{ width: '15%' }}>Date</p>
-                                            <p style={{ width: '10%' }}>
-                                                Progress
-                                            </p>
-                                            <p style={{ width: '20%' }}>List</p>
-                                        </div> */}
                                         {filterdBoardList()?.map(
                                             (boardList, index) => (
                                                 <BoardStackList

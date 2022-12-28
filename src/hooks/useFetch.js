@@ -99,7 +99,7 @@ export const addCardIntoBoardList = (spaceId, listId, newCard) =>
     api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
 
 export const cardDeleteApiCall = (spaceId, listId, cardId) =>
-    api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}/delete`);
+    api.delete(`/spaces/${spaceId}/board/${listId}/card/${cardId}`);
 
 export const cardUpdateApiCall = (
     spaceId,

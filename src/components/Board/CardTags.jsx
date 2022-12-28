@@ -1,10 +1,10 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { create_tag, get_tags } from '../../api/tags';
+import { create_tag, get_tags, delete_tag } from '../../api/tags';
 import { cardUpdateApiCall } from '../../hooks/useFetch';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CreatableSelect from 'react-select/creatable';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const colorStyles = {
     control: (provided, state) => ({
@@ -73,7 +73,7 @@ const CardTags = (props) => {
     };
 
     // 🟥🟥🟥
-    const handle_delete_tags = async (tag) => {
+    const handle_remove_tags = async (tag) => {
         // add for display at UI
         setLocalCard((pre) => ({
             ...pre,
@@ -139,6 +139,15 @@ const CardTags = (props) => {
         setIsLoading(false);
     };
 
+    const handle_delete_tag = async (id) => {
+        await delete_tag({
+            workSpaceId: selectedWorkspaceId,
+            tagId: id,
+        });
+
+        setOptions((pre) => pre.filter((data) => data?._id !== id));
+    };
+
     useEffect(() => {
         const getTags = async () => {
             try {
@@ -188,7 +197,7 @@ const CardTags = (props) => {
                     if (e.action === 'select-option') {
                         handle_add_tags(e.option);
                     } else {
-                        handle_delete_tags(e.removedValue);
+                        handle_remove_tags(e.removedValue);
                     }
                 }}
                 onCreateOption={handle_new_tag_creation}
@@ -197,12 +206,12 @@ const CardTags = (props) => {
                 components={{
                     Option: ({ data, innerRef, innerProps }) => (
                         <div
-                            {...innerProps}
-                            {...innerRef}
                             key={data._id}
-                            className="pl-3 mx-2 py-2 hover:bg-[rgba(236,236,236,0.5)] flex items-center cursor-pointer rounded-2xl"
+                            className="p-2 mx-2 hover:bg-[rgba(236,236,236,0.5)] flex justify-between items-center cursor-pointer rounded-2xl"
                         >
                             <span
+                                {...innerProps}
+                                {...innerRef}
                                 className={`px-2 py-1 w-fit rounded-full text-sm`}
                                 style={{
                                     color: data?.color,
@@ -210,7 +219,17 @@ const CardTags = (props) => {
                                     border: `1px solid ${data?.color}`,
                                 }}
                             >
-                                {data?.name}
+                                {data?.name || data?.label}
+                            </span>
+                            <span onClick={() => handle_delete_tag(data?._id)}>
+                                <XMarkIcon
+                                    style={{
+                                        color: data?.color,
+                                        backgroundColor: `${data?.color}10`,
+                                        border: `1px solid ${data?.color}`,
+                                    }}
+                                    className={`h-5 px-2 py-1 w-fit rounded-full`}
+                                />
                             </span>
                         </div>
                     ),

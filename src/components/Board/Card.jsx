@@ -1,5 +1,5 @@
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { CardModal, CardChip } from '.';
+import { CardChip } from '.';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -9,14 +9,14 @@ import {
     CheckIcon,
 } from '@heroicons/react/24/outline';
 import ConfirmDialog from './ConfirmDialog';
-import { cardUpdateApiCall, getSingleCard } from '../../hooks/useFetch';
+import { cardUpdateApiCall } from '../../hooks/useFetch';
 // import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
-const Card = ({ showType, card, listID }) => {
+const Card = ({ card, listID }) => {
     const dropDownRef = useRef();
     const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
         useState(false);
@@ -32,35 +32,35 @@ const Card = ({ showType, card, listID }) => {
     );
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-    const [localCard, setLocalCard] = useState({});
+    const [localCard, setLocalCard] = useState(card);
 
-    useEffect(() => {
-        const getCard = async () => {
-            const { data } = await getSingleCard(
-                selectedSpaceId,
-                listID,
-                card?._id
-            );
-            setLocalCard(data?.card);
-        };
+    // useEffect(() => {
+    //     const getCard = async () => {
+    //         const { data } = await getSingleCard(
+    //             selectedSpaceId,
+    //             listID,
+    //             card?._id
+    //             );
+    //             setLocalCard(data?.card);
+    //     };
 
-        getCard();
-    }, [selectedSpaceId, listID, card?._id]);
+    //     getCard();
+    // }, [selectedSpaceId, listID, card?._id]);
 
-    const progressStatus = (progress) => {
-        switch (progress) {
-            case 4:
-                return 100;
-            case 3:
-                return 75;
-            case 2:
-                return 50;
-            case 1:
-                return 25;
-            default:
-                return 0;
-        }
-    };
+    // const progressStatus = (progress) => {
+    //     switch (progress) {
+    //         case 4:
+    //             return 100;
+    //         case 3:
+    //             return 75;
+    //         case 2:
+    //             return 50;
+    //         case 1:
+    //             return 25;
+    //         default:
+    //             return 0;
+    //     }
+    // };
 
     const handleClick = (e) => {
         if (!dropDownRef?.current?.contains(e.target))
@@ -136,10 +136,12 @@ const Card = ({ showType, card, listID }) => {
                     style={{ backgroundColor: card?.color }}
                 />
                 {/* message indicator */}
-                <span
-                    className="absolute -top-1 right-1 h-3 w-3 rounded-full"
-                    style={{ backgroundColor: '#FF3659' }}
-                />
+                {card?.seen === false && (
+                    <span
+                        className="absolute -top-1 right-1 h-3 w-3 rounded-full"
+                        style={{ backgroundColor: '#FF3659' }}
+                    />
+                )}
 
                 {!!card.assignee?.length && (
                     <div className="mb-3 flex">

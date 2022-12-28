@@ -166,7 +166,6 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                                     className="mb-2"
                                 >
                                     <Card
-                                        showType={showType}
                                         key={card._id}
                                         card={card}
                                         listID={boardList?._id}

@@ -27,20 +27,20 @@ const CardStack = ({ listName, card, listID }) => {
     );
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
-    const [localCard, setLocalCard] = useState({});
+    const [localCard, setLocalCard] = useState(card);
 
-    useEffect(() => {
-        const getCard = async () => {
-            const { data } = await getSingleCard(
-                selectedSpaceId,
-                listID,
-                card?._id
-            );
-            setLocalCard(data?.card);
-        };
+    // useEffect(() => {
+    //     const getCard = async () => {
+    //         const { data } = await getSingleCard(
+    //             selectedSpaceId,
+    //             listID,
+    //             card?._id
+    //         );
+    //         setLocalCard(data?.card);
+    //     };
 
-        getCard();
-    }, [selectedSpaceId, listID, card?._id]);
+    //     getCard();
+    // }, [selectedSpaceId, listID, card?._id]);
 
     const progressStatus = (progress) => {
         switch (progress) {
@@ -93,12 +93,15 @@ const CardStack = ({ listName, card, listID }) => {
                 style={{ backgroundColor: card?.color }}
             />
             {/* message indicator */}
-            <span
-                className="absolute -top-1 right-1 h-3 w-3 rounded-full"
-                style={{ backgroundColor: '#FF3659' }}
-            />
+            {card?.seen === false && (
+                <span
+                    className="absolute -top-1 right-1 h-3 w-3 rounded-full"
+                    style={{ backgroundColor: '#FF3659' }}
+                />
+            )}
 
             {/* card name */}
+
             <div style={{ width: '30%' }}>
                 <p className="text-sm text-gray-800 font-bold">{card.name}</p>
             </div>
