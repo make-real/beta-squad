@@ -1,6 +1,6 @@
 import { UserPlus } from '../../assets/icons';
 import { useBoardCardContext } from '../../context/BoardCardContext';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { CardSettingDropDown } from '.';
 import {
@@ -31,8 +31,8 @@ import {
     EllipsisHorizontalIcon,
     XMarkIcon,
     ChatBubbleBottomCenterTextIcon,
-    CheckCircleIcon,
-    StopCircleIcon,
+    // CheckCircleIcon,
+    // StopCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStyleContext } from '../../context/StyleContext';
@@ -55,10 +55,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         (state) => state.workspace.selectedWorkspace
     );
     const [toggleEdit, setToggleEdit] = useState(false);
-    const { updateCard, boardLists } = useBoardCardContext();
+    const { boardLists } = useBoardCardContext();
     // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-    const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
+    // const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
     const nameOfBoardList = boardLists.find(({ _id }) => _id === listID)?.name;
     // const [openAssigneeModal, setOpenAssigneeModal] = useState(false);
     // const [modalActionToggling, setModalActionToggling] = useState(false);
@@ -288,7 +288,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         setLocalCard(updatedCheckList);
 
         try {
-            const { data } = await deleteChecklistItem(
+            await deleteChecklistItem(
                 selectedSpaceId,
                 listID,
                 localCard._id,
@@ -327,9 +327,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     //     }
     // };
 
-    const selectedSpaceObj = useSelector(
-        (state) => state.space.selectedSpaceObj
-    );
+    // const selectedSpaceObj = useSelector(
+    //     (state) => state.space.selectedSpaceObj
+    // );
     const checked = localCard?.checkList?.filter((item) => item?.checked);
     const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
@@ -346,10 +346,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     }
 
     return (
-        <>
-            {/* <section className="fixed top-0 right-0 left-0 bottom-0 z-[1] bg-black/30 grid place-items-center overflow-visible"> */}
+        <React.Fragment>
             <section
-                className={`duration-200 overflow-x-auto customScroll p-8 bg-[#031124]/[0.4]`}
+                className={`duration-200 p-8 bg-[#031124]/[0.4] h-full overflow-y-scroll no-scrollbar`}
             >
                 {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
                 {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
@@ -387,6 +386,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             {toggleEdit ? (
                                 <input
                                     type="text"
+                                    autoFocus
                                     value={localCard?.name}
                                     onChange={(e) =>
                                         setLocalCard((pre) => ({
@@ -1032,7 +1032,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     onClose={() => setImages((p) => ({ ...p, isOpen: false }))}
                 />
             )}
-        </>
+        </React.Fragment>
     );
 };
 

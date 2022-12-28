@@ -147,6 +147,19 @@ const CardStack = ({ listName, card, listID }) => {
             >
                 <div
                     style={{
+                        backgroundColor: progress === 4 && '#54CC7C',
+                    }}
+                    className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
+                >
+                    {progress === 4 && <CheckIcon className="w-4 h-4" />}
+                </div>
+            </div>
+            {/* <div
+                style={{ width: '10%' }}
+                className="flex justify-center items-center"
+            >
+                <div
+                    style={{
                         backgroundColor:
                             progress === 4
                                 ? '#54CC7C'
@@ -162,7 +175,7 @@ const CardStack = ({ listName, card, listID }) => {
                         </span>
                     )}
                 </div>
-            </div>
+            </div> */}
 
             {/* hover element */}
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-2xl w-full h-0 flex flex-col justify-center items-center bg-[#031124]/[0.6] opacity-0 group-hover:h-full group-hover:opacity-100 duration-100 ease-in-out">
