@@ -37,8 +37,9 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStyleContext } from '../../context/StyleContext';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
-import DragDrop from '../DragDrop';
+import DragDropFile from '../DragDropFile';
 import { ClipLoader } from 'react-spinners';
+import DocView from '../DocView';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const { workspace_id, squadId: listID, id } = useParams();
@@ -330,6 +331,13 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // const selectedSpaceObj = useSelector(
     //     (state) => state.space.selectedSpaceObj
     // );
+
+    let docs = [];
+
+    for (const file of localCard?.attachments || []) {
+        docs.push({ uri: file });
+    }
+
     const checked = localCard?.checkList?.filter((item) => item?.checked);
     const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
@@ -344,6 +352,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             </section>
         );
     }
+
+    console.log(localCard?.attachments);
 
     return (
         <React.Fragment>
@@ -935,46 +945,65 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                             <div className="loading_continuous"></div>
                                         </div>
                                     )}
+
                                     {localCard?.attachments?.length > 0 &&
                                         localCard?.attachments?.map(
                                             (file, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="relative rounded-md p-2 cursor-pointer hover:bg-gray-200 group"
-                                                >
-                                                    <p
-                                                        className="absolute top-[-2px] right-[-2px] px-1.5 py-0 rounded-full text-center leading-5 text-red-500 border-0 border-red-500 bg-white duration-200 invisible group-hover:visible"
-                                                        onClick={() =>
-                                                            handle_attach_delete(
-                                                                file
-                                                            )
-                                                        }
-                                                    >
-                                                        x
-                                                    </p>
-                                                    <img
-                                                        src={file}
-                                                        alt=""
-                                                        className="h-24"
-                                                        onClick={() =>
-                                                            setImages((p) => ({
-                                                                ...p,
-                                                                isOpen: true,
-                                                                currentImage: i,
-                                                            }))
-                                                        }
-                                                    />
-                                                    {/* <div className="text-sm pt-2">
-                  <p>
-                    By <b>{userInfo.username}</b>
-                  </p>
-                </div> */}
-                                                </div>
+                                                <DocView
+                                                    button={
+                                                        <div
+                                                            key={i}
+                                                            className="relative rounded-md p-2 cursor-pointer bg-gray-100 hover:bg-gray-200 group w-[100px] h-[100px]"
+                                                        >
+                                                            <p
+                                                                className="absolute top-[-2px] right-[-2px] px-1.5 py-0 rounded-full text-center leading-5 text-red-500 border-0 border-red-500 bg-white duration-200 invisible group-hover:visible"
+                                                                onClick={() =>
+                                                                    handle_attach_delete(
+                                                                        file
+                                                                    )
+                                                                }
+                                                            >
+                                                                x
+                                                            </p>
+                                                            <img
+                                                                src={file}
+                                                                alt={`can't preview ${file
+                                                                    .split('.')
+                                                                    .pop()} file`}
+                                                                className="w-full h-full"
+                                                                onClick={() => {
+                                                                    setImages(
+                                                                        (
+                                                                            p
+                                                                        ) => ({
+                                                                            ...p,
+                                                                            isOpen: true,
+                                                                            currentImage:
+                                                                                i,
+                                                                        })
+                                                                    );
+                                                                }}
+                                                            />{' '}
+                                                            {/* <div className="text-sm pt-2">
+                                                            <p>
+                                                                By{' '}
+                                                                <b>
+                                                                    {
+                                                                        userInfo.username
+                                                                    }
+                                                                </b>
+                                                            </p>
+                                                        </div> */}
+                                                        </div>
+                                                    }
+                                                    docs={docs}
+                                                    index={i}
+                                                />
                                             )
                                         )}
                                 </div>
                                 <div className="py-2 px-1">
-                                    <DragDrop
+                                    <DragDropFile
                                         setAttachFileLoading={
                                             setAttachFileLoading
                                         }
@@ -1009,7 +1038,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     deleteAttachFile={deleteAttachFile}
                 />
             )}
-            {localCard?.attachments && (
+
+            {/* {localCard?.attachments && (
+                <DocView docs={docs} />
+
                 <ImgsViewer
                     imgs={
                         localCard?.attachments.map((img) => ({ src: img })) ||
@@ -1031,7 +1063,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     }
                     onClose={() => setImages((p) => ({ ...p, isOpen: false }))}
                 />
-            )}
+            )} */}
         </React.Fragment>
     );
 };

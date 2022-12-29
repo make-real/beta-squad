@@ -1,10 +1,9 @@
 import { FolderOpenIcon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 
-const fileTypes = ['JPG', 'PNG', 'GIF'];
+// const fileTypes = ['JPEG', 'JPG', 'PNG', 'GIF'];
 
-function DragDrop({
+function DragDropFile({
     setAttachFileLoading,
     cardAttachmentUpdateApiCall,
     selectedSpaceId,
@@ -21,6 +20,7 @@ function DragDrop({
     // };
 
     const handle_card_attachments = async (files) => {
+        console.log(files);
         const formData = new FormData();
 
         for (const file of files) {
@@ -56,16 +56,17 @@ function DragDrop({
         </div>
     );
 
+
     return (
         <FileUploader
             className="max-w-full w-full"
-            multiple
+            multiple={true}
             handleChange={handle_card_attachments}
             name="file"
-            types={fileTypes}
+            // types={fileTypes}
             children={stack2}
         />
     );
 }
 
-export default DragDrop;
+export default DragDropFile;
