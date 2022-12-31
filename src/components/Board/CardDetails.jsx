@@ -22,7 +22,7 @@ import Button from '../Button';
 // import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 // import draftToHtml from 'draftjs-to-html';
 import CardMessage from './CardComment';
-import ImgsViewer from 'react-images-viewer';
+// import ImgsViewer from 'react-images-viewer';
 import { formatDate } from '../../util/date';
 import TaskDatePicker from '../TaskDatePicker';
 import {
@@ -40,6 +40,8 @@ import { useStyleContext } from '../../context/StyleContext';
 import DragDropFile from '../DragDropFile';
 import { ClipLoader } from 'react-spinners';
 import DocView from '../DocView';
+import { GrDocumentPdf } from 'react-icons/gr';
+import PreviewDoc from './PreviewDoc';
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     const { workspace_id, squadId: listID, id } = useParams();
@@ -965,35 +967,25 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                                             >
                                                                 x
                                                             </p>
-                                                            <img
-                                                                src={file}
-                                                                alt={`can't preview ${file
-                                                                    .split('.')
-                                                                    .pop()} file`}
-                                                                className="w-full h-full"
-                                                                onClick={() => {
-                                                                    setImages(
-                                                                        (
-                                                                            p
-                                                                        ) => ({
-                                                                            ...p,
-                                                                            isOpen: true,
-                                                                            currentImage:
-                                                                                i,
-                                                                        })
-                                                                    );
-                                                                }}
-                                                            />{' '}
-                                                            {/* <div className="text-sm pt-2">
-                                                            <p>
-                                                                By{' '}
-                                                                <b>
-                                                                    {
-                                                                        userInfo.username
+                                                            <div className="w-full h-full">
+                                                                <PreviewDoc
+                                                                    file={file}
+                                                                    i={i}
+                                                                    setImages={
+                                                                        setImages
                                                                     }
-                                                                </b>
-                                                            </p>
-                                                        </div> */}
+                                                                />
+                                                            </div>
+                                                            {/* <div className="text-sm pt-2">
+                                                                <p>
+                                                                    By{' '}
+                                                                    <b>
+                                                                        {
+                                                                            userInfo.username
+                                                                        }
+                                                                    </b>
+                                                                </p>
+                                                            </div>  */}
                                                         </div>
                                                     }
                                                     docs={docs}
