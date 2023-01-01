@@ -39,8 +39,6 @@ const TopNav = () => {
 const NotLoggedInTopNav = () => {
     const location = useLocation();
     const currentPage = location.pathname === "/login" ? "login" : location.pathname === "/register" ? "register" : "login";
-    console.log(location.pathname === "/register");
-    console.log(currentPage);
     return (
         <div className="flex justify-between w-full py-[15px] px-[50px]">
             <div className="flex items-center gap-2">

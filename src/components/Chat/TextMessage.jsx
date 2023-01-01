@@ -277,8 +277,6 @@ const TextMessage = ({ messageToRespond, setMessageToRespond, forComment, commen
     const userId = JSON.parse(localStorage.getItem("userId"));
 
     useEffect(() => {
-        console.log(socket);
-
         socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
             console.log(msg);
             if (msg.to === selectedSpaceId) {

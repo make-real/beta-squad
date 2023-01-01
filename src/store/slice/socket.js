@@ -11,8 +11,6 @@ export const socketSlice = createSlice({
     initialState,
     reducers: {
         initializeSocket: (state) => {
-            console.log("Initializinfg socket");
-
             if (state.socket === null) {
                 state.socket = io(config.BASE_URL, {
                     auth: {

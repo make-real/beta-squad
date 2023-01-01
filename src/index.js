@@ -52,8 +52,7 @@ requestNotificationPermission();
 // }
 
 root.render(
-    // <React.StrictMode>
-    <SocketContext socket={socket}>
+    <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
                 <BoardCardContext>
@@ -65,6 +64,5 @@ root.render(
                 </BoardCardContext>
             </BrowserRouter>
         </Provider>
-    </SocketContext>
-    // </React.StrictMode>
+    </React.StrictMode>
 );
