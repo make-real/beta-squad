@@ -14,13 +14,7 @@ import {
     PageNotFound,
     CardAsList,
 } from "./components";
-import {
-    Routes,
-    Route,
-    Navigate,
-    useParams,
-    useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useParams, useNavigate } from "react-router-dom";
 import { fetchUserToken } from "./util/fetchUserToken";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -42,12 +36,10 @@ import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
 import { get_space_data, get_workspace_data } from "./api/workSpace";
 import { addSpace } from "./store/slice/space";
 import SquadScreen from "./components/Home/SquadScreen";
-import {
-    setSelectedSpaceObject,
-    setSelectedSpaceId,
-} from "./store/slice/space";
+import { setSelectedSpaceObject, setSelectedSpaceId } from "./store/slice/space";
 import { initFullSidebar } from "./store/slice/screen";
 import NavigateUser from "./components/Home/NavigateUser";
+import { initializeSocket } from "./store/slice/socket";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -81,6 +73,10 @@ const ProjectRoute = ({ children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(initializeSocket());
+    }, []);
+
+    useEffect(() => {
         dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [dispatch, params]);
 
@@ -110,11 +106,7 @@ const SquadAuth = ({ children }) => {
 
     useEffect(() => {
         dispatch(setSelectedSpaceId(params.squadId));
-        dispatch(
-            setSelectedSpaceObject(
-                allSpaces.find((space) => space._id === params.squadId)
-            )
-        );
+        dispatch(setSelectedSpaceObject(allSpaces.find((space) => space._id === params.squadId)));
         dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [params, dispatch]);
 
@@ -135,12 +127,8 @@ const CardRoute = ({ children }) => {
 
 const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-    const currentWorkspace = useSelector(
-        (state) => state.workspace.currentWorkspace
-    );
-    const selectedSpaceObj = useSelector(
-        (state) => state.space.selectedSpaceObj
-    );
+    const currentWorkspace = useSelector((state) => state.workspace.currentWorkspace);
+    const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
     const fetchSpaces = async () => {};
     const dispatch = useDispatch();
 
@@ -345,10 +333,7 @@ const App = () => {
                             element={
                                 <ProtectedRoute>
                                     <SquadAuth>
-                                        <SquadScreen
-                                            currentWorkspace={currentWorkspace}
-                                            selectedSpace={selectedSpaceObj}
-                                        />
+                                        <SquadScreen currentWorkspace={currentWorkspace} selectedSpace={selectedSpaceObj} />
                                     </SquadAuth>
                                 </ProtectedRoute>
                             }

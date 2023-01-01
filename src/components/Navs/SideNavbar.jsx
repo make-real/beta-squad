@@ -9,21 +9,9 @@ import { useDispatch } from "react-redux";
 import FolderIcon from "../../assets/icon_component/Folder";
 import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-    get_space_data,
-    get_workspace_data,
-    get_workspace_member,
-} from "../../api/workSpace";
-import {
-    addWorkSpace,
-    addWorkspaceMembers,
-    setSelectedWorkSpaceId,
-} from "../../store/slice/workspace";
-import {
-    addSpace,
-    setSelectedSpaceId,
-    setSelectedSpaceObject,
-} from "../../store/slice/space";
+import { get_space_data, get_workspace_data, get_workspace_member } from "../../api/workSpace";
+import { addWorkSpace, addWorkspaceMembers, setSelectedWorkSpaceId } from "../../store/slice/workspace";
+import { addSpace, setSelectedSpaceId, setSelectedSpaceObject } from "../../store/slice/space";
 import { useSelector } from "react-redux";
 import BriefCaseIcon from "../../assets/briefcase.svg";
 import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
@@ -35,11 +23,8 @@ import { getAvatarUrl } from "../../util/getAvatarUrl";
 const SideNavbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const currentWorkspace = useSelector(
-        (state) => state.workspace.currentWorkspace
-    );
-    const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
-        useState(false);
+    const currentWorkspace = useSelector((state) => state.workspace.currentWorkspace);
+    const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
     const fullSidebar = useSelector((state) => state.screen.fullSidebar);
     const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
     const [newWorkSpace, setNewWorkSpace] = useState(false);
@@ -50,9 +35,7 @@ const SideNavbar = () => {
     const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
     const { selectedSpace, allSpaces } = useSelector((state) => state.space);
     const workspaces = useSelector((state) => state.workspace.workspaces);
-    const selectedWorkspace = useSelector(
-        (state) => state.workspace.selectedWorkspace
-    );
+    const selectedWorkspace = useSelector((state) => state.workspace.selectedWorkspace);
     const [selectedChat, setSelectedChat] = useState(null);
 
     const members = useSelector((state) => state.workspace.workspaceMembers);
@@ -61,8 +44,7 @@ const SideNavbar = () => {
 
     const params = useParams();
 
-    const manageWorkspacePage =
-        location.pathname === "/settings/manage-workspace";
+    const manageWorkspacePage = location.pathname === "/settings/manage-workspace";
     const profilePage = location.pathname === "/settings/profile";
     const defaultPage = location.pathname.startsWith("/projects");
 
@@ -96,9 +78,7 @@ const SideNavbar = () => {
                     dispatch(setSelectedWorkSpaceId(params.workspace_id));
                 } else {
                     if (!currentWorkspace) {
-                        dispatch(
-                            setSelectedWorkSpaceId(data.workspaces[0]?._id)
-                        );
+                        dispatch(setSelectedWorkSpaceId(data.workspaces[0]?._id));
                     }
                 }
             } catch (error) {
@@ -112,9 +92,7 @@ const SideNavbar = () => {
     useEffect(() => {
         const getSpaceData = async () => {
             try {
-                const { data } = await get_space_data(
-                    params.workspace_id ?? selectedWorkspace
-                );
+                const { data } = await get_space_data(params.workspace_id ?? selectedWorkspace);
 
                 dispatch(addSpace(data.spaces));
 
@@ -136,21 +114,15 @@ const SideNavbar = () => {
         JSON.parse(localStorage.getItem("stepFinished")) === true
             ? false
             : (workspaces?.length === 1 && allSpaces?.length === 0) ||
-              (allSpaces[0]?.name === "Onboarding" &&
-                  [...members.filter((m) => m?._id !== user?._id)].length ===
-                      0);
+              (allSpaces[0]?.name === "Onboarding" && [...members.filter((m) => m?._id !== user?._id)].length === 0);
 
     const firstTimeSquad =
         JSON.parse(localStorage.getItem("stepFinished")) === true
             ? false
-            : (allSpaces?.length === 0 ||
-                  allSpaces[0]?.name === "Onboarding") &&
-              allSpaces.length === 1;
+            : (allSpaces?.length === 0 || allSpaces[0]?.name === "Onboarding") && allSpaces.length === 1;
 
     const firstTimeMember =
-        JSON.parse(localStorage.getItem("stepFinished")) === true
-            ? false
-            : [...members.filter((m) => m?._id !== user?._id)].length === 0;
+        JSON.parse(localStorage.getItem("stepFinished")) === true ? false : [...members.filter((m) => m?._id !== user?._id)].length === 0;
 
     const squadOnDrop = (e) => {
         e.preventDefault();
@@ -162,12 +134,8 @@ const SideNavbar = () => {
 
         const newOrder = [...allSpaces];
 
-        const targetIndex = newOrder.indexOf(
-            newOrder.find((s) => s._id === targetId)
-        );
-        const draggedIndex = newOrder.indexOf(
-            newOrder.find((s) => s._id === draggedId)
-        );
+        const targetIndex = newOrder.indexOf(newOrder.find((s) => s._id === targetId));
+        const draggedIndex = newOrder.indexOf(newOrder.find((s) => s._id === draggedId));
 
         newOrder.splice(draggedIndex, 1);
         newOrder.splice(
@@ -182,31 +150,14 @@ const SideNavbar = () => {
         <>
             <div
                 className={`${
-                    fullSidebar
-                        ? "min-w-[225px] w-[225px]"
-                        : "w-max items-center"
+                    fullSidebar ? "min-w-[225px] w-[225px]" : "w-max items-center"
                 } bg-[#2C3782] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
             >
-                <div
-                    className={`flex items-center justify-between mb-[32px] ${
-                        fullSidebar
-                            ? "pl-[25px] pr-[10px]"
-                            : "pl-[25px] pr-[25px]"
-                    }`}
-                >
+                <div className={`flex items-center justify-between mb-[32px] ${fullSidebar ? "pl-[25px] pr-[10px]" : "pl-[25px] pr-[25px]"}`}>
                     {fullSidebar && (
-                        <Link
-                            to={`/projects/${selectedWorkspace}`}
-                            className="flex items-center gap-4"
-                        >
-                            <img
-                                src={LogoIcon}
-                                alt=""
-                                className="w-[28px] h-[28px]"
-                            />
-                            <h1 className="text-[#C4CEFE] text-[20px]">
-                                TaskM
-                            </h1>
+                        <Link to={`/projects/${selectedWorkspace}`} className="flex items-center gap-4">
+                            <img src={LogoIcon} alt="" className="w-[28px] h-[28px]" />
+                            <h1 className="text-[#C4CEFE] text-[20px]">TaskM</h1>
                         </Link>
                     )}
                     <div
@@ -216,9 +167,7 @@ const SideNavbar = () => {
                         }}
                     >
                         <CloseMenuBtn
-                            className={`text-white w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
-                                fullSidebar ? "" : "rotate-180"
-                            }`}
+                            className={`text-white w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${fullSidebar ? "" : "rotate-180"}`}
                         />
                     </div>
                 </div>
@@ -228,49 +177,22 @@ const SideNavbar = () => {
                         <div
                             className={`mb-[15px] bg-[#6576FF20] flex items-center cursor-pointer py-[12px] justify-between 
                                     } 
-                                ${
-                                    fullSidebar
-                                        ? "pl-[25px] pr-[10px]"
-                                        : "pl-[25px] pr-[25px]"
-                                }`}
+                                ${fullSidebar ? "pl-[25px] pr-[10px]" : "pl-[25px] pr-[25px]"}`}
                         >
                             <div className="flex items-center gap-3">
-                                <img
-                                    className="w-[25px] h-[25px]"
-                                    src={BriefCaseIcon}
-                                    alt=""
-                                />
+                                <img className="w-[25px] h-[25px]" src={BriefCaseIcon} alt="" />
 
-                                {fullSidebar && (
-                                    <p className="text-[14px] text-[#C4CEFE] font-semibold">
-                                        Workspaces
-                                    </p>
-                                )}
+                                {fullSidebar && <p className="text-[14px] text-[#C4CEFE] font-semibold">Workspaces</p>}
                             </div>
-                            {fullSidebar && (
-                                <img
-                                    onClick={() =>
-                                        setShowCreateWorkspaceModal(true)
-                                    }
-                                    src={BorderedPlusIcon}
-                                    alt=""
-                                />
-                            )}
+                            {fullSidebar && <img onClick={() => setShowCreateWorkspaceModal(true)} src={BorderedPlusIcon} alt="" />}
                         </div>
 
-                        {workspaces?.map((workspace) => (
-                            <Link
-                                to={`/projects/${workspace._id}`}
-                                className="flex flex-col gap-3"
-                            >
+                        {workspaces?.map((workspace, idx) => (
+                            <Link key={idx} to={`/projects/${workspace._id}`} className="flex flex-col gap-3">
                                 <div
                                     className={`flex items-center gap-3 cursor-pointer py-[12px] 
                                     } 
-                                ${
-                                    fullSidebar
-                                        ? "pl-[25px]"
-                                        : "pl-[25px] pr-[25px]"
-                                }`}
+                                ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                                 >
                                     {workspace?.logo ? (
                                         <div className="w-[25px] h-[25px] ">
@@ -285,11 +207,7 @@ const SideNavbar = () => {
                                             {workspace?.name.charAt(0)}
                                         </div>
                                     )}
-                                    {fullSidebar && (
-                                        <p className="text-[14px] text-white">
-                                            {workspace?.name}
-                                        </p>
-                                    )}
+                                    {fullSidebar && <p className="text-[14px] text-white">{workspace?.name}</p>}
                                 </div>
                             </Link>
                         ))}
@@ -301,21 +219,11 @@ const SideNavbar = () => {
                     <div
                         className={`mb-[15px] bg-[#6576FF20] flex items-center cursor-pointer py-[12px] justify-between 
                                     } 
-                                ${
-                                    fullSidebar
-                                        ? "pl-[25px] pr-[10px]"
-                                        : "pl-[25px] pr-[25px]"
-                                }`}
+                                ${fullSidebar ? "pl-[25px] pr-[10px]" : "pl-[25px] pr-[25px]"}`}
                     >
                         <div className="flex items-center gap-3">
                             <div className="w-[30px] h-[30px] flex items-center justify-center bg-[#2C3782] rounded-full">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         opacity="0.4"
                                         d="M12 2C9.38 2 7.25 4.13 7.25 6.75C7.25 9.32 9.26 11.4 11.88 11.49C11.96 11.48 12.04 11.48 12.1 11.49C12.12 11.49 12.13 11.49 12.15 11.49C12.16 11.49 12.16 11.49 12.17 11.49C14.73 11.4 16.74 9.32 16.75 6.75C16.75 4.13 14.62 2 12 2Z"
@@ -328,11 +236,7 @@ const SideNavbar = () => {
                                 </svg>
                             </div>
 
-                            {fullSidebar && (
-                                <p className="text-[14px] text-[#FFFFFF] font-semibold">
-                                    Profile
-                                </p>
-                            )}
+                            {fullSidebar && <p className="text-[14px] text-[#FFFFFF] font-semibold">Profile</p>}
                         </div>
                     </div>
                 )}
@@ -348,18 +252,8 @@ const SideNavbar = () => {
                                 navigate(`/projects/${selectedWorkspace}`);
                                 setSelectedChat(null);
                             }}
-                            className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                                selectedChat
-                                    ? ""
-                                    : selectedSpace
-                                    ? ""
-                                    : "bg-[#6576FF10]"
-                            } 
-                                ${
-                                    fullSidebar
-                                        ? "pl-[25px]"
-                                        : "pl-[25px] pr-[25px]"
-                                }`}
+                            className={`flex items-center gap-3 cursor-pointer py-[10px] ${selectedChat ? "" : selectedSpace ? "" : "bg-[#6576FF10]"} 
+                                ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                         >
                             {currentWorkspace?.logo ? (
                                 <div className="w-[32px] h-[32px] ">
@@ -374,11 +268,7 @@ const SideNavbar = () => {
                                     {currentWorkspace?.name.charAt(0)}
                                 </div>
                             )}
-                            {fullSidebar && (
-                                <p className="text-[14px] text-white">
-                                    {currentWorkspace?.name}
-                                </p>
-                            )}
+                            {fullSidebar && <p className="text-[14px] text-white">{currentWorkspace?.name}</p>}
                         </div>
                     </div>
                 )}
@@ -386,12 +276,8 @@ const SideNavbar = () => {
                 {defaultPage && (
                     <div className="mt-[16px]">
                         {fullSidebar && (
-                            <div
-                                className={`flex items-center justify-between pl-[17px] pr-[10px]`}
-                            >
-                                <h2 className="text-[#6576FF] opacity-80">
-                                    Your Squad
-                                </h2>
+                            <div className={`flex items-center justify-between pl-[17px] pr-[10px]`}>
+                                <h2 className="text-[#6576FF] opacity-80">Your Squad</h2>
                                 <div className="flex items-center gap-2">
                                     {/* <div
                                         className="w-max"
@@ -405,87 +291,46 @@ const SideNavbar = () => {
                                             className="cursor-pointer"
                                         />
                                     </div> */}
-                                    <div
-                                        className="w-max"
-                                        onClick={() =>
-                                            setShowCreateSquadModal(true)
-                                        }
-                                    >
-                                        <img
-                                            src={BorderedPlusIcon}
-                                            alt=""
-                                            className="cursor-pointer"
-                                        />
+                                    <div className="w-max" onClick={() => setShowCreateSquadModal(true)}>
+                                        <img src={BorderedPlusIcon} alt="" className="cursor-pointer" />
                                     </div>
                                 </div>
                             </div>
                         )}
-                        {!fullSidebar && (
-                            <h1 className="text-[#6576FF80] text-center">
-                                Squad
-                            </h1>
-                        )}
+                        {!fullSidebar && <h1 className="text-[#6576FF80] text-center">Squad</h1>}
                         {/* Squads List */}
                         {(!isFirstTime || !firstTimeSquad) && (
                             <div className="mt-[10px] flex flex-col">
-                                {allSpaces.map((space) => {
+                                {allSpaces.map((space, idx) => {
                                     if (space.name === "Onboarding") return;
                                     return (
                                         <div
+                                            key={idx}
                                             draggable={true}
                                             onDragStart={(e) => {
-                                                e.dataTransfer.setData(
-                                                    "id",
-                                                    e.target.getAttribute(
-                                                        "data-id"
-                                                    )
-                                                );
+                                                e.dataTransfer.setData("id", e.target.getAttribute("data-id"));
                                             }}
                                             onDragOver={(e) => {
                                                 e.preventDefault();
                                             }}
                                             onDragLeave={(e) => {
-                                                e.target.classList.remove(
-                                                    "border-b-2"
-                                                );
-                                                e.target.classList.remove(
-                                                    "border-[#6576FF]"
-                                                );
+                                                e.target.classList.remove("border-b-2");
+                                                e.target.classList.remove("border-[#6576FF]");
                                             }}
                                             onDragEnter={(e) => {
-                                                e.target.classList.add(
-                                                    "border-b-2"
-                                                );
-                                                e.target.classList.add(
-                                                    "border-[#6576FF]"
-                                                );
+                                                e.target.classList.add("border-b-2");
+                                                e.target.classList.add("border-[#6576FF]");
                                             }}
                                             onDrop={squadOnDrop}
                                             data-id={space._id}
                                             className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                                                selectedSpace === space._id
-                                                    ? "bg-[#6576FF10]"
-                                                    : ""
-                                            }  ${
-                                                fullSidebar
-                                                    ? "pl-[25px]"
-                                                    : "pl-[25px] pr-[25px]"
-                                            }`}
+                                                selectedSpace === space._id ? "bg-[#6576FF10]" : ""
+                                            }  ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                                             onClick={() => {
-                                                dispatch(
-                                                    setSelectedSpaceId(
-                                                        space._id
-                                                    )
-                                                );
-                                                dispatch(
-                                                    setSelectedSpaceObject(
-                                                        space
-                                                    )
-                                                );
+                                                dispatch(setSelectedSpaceId(space._id));
+                                                dispatch(setSelectedSpaceObject(space));
                                                 setSelectedChat(null);
-                                                navigate(
-                                                    `/projects/${selectedWorkspace}/squad/${space._id}`
-                                                );
+                                                navigate(`/projects/${selectedWorkspace}/squad/${space._id}`);
                                             }}
                                         >
                                             {space.privacy === "public" ? (
@@ -503,11 +348,7 @@ const SideNavbar = () => {
                                                     className={`w-[20px] h-[20px] pointer-events-none`}
                                                 />
                                             )}
-                                            {fullSidebar && (
-                                                <p className="text-[14px] text-[#C4CEFE] pointer-events-none">
-                                                    {space.name}
-                                                </p>
-                                            )}
+                                            {fullSidebar && <p className="text-[14px] text-[#C4CEFE] pointer-events-none">{space.name}</p>}
                                         </div>
                                     );
                                 })}
@@ -521,69 +362,36 @@ const SideNavbar = () => {
                           <div className="mt-[44px]">
                               {fullSidebar && (
                                   <div className="flex items-center justify-between pl-[17px] pr-[10px]">
-                                      <h2 className="text-[#6576FF] opacity-80">
-                                          Chats
-                                      </h2>
+                                      <h2 className="text-[#6576FF] opacity-80">Chats</h2>
                                       <div className="flex items-center gap-2">
-                                          <img
-                                              src={SearchIcon}
-                                              alt="search"
-                                              className="cursor-pointer"
-                                          />
+                                          <img src={SearchIcon} alt="search" className="cursor-pointer" />
                                       </div>
                                   </div>
                               )}
-                              {!fullSidebar && (
-                                  <h1 className="text-[#6576FF80] text-center">
-                                      Chats
-                                  </h1>
-                              )}
+                              {!fullSidebar && <h1 className="text-[#6576FF80] text-center">Chats</h1>}
                               {/* Chats List */}
                               <div className="mt-[10px] flex flex-col">
-                                  {members.map((member) =>
+                                  {members.map((member, idx) =>
                                       member?._id !== userId ? (
                                           <div
+                                              key={idx}
                                               className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
-                                                  selectedChat?._id ===
-                                                  member?._id
-                                                      ? "bg-[#6576FF10]"
-                                                      : ""
-                                              } ${
-                                                  fullSidebar
-                                                      ? "pl-[25px]"
-                                                      : "pl-[25px] pr-[25px]"
-                                              }`}
+                                                  selectedChat?._id === member?._id ? "bg-[#6576FF10]" : ""
+                                              } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                                               onClick={() => {
                                                   // openChat(member._id)
-                                                  dispatch(
-                                                      setSelectedSpaceId(null)
-                                                  );
-                                                  dispatch(
-                                                      setSelectedSpaceObject(
-                                                          null
-                                                      )
-                                                  );
+                                                  dispatch(setSelectedSpaceId(null));
+                                                  dispatch(setSelectedSpaceObject(null));
                                                   setSelectedChat(member);
-                                                  navigate(
-                                                      `/projects/${selectedWorkspace}/chat/${member?._id}`
-                                                  );
+                                                  navigate(`/projects/${selectedWorkspace}/chat/${member?._id}`);
                                               }}
                                           >
                                               <img
-                                                  src={
-                                                      member?.avatar ??
-                                                      getAvatarUrl(
-                                                          member?.fullName
-                                                      )
-                                                  }
+                                                  src={member?.avatar ?? getAvatarUrl(member?.fullName)}
                                                   className="w-[28px] h-[28px] rounded-full border object-cover"
                                                   alt=""
                                               />
-                                              {fullSidebar && (
-                                                  <p className="text-[#C4CEFE] text-[14px]">
-                                                      {member.fullName}
-                                                  </p>
-                                              )}
+                                              {fullSidebar && <p className="text-[#C4CEFE] text-[14px]">{member.fullName}</p>}
                                           </div>
                                       ) : null
                                   )}
@@ -592,37 +400,19 @@ const SideNavbar = () => {
                       )
                     : null}
                 {/* Footer Copyright */}
-                <p
-                    className={`text-[#C4CEFE] ${
-                        fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"
-                    } mt-auto mb-[16px]`}
-                >
+                <p className={`text-[#C4CEFE] ${fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"} mt-auto mb-[16px]`}>
                     &copy;
-                    {fullSidebar && (
-                        <span className="ml-[10px]">Taskmanager 2022</span>
-                    )}
+                    {fullSidebar && <span className="ml-[10px]">Taskmanager 2022</span>}
                 </p>
             </div>
 
             {spaceSearchModal && (
-                <ModalSearchSpace
-                    allSpace={allSpaces}
-                    setSpaceSearchModal={setSpaceSearchModal}
-                    setCreateSpaceModal={setCreateSpaceModal}
-                />
+                <ModalSearchSpace allSpace={allSpaces} setSpaceSearchModal={setSpaceSearchModal} setCreateSpaceModal={setCreateSpaceModal} />
             )}
 
-            {showCreateWorkspaceModal && (
-                <CreateWorkspaceModal
-                    setShowCreateWorkspaceModal={setShowCreateWorkspaceModal}
-                />
-            )}
+            {showCreateWorkspaceModal && <CreateWorkspaceModal setShowCreateWorkspaceModal={setShowCreateWorkspaceModal} />}
 
-            {showCreateSquadModal && (
-                <CreateSquadModal
-                    setShowCreateSquadModal={setShowCreateSquadModal}
-                />
-            )}
+            {showCreateSquadModal && <CreateSquadModal setShowCreateSquadModal={setShowCreateSquadModal} />}
         </>
     );
 };
