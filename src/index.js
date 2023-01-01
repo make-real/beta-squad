@@ -11,21 +11,10 @@ import "./style/index.css";
 import "reactjs-popup/dist/index.css";
 import io from "socket.io-client";
 import { SocketContext } from "./context/SocketContext";
-import { addReaction, addSingleMessage, removeMessage } from "./store/slice/message";
-import { requestNotificationPermission, sentLocalNotification } from "./util/helpers";
-import config from "./config";
-import { initializeSocket } from "./store/slice/socket";
-
+import { requestNotificationPermission } from "./util/helpers";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// Init Sockeßt connection
-const token = JSON.parse(localStorage.getItem("jwt"));
-
 requestNotificationPermission();
-
-let socket;
-
-const userId = JSON.parse(localStorage.getItem("userId"));
 
 // if (token) {
 //     socket = io(config.BASE_URL, {

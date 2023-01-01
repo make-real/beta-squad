@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
 import workspace from "./slice/workspace";
 import space from "./slice/space";
 import userInfo from "./slice/userInfo";
@@ -24,6 +24,10 @@ const rootReducer = combineReducers({
 const store = configureStore({
     reducer: rootReducer,
     devTools: true,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 export default store;

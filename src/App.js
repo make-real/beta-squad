@@ -73,10 +73,6 @@ const ProjectRoute = ({ children }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(initializeSocket());
-    }, []);
-
-    useEffect(() => {
         dispatch(setSelectedWorkSpaceId(params.workspace_id));
     }, [dispatch, params]);
 
@@ -133,6 +129,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(initializeSocket());
         dispatch(initFullSidebar());
     }, []);
 
