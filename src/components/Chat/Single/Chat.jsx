@@ -1,72 +1,57 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { get_single_messages } from '../../../api/chat'
-import { useSelector } from 'react-redux'
-import { addBulkMessagePrivate } from '../../../store/slice/privateChat'
-import { useDispatch } from 'react-redux'
-import PrivateTextMessage from '../PrivateTextMessage'
-import PrivateMessageBox from '../PrivateMessageBox'
-import BackArrowIcon from '../../../assets/back_arrow.svg'
-import SearchIcon from '../../../assets/search.svg'
-import VideoCallIcon from '../../../assets/video_call.svg'
-import AudioCallIcon from '../../../assets/audio_call.svg'
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { get_single_messages } from "../../../api/chat";
+import { useSelector } from "react-redux";
+import { addBulkMessagePrivate } from "../../../store/slice/privateChat";
+import { useDispatch } from "react-redux";
+import PrivateTextMessage from "../PrivateTextMessage";
+import PrivateMessageBox from "../PrivateMessageBox";
+import BackArrowIcon from "../../../assets/back_arrow.svg";
+import SearchIcon from "../../../assets/search.svg";
+import VideoCallIcon from "../../../assets/video_call.svg";
+import AudioCallIcon from "../../../assets/audio_call.svg";
 
-import GridIcon from '../../../assets/icon_component/Grid'
-import RowVerticalIcon from '../../../assets/icon_component/RowVertical'
+import GridIcon from "../../../assets/icon_component/Grid";
+import RowVerticalIcon from "../../../assets/icon_component/RowVertical";
 
 const SingleChat = () => {
-    const { participantID } = useParams()
-    const [selectedTab, setSelectedTab] = useState('messages')
-    const [messageToRespond, setMessageToRespond] = useState()
-    const [selectedMember, setSelectedMember] = useState({})
-    const { selectedWorkspace } = useSelector((state) => state.workspace)
-    const currentWorkspace = useSelector(
-        (state) => state.workspace.currentWorkspace
-    )
-    const workspaceMembers = useSelector(
-        (state) => state.workspace.workspaceMembers
-    )
-    const [showType, setShowType] = useState('grid')
+    const { participantID, workspace_id } = useParams();
+    const [selectedTab, setSelectedTab] = useState("messages");
+    const [selectedMember, setSelectedMember] = useState({});
+    const workspaceMembers = useSelector((state) => state.workspace.workspaceMembers);
+    const [showType, setShowType] = useState("grid");
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (workspaceMembers) {
-            setSelectedMember(
-                workspaceMembers.find((value) => value._id === participantID)
-            )
+            setSelectedMember(workspaceMembers.find((value) => value._id === participantID));
         }
-    }, [workspaceMembers, participantID])
+    }, [workspaceMembers, participantID]);
 
     useEffect(() => {
-        getMessages()
-    }, [participantID, selectedWorkspace])
+        getMessages();
+    }, [participantID, workspace_id]);
 
     const getMessages = async () => {
         try {
-            console.log('Sending...')
-            const { data } = await get_single_messages(
-                selectedWorkspace,
-                participantID
-            )
+            const { data } = await get_single_messages(workspace_id, participantID);
 
-            console.log(data.message)
-
-            dispatch(addBulkMessagePrivate(data.messages.reverse()))
+            dispatch(addBulkMessagePrivate(data.messages.reverse()));
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const TabsScreen = {
         messages: <SingleChatScreen participantID={participantID} />,
         board: <></>,
-    }
+    };
 
     const TabsName = {
-        messages: 'Messages',
-        board: 'Board',
-    }
+        messages: "Messages",
+        board: "Board",
+    };
 
     return (
         <div className="bg-[#F9F9FF] w-full h-full">
@@ -82,56 +67,30 @@ const SingleChat = () => {
                                 />
                                 <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] bottom-0 right-[-4px]"></div>
                             </div>
-                            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
-                                {selectedMember?.fullName}
-                            </h2>
+                            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">{selectedMember?.fullName}</h2>
                         </div>
 
                         <div className="flex items-center">
                             <div className="flex items-center gap-[12px]">
-                                <img
-                                    src={SearchIcon}
-                                    alt="search"
-                                    className=""
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Search here"
-                                    className=" placeholder:text-[#99A6B9] border-none outline-none"
-                                />
+                                <img src={SearchIcon} alt="search" className="" />
+                                <input type="text" placeholder="Search here" className=" placeholder:text-[#99A6B9] border-none outline-none" />
                             </div>
-                            {selectedTab === 'messages' ? (
+                            {selectedTab === "messages" ? (
                                 <div className="flex items-center gap-[22px]">
                                     <div className="cursor-pointer">
-                                        <img
-                                            src={VideoCallIcon}
-                                            alt="video_call"
-                                        />
+                                        <img src={VideoCallIcon} alt="video_call" />
                                     </div>
                                     <div className="cursor-pointer">
-                                        <img
-                                            src={AudioCallIcon}
-                                            alt="audio_call"
-                                        />
+                                        <img src={AudioCallIcon} alt="audio_call" />
                                     </div>
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-[22px]">
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => setShowType('grid')}
-                                    >
-                                        <GridIcon
-                                            isSelected={showType === 'grid'}
-                                        />
+                                    <div className="cursor-pointer" onClick={() => setShowType("grid")}>
+                                        <GridIcon isSelected={showType === "grid"} />
                                     </div>
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => setShowType('stack')}
-                                    >
-                                        <RowVerticalIcon
-                                            isSelected={showType === 'stack'}
-                                        />
+                                    <div className="cursor-pointer" onClick={() => setShowType("stack")}>
+                                        <RowVerticalIcon isSelected={showType === "stack"} />
                                     </div>
                                 </div>
                             )}
@@ -139,58 +98,49 @@ const SingleChat = () => {
                     </div>
                     <div className="mt-[30px]">
                         <div className="flex items-center gap-[45px]">
-                            {Object.keys(TabsName).map((value) => {
+                            {Object.keys(TabsName).map((value, idx) => {
                                 return (
                                     <h2
+                                        key={idx}
                                         onClick={() => setSelectedTab(value)}
                                         className={`${
-                                            selectedTab === value
-                                                ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
-                                                : 'text-[#818892]'
+                                            selectedTab === value ? "border-b-2 border-b-[#6576FF] text-[#031124]" : "text-[#818892]"
                                         } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                     >
                                         {TabsName[value]}
                                     </h2>
-                                )
+                                );
                             })}
                         </div>
                     </div>
-                    <div className="w-full mt-[40px] h-full overflow-hidden">
-                        {TabsScreen[selectedTab]}
-                    </div>
+                    <div className="w-full mt-[40px] h-full overflow-hidden">{TabsScreen[selectedTab]}</div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 // Single Chat work should done here.........
-const SingleChatScreen = ({ participantID }) => {
-    const [messageToRespond, setMessageToRespond] = useState()
+const SingleChatScreen = () => {
+    const { participantID, workspace_id } = useParams();
 
-    const dispatch = useDispatch()
+    const [messageToRespond, setMessageToRespond] = useState();
 
-    const { selectedWorkspace } = useSelector((state) => state.workspace)
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        getMessages()
-    }, [participantID, selectedWorkspace])
+        getMessages();
+    }, [participantID, workspace_id]);
 
     const getMessages = async () => {
         try {
-            console.log('Sending...')
-            const { data } = await get_single_messages(
-                selectedWorkspace,
-                participantID
-            )
+            const { data } = await get_single_messages(workspace_id, participantID);
 
-            console.log(data.message)
-
-            dispatch(addBulkMessagePrivate(data.messages.reverse()))
+            dispatch(addBulkMessagePrivate(data.messages.reverse()));
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     return (
         <div className={`bg-[#ECECEC] pb-5 rounded-lg h-full flex flex-col `}>
@@ -207,24 +157,14 @@ const SingleChatScreen = ({ participantID }) => {
                 //     height: `calc(100% - ${messageToRespond ? 170 : 70}px)`,
                 // }}
                 className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll flex-1 
-                ${
-                    messageToRespond
-                        ? 'h-[calc(100%-245px)]'
-                        : 'h-[calc(100%-145px)]'
-                }
+                ${messageToRespond ? "h-[calc(100%-245px)]" : "h-[calc(100%-145px)]"}
                 `}
             >
-                <PrivateTextMessage
-                    messageToRespond={messageToRespond}
-                    setMessageToRespond={setMessageToRespond}
-                />
+                <PrivateTextMessage messageToRespond={messageToRespond} setMessageToRespond={setMessageToRespond} />
             </div>
-            <PrivateMessageBox
-                messageToRespond={messageToRespond}
-                setMessageToRespond={setMessageToRespond}
-            />
+            <PrivateMessageBox messageToRespond={messageToRespond} setMessageToRespond={setMessageToRespond} />
         </div>
-    )
-}
+    );
+};
 
-export default SingleChat
+export default SingleChat;

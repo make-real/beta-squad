@@ -2,14 +2,12 @@ import useAxios from ".";
 import { toFormData } from "../util/helpers";
 
 export const get_single_messages = (workspaceId, userId) => {
-  return useAxios.get(
-    `/chat/${workspaceId}/get-messages?participant=${userId}`
-  );
+    return useAxios.get(`/workspaces/${workspaceId}/chat/${userId}`);
 };
 
-export const send_single_message = (workspaceId, data) => {
-  // const formData = toFormData(data);
-  return useAxios.post(`/chat/${workspaceId}/send-messages`, data);
+export const send_single_message = (workspaceId, userId, data) => {
+    // const formData = toFormData(data);
+    return useAxios.post(`/workspaces/${workspaceId}/chat/${userId}`, data);
 };
 
 /**
@@ -21,9 +19,9 @@ export const send_single_message = (workspaceId, data) => {
  * @returns Promise
  */
 export const add_reaction = (spaceID, messageID, emoji) => {
-  return useAxios.put(`/spaces/${spaceID}/chat/${messageID}`, {
-    reaction: emoji,
-  });
+    return useAxios.put(`/spaces/${spaceID}/chat/${messageID}`, {
+        reaction: emoji,
+    });
 };
 
 /**
@@ -34,5 +32,5 @@ export const add_reaction = (spaceID, messageID, emoji) => {
  * @returns Promise
  */
 export const delete_message = (spaceID, messageID) => {
-  return useAxios.delete(`/spaces/${spaceID}/chat/${messageID}`);
+    return useAxios.delete(`/spaces/${spaceID}/chat/${messageID}`);
 };
