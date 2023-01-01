@@ -145,7 +145,7 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                 }
                 let config = {
                     method: "post",
-                    url: `/chat/${participantID}/send-messages`,
+                    url: `/workspaces/${workspace_id}/chat/${participantID}`,
                     sendTo: participantID,
                     data: formData,
                     headers: {
@@ -157,31 +157,8 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                     },
                 };
 
-                // const obj = {
-                //   _id: msgId,
-                //   sender: {
-                //     _id: "6385f93ae63eabf483bb732c",
-                //     fullName: user?.fullName,
-                //     username: user?.username,
-                //     avatar: user?.avatar,
-                //   },
-                //   to: selectedSpaceId,
-                //   chatHeaderRef: messageToRespond?._id,
-                //   content: {
-                //     attachments: [...formData],
-                //     mentionedUsers: [],
-                //   },
-                //   seenBy: [],
-                //   reactions: [],
-                //   createdAt: new Date(),
-                //   updatedAt: new Date(),
-                //   __v: 0,
-                // };
-
-                // dispatch(addSingleMessagePrivate(obj));
-
                 const { data } = await api(config);
-                console.log(data);
+                dispatch(addSingleMessagePrivate(data.message));
             }
 
             setUploadPercentage(0);
@@ -206,7 +183,7 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                 }
                 let config = {
                     method: "post",
-                    url: `/chat/${participantID}/send-messages`,
+                    url: `/workspaces/${workspace_id}/chat/${participantID}`,
                     data: formData,
                     headers: {
                         "content-type": "multipart/form-data",
