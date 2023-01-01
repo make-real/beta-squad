@@ -276,7 +276,7 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                             </div>
                         )}
                         {!isRecording ? (
-                            <div className="w-full flex relative z-[9999] shadow-md border bg-white rounded-lg px-3 py-2">
+                            <div className="w-full flex relative bg-[#ececec] z-[9999] border rounded-lg px-3 py-2">
                                 <MentionsInput
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}

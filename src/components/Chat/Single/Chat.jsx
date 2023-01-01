@@ -143,7 +143,7 @@ const SingleChatScreen = () => {
     };
 
     return (
-        <div className={`bg-[#ECECEC] pb-5 rounded-lg h-full flex flex-col `}>
+        <div className={`border border-[#ECECEC] pb-5 rounded-lg h-full flex flex-col `}>
             <div
                 // Previous
                 style={
