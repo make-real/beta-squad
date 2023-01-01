@@ -5,7 +5,7 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
-import { addBulkMessage, addSingleMessage } from "../../store/slice/message";
+import { addBulkMessage, addReaction, addSingleMessage } from "../../store/slice/message";
 import { populateUsers, sentLocalNotification } from "../../util/helpers";
 import images from "../../assets";
 import { add_reaction, delete_message } from "../../api/message";
@@ -288,8 +288,13 @@ const TextMessage = ({ messageToRespond, setMessageToRespond, forComment, commen
             }
         });
 
+        socket?.on("NEW_REACTION_RECEIVED", (data) => {
+            dispatch(addReaction(data));
+        });
+
         return () => {
             socket?.off("NEW_SPACE_MESSAGE_RECEIVED");
+            socket?.off("NEW_REACTION_RECEIVED");
         };
     }, [socket]);
 
