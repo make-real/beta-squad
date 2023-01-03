@@ -99,7 +99,7 @@ const Profile = () => {
                         Profile
                     </p>
                 </div> */}
-                <div className="w-full h-full bg-white rounded-[16px] pt-[30px] pb-[50px] px-[40px] flex flex-col">
+                <div className="w-full h-full bg-white rounded-[16px] pt-[30px] pb-[50px] px-[40px] flex flex-col overflow-auto no-scrollbar">
                     <h1 className="text-[#424D5B] text-[20px] leading-[25px] font-semibold">
                         Profile
                     </h1>

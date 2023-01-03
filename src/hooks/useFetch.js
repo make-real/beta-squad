@@ -61,9 +61,19 @@ const useFetch = (endPoint) => {
 export const userSignUp = (userInfo) =>
     api.post('/user-auth/sign-up', userInfo);
 export const userSignIn = (userInfo) => api.post('/user-auth/login', userInfo);
+
+export const userRecoverPassword = (email) =>
+    api.post('/user-auth/recover-password', email);
+export const verifyRecoverPassword = (code) =>
+    api.post('/user-auth/recover-password/code', code);
+export const recoverPassword = (code) =>
+    api.post('/user-auth/recover-password/password-reset', code);
+
 export const userLogOut = (_) => api.delete('/user-auth/logout');
 export const accountVerification = (code) =>
     api.post('/user-auth/account-verification', code);
+export const resendVerificationCode = (email) =>
+    api.post('/user-auth/resend-verification-code', email);
 
 // GET Methods
 export const getUserProfileInfo = (userId) =>
