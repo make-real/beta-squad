@@ -13,13 +13,41 @@ import AudioCallIcon from "../../../assets/audio_call.svg";
 
 import GridIcon from "../../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../../assets/icon_component/RowVertical";
+import Draggable from "react-draggable";
+import VideoOff from "../../../assets/icon_component/VideoOff";
+import MicrophoneOn from "../../../assets/icon_component/MicrophoneOn";
+import CallEnd from "../../../assets/icon_component/CallEnd";
+import More from "../../../assets/icon_component/More";
+import Folder from "../../../assets/icon_component/Folder";
 
 const SingleChat = () => {
     const { participantID, workspace_id } = useParams();
     const [selectedTab, setSelectedTab] = useState("messages");
     const [selectedMember, setSelectedMember] = useState({});
     const workspaceMembers = useSelector((state) => state.workspace.workspaceMembers);
+    const socket = useSelector((state) => state?.socket?.socket);
     const [showType, setShowType] = useState("grid");
+    const [call, setCall] = useState(false);
+
+    const startCall = () => {
+        setCall(true);
+        socket.emit("START_CALL", selectedMember._id);
+    };
+
+    useEffect(() => {
+        socket?.on("ON_CALL", () => setCall(true));
+        socket?.on("ON_CALL_END", () => setCall(false));
+
+        return () => {
+            socket?.off("ON_CALL");
+            socket?.off("ON_CALL_END");
+        };
+    }, [socket]);
+
+    const endCall = () => {
+        setCall(false);
+        socket.emit("END_CALL", selectedMember._id);
+    };
 
     const dispatch = useDispatch();
 
@@ -76,13 +104,40 @@ const SingleChat = () => {
                                 <input type="text" placeholder="Search here" className=" placeholder:text-[#99A6B9] border-none outline-none" />
                             </div>
                             {selectedTab === "messages" ? (
-                                <div className="flex items-center gap-[22px]">
-                                    <div className="cursor-pointer">
-                                        <img src={VideoCallIcon} alt="video_call" />
+                                <div className="flex items-center gap-[22px] relative">
+                                    <div className="cursor-pointer" onClick={startCall}>
+                                        <img src={VideoCallIcon} alt="video_call"  />
                                     </div>
-                                    <div className="cursor-pointer">
+                                    <div className="cursor-pointer" onClick={startCall} >
                                         <img src={AudioCallIcon} alt="audio_call" />
                                     </div>
+
+                                    {call && (
+                                        <Draggable>
+                                            <div className="absolute bg-white  drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)] right-0 -bottom-[90px] p-5 rounded-xl z-[1000] flex cursor-move">
+                                                <div className="flex w-full">
+                                                    <Folder className="w-[20px] h-[20px] mr-2" style={{ fill: selectedMember?.color }} />
+
+                                                    <div>
+                                                        <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
+                                                            {selectedMember?.name}
+                                                        </h2>
+                                                        <p className="font-normal text-[12px] leading-[15px] text-[#818892]">Ringing...</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center self-start gap-4">
+                                                    <VideoOff className="cursor-pointer" />
+
+                                                    <MicrophoneOn className="cursor-pointer" />
+
+                                                    <CallEnd className="cursor-pointer" onClick={endCall} />
+
+                                                    <More className="cursor-pointer" />
+                                                </div>
+                                            </div>
+                                        </Draggable>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-[22px]">
