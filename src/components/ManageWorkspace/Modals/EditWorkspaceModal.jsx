@@ -1,17 +1,19 @@
-import React from "react";
-import CrossIcon from "../../../assets/cross.svg";
-import PlusIcon from "../../../assets/plus.svg";
-import GalleryIcon from "../../../assets/gallery.svg";
-import { useState } from "react";
-import { useEffect } from "react";
-import { update_workspace } from "../../../api/workSpace";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { updateWorkspace } from "../../../store/slice/workspace";
+import React from 'react';
+import CrossIcon from '../../../assets/cross.svg';
+import PlusIcon from '../../../assets/plus.svg';
+import GalleryIcon from '../../../assets/gallery.svg';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { update_workspace } from '../../../api/workSpace';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { updateWorkspace } from '../../../store/slice/workspace';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const EditWorkspaceModal = ({ cancelFunc, data }) => {
     const [editedData, setEditedData] = useState({});
     const [logoDataURL, setLogoDataURL] = useState();
+    const [errMsg, setErrMsg] = useState('');
 
     const dispatch = useDispatch();
 
@@ -42,6 +44,7 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        setErrMsg('');
 
         const newData = { name: editedData.name };
 
@@ -60,10 +63,11 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
             // console.log(error.response.data);
             console.log(error);
 
+            setErrMsg(error?.name);
             // error for user at notification...
-            toast.error(error?.name, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.name, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -96,6 +100,7 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
                                     <img
                                         src={logoDataURL || editedData.logo}
                                         className="w-full h-full rounded-full object-cover border-[3px] border-[#6576FF40]"
+                                        alt=""
                                     />
                                     <label
                                         htmlFor="workspace_logo"
@@ -131,6 +136,13 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
                         onChange={handleChange}
                         name="name"
                     />
+
+                    {errMsg && (
+                        <span className="flex justify-start items-center gap-1 mt-2">
+                            <RiErrorWarningLine className="text-[#FF3659]" />
+                            <p className="text-xs text-[#FF3659]">{errMsg}</p>
+                        </span>
+                    )}
 
                     <div className="flex items-center mt-[60px] gap-[30px]">
                         <button

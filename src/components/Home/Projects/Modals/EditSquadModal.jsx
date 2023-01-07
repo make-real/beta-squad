@@ -1,16 +1,18 @@
-import CrossIcon from "../../../../assets/cross.svg";
-import { boxHexColorCodes } from "../../../../constant/data";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { update_space } from "../../../../api/space";
-import { updateSpace } from "../../../../store/slice/space";
+import CrossIcon from '../../../../assets/cross.svg';
+import { boxHexColorCodes } from '../../../../constant/data';
+import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { update_space } from '../../../../api/space';
+import { updateSpace } from '../../../../store/slice/space';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const EditSquadModal = ({ cancelEditProject, data }) => {
     const [editData, setEditData] = useState({});
     const [selectedColor, setSelectedColor] = useState(data.color);
+    const [errMsg, setErrMsg] = useState('');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,27 +37,31 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
 
     const handleSpaceUpdate = async (e) => {
         e.preventDefault();
+        setErrMsg('');
 
         try {
             const { data } = await update_space(editData._id, editData);
             // display a notification for user
-            toast.success(`Space updated successfully`, {
-                autoClose: 3000,
-            });
+            // toast.success(`Space updated successfully`, {
+            //     autoClose: 3000,
+            // });
 
             dispatch(updateSpace(editData));
+
+            // close this modal
+            cancelEditProject(false);
         } catch (error) {
             // error for developer for deBugging...
             // console.log(error.response.data);
             console.log(error);
 
+            setErrMsg(error?.name || error?.message);
+
             // error for user at notification...
-            toast.error(error?.name, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.name, {
+            //     autoClose: 3000,
+            // });
         }
-        // close this modal
-        cancelEditProject(false);
     };
 
     return (
@@ -86,7 +92,7 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                         onChange={handleChange}
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
-                        Add Purpose{" "}
+                        Add Purpose{' '}
                         <span className="inline-block ml-[12px] font-light">
                             (Optional)
                         </span>
@@ -111,7 +117,7 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                                     className={`relative rounded-[4px] cursor-pointer ${
                                         selectedColor === color
                                             ? `w-[22px] h-[22px] border-[2px] border-white`
-                                            : "w-[16px] h-[16px]"
+                                            : 'w-[16px] h-[16px]'
                                     }`}
                                 >
                                     {selectedColor === color && (
@@ -137,9 +143,9 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                                 id="squad_privacy_public"
                                 className="accent-[#6576FF]"
                                 checked={
-                                    editData.privacy === "public" ? true : false
+                                    editData.privacy === 'public' ? true : false
                                 }
-                                onChange={() => handleChange(null, "public")}
+                                onChange={() => handleChange(null, 'public')}
                             />
                             <label
                                 htmlFor="squad_privacy_public"
@@ -161,11 +167,11 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                                 id="squad_privacy_private"
                                 className="accent-[#6576FF]"
                                 checked={
-                                    editData.privacy === "private"
+                                    editData.privacy === 'private'
                                         ? true
                                         : false
                                 }
-                                onChange={() => handleChange(null, "private")}
+                                onChange={() => handleChange(null, 'private')}
                             />
                             <label
                                 htmlFor="squad_privacy_private"
@@ -179,6 +185,14 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
                             view it and edit it.
                         </p>
                     </div>
+
+                    {errMsg && (
+                        <span className="flex justify-start items-center gap-1 mt-2">
+                            <RiErrorWarningLine className="text-[#FF3659]" />
+                            <p className="text-[#FF3659]">{errMsg}</p>
+                        </span>
+                    )}
+
                     <div className="flex items-center mt-[40px] gap-[30px]">
                         <button
                             onClick={cancelEditProject}

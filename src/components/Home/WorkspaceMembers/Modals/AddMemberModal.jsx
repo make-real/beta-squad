@@ -1,54 +1,54 @@
-import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { add_workspace_member } from "../../../../api/workSpace";
-import CrossIcon from "../../../../assets/cross.svg";
-import InboxIcon from "../../../../assets/inbox.svg";
-import { validateEmail } from "../../../../util/helpers";
-import TaguserIcon from "../../../../assets/tag_user.svg";
-import { WORKSPACE_ROLE } from "../../../../constant/enums";
+import React from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { add_workspace_member } from '../../../../api/workSpace';
+import CrossIcon from '../../../../assets/cross.svg';
+import InboxIcon from '../../../../assets/inbox.svg';
+import { validateEmail } from '../../../../util/helpers';
+import TaguserIcon from '../../../../assets/tag_user.svg';
+import { WORKSPACE_ROLE } from '../../../../constant/enums';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
     );
     const [memberData, setMemberData] = useState({
-        email: "",
-        role: "",
+        email: '',
+        role: '',
     });
+    const [errMsg, setErrMsg] = useState('');
 
     const addMember = async (e) => {
         e.preventDefault();
+        setErrMsg('');
 
         if (!validateEmail(memberData.email)) return;
 
         try {
-            const { data } = await add_workspace_member(
-                currentWorkspace._id,
-                memberData.email
-            );
+            await add_workspace_member(currentWorkspace._id, memberData.email);
 
             // display a notification for user
-            toast.success(`Member added`, {
-                autoClose: 3000,
-            });
+            // toast.success(`Member added`, {
+            //     autoClose: 3000,
+            // });
+
+            // reset all input fields...
+            setMemberData({ name: '', color: '', privacy: '' });
+
+            // close this modal
+            setShowAddMemberModal(false);
         } catch (error) {
             // error for developer for deBugging...
             // console.log(error.response.data);
             console.log(error);
-
+            setErrMsg(error?.message);
             // error for user at notification...
-            toast.error(error?.message, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.message, {
+            //     autoClose: 3000,
+            // });
         }
-
-        // reset all input fields...
-        setMemberData({ name: "", color: "", privacy: "" });
-
-        // close this modal
-        setShowAddMemberModal(false);
     };
 
     const handleChange = (e) => {
@@ -70,7 +70,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                     Add Member
                 </h1>
                 <p className="mt-[9px] text-[#818892] text-[14px]">
-                    Enter email to add member to{" "}
+                    Enter email to add member to{' '}
                     <span className="text-[#6576FF]">
                         {currentWorkspace?.name}
                     </span>
@@ -114,6 +114,14 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                             ))}
                         </select>
                     </div> */}
+
+                    {errMsg && (
+                        <span className="flex justify-start items-center gap-1 mt-2">
+                            <RiErrorWarningLine className="text-[#FF3659]" />
+                            <p className="text-[#FF3659]">{errMsg}</p>
+                        </span>
+                    )}
+
                     <button className="mt-[40px] w-full py-[17px] rounded-[8px] bg-[#6576FF] text-white">
                         Send Invitation
                     </button>

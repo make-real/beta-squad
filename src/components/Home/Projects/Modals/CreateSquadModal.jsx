@@ -1,56 +1,60 @@
-import CrossIcon from "../../../../assets/cross.svg";
-import React from "react";
-import { boxHexColorCodes } from "../../../../constant/data";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { spaceCreation } from "../../../../hooks/useFetch";
-import { addNewSpace } from "../../../../store/slice/space";
-import { useEffect } from "react";
+import CrossIcon from '../../../../assets/cross.svg';
+import React from 'react';
+import { boxHexColorCodes } from '../../../../constant/data';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { spaceCreation } from '../../../../hooks/useFetch';
+import { addNewSpace } from '../../../../store/slice/space';
+import { useEffect } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const CreateSquadModal = ({ setShowCreateSquadModal }) => {
     const currentWorkspace = useSelector(
         (state) => state.workspace.currentWorkspace
     );
-    const [selectedColor, setSelectedColor] = useState("#C654FC");
+    const [selectedColor, setSelectedColor] = useState('#C654FC');
     const [createNewSpace, setCreateNewSpace] = useState({
         workspaceId: currentWorkspace._id,
-        name: "",
-        color: "",
-        privacy: "",
-        description: "",
+        name: '',
+        color: '',
+        privacy: '',
+        description: '',
     });
+    const [errMsg, setErrMsg] = useState('');
+
     const dispatch = useDispatch();
 
     const handleSpaceCreation = async (e) => {
         e.preventDefault();
+        setErrMsg('');
 
         try {
             const { data } = await spaceCreation(createNewSpace);
 
             // display a notification for user
-            toast.success(`${data?.space?.name} - space created successfully`, {
-                autoClose: 3000,
-            });
+            // toast.success(`${data?.space?.name} - space created successfully`, {
+            //     autoClose: 3000,
+            // });
 
             // add this space into user allSpace [array]... & send back to parent component...
             dispatch(addNewSpace(data?.space));
+
+            // reset all input fields...
+            setCreateNewSpace({ name: '', color: '', privacy: '' });
+
+            // close this modal
+            setShowCreateSquadModal(false);
         } catch (error) {
             // error for developer for deBugging...
             console.log(error.response.data);
-
+            setErrMsg(error?.response?.data?.issue?.name);
             // error for user at notification...
-            toast.error(error?.response?.data?.issue?.name, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.response?.data?.issue?.name, {
+            //     autoClose: 3000,
+            // });
         }
-
-        // reset all input fields...
-        setCreateNewSpace({ name: "", color: "", privacy: "" });
-
-        // close this modal
-        setShowCreateSquadModal(false);
     };
 
     const handleChange = (e, privacy) => {
@@ -84,7 +88,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                     Create Squad
                 </h1>
                 <p className="mt-[9px] text-[#818892] text-[14px]">
-                    Enter email to add member to{" "}
+                    Enter email to add member to{' '}
                     <span className="text-[#6576FF]">
                         {currentWorkspace?.name}
                     </span>
@@ -102,7 +106,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                         name="name"
                     />
                     <p className="text-[#818892] text-[14px] font-semibold mt-[20px]">
-                        Add Purpose{" "}
+                        Add Purpose{' '}
                         <span className="inline-block ml-[12px] font-light">
                             (Optional)
                         </span>
@@ -129,7 +133,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                     className={`relative rounded-[4px] cursor-pointer ${
                                         selectedColor === color
                                             ? `w-[22px] h-[22px] border-[2px] border-white`
-                                            : "w-[16px] h-[16px]"
+                                            : 'w-[16px] h-[16px]'
                                     }`}
                                 >
                                     {selectedColor === color && (
@@ -154,7 +158,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                 name="privacy"
                                 id="squad_privacy_public"
                                 className="accent-[#6576FF]"
-                                onChange={() => handleChange(null, "public")}
+                                onChange={() => handleChange(null, 'public')}
                             />
                             <label
                                 htmlFor="squad_privacy_public"
@@ -175,7 +179,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                                 name="privacy"
                                 id="squad_privacy_private"
                                 className="accent-[#6576FF]"
-                                onChange={() => handleChange(null, "private")}
+                                onChange={() => handleChange(null, 'private')}
                             />
                             <label
                                 htmlFor="squad_privacy_private"
@@ -189,6 +193,14 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
                             view it and edit it.
                         </p>
                     </div>
+
+                    {errMsg && (
+                        <span className="flex justify-start items-center gap-1 mt-2">
+                            <RiErrorWarningLine className="text-[#FF3659]" />
+                            <p className="text-[#FF3659]">{errMsg}</p>
+                        </span>
+                    )}
+
                     <div className="flex items-center mt-[40px] gap-[30px]">
                         <button
                             onClick={() => setShowCreateSquadModal(false)}

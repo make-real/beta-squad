@@ -59,7 +59,7 @@ const ConfirmDialog = ({
 
                 removeCard(listID, cardID);
 
-                toast.success(`${data?.message}`, { autoClose: 3000 });
+                // toast.success(`${data?.message}`, { autoClose: 3000 });
 
                 navigate(
                     `/projects/${selectedWorkspaceId}/squad/${selectedSpaceId}`,

@@ -1,10 +1,12 @@
-import React from "react";
-import WarningIcon from "../../../../assets/icon_component/Warning";
-import CrossIcon from "../../../../assets/cross.svg";
-import { delete_space } from "../../../../api/space";
-import { removeSpace } from "../../../../store/slice/space";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import React from 'react';
+import WarningIcon from '../../../../assets/icon_component/Warning';
+import CrossIcon from '../../../../assets/cross.svg';
+import { delete_space } from '../../../../api/space';
+import { removeSpace } from '../../../../store/slice/space';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const DeleteProjectModal = ({
     data,
@@ -12,9 +14,12 @@ const DeleteProjectModal = ({
     setDeletingProject,
     setShowDeleteProjectModal,
 }) => {
+    const [errMsg, setErrMsg] = useState('');
+
     const dispatch = useDispatch();
     const deleteSpace = async (e) => {
         e.preventDefault();
+        setErrMsg('');
         setShowDeleteProjectModal(false);
         setDeletingProject((prev) => ({ ...prev, show: true }));
 
@@ -29,10 +34,11 @@ const DeleteProjectModal = ({
             console.log(error);
             setDeletingProject((prev) => ({ ...prev, show: false }));
 
+            setErrMsg(error?.name);
             // error for user at notification...
-            toast.error(error?.name, {
-                autoClose: 3000,
-            });
+            // toast.error(error?.name, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -54,7 +60,7 @@ const DeleteProjectModal = ({
                     Delete {data.name}?
                 </h1>
                 <p className="mt-[8px] text-[#818892] text-[14px]">
-                    Are you sure you want to delete “{" "}
+                    Are you sure you want to delete “{' '}
                     <span className="text-[#031124] font-semibold">
                         {data.name}
                     </span>
@@ -74,6 +80,14 @@ const DeleteProjectModal = ({
                         also be deleted of this Squad.
                     </p>
                 </div>
+
+                {errMsg && (
+                    <span className="flex justify-start items-center gap-1 mt-2">
+                        <RiErrorWarningLine className="text-[#FF3659]" />
+                        <p className="text-[#FF3659]">{errMsg}</p>
+                    </span>
+                )}
+
                 <div className="flex items-center mt-[40px] gap-[30px]">
                     <div
                         onClick={cancelDeletion}

@@ -591,7 +591,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                                     );
                                 }}
                             >
-                                <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200" />
+                                <XMarkIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-red-500 hover:text-gray-200 duration-200" />
                             </div>
                         </div>
                     </div>

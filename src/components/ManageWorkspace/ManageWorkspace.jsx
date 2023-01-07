@@ -292,7 +292,7 @@ const CreateWorkspace = () => {
                 </h1>
                 <p className="mt-[9px] leading-[24px] text-[#818892] text-[14px] max-w-[90%]">
                     Fill up the following fields to and press create to create
-                    new workspace.
+                    n
                 </p>
                 <form onSubmit={handleCreation} className="mt-[33px]">
                     <>

@@ -1,12 +1,13 @@
-import React from "react";
-import { useState } from "react";
-import CrossIcon from "../../../assets/cross.svg";
-import PlusIcon from "../../../assets/plus.svg";
-import GreenTick from "../../../assets/green_tick.svg";
-import { workspaceCreation } from "../../../hooks/useFetch";
-import { addOneWorkspace, addWorkSpace } from "../../../store/slice/workspace";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { useState } from 'react';
+import CrossIcon from '../../../assets/cross.svg';
+import PlusIcon from '../../../assets/plus.svg';
+import GreenTick from '../../../assets/green_tick.svg';
+import { workspaceCreation } from '../../../hooks/useFetch';
+import { addOneWorkspace, addWorkSpace } from '../../../store/slice/workspace';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
     const [workspaceCreated, setWorkspaceCreated] = useState(false);
@@ -15,6 +16,7 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
         image: null,
         dataURL: null,
     });
+    const [errMsg, setErrMsg] = useState('');
 
     const handleLogo = (e) => {
         const files = e.target.files;
@@ -36,11 +38,12 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
 
     const handleCreation = async (e) => {
         e.preventDefault();
+        setErrMsg('');
         try {
             // its a POST method | object send into backend/server
             const createData = new FormData();
-            createData.append("name", workspaceData.name);
-            if (logo.image) createData.append("logo", logo.image);
+            createData.append('name', workspaceData.name);
+            if (logo.image) createData.append('logo', logo.image);
             const { data } = await workspaceCreation(createData);
 
             // get all Work-Space data & send into redux store...
@@ -48,19 +51,20 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
             dispatch(addOneWorkspace(data.workspace));
 
             // display a success notification for user...
-            toast.success(
-                `${data?.workspace?.name} : work space created successfully`,
-                { autoClose: 3000 }
-            );
+            // toast.success(
+            //     `${data?.workspace?.name} : work space created successfully`,
+            //     { autoClose: 3000 }
+            // );
             setWorkspaceCreated(true);
         } catch (error) {
             // display error notification for developers...
             console.log(error.response?.data?.issue);
 
+            setErrMsg(error.response?.data?.issue?.name);
             // display error notification for users...
-            toast.error(error.response?.data?.name, {
-                autoClose: 3000,
-            });
+            // toast.error(error.response?.data?.name, {
+            //     autoClose: 3000,
+            // });
         }
     };
 
@@ -141,6 +145,15 @@ const CreateWorkspaceModal = ({ setShowCreateWorkspaceModal }) => {
                             }
                         />
 
+                        {errMsg && (
+                            <span className="flex justify-start items-center gap-1 mt-2">
+                                <RiErrorWarningLine className="text-[#FF3659]" />
+                                <p className="text-xs text-[#FF3659]">
+                                    {errMsg}
+                                </p>
+                            </span>
+                        )}
+                        
                         <div className="flex items-center mt-[60px] gap-[30px]">
                             <button
                                 onClick={() =>
