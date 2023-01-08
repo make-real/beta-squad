@@ -18,6 +18,7 @@ import SquadMembers from "./SquadMembers/SquadMembers";
 import Folder from "../../assets/icon_component/Folder";
 import Draggable from "react-draggable";
 import CallEnd from "../../assets/icon_component/CallEnd";
+import ringing from "../../assets/ringing.mp3";
 import VideoOff from "../../assets/icon_component/VideoOff";
 import MicrophoneOff from "../../assets/icon_component/MicrophoneOff";
 import MicrophoneOn from "../../assets/icon_component/MicrophoneOn";
@@ -39,7 +40,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
     const [call, setCall] = useState();
     const [callReceived, setCallReceived] = useState(false);
-    const {state} = useLocation();
+    const { state } = useLocation();
     const location = useLocation();
 
     const localAudioTrackRef = useRef();
@@ -115,6 +116,21 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         return (num < 10 ? "0" : "") + num;
     }
 
+    const ringingRef = useRef();
+
+    useEffect(() => {
+        if (!callReceived && call) {
+            ringingRef.current = new Audio(ringing);
+            ringingRef.current.loop = true;
+
+            ringingRef.current.play();
+        }
+
+        if (callReceived) ringingRef?.current?.pause();
+
+
+    }, [call, callReceived]);
+
     function convertSeconds(seconds) {
         let hours = Math.floor(seconds / 3600);
         let minutes = Math.floor((seconds % 3600) / 60);
@@ -129,6 +145,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
             setCallReceived(false);
             setCallTime(0);
             socket.emit("END_CALL", call._id);
+            ringingRef?.current?.pause();
 
             await localAudioTrackRef?.current?.close();
             await RtcEngine?.leave();
@@ -139,17 +156,17 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
     useEffect(() => {
         if (state?.tab) {
-            setSelectedTab(state?.tab ?? 'messages')
-            window.history.replaceState({}, document.title)
+            setSelectedTab(state?.tab ?? "messages");
+            window.history.replaceState({}, document.title);
         }
-    }, [state?.tab])
+    }, [state?.tab]);
 
     useEffect(() => {
-        let tab = location?.hash?.slice(1)
+        let tab = location?.hash?.slice(1);
         if (tab) {
-            setSelectedTab(tab)
+            setSelectedTab(tab);
         }
-    }, [location])
+    }, [location]);
 
     const TabsScreen = {
         messages: <Chat />,
@@ -158,10 +175,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     };
 
     const TabsName = {
-        messages: 'Messages',
-        board: 'Board',
-        members: 'Members',
-    }
+        messages: "Messages",
+        board: "Board",
+        members: "Members",
+    };
 
     const handleReceiveCall = async () => {
         socket?.emit("JOIN_CALL", call._id);
@@ -186,9 +203,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="bg-[#F9F9FF] w-full h-full">
             <div
                 className={`relative ${
-                    selectedTab === 'messages' || selectedTab === 'board'
-                        ? 'pt-[40px]'
-                        : 'pt-[40px]'
+                    selectedTab === "messages" || selectedTab === "board" ? "pt-[40px]" : "pt-[40px]"
                 } px-[40px] pb-[40px] bg-[#F9F9FF] h-full flex flex-col`}
             >
                 <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px] flex flex-col">
@@ -205,49 +220,27 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                         key={idx}
                                         onClick={() => setSelectedTab(value)}
                                         className={`${
-                                            selectedTab === value
-                                                ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
-                                                : 'text-[#818892]'
+                                            selectedTab === value ? "border-b-2 border-b-[#6576FF] text-[#031124]" : "text-[#818892]"
                                         } text-[19px] font-medium   cursor-pointer`}
                                     >
                                         {TabsName[value]}
                                     </a>
-                                )
+                                );
                             })}
                         </div>
 
                         <div className="flex items-center">
                             <div className="flex items-center gap-[12px]">
-                                <img
-                                    src={SearchIcon}
-                                    alt="search"
-                                    className=""
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Search here"
-                                    className=" placeholder:text-[#99A6B9] border-none outline-none"
-                                />
+                                <img src={SearchIcon} alt="search" className="" />
+                                <input type="text" placeholder="Search here" className=" placeholder:text-[#99A6B9] border-none outline-none" />
                             </div>
-                            {selectedTab === 'messages' ? (
+                            {selectedTab === "messages" ? (
                                 <div className="flex items-center gap-[22px] relative">
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={startCall}
-                                    >
-                                        <img
-                                            src={VideoCallIcon}
-                                            alt="video_call"
-                                        />
+                                    <div className="cursor-pointer" onClick={startCall}>
+                                        <img src={VideoCallIcon} alt="video_call" />
                                     </div>
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={startCall}
-                                    >
-                                        <img
-                                            src={AudioCallIcon}
-                                            alt="audio_call"
-                                        />
+                                    <div className="cursor-pointer" onClick={startCall}>
+                                        <img src={AudioCallIcon} alt="audio_call" />
                                     </div>
 
                                     {call && (
@@ -263,9 +256,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
                                                     <div>
                                                         <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
-                                                            {
-                                                                selectedSpace?.name
-                                                            }
+                                                            {selectedSpace?.name}
                                                         </h2>
                                                         <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
                                                             {callReceived ? convertSeconds(callTime) : "Calling..."}{" "}
@@ -281,10 +272,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                                         </>
                                                     )}
 
-                                                    <CallEnd
-                                                        className="cursor-pointer"
-                                                        onClick={endCall}
-                                                    />
+                                                    <CallEnd className="cursor-pointer" onClick={endCall} />
 
                                                     {!callReceived && <ReceiveCall onClick={handleReceiveCall} className="cursor-pointer h-[24px]" />}
 
@@ -296,21 +284,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-[22px]">
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => setShowType('grid')}
-                                    >
-                                        <GridIcon
-                                            isSelected={showType === 'grid'}
-                                        />
+                                    <div className="cursor-pointer" onClick={() => setShowType("grid")}>
+                                        <GridIcon isSelected={showType === "grid"} />
                                     </div>
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => setShowType('stack')}
-                                    >
-                                        <RowVerticalIcon
-                                            isSelected={showType === 'stack'}
-                                        />
+                                    <div className="cursor-pointer" onClick={() => setShowType("stack")}>
+                                        <RowVerticalIcon isSelected={showType === "stack"} />
                                     </div>
                                 </div>
                             )}
@@ -318,16 +296,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     </div>
                     <div className=" flex flex-col h-full">
                         {/* <div className="w-full h-[1px] bg-[#ECECEC]"></div> */}
-                        <div
-                            className={`h-full w-full pb-10 mx-auto mt-[30px]  overflow-hidden`}
-                        >
-                            {TabsScreen[selectedTab]}
-                        </div>
+                        <div className={`h-full w-full pb-10 mx-auto mt-[30px]  overflow-hidden`}>{TabsScreen[selectedTab]}</div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SquadScreen
+export default SquadScreen;
