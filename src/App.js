@@ -39,7 +39,7 @@ import SquadScreen from "./components/Home/SquadScreen";
 import { setSelectedSpaceObject, setSelectedSpaceId } from "./store/slice/space";
 import { initFullSidebar } from "./store/slice/screen";
 import NavigateUser from "./components/Home/NavigateUser";
-import { initializeSocket } from "./store/slice/socket";
+import { initializeRtcEngine, initializeSocket } from "./store/slice/global";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -125,11 +125,11 @@ const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const currentWorkspace = useSelector((state) => state.workspace.currentWorkspace);
     const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
-    const fetchSpaces = async () => {};
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(initializeSocket());
+        dispatch(initializeRtcEngine());
         dispatch(initFullSidebar());
     }, []);
 

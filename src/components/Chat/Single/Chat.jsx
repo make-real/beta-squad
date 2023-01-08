@@ -25,7 +25,7 @@ const SingleChat = () => {
     const [selectedTab, setSelectedTab] = useState("messages");
     const [selectedMember, setSelectedMember] = useState({});
     const workspaceMembers = useSelector((state) => state.workspace.workspaceMembers);
-    const socket = useSelector((state) => state?.socket?.socket);
+    const socket = useSelector((state) => state.global.socket);
     const [showType, setShowType] = useState("grid");
     const [call, setCall] = useState(false);
 

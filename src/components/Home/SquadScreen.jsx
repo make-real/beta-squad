@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import SearchIcon from "../../assets/search.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
@@ -11,7 +11,7 @@ import { setSelectedSpaceId, setSelectedSpaceObject } from "../../store/slice/sp
 import FolderIcon from "../../assets/icon_component/Folder";
 import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import Board from "../Board/Board";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
@@ -24,37 +24,116 @@ import MicrophoneOn from "../../assets/icon_component/MicrophoneOn";
 import More from "../../assets/icon_component/More";
 
 import AgoraRTC from "agora-rtc-sdk-ng";
-
+import ReceiveCall from "../../assets/icon_component/ReceiveCall";
+import { async } from "@firebase/util";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
+    const { participantID, workspace_id } = useParams();
     const [selectedTab, setSelectedTab] = useState("messages");
     const [showType, setShowType] = useState("grid");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-    const socket = useSelector((state) => state.socket.socket);
+    const { socket, RtcEngine } = useSelector((state) => state.global);
+    const uid = useSelector((state) => state?.userInfo?.userInfo?.uid);
 
     const [call, setCall] = useState();
+    const [callReceived, setCallReceived] = useState(false);
     const { state } = useLocation();
 
+    const localAudioTrackRef = useRef();
+
     const startCall = () => {
-        setCall(true);
-        socket.emit("START_CALL", selectedSpace._id);
+        setCallReceived(true);
+        socket?.emit("START_CALL", selectedSpaceId);
     };
 
     useEffect(() => {
-        socket?.on("ON_CALL", () => setCall(true));
-        socket?.on("ON_CALL_END", () => setCall(false));
+        socket?.on("ON_CALL", async (call) => {
+            setCall(call);
+        });
+
+        socket?.on("ON_JOIN_CALL", async (call, token) => {
+            console.log("ON_JOIN_CALL");
+
+            setCallReceived(true);
+            await RtcEngine?.join("b4304444d7834aca8f8036e813705e51", call?.channelId, token, uid);
+
+            const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+
+            localAudioTrackRef.current = localAudioTrack;
+
+            await RtcEngine?.publish([localAudioTrack]);
+        });
+
+        socket?.on("ON_CALL_END", async (call) => {
+            setCall(false);
+            setCallReceived(false);
+            setCallTime(0);
+
+            await localAudioTrackRef?.current?.close();
+            await RtcEngine?.leave();
+        });
+
+        RtcEngine?.on("user-published", async (user, mediaType) => {
+            console.log("user-published");
+
+            // Subscribe to the remote user when the SDK triggers the "user-published" event.
+            await RtcEngine?.subscribe(user, mediaType);
+            console.log("subscribe success");
+            // Subscribe and play the remote video in the container If the remote user publishes a video track.
+            if (mediaType == "video") {
+                const remoteAudioTrack = user.audioTrack;
+                const remoteVideoTrack = user.videoTrack;
+                const remoteUserId = user.uid.toString();
+
+                remoteAudioTrack.play();
+            }
+            // Subscribe and play the remote audio track If the remote user publishes the audio track only.
+            if (mediaType == "audio") {
+                const remoteAudioTrack = user.audioTrack;
+                const remoteUserId = user.uid.toString();
+
+                remoteAudioTrack.play();
+            }
+
+            // Listen for the "user-unpublished" event.
+            RtcEngine?.on("user-unpublished", (user) => {
+                console.log(user.uid + "has left the channel");
+            });
+        });
 
         return () => {
             socket?.off("ON_CALL");
             socket?.off("ON_CALL_END");
+            socket?.off("ON_JOIN_CALL");
         };
-    }, [socket]);
+    }, [socket, uid, RtcEngine]);
 
-    const endCall = () => {
-        setCall(false);
-        socket.emit("END_CALL", selectedSpace._id);
+    function twoDigits(num) {
+        return (num < 10 ? "0" : "") + num;
+    }
+
+    function convertSeconds(seconds) {
+        let hours = Math.floor(seconds / 3600);
+        let minutes = Math.floor((seconds % 3600) / 60);
+        let remainingSeconds = seconds % 60;
+
+        return `${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(remainingSeconds)}`;
+    }
+
+    const endCall = async () => {
+        try {
+            setCall(false);
+            setCallReceived(false);
+            setCallTime(0);
+            socket.emit("END_CALL", call._id);
+
+            await localAudioTrackRef?.current?.close();
+            await RtcEngine?.leave();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
@@ -66,7 +145,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
     const TabsScreen = {
         messages: <Chat />,
-        board: <Board selectedSpaceId={selectedSpaceId} showType={showType} />,
+        board: <Board selectedSpaceId={workspace_id} showType={showType} />,
         members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
     };
 
@@ -75,6 +154,25 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         board: "Board",
         members: "Members",
     };
+
+    const handleReceiveCall = async () => {
+        socket?.emit("JOIN_CALL", call._id);
+        setCallReceived(true);
+    };
+
+    const [callTime, setCallTime] = useState(0);
+
+    useEffect(() => {
+        let interval;
+
+        if (callReceived) interval = setInterval(() => setCallTime((prev) => prev + 1), 1000);
+
+        if (!callReceived) clearInterval(interval);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [callReceived]);
 
     return (
         <div className="bg-[#F9F9FF] w-full h-full">
@@ -113,18 +211,25 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                                         <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
                                                             {selectedSpace?.name}
                                                         </h2>
-                                                        <p className="font-normal text-[12px] leading-[15px] text-[#818892]">Ringing...</p>
+                                                        <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
+                                                            {callReceived ? convertSeconds(callTime) : "Calling..."}{" "}
+                                                        </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex items-center self-start gap-4">
-                                                    <VideoOff className="cursor-pointer" />
-
-                                                    <MicrophoneOn className="cursor-pointer" />
+                                                    {callReceived && (
+                                                        <>
+                                                            <VideoOff className="cursor-pointer" />
+                                                            <MicrophoneOn className="cursor-pointer" />
+                                                        </>
+                                                    )}
 
                                                     <CallEnd className="cursor-pointer" onClick={endCall} />
 
-                                                    <More className="cursor-pointer" />
+                                                    {!callReceived && <ReceiveCall onClick={handleReceiveCall} className="cursor-pointer h-[24px]" />}
+
+                                                    {callReceived && <More className="cursor-pointer" />}
                                                 </div>
                                             </div>
                                         </Draggable>
