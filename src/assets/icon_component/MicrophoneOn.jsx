@@ -1,8 +1,8 @@
 import React from "react";
 
-const MicrophoneOn = ({ className, style }) => {
+const MicrophoneOn = ({ className, style, onClick }) => {
     return (
-        <svg className={className} style={style} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg onClick={onClick} className={className} style={style} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g opacity="0.4">
                 <mask id="path-1-inside-1_1294_12353" fill="white">
                     <path d="M10 18.275C5.8 18.275 2.375 14.8583 2.375 10.65V9.08333C2.375 8.75833 2.64167 8.5 2.95833 8.5C3.275 8.5 3.54167 8.76667 3.54167 9.08333V10.65C3.54167 14.2083 6.43333 17.1 9.99167 17.1C13.55 17.1 16.4417 14.2083 16.4417 10.65V9.08333C16.4417 8.75833 16.7083 8.5 17.025 8.5C17.3417 8.5 17.6083 8.76667 17.6083 9.08333V10.65C17.625 14.8583 14.2 18.275 10 18.275Z" />

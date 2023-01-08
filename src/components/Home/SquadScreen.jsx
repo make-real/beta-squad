@@ -27,131 +27,24 @@ import More from "../../assets/icon_component/More";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import ReceiveCall from "../../assets/icon_component/ReceiveCall";
 import { async } from "@firebase/util";
+import { addLocalAudioTrack, callReceived } from "../../store/slice/global";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     const { participantID, workspace_id } = useParams();
     const [selectedTab, setSelectedTab] = useState("messages");
     const [showType, setShowType] = useState("grid");
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-    const { socket, RtcEngine } = useSelector((state) => state.global);
-    const uid = useSelector((state) => state?.userInfo?.userInfo?.uid);
+    const { socket, call } = useSelector((state) => state.global);
 
-    const [call, setCall] = useState();
-    const [callReceived, setCallReceived] = useState(false);
     const { state } = useLocation();
     const location = useLocation();
 
-    const localAudioTrackRef = useRef();
-
     const startCall = () => {
-        setCallReceived(true);
+        if (call?.data) return;
+
+        dispatch(callReceived(true));
         socket?.emit("START_CALL", selectedSpaceId);
-    };
-
-    useEffect(() => {
-        socket?.on("ON_CALL", async (call) => {
-            setCall(call);
-        });
-
-        socket?.on("ON_JOIN_CALL", async (call, token) => {
-            console.log("ON_JOIN_CALL");
-
-            setCallReceived(true);
-            await RtcEngine?.join("b4304444d7834aca8f8036e813705e51", call?.channelId, token, uid);
-
-            const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-
-            localAudioTrackRef.current = localAudioTrack;
-
-            await RtcEngine?.publish([localAudioTrack]);
-        });
-
-        socket?.on("ON_CALL_END", async (call) => {
-            setCall(false);
-            setCallReceived(false);
-            setCallTime(0);
-
-            await localAudioTrackRef?.current?.close();
-            await RtcEngine?.leave();
-        });
-
-        RtcEngine?.on("user-published", async (user, mediaType) => {
-            console.log("user-published");
-
-            // Subscribe to the remote user when the SDK triggers the "user-published" event.
-            await RtcEngine?.subscribe(user, mediaType);
-            console.log("subscribe success");
-            // Subscribe and play the remote video in the container If the remote user publishes a video track.
-            if (mediaType == "video") {
-                const remoteAudioTrack = user.audioTrack;
-                const remoteVideoTrack = user.videoTrack;
-                const remoteUserId = user.uid.toString();
-
-                remoteAudioTrack.play();
-            }
-            // Subscribe and play the remote audio track If the remote user publishes the audio track only.
-            if (mediaType == "audio") {
-                const remoteAudioTrack = user.audioTrack;
-                const remoteUserId = user.uid.toString();
-
-                remoteAudioTrack.play();
-            }
-
-            // Listen for the "user-unpublished" event.
-            RtcEngine?.on("user-unpublished", (user) => {
-                console.log(user.uid + "has left the channel");
-            });
-        });
-
-        return () => {
-            socket?.off("ON_CALL");
-            socket?.off("ON_CALL_END");
-            socket?.off("ON_JOIN_CALL");
-        };
-    }, [socket, uid, RtcEngine]);
-
-    function twoDigits(num) {
-        return (num < 10 ? "0" : "") + num;
-    }
-
-    const ringingRef = useRef();
-
-    useEffect(() => {
-        if (!callReceived && call) {
-            ringingRef.current = new Audio(ringing);
-            ringingRef.current.loop = true;
-
-            ringingRef.current.play();
-        }
-
-        if (callReceived) ringingRef?.current?.pause();
-
-
-    }, [call, callReceived]);
-
-    function convertSeconds(seconds) {
-        let hours = Math.floor(seconds / 3600);
-        let minutes = Math.floor((seconds % 3600) / 60);
-        let remainingSeconds = seconds % 60;
-
-        return `${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(remainingSeconds)}`;
-    }
-
-    const endCall = async () => {
-        try {
-            setCall(false);
-            setCallReceived(false);
-            setCallTime(0);
-            socket.emit("END_CALL", call._id);
-            ringingRef?.current?.pause();
-
-            await localAudioTrackRef?.current?.close();
-            await RtcEngine?.leave();
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     useEffect(() => {
@@ -179,25 +72,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         board: "Board",
         members: "Members",
     };
-
-    const handleReceiveCall = async () => {
-        socket?.emit("JOIN_CALL", call._id);
-        setCallReceived(true);
-    };
-
-    const [callTime, setCallTime] = useState(0);
-
-    useEffect(() => {
-        let interval;
-
-        if (callReceived) interval = setInterval(() => setCallTime((prev) => prev + 1), 1000);
-
-        if (!callReceived) clearInterval(interval);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [callReceived]);
 
     return (
         <div className="bg-[#F9F9FF] w-full h-full">
@@ -242,45 +116,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                                     <div className="cursor-pointer" onClick={startCall}>
                                         <img src={AudioCallIcon} alt="audio_call" />
                                     </div>
-
-                                    {call && (
-                                        <Draggable>
-                                            <div className="absolute bg-white  drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)] right-0 -bottom-[90px] p-5 rounded-xl z-[1000] flex cursor-move">
-                                                <div className="flex w-full">
-                                                    <Folder
-                                                        className="w-[20px] h-[20px] mr-2"
-                                                        style={{
-                                                            fill: selectedSpace?.color,
-                                                        }}
-                                                    />
-
-                                                    <div>
-                                                        <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
-                                                            {selectedSpace?.name}
-                                                        </h2>
-                                                        <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
-                                                            {callReceived ? convertSeconds(callTime) : "Calling..."}{" "}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex items-center self-start gap-4">
-                                                    {callReceived && (
-                                                        <>
-                                                            <VideoOff className="cursor-pointer" />
-                                                            <MicrophoneOn className="cursor-pointer" />
-                                                        </>
-                                                    )}
-
-                                                    <CallEnd className="cursor-pointer" onClick={endCall} />
-
-                                                    {!callReceived && <ReceiveCall onClick={handleReceiveCall} className="cursor-pointer h-[24px]" />}
-
-                                                    {callReceived && <More className="cursor-pointer" />}
-                                                </div>
-                                            </div>
-                                        </Draggable>
-                                    )}
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-[22px]">

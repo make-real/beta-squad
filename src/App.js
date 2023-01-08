@@ -39,7 +39,9 @@ import SquadScreen from "./components/Home/SquadScreen";
 import { setSelectedSpaceObject, setSelectedSpaceId } from "./store/slice/space";
 import { initFullSidebar } from "./store/slice/screen";
 import NavigateUser from "./components/Home/NavigateUser";
-import { initializeRtcEngine, initializeSocket } from "./store/slice/global";
+import { addCall, addLocalAudioTrack, callReceived, incrementCallTime, initializeRtcEngine, initializeSocket } from "./store/slice/global";
+import MiniCall from "./components/call/MiniCall";
+import AgoraRTC from "agora-rtc-sdk-ng";
 
 const ProtectedRoute = ({ children }) => {
     const jwt = fetchUserToken() || false;
@@ -125,6 +127,8 @@ const App = () => {
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const currentWorkspace = useSelector((state) => state.workspace.currentWorkspace);
     const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
+    const { socket, RtcEngine, call } = useSelector((state) => state.global);
+    const uid = useSelector((state) => state.userInfo?.userInfo?.uid);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -133,8 +137,89 @@ const App = () => {
         dispatch(initFullSidebar());
     }, []);
 
+    useEffect(() => {
+        socket?.on("ON_CALL", (call) => {
+            console.log({ call });
+            dispatch(addCall(call));
+        });
+
+        socket?.on("ON_JOIN_CALL", async (call, token) => {
+            dispatch(callReceived(true));
+            await RtcEngine?.join("b4304444d7834aca8f8036e813705e51", call?.channelId, token, uid);
+
+            const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+
+            dispatch(addLocalAudioTrack(localAudioTrack));
+
+            await RtcEngine?.publish([localAudioTrack]);
+        });
+
+        socket?.on("ON_CALL_END", async (call) => {
+            dispatch(callReceived(false));
+
+            await call?.localAudioTrack?.close();
+            await RtcEngine?.leave();
+        });
+
+        RtcEngine?.on("user-published", async (user, mediaType) => {
+            console.log("user-published");
+
+            // Subscribe to the remote user when the SDK triggers the "user-published" event.
+            await RtcEngine?.subscribe(user, mediaType);
+            console.log("subscribe success");
+            // Subscribe and play the remote video in the container If the remote user publishes a video track.
+            if (mediaType == "video") {
+                const remoteAudioTrack = user.audioTrack;
+                // const remoteVideoTrack = user.videoTrack;
+                // const remoteUserId = user.uid.toString();
+
+                remoteAudioTrack.play();
+            }
+            // Subscribe and play the remote audio track If the remote user publishes the audio track only.
+            if (mediaType == "audio") {
+                const remoteAudioTrack = user.audioTrack;
+                // const remoteUserId = user.uid.toString();
+
+                remoteAudioTrack.play();
+            }
+
+            // Listen for the "user-unpublished" event.
+            RtcEngine?.on("user-unpublished", (user) => {
+                console.log(user.uid + "has left the channel");
+            });
+        });
+
+        RtcEngine?.enableAudioVolumeIndicator();
+
+        RtcEngine?.on("volume-indicator", (volumes) => {
+            volumes.forEach((volume) => {
+                console.log(`UID ${volume.uid} Level ${volume.level}`);
+            });
+        });
+
+        return () => {
+            socket?.off("ON_CALL");
+            socket?.off("ON_CALL_END");
+            socket?.off("ON_JOIN_CALL");
+        };
+    }, [socket, uid, RtcEngine]);
+
+    useEffect(() => {
+        let interval;
+
+        if (call?.received) interval = setInterval(() => dispatch(incrementCallTime()), 1000);
+
+        if (!call?.received) clearInterval(interval);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [call?.received]);
+
     return (
         <main className="overflow-hidden">
+            {call?.data && <MiniCall />}
+
             <Routes>
                 <Route path="/" />
                 <Route

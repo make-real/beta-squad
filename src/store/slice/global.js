@@ -3,10 +3,20 @@ import AgoraRTC from "agora-rtc-sdk-ng";
 import { io } from "socket.io-client";
 import config from "../../config";
 
+import ringing from "../../assets/ringing.mp3";
+
 const initialState = {
     socket: null,
     RtcEngine: null,
+    call: {
+        time: 0,
+        received: false,
+        data: null,
+        localAudioTrack: null,
+    },
 };
+
+let ringingRef;
 
 export const globalSlice = createSlice({
     name: "global",
@@ -33,9 +43,45 @@ export const globalSlice = createSlice({
                 });
             }
         },
+        addCall: (state, action) => {
+            state.call.data = action.payload;
+
+            if (!state.call.received) {
+                ringingRef = new Audio(ringing);
+                ringingRef.loop = true;
+                ringingRef.play();
+            } else {
+                ringingRef?.pause();
+            }
+        },
+        removeCall: (state, action) => {
+            state.call.data = action.payload;
+            state.call.time = 0;
+            state.call.received = false;
+            ringingRef?.pause();
+        },
+        callReceived: (state, action) => {
+            if (action.payload) {
+                state.call.received = true;
+                state.call.time = 0;
+                ringingRef?.pause();
+            } else {
+                state.call.data = null;
+                state.call.received = false;
+                state.call.time = 0;
+                ringingRef?.pause();
+            }
+        },
+        addLocalAudioTrack: (state, action) => {
+            state.call.localAudioTrack = action.payload;
+        },
+        incrementCallTime: (state) => {
+            state.call.time = state.call.time + 1;
+        },
     },
 });
 
-export const { initializeSocket, initializeRtcEngine } = globalSlice.actions;
+export const { initializeSocket, initializeRtcEngine, addCall, removeCall, callReceived, addLocalAudioTrack, incrementCallTime } =
+    globalSlice.actions;
 
 export default globalSlice.reducer;
