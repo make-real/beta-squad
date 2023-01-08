@@ -16,13 +16,13 @@ const SquadMembers = ({ showType, selectedSpace }) => {
 
     const fetchSquadMembers = async () => {
         try {
-            const { data } = await get_space_members(selectedSpace._id)
+            const { data } = await get_space_members(selectedSpace?._id)
             console.log(data)
             setMembers(data?.members)
         } catch (err) {
-            toast.error(err?.message, {
-                autoClose: 3000,
-            })
+            // toast.error(err?.message, {
+            //     autoClose: 3000,
+            // })
             console.log('Error occured ==> ', err)
         }
     }
@@ -43,8 +43,10 @@ const SquadMembers = ({ showType, selectedSpace }) => {
     }
 
     useEffect(() => {
-        fetchSquadMembers()
-    }, [])
+        if (selectedSpace) {
+            fetchSquadMembers()
+        }
+    }, [selectedSpace])
 
     return (
         <>

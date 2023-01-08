@@ -29,11 +29,19 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
         (state) => state.workspace
     )
     const userInfo = useSelector((state) => state.userInfo.userInfo)
+    const location = useLocation()
 
     const Tabs = {
         projects: <Projects showType={showType} />,
         squad_members: <WorkspaceMembers showType={showType} />,
     }
+
+    useEffect(() => {
+        let tab = location.hash.slice(1)
+        if (tab) {
+            setSelectedTab(tab)
+        }
+    }, [location])
 
     // const location = useLocation();
 
@@ -123,7 +131,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                         </div>
                         <div className="mt-[30px] h-full flex flex-col overflow-hidden">
                             <div className="flex items-center gap-[50px]">
-                                <h2
+                                <a
+                                    href={`#projects`}
                                     onClick={() => setSelectedTab('projects')}
                                     className={`${
                                         selectedTab === 'projects'
@@ -132,8 +141,9 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                 >
                                     Projects
-                                </h2>
-                                <h2
+                                </a>
+                                <a
+                                    href={`#squad_members`}
                                     onClick={() =>
                                         setSelectedTab('squad_members')
                                     }
@@ -144,7 +154,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                                 >
                                     Squad Members
-                                </h2>
+                                </a>
                             </div>
                             <div className="w-full h-[1px] bg-[#ECECEC]"></div>
                             {Tabs[selectedTab]}
