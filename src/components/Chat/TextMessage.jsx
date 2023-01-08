@@ -271,7 +271,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond, forComment, commen
 
     const messagesState = useSelector((state) => state.message.messages);
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-    const socket = useSelector((state) => state.socket.socket);
+    const socket = useSelector((state) => state.global.socket);
 
     const messages = forComment ? comments : messagesState;
     const userId = JSON.parse(localStorage.getItem("userId"));
@@ -320,7 +320,7 @@ const TextMessage = ({ messageToRespond, setMessageToRespond, forComment, commen
 
     const scrollToBottom = () => {
         setTimeout(() => {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+            messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
     };
 

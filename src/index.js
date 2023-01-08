@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 requestNotificationPermission();
 
 root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
                 <BoardCardContext>
@@ -27,5 +27,5 @@ root.render(
                 </BoardCardContext>
             </BrowserRouter>
         </Provider>
-    </React.StrictMode>
+    // </React.StrictMode>
 );

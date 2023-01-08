@@ -6,7 +6,7 @@ import message from "./slice/message";
 import board from "./slice/board";
 import cardAsList from "./slice/cardAsList";
 import privateChat from "./slice/privateChat";
-import socket from "./slice/socket";
+import global from "./slice/global";
 import screen from "./slice/screen";
 
 const rootReducer = combineReducers({
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
     cardAsList,
     privateChat,
     screen,
-    socket,
+    global,
 });
 
 const store = configureStore({

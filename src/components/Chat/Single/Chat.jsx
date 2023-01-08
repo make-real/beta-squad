@@ -6,7 +6,6 @@ import { addBulkMessagePrivate } from '../../../store/slice/privateChat'
 import { useDispatch } from 'react-redux'
 import PrivateTextMessage from '../PrivateTextMessage'
 import PrivateMessageBox from '../PrivateMessageBox'
-import BackArrowIcon from '../../../assets/back_arrow.svg'
 import SearchIcon from '../../../assets/search.svg'
 import VideoCallIcon from '../../../assets/video_call.svg'
 import AudioCallIcon from '../../../assets/audio_call.svg'
@@ -21,17 +20,15 @@ import More from '../../../assets/icon_component/More'
 import Folder from '../../../assets/icon_component/Folder'
 
 const SingleChat = () => {
-    const { participantID, workspace_id } = useParams()
-    const [selectedTab, setSelectedTab] = useState('messages')
-    const [selectedMember, setSelectedMember] = useState({})
-    const workspaceMembers = useSelector(
-        (state) => state.workspace.workspaceMembers
-    )
-    const socket = useSelector((state) => state?.socket?.socket)
-    const [showType, setShowType] = useState('grid')
-    const [call, setCall] = useState(false)
-
+    
     const location = useLocation()
+    const { participantID, workspace_id } = useParams();
+    const [selectedTab, setSelectedTab] = useState("messages");
+    const [selectedMember, setSelectedMember] = useState({});
+    const workspaceMembers = useSelector((state) => state.workspace.workspaceMembers);
+    const socket = useSelector((state) => state.global.socket);
+    const [showType, setShowType] = useState("grid");
+    const [call, setCall] = useState(false);
 
     const startCall = () => {
         setCall(true)

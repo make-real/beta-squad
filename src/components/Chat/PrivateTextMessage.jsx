@@ -279,11 +279,11 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
 
     const scrollToBottom = () => {
         setTimeout(() => {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+            messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
     };
 
-    const socket = useSelector((state) => state.socket.socket);
+    const socket = useSelector((state) => state.global.socket);
 
     const { participantID } = useParams();
 

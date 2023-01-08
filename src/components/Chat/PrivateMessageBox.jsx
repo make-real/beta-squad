@@ -355,8 +355,8 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
 
                                 <div className="flex flex-1 mx-auto w-full overflow-hidden cursor-pointer relative">
                                     {/* <span className="text-xs ">Recording...</span> */}
-                                    {Array.from({ length: 20 }).map(() => (
-                                        <ScaleLoader width={2} color="#6576FF" />
+                                    {Array.from({ length: 20 }).map((i, idx) => (
+                                        <ScaleLoader key={idx} width={2} color="#6576FF" />
                                     ))}
                                 </div>
 
