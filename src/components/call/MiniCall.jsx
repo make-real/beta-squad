@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Draggable from "react-draggable";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { ScaleLoader } from "react-spinners";
 import CallEnd from "../../assets/icon_component/CallEnd";
 import Folder from "../../assets/icon_component/Folder";
 import MicrophoneOff from "../../assets/icon_component/MicrophoneOff";
@@ -57,44 +58,59 @@ export default function MiniCall() {
 
     return (
         <Draggable>
-            <div className="absolute bg-white  drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)] right-5 top-5 p-5 rounded-xl z-[1000] flex cursor-move">
-                <div className="flex w-full">
-                    {!Boolean(call?.data?.space?.fullName) && (
-                        <Folder
-                            className="w-[20px] h-[20px] mr-2"
-                            style={{
-                                fill: call?.data?.space?.color,
-                            }}
-                        />
-                    )}
+            <div className="absolute bg-white  drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)] right-5 top-5 p-5 rounded-xl z-[1000] cursor-move">
+                <div className="flex">
+                    <div className="flex w-full">
+                        {!Boolean(call?.data?.space?.fullName) && (
+                            <Folder
+                                className="w-[20px] h-[20px] mr-2"
+                                style={{
+                                    fill: call?.data?.space?.color,
+                                }}
+                            />
+                        )}
 
-                    <div>
-                        <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
-                            {call?.data?.space?.fullName || call?.data?.space?.name}
-                        </h2>
-                        <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
-                            {call?.received ? convertSeconds(call?.time) : "Calling..."}{" "}
-                        </p>
+                        <div>
+                            <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
+                                {call?.data?.space?.fullName || call?.data?.space?.name}
+                            </h2>
+                            <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
+                                {call?.received ? convertSeconds(call?.time) : "Calling..."}{" "}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center self-start gap-4">
+                        {call?.received && (
+                            <>
+                                <VideoOff className="cursor-pointer" />
+                                {micMuted ? (
+                                    <MicrophoneOff onClick={handleMicMuteUnmute} className="cursor-pointer" />
+                                ) : (
+                                    <MicrophoneOn onClick={handleMicMuteUnmute} className="cursor-pointer" />
+                                )}
+                            </>
+                        )}
+
+                        <CallEnd className="cursor-pointer" onClick={endCall} />
+
+                        {!call?.received && <ReceiveCall onClick={handleReceiveCall} className="cursor-pointer h-[24px]" />}
+
+                        {call?.received && <More className="cursor-pointer" />}
                     </div>
                 </div>
 
-                <div className="flex items-center self-start gap-4">
-                    {call?.received && (
-                        <>
-                            <VideoOff className="cursor-pointer" />
-                            {micMuted ? (
-                                <MicrophoneOff onClick={handleMicMuteUnmute} className="cursor-pointer" />
-                            ) : (
-                                <MicrophoneOn onClick={handleMicMuteUnmute} className="cursor-pointer" />
-                            )}
-                        </>
-                    )}
-
-                    <CallEnd className="cursor-pointer" onClick={endCall} />
-
-                    {!call?.received && <ReceiveCall onClick={handleReceiveCall} className="cursor-pointer h-[24px]" />}
-
-                    {call?.received && <More className="cursor-pointer" />}
+                <div className="flex h-[50px] justify-center items-center">
+                    {call.indications.map((i, idx) => (
+                        <div
+                            key={idx}
+                            className={`w-[2px]  bg-blue-600 mx-[2px]`}
+                            style={{
+                                height: `${Math.round(i)}px`,
+                            }}
+                        >
+                        </div>
+                    ))}
                 </div>
             </div>
         </Draggable>

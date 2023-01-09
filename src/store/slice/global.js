@@ -5,6 +5,18 @@ import config from "../../config";
 
 import ringing from "../../assets/ringing.mp3";
 
+function pushAndRemove(array, element, maxLength) {
+    // Push the new element to the array
+    array.push(element);
+
+    // Remove the oldest element from the array if necessary
+    while (array.length > maxLength) {
+        array.shift();
+    }
+
+    return array;
+}
+
 const initialState = {
     socket: null,
     RtcEngine: null,
@@ -13,6 +25,7 @@ const initialState = {
         received: false,
         data: null,
         localAudioTrack: null,
+        indications: [],
     },
 };
 
@@ -78,10 +91,13 @@ export const globalSlice = createSlice({
         incrementCallTime: (state) => {
             state.call.time = state.call.time + 1;
         },
+        addIndicationData: (state, action) => {
+            state.call.indications = pushAndRemove(state.call.indications, action.payload, 42);
+        },
     },
 });
 
-export const { initializeSocket, initializeRtcEngine, addCall, removeCall, callReceived, addLocalAudioTrack, incrementCallTime } =
+export const { initializeSocket, initializeRtcEngine, addCall, removeCall, callReceived, addLocalAudioTrack, incrementCallTime, addIndicationData } =
     globalSlice.actions;
 
 export default globalSlice.reducer;

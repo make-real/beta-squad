@@ -30,7 +30,7 @@ import Home from "./components/Home/Home";
 import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
 import ProfileScreen from "./components/Profile/Profile";
 import CardDetails from "./components/Board/CardDetails";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
 import { get_space_data, get_workspace_data } from "./api/workSpace";
@@ -39,7 +39,15 @@ import SquadScreen from "./components/Home/SquadScreen";
 import { setSelectedSpaceObject, setSelectedSpaceId } from "./store/slice/space";
 import { initFullSidebar } from "./store/slice/screen";
 import NavigateUser from "./components/Home/NavigateUser";
-import { addCall, addLocalAudioTrack, callReceived, incrementCallTime, initializeRtcEngine, initializeSocket } from "./store/slice/global";
+import {
+    addCall,
+    addIndicationData,
+    addLocalAudioTrack,
+    callReceived,
+    incrementCallTime,
+    initializeRtcEngine,
+    initializeSocket,
+} from "./store/slice/global";
 import MiniCall from "./components/call/MiniCall";
 import AgoraRTC from "agora-rtc-sdk-ng";
 
@@ -124,6 +132,8 @@ const CardRoute = ({ children }) => {
 };
 
 const App = () => {
+    const indRef = useRef();
+
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const currentWorkspace = useSelector((state) => state.workspace.currentWorkspace);
     const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
@@ -154,11 +164,18 @@ const App = () => {
             await RtcEngine?.publish([localAudioTrack]);
         });
 
-        socket?.on("ON_CALL_END", async (call) => {
-            dispatch(callReceived(false));
+        socket?.on("ON_CALL_END", async (c) => {
+            try {
+                console.log("ON_CALL_END");
+                dispatch(callReceived(false));
 
-            await call?.localAudioTrack?.close();
-            await RtcEngine?.leave();
+                await call?.localAudioTrack?.close();
+                await RtcEngine?.leave();
+
+                console.log("ON_CALL_END 2");
+            } catch (error) {
+                console.log(error);
+            }
         });
 
         RtcEngine?.on("user-published", async (user, mediaType) => {
@@ -194,15 +211,23 @@ const App = () => {
         RtcEngine?.on("volume-indicator", (volumes) => {
             volumes.forEach((volume) => {
                 console.log(`UID ${volume.uid} Level ${volume.level}`);
+                indRef.current = Math.floor(volume.level / 2);
             });
         });
 
+        let interval = setInterval(() => {
+            dispatch(addIndicationData(indRef.current));
+        }, 20);
+
         return () => {
+            RtcEngine?.off("volume-indicator");
             socket?.off("ON_CALL");
             socket?.off("ON_CALL_END");
             socket?.off("ON_JOIN_CALL");
+
+            clearInterval(interval);
         };
-    }, [socket, uid, RtcEngine]);
+    }, [socket, uid, RtcEngine, call]);
 
     useEffect(() => {
         let interval;
