@@ -54,6 +54,7 @@ export const globalSlice = createSlice({
                     mode: "rtc",
                     codec: "vp8",
                 });
+                state.RtcEngine?.enableAudioVolumeIndicator();
             }
         },
         addCall: (state, action) => {

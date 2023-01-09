@@ -96,7 +96,7 @@ const ProjectRoute = ({ children }) => {
             }
         };
         getSpaceData();
-    }, [dispatch, params]);
+    }, [params?.workspace_id]);
 
     useEffect(() => {
         dispatch(setSelectedWorkSpaceId(params.workspace_id));
@@ -149,7 +149,6 @@ const App = () => {
 
     useEffect(() => {
         socket?.on("ON_CALL", (call) => {
-            console.log({ call });
             dispatch(addCall(call));
         });
 
@@ -162,20 +161,6 @@ const App = () => {
             dispatch(addLocalAudioTrack(localAudioTrack));
 
             await RtcEngine?.publish([localAudioTrack]);
-        });
-
-        socket?.on("ON_CALL_END", async (c) => {
-            try {
-                console.log("ON_CALL_END");
-                dispatch(callReceived(false));
-
-                await call?.localAudioTrack?.close();
-                await RtcEngine?.leave();
-
-                console.log("ON_CALL_END 2");
-            } catch (error) {
-                console.log(error);
-            }
         });
 
         RtcEngine?.on("user-published", async (user, mediaType) => {
@@ -206,8 +191,6 @@ const App = () => {
             });
         });
 
-        RtcEngine?.enableAudioVolumeIndicator();
-
         RtcEngine?.on("volume-indicator", (volumes) => {
             volumes.forEach((volume) => {
                 console.log(`UID ${volume.uid} Level ${volume.level}`);
@@ -220,6 +203,8 @@ const App = () => {
         }, 20);
 
         return () => {
+            RtcEngine?.off("user-published");
+            RtcEngine?.off("user-unpublished");
             RtcEngine?.off("volume-indicator");
             socket?.off("ON_CALL");
             socket?.off("ON_CALL_END");
@@ -227,7 +212,24 @@ const App = () => {
 
             clearInterval(interval);
         };
-    }, [socket, uid, RtcEngine, call]);
+    }, [socket, uid, RtcEngine]);
+
+    useEffect(() => {
+        socket?.on("ON_CALL_END", async (c) => {
+            try {
+                dispatch(callReceived(false));
+
+                await call?.localAudioTrack?.close();
+                await RtcEngine?.leave();
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+        return () => {
+            socket?.off("ON_CALL_END");
+        };
+    }, [socket, call]);
 
     useEffect(() => {
         let interval;

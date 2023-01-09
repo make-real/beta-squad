@@ -104,7 +104,7 @@ const SideNavbar = () => {
         };
 
         getSpaceData();
-    }, [dispatch, selectedWorkspace, params]);
+    }, [selectedWorkspace, params?.workspace_id]);
 
     const openChat = (id) => {
         navigate("single-chat/" + id);
