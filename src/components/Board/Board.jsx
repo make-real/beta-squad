@@ -14,8 +14,14 @@ import images from '../../assets';
 import { useSelector } from 'react-redux';
 import { filterStatus } from '../../store/slice/board';
 import BoardStackList from './BoardStackList';
+import { useParams } from 'react-router-dom';
 
-const Board = ({ selectedSpaceId, showType }) => {
+const Board = ({  showType }) => {
+
+
+    const {squadId} = useParams();
+
+
     const { handleDragEnd, boardLists, setBoardList, addBoardList } =
         useBoardCardContext();
     const { filter } = useSelector((state) => state.board);
@@ -23,9 +29,9 @@ const Board = ({ selectedSpaceId, showType }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (selectedSpaceId) {
+                if (squadId) {
                     const { data } = await useAxios.get(
-                        `/spaces/${selectedSpaceId}/board?getCards=true`
+                        `/spaces/${squadId}/board?getCards=true`
                     );
 
                     setBoardList(data.lists);
@@ -36,17 +42,17 @@ const Board = ({ selectedSpaceId, showType }) => {
             }
         };
         fetchData();
-    }, [selectedSpaceId, setBoardList]);
+    }, [squadId, setBoardList]);
 
     const [listLoading, setListLoading] = useState(false);
 
-    const handleBoardListCreation = async (selectedSpaceId, text) => {
+    const handleBoardListCreation = async (squadId, text) => {
         const listObject = { name: text };
         setListLoading(true);
 
         try {
             const { data } = await addBoardListApiCall(
-                selectedSpaceId,
+                squadId,
                 listObject
             );
             setListLoading(false);
@@ -84,20 +90,20 @@ const Board = ({ selectedSpaceId, showType }) => {
 
             if (type === 'column') {
                 await updateListOrder(
-                    selectedSpaceId,
+                    squadId,
                     draggableId,
                     Number(destination.index) + 1
                 );
             } else if (destination.droppableId === source.droppableId) {
                 await updateCardOrder(
-                    selectedSpaceId,
+                    squadId,
                     source.droppableId,
                     draggableId,
                     Number(destination.index) + 1
                 );
             } else {
                 await moveCard(
-                    selectedSpaceId,
+                    squadId,
                     source.droppableId,
                     draggableId,
                     destination.droppableId,
@@ -169,7 +175,7 @@ const Board = ({ selectedSpaceId, showType }) => {
 
     return (
         <section className={`duration-200 overflow-auto customScroll h-full`}>
-            {selectedSpaceId ? (
+            {squadId ? (
                 showType === 'grid' ? (
                     <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
                         <DragDropContext onDragEnd={dragEnd}>
@@ -207,7 +213,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                             placeHolder="Add list name..."
                             btnText="list"
                             onSubmit={(text) =>
-                                handleBoardListCreation(selectedSpaceId, text)
+                                handleBoardListCreation(squadId, text)
                             }
                         />
                     </div>
@@ -248,7 +254,7 @@ const Board = ({ selectedSpaceId, showType }) => {
                             placeHolder="Add list name..."
                             btnText="list"
                             onSubmit={(text) =>
-                                handleBoardListCreation(selectedSpaceId, text)
+                                handleBoardListCreation(squadId, text)
                             }
                         />
                     </div>
