@@ -194,13 +194,10 @@ const App = () => {
         RtcEngine?.on("volume-indicator", (volumes) => {
             volumes.forEach((volume) => {
                 console.log(`UID ${volume.uid} Level ${volume.level}`);
-                indRef.current = Math.floor(volume.level / 2);
+
+                dispatch(addIndicationData(Math.floor(volume.level / 2)));
             });
         });
-
-        let interval = setInterval(() => {
-            dispatch(addIndicationData(indRef.current));
-        }, 20);
 
         return () => {
             RtcEngine?.off("user-published");
@@ -209,8 +206,6 @@ const App = () => {
             socket?.off("ON_CALL");
             socket?.off("ON_CALL_END");
             socket?.off("ON_JOIN_CALL");
-
-            clearInterval(interval);
         };
     }, [socket, uid, RtcEngine]);
 
