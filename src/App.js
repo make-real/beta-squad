@@ -152,9 +152,15 @@ const App = () => {
             dispatch(addCall(call));
         });
 
+        socket?.on("ON_CALL_UPDATED", (call) => {
+            dispatch(addCall(call));
+        });
+
         socket?.on("ON_JOIN_CALL", async (call, token) => {
+            dispatch(addCall(call));
             dispatch(callReceived(true));
-            await RtcEngine?.join("b4304444d7834aca8f8036e813705e51", call?.channelId, token, uid);
+
+            await RtcEngine?.join("d650cc9984014529827ee1a4bcb345fc", call?.channelId, token, uid);
 
             const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 
@@ -203,8 +209,8 @@ const App = () => {
             RtcEngine?.off("user-published");
             RtcEngine?.off("user-unpublished");
             RtcEngine?.off("volume-indicator");
+            socket?.off("ON_CALL_UPDATED");
             socket?.off("ON_CALL");
-            socket?.off("ON_CALL_END");
             socket?.off("ON_JOIN_CALL");
         };
     }, [socket, uid, RtcEngine]);
@@ -216,6 +222,7 @@ const App = () => {
 
                 await call?.localAudioTrack?.close();
                 await RtcEngine?.leave();
+                window.location.reload();
             } catch (error) {
                 console.log(error);
             }
@@ -229,14 +236,14 @@ const App = () => {
     useEffect(() => {
         let interval;
 
-        if (call?.received) interval = setInterval(() => dispatch(incrementCallTime()), 1000);
+        if (call?.data?.participants?.length >= 2) interval = setInterval(() => dispatch(incrementCallTime()), 1000);
 
-        if (!call?.received) clearInterval(interval);
+        if (call?.data?.participants?.length === 1) clearInterval(interval);
 
         return () => {
             clearInterval(interval);
         };
-    }, [call?.received]);
+    }, [call?.data?.participants]);
 
     return (
         <main className="overflow-hidden">
