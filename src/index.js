@@ -21,9 +21,10 @@ channel.postMessage("another-tab");
 
 channel.addEventListener("message", (msg) => {
     if (msg.data === "another-tab") {
-        window.close()
-        // message received from 2nd tab
-        // alert("Cannot open multiple instances");
+        document.body.innerHTML = `<div class="container py-4 flex items-center justify-center self-center"><div class="bg-red-500 text-white p-4 rounded-lg text-center">
+        <p class="font-medium">Sorry, Multiple tabs are not allowed.</p>
+      </div></div>
+      `;
     }
 });
 
