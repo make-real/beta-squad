@@ -91,23 +91,19 @@ export default function MiniCall() {
             }
 
             if (call?.localVideoTrack) {
+                await call?.localVideoTrack?.setEnabled(false);
+                await call?.localVideoTrack?.stop();
+                await call?.localVideoTrack?.close();
                 await RtcEngine?.unpublish([call?.localVideoTrack]);
+                dispatch(addLocalVideoTrack(null));
+            } else {
+                const localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+                dispatch(addLocalVideoTrack(localVideoTrack));
+                localVideoTrack.play(selfVideoContainerRef.current);
+                await RtcEngine?.publish([localVideoTrack]);
             }
-
-            const localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-            dispatch(addLocalVideoTrack(localVideoTrack));
-            localVideoTrack.play(selfVideoContainerRef.current);
-            await RtcEngine?.publish([localVideoTrack]);
 
             setCameraOff(!cameraOff);
-
-            if (cameraOff) {
-                localVideoTrack?.play(selfVideoContainerRef.current);
-                localVideoTrack.setEnabled(true);
-            } else {
-                localVideoTrack?.stop();
-                localVideoTrack.setEnabled(false);
-            }
 
             socket?.emit("CAMERA_STATE_CHANGED", call?.data?._id, !cameraOff);
         } catch (error) {
@@ -121,7 +117,11 @@ export default function MiniCall() {
 
     const handleShareScreen = async () => {
         try {
-            if (!cameraOff) setCameraOff(true);
+            if (!cameraOff) {
+                alert("Stop your camera first.");
+
+                return;
+            }
 
             if (call?.localVideoTrack) {
                 await RtcEngine?.unpublish([call?.localVideoTrack]);
