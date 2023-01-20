@@ -62,6 +62,7 @@ export const globalSlice = createSlice({
             state.call.data = action.payload;
 
             if (!state.call.received) {
+                ringingRef?.pause();
                 ringingRef = new Audio(ringing);
                 ringingRef.loop = true;
                 ringingRef.play();
@@ -70,7 +71,7 @@ export const globalSlice = createSlice({
             }
         },
         removeCall: (state, action) => {
-            state.call.data = action.payload;
+            state.call.data = null;
             state.call.time = 0;
             state.call.received = false;
             ringingRef?.pause();
@@ -108,6 +109,14 @@ export const globalSlice = createSlice({
         addIndicationData: (state, action) => {
             state.call.indications = pushAndRemove(state.call.indications, action.payload, 42);
         },
+        ignoreCall: (state) => {
+            if (!state.call.received) {
+                state.call.data = null;
+                state.call.time = 0;
+                state.call.received = false;
+                ringingRef?.pause();
+            }
+        },
     },
 });
 
@@ -122,6 +131,7 @@ export const {
     incrementCallTime,
     addIndicationData,
     addLocalVideoTrack,
+    ignoreCall
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

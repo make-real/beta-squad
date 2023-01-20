@@ -55,7 +55,7 @@ const SingleChat = () => {
         if (call?.data) return;
 
         dispatch(callReceived(true));
-        socket?.emit("START_CALL", selectedMember?._id, false, type);
+        socket?.emit("START_CALL", selectedMember?._id, true, type);
     };
     const TabsScreen = {
         messages: <SingleChatScreen participantID={participantID} />,

@@ -45,6 +45,7 @@ import {
     addLocalAudioTrack,
     addRemoteVideoTrack,
     callReceived,
+    ignoreCall,
     incrementCallTime,
     initializeRtcEngine,
     initializeSocket,
@@ -153,6 +154,8 @@ const App = () => {
     useEffect(() => {
         socket?.on("ON_CALL", (call) => {
             dispatch(addCall(call));
+
+            setTimeout(() => dispatch(ignoreCall()), 60000);
         });
 
         socket?.on("ON_CALL_UPDATED", (call) => {

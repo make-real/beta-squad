@@ -246,7 +246,7 @@ export default function MiniCall() {
 
                     <div className="flex p-5">
                         <div className="flex w-full items-center">
-                            {!Boolean(call?.data?.target === "Space") ? (
+                            {Boolean(call?.data?.target === "Space") ? (
                                 <Folder
                                     className="w-[20px] h-[20px] mr-2"
                                     style={{
@@ -263,7 +263,9 @@ export default function MiniCall() {
 
                             <div>
                                 <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
-                                    {call?.data?.space?.fullName || call?.data?.participants.find((p) => p.user._id !== user._id)?.user.fullName}
+                                    {Boolean(call?.data?.target === "Space")
+                                        ? call?.data?.space?.name
+                                        : call?.data?.participants.find((p) => p.user._id !== user._id)?.user.fullName}
                                 </h2>
                                 <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
                                     {call?.received
