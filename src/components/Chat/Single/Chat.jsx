@@ -51,13 +51,12 @@ const SingleChat = () => {
         }
     };
 
-    const startCall = () => {
+    const startCall = (type) => {
         if (call?.data) return;
 
         dispatch(callReceived(true));
-        socket?.emit("START_CALL", selectedMember?._id, true);
+        socket?.emit("START_CALL", selectedMember?._id, false, type);
     };
-
     const TabsScreen = {
         messages: <SingleChatScreen participantID={participantID} />,
         board: <></>,
@@ -99,10 +98,10 @@ const SingleChat = () => {
                             </div>
                             {selectedTab === "messages" ? (
                                 <div className="flex items-center gap-[22px] relative">
-                                    <div className="cursor-pointer" onClick={startCall}>
+                                    <div className="cursor-pointer" onClick={() => startCall("video")}>
                                         <img src={VideoCallIcon} alt="video_call" />
                                     </div>
-                                    <div className="cursor-pointer" onClick={startCall}>
+                                    <div className="cursor-pointer" onClick={() => startCall("audio")}>
                                         <img src={AudioCallIcon} alt="audio_call" />
                                     </div>
                                 </div>

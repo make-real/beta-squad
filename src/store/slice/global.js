@@ -25,6 +25,7 @@ const initialState = {
         received: false,
         data: null,
         localAudioTrack: null,
+        localVideoTrack: null,
         indications: [],
     },
 };
@@ -89,6 +90,20 @@ export const globalSlice = createSlice({
         addLocalAudioTrack: (state, action) => {
             state.call.localAudioTrack = action.payload;
         },
+        addLocalVideoTrack: (state, action) => {
+            state.call.localVideoTrack = action.payload;
+        },
+        addRemoteVideoTrack: (state, action) => {
+            state.call.data.participants.map((participant) => {
+                if (participant.user.uid == action.payload.uid) {
+                    participant.video = action.payload.video;
+                }
+
+                return participant;
+            });
+
+            state.call.localVideoTrack = action.payload;
+        },
         incrementCallTime: (state) => {
             state.call.time = state.call.time + 1;
         },
@@ -98,7 +113,17 @@ export const globalSlice = createSlice({
     },
 });
 
-export const { initializeSocket, initializeRtcEngine, addCall, removeCall, callReceived, addLocalAudioTrack, incrementCallTime, addIndicationData } =
-    globalSlice.actions;
+export const {
+    initializeSocket,
+    initializeRtcEngine,
+    addCall,
+    removeCall,
+    callReceived,
+    addLocalAudioTrack,
+    addRemoteVideoTrack,
+    incrementCallTime,
+    addIndicationData,
+    addLocalVideoTrack,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

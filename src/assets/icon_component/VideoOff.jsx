@@ -1,8 +1,17 @@
 import React from "react";
 
-const VideoOff = ({ className, style }) => {
+const VideoOff = ({ className, style, onClick }) => {
     return (
-        <svg className={className} style={style} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            onClick={onClick}
+            className={className}
+            style={style}
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 opacity="0.4"
                 d="M5.83333 3.45825H10.8333C12.1895 3.45825 12.9292 3.72729 13.3509 4.149C13.7726 4.57071 14.0417 5.31044 14.0417 6.66659V13.3333C14.0417 14.6894 13.7726 15.4291 13.3509 15.8508C12.9292 16.2725 12.1895 16.5416 10.8333 16.5416H5.83333C4.56696 16.5416 3.80058 16.1078 3.33658 15.551C2.85328 14.9711 2.625 14.1683 2.625 13.3333V6.66659C2.625 5.31044 2.89404 4.57071 3.31575 4.149C3.73746 3.72729 4.47718 3.45825 5.83333 3.45825Z"

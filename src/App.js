@@ -43,6 +43,8 @@ import {
     addCall,
     addIndicationData,
     addLocalAudioTrack,
+    addLocalVideoTrack,
+    addRemoteVideoTrack,
     callReceived,
     incrementCallTime,
     initializeRtcEngine,
@@ -141,6 +143,8 @@ const App = () => {
     const uid = useSelector((state) => state.userInfo?.userInfo?.uid);
     const dispatch = useDispatch();
 
+    const localVideoRef = useRef();
+
     useEffect(() => {
         dispatch(initializeSocket());
         dispatch(initializeRtcEngine());
@@ -163,25 +167,39 @@ const App = () => {
             await RtcEngine?.join("d650cc9984014529827ee1a4bcb345fc", call?.channelId, token, uid);
 
             const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+            // const localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 
             dispatch(addLocalAudioTrack(localAudioTrack));
+            // dispatch(addLocalVideoTrack(localVideoTrack));
+
+            // localVideoTrack.play(localVideoRef.current);
 
             await RtcEngine?.publish([localAudioTrack]);
         });
 
         RtcEngine?.on("user-published", async (user, mediaType) => {
-            console.log("user-published");
+            console.log("####################################");
+            console.log("user-published %s", mediaType);
+            console.log("####################################");
 
-            // Subscribe to the remote user when the SDK triggers the "user-published" event.
             await RtcEngine?.subscribe(user, mediaType);
             console.log("subscribe success");
+
+            // Subscribe to the remote user when the SDK triggers the "user-published" event.
+
             // Subscribe and play the remote video in the container If the remote user publishes a video track.
             if (mediaType == "video") {
-                const remoteAudioTrack = user.audioTrack;
+                dispatch(
+                    addRemoteVideoTrack({
+                        uid: user.uid,
+                        video: user.videoTrack,
+                    })
+                );
+
+                // const remoteAudioTrack = user.audioTrack;
                 // const remoteVideoTrack = user.videoTrack;
                 // const remoteUserId = user.uid.toString();
-
-                remoteAudioTrack.play();
+                // remoteAudioTrack.play();
             }
             // Subscribe and play the remote audio track If the remote user publishes the audio track only.
             if (mediaType == "audio") {
@@ -247,7 +265,7 @@ const App = () => {
 
     return (
         <main className="overflow-hidden">
-            {call?.data && <MiniCall />}
+            {call?.data && <MiniCall localVideoRef={localVideoRef} />}
 
             <Routes>
                 <Route path="/" />
