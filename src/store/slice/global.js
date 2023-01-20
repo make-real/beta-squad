@@ -101,8 +101,6 @@ export const globalSlice = createSlice({
 
                 return participant;
             });
-
-            state.call.localVideoTrack = action.payload;
         },
         incrementCallTime: (state) => {
             state.call.time = state.call.time + 1;

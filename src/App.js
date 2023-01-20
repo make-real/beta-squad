@@ -43,7 +43,6 @@ import {
     addCall,
     addIndicationData,
     addLocalAudioTrack,
-    addLocalVideoTrack,
     addRemoteVideoTrack,
     callReceived,
     incrementCallTime,
@@ -167,12 +166,8 @@ const App = () => {
             await RtcEngine?.join("d650cc9984014529827ee1a4bcb345fc", call?.channelId, token, uid);
 
             const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-            // const localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 
             dispatch(addLocalAudioTrack(localAudioTrack));
-            // dispatch(addLocalVideoTrack(localVideoTrack));
-
-            // localVideoTrack.play(localVideoRef.current);
 
             await RtcEngine?.publish([localAudioTrack]);
         });

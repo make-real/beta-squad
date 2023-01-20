@@ -1,5 +1,6 @@
 import AgoraRTC from "agora-rtc-sdk-ng";
-import React, { useState } from "react";
+import { ca } from "date-fns/locale";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import Draggable from "react-draggable";
 import { useDispatch } from "react-redux";
@@ -40,6 +41,12 @@ export default function MiniCall() {
         return (num < 10 ? "0" : "") + num;
     }
 
+    useEffect(() => {
+        if (call?.localVideoTrack && selfVideoContainerRef.current) {
+            call?.localVideoTrack.play(selfVideoContainerRef.current);
+        }
+    }, [call, maximized]);
+
     function convertSeconds(seconds) {
         let hours = Math.floor(seconds / 3600);
         let minutes = Math.floor((seconds % 3600) / 60);
@@ -77,16 +84,20 @@ export default function MiniCall() {
 
     const handleCameraOnOff = async () => {
         try {
-            let localVideoTrack;
+            if (screenSharing) {
+                alert("Stop screen sharing first.");
 
-            if (!Boolean(call?.localVideoTrack)) {
-                localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-                dispatch(addLocalVideoTrack(localVideoTrack));
-                localVideoTrack.play(selfVideoContainerRef.current);
-                await RtcEngine?.publish([localVideoTrack]);
-            } else {
-                localVideoTrack = call?.localVideoTrack;
+                return;
             }
+
+            if (call?.localVideoTrack) {
+                await RtcEngine?.unpublish([call?.localVideoTrack]);
+            }
+
+            const localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+            dispatch(addLocalVideoTrack(localVideoTrack));
+            localVideoTrack.play(selfVideoContainerRef.current);
+            await RtcEngine?.publish([localVideoTrack]);
 
             setCameraOff(!cameraOff);
 
@@ -110,16 +121,16 @@ export default function MiniCall() {
 
     const handleShareScreen = async () => {
         try {
-            let localVideoTrack;
+            if (!cameraOff) setCameraOff(true);
 
-            if (!Boolean(call?.localVideoTrack)) {
-                localVideoTrack = await AgoraRTC.createScreenVideoTrack();
-                dispatch(addLocalVideoTrack(localVideoTrack));
-                localVideoTrack.play(selfVideoContainerRef.current);
-                await RtcEngine?.publish([localVideoTrack]);
-            } else {
-                localVideoTrack = call?.localVideoTrack;
+            if (call?.localVideoTrack) {
+                await RtcEngine?.unpublish([call?.localVideoTrack]);
             }
+
+            const localVideoTrack = await AgoraRTC.createScreenVideoTrack();
+            dispatch(addLocalVideoTrack(localVideoTrack));
+            localVideoTrack.play(selfVideoContainerRef.current);
+            await RtcEngine?.publish([localVideoTrack]);
 
             if (localVideoTrack) {
                 localVideoTrack.on("track-ended", async () => {
