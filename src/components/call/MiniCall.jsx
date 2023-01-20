@@ -106,9 +106,52 @@ export default function MiniCall() {
         }
     };
 
+    const [screenSharing, setScreenSharing] = useState(false);
+
+    const handleShareScreen = async () => {
+        try {
+            let localVideoTrack;
+
+            if (!Boolean(call?.localVideoTrack)) {
+                localVideoTrack = await AgoraRTC.createScreenVideoTrack();
+                dispatch(addLocalVideoTrack(localVideoTrack));
+                localVideoTrack.play(selfVideoContainerRef.current);
+                await RtcEngine?.publish([localVideoTrack]);
+            } else {
+                localVideoTrack = call?.localVideoTrack;
+            }
+
+            if (localVideoTrack) {
+                localVideoTrack.on("track-ended", async () => {
+                    await RtcEngine?.unpublish([localVideoTrack]);
+                    setScreenSharing(false);
+
+                    localVideoTrack?.stop();
+                    localVideoTrack.setEnabled(false);
+
+                    dispatch(addLocalVideoTrack(null));
+                });
+            }
+
+            setScreenSharing(!screenSharing);
+
+            if (screenSharing) {
+                localVideoTrack?.stop();
+                localVideoTrack.setEnabled(false);
+            } else {
+                localVideoTrack?.play(selfVideoContainerRef.current);
+                localVideoTrack.setEnabled(true);
+            }
+
+            socket?.emit("CAMERA_STATE_CHANGED", call?.data?._id, !screenSharing);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     if (maximized) {
         return (
-            <div className="absolute bg-[#031124] w-full h-full z-[999] overflow-y-scroll flex flex-col items-center">
+            <div className="absolute bg-[#031124] w-full h-full z-[999999999] overflow-y-scroll flex flex-col items-center">
                 <div className="bg-black/10 p-4 w-full sticky top-0">
                     <div className="flex">
                         {!Boolean(call?.data?.space?.fullName) && (
@@ -147,7 +190,12 @@ export default function MiniCall() {
                     ref={selfVideoContainerRef}
                 >
                     <div className="absolute flex flex-col items-center justify-center w-full h-full">
-                        <img src={getAvatarUrl(user?.fullName)} alt="" className="w-[48px] h-[48px] rounded-full border object-cover mb-2" crossOrigin="true" />
+                        <img
+                            src={getAvatarUrl(user?.fullName)}
+                            alt=""
+                            className="w-[48px] h-[48px] rounded-full border object-cover mb-2"
+                            crossOrigin="true"
+                        />
 
                         <h3>{user?.fullName}</h3>
                     </div>
@@ -170,7 +218,7 @@ export default function MiniCall() {
                             <MicrophoneOn className="w-7 h-7 cursor-pointer" onClick={handleMicMuteUnmute} />
                         )}
 
-                        <ScreenShare className="w-7 h-7 cursor-pointer" />
+                        {!screenSharing && <ScreenShare className="w-7 h-7 cursor-pointer" active={screenSharing} onClick={handleShareScreen} />}
 
                         <div>{convertSeconds(call?.time)}</div>
                     </div>
@@ -186,19 +234,25 @@ export default function MiniCall() {
                     {/* <div ref={localVideoRef} className="w-full h-[300px]"></div> */}
 
                     <div className="flex p-5">
-                        <div className="flex w-full">
-                            {!Boolean(call?.data?.space?.fullName) && (
+                        <div className="flex w-full items-center">
+                            {!Boolean(call?.data?.target === "Space") ? (
                                 <Folder
                                     className="w-[20px] h-[20px] mr-2"
                                     style={{
                                         fill: call?.data?.space?.color,
                                     }}
                                 />
+                            ) : (
+                                <img
+                                    src={getAvatarUrl(call?.data?.participants.find((p) => p.user._id !== user._id)?.user.fullName)}
+                                    alt=""
+                                    className="w-[28px] h-[28px] rounded-full border object-cover mr-2"
+                                />
                             )}
 
                             <div>
                                 <h2 className="text-[15px] leading-[19px] font-medium text-[#424D5B] mr-[9px] truncate w-[100px]">
-                                    {call?.data?.space?.fullName || call?.data?.space?.name}
+                                    {call?.data?.space?.fullName || call?.data?.participants.find((p) => p.user._id !== user._id)?.user.fullName}
                                 </h2>
                                 <p className="font-normal text-[12px] leading-[15px] text-[#818892]">
                                     {call?.received
