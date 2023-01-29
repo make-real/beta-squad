@@ -20,6 +20,9 @@ import More from "../../../assets/icon_component/More";
 import Folder from "../../../assets/icon_component/Folder";
 import { callReceived } from "../../../store/slice/global";
 
+import ring from "../../../assets/ring.wav";
+import { useRef } from "react";
+
 const SingleChat = () => {
     const location = useLocation();
     const { participantID, workspace_id } = useParams();
@@ -51,8 +54,20 @@ const SingleChat = () => {
         }
     };
 
+    const ringRef = useRef();
+
+    useEffect(() => {
+        if (call?.data?.participants?.length != 1) {
+            ringRef?.current?.pause();
+        }
+    }, [call?.data?.participants]);
+
     const startCall = (type) => {
         if (call?.data) return;
+
+        ringRef.current = new Audio(ring);
+        ringRef.current.loop = true;
+        ringRef.current.play();
 
         dispatch(callReceived(true));
         socket?.emit("START_CALL", selectedMember?._id, true, type);
