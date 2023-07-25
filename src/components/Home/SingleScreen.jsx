@@ -1,33 +1,33 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
-import { get_single_messages } from '../../api/chat';
-import { addBulkMessagePrivate } from '../../store/slice/privateChat';
-import { callReceived } from '../../store/slice/global';
-import PrivateTextMessage from '../Chat/PrivateTextMessage';
-import PrivateMessageBox from '../Chat/PrivateMessageBox';
-import SearchIcon from '../../assets/search.svg';
-import VideoCallIcon from '../../assets/video_call.svg';
-import AudioCallIcon from '../../assets/audio_call.svg';
-import GridIcon from '../../assets/icon_component/Grid';
-import RowVerticalIcon from '../../assets/icon_component/RowVertical';
-import images from '../../assets';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { AddBtn } from '../Board';
+import { useEffect } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
+import { get_single_messages } from "../../api/chat";
+import { addBulkMessagePrivate } from "../../store/slice/privateChat";
+import { callReceived } from "../../store/slice/global";
+import PrivateTextMessage from "../Chat/PrivateTextMessage";
+import PrivateMessageBox from "../Chat/PrivateMessageBox";
+import SearchIcon from "../../assets/search.svg";
+import VideoCallIcon from "../../assets/video_call.svg";
+import AudioCallIcon from "../../assets/audio_call.svg";
+import GridIcon from "../../assets/icon_component/Grid";
+import RowVerticalIcon from "../../assets/icon_component/RowVertical";
+import images from "../../assets";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { AddBtn } from "../Board";
 
 const SingleScreen = () => {
   const location = useLocation();
 
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState('messages');
+  const [selectedTab, setSelectedTab] = useState("messages");
   const [selectedMember, setSelectedMember] = useState({});
   const workspaceMembers = useSelector(
     (state) => state.workspace.workspaceMembers
   );
   const { socket, call } = useSelector((state) => state?.global);
-  const [showType, setShowType] = useState('grid');
+  const [showType, setShowType] = useState("grid");
 
   const dispatch = useDispatch();
 
@@ -57,7 +57,7 @@ const SingleScreen = () => {
     if (call?.data) return;
 
     dispatch(callReceived(true));
-    socket?.emit('START_CALL', selectedMember?._id, true, type);
+    socket?.emit("START_CALL", selectedMember?._id, true, type);
   };
   const TabsScreen = {
     messages: <SingleChatScreen participantID={participantID} />,
@@ -67,8 +67,8 @@ const SingleScreen = () => {
   };
 
   const TabsName = {
-    messages: 'Messages',
-    board: 'Board',
+    messages: "Messages",
+    board: "Board",
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const SingleScreen = () => {
   }, [location]);
 
   return (
-    <div className="bg-[#F9F9FF] w-full h-full">
+    <div className="bg-[#FFF] w-full h-full">
       <div className="relative pt-[40px] pb-[40px] px-[40px] h-full flex flex-col">
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[36px] flex flex-col">
           <div className="flex items-center justify-between">
@@ -106,17 +106,17 @@ const SingleScreen = () => {
                   className=" placeholder:text-[#99A6B9] border-none outline-none"
                 />
               </div>
-              {selectedTab === 'messages' ? (
+              {selectedTab === "messages" ? (
                 <div className="flex items-center gap-[22px] relative">
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall('video')}
+                    onClick={() => startCall("video")}
                   >
                     <img src={VideoCallIcon} alt="video_call" />
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall('audio')}
+                    onClick={() => startCall("audio")}
                   >
                     <img src={AudioCallIcon} alt="audio_call" />
                   </div>
@@ -125,15 +125,15 @@ const SingleScreen = () => {
                 <div className="flex items-center gap-[22px]">
                   <div
                     className="cursor-pointer"
-                    onClick={() => setShowType('grid')}
+                    onClick={() => setShowType("grid")}
                   >
-                    <GridIcon isSelected={showType === 'grid'} />
+                    <GridIcon isSelected={showType === "grid"} />
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => setShowType('stack')}
+                    onClick={() => setShowType("stack")}
                   >
-                    <RowVerticalIcon isSelected={showType === 'stack'} />
+                    <RowVerticalIcon isSelected={showType === "stack"} />
                   </div>
                 </div>
               )}
@@ -149,8 +149,8 @@ const SingleScreen = () => {
                     onClick={() => setSelectedTab(value)}
                     className={`${
                       selectedTab === value
-                        ? 'border-b-2 border-b-[#6576FF] text-[#031124]'
-                        : 'text-[#818892]'
+                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                        : "text-[#818892]"
                     } text-[19px] font-medium  pb-[10px] cursor-pointer`}
                   >
                     {TabsName[value]}
@@ -209,8 +209,8 @@ const SingleChatScreen = () => {
         className={`overflow-y-auto hide-scrollbar overflow-x-hidden border-b-[0.5px] pt-5 customScroll flex-1 
                 ${
                   messageToRespond
-                    ? 'h-[calc(100%-245px)]'
-                    : 'h-[calc(100%-145px)]'
+                    ? "h-[calc(100%-245px)]"
+                    : "h-[calc(100%-145px)]"
                 }
                 `}
       >
@@ -235,7 +235,7 @@ const SingleBoardScreen = ({ showType }) => {
 
   const dispatch = useDispatch();
 
-  const userId = JSON.parse(localStorage.getItem('userId'));
+  const userId = JSON.parse(localStorage.getItem("userId"));
 
   //   useEffect(() => {
   //     getMessages();
@@ -254,7 +254,7 @@ const SingleBoardScreen = ({ showType }) => {
   return (
     <section className={`duration-200 overflow-auto customScroll h-full`}>
       {userId ? (
-        showType === 'grid' ? (
+        showType === "grid" ? (
           <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
             <p>grid view</p>
             {/* <DragDropContext onDragEnd={dragEnd}>

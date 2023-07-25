@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import LogoIcon from '../../assets/logo.svg';
-import NotificationIcon from '../../assets/notification.svg';
-import ArrowDown from '../../assets/arrowdown.svg';
-import SettingsIcon from '../../assets/setting.svg';
-import LogoutIcon from '../../assets/logout.svg';
-import ProfileIcon from '../../assets/profile.svg';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { userLogOut } from '../../hooks/useFetch';
-import { useDispatch } from 'react-redux';
-import { setSelectedWorkSpaceId } from '../../store/slice/workspace';
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import LogoIcon from "../../assets/logo.svg";
+import NotificationIcon from "../../assets/notification.svg";
+import ArrowDown from "../../assets/arrowdown.svg";
+import SettingsIcon from "../../assets/setting.svg";
+import LogoutIcon from "../../assets/logout.svg";
+import ProfileIcon from "../../assets/profile.svg";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { userLogOut } from "../../hooks/useFetch";
+import { useDispatch } from "react-redux";
+import { setSelectedWorkSpaceId } from "../../store/slice/workspace";
 import {
   setSelectedSpaceId,
   setSelectedSpaceObject,
-} from '../../store/slice/space';
-import NotificationsModal from '../Modals/NotificationsModal';
-import LeftArrow from '../../assets/left_arrow.svg';
-import VerticalDots from '../../assets/vertical_dots.svg';
-import HorizontalDots from '../../assets/horizontal_dots.svg';
-import BellIcon from '../../assets/icon_component/NotificationIcon';
-import { toggleFullSidebar } from '../../store/slice/screen';
-import { get_notifications } from '../../api/notification';
-import { useRef } from 'react';
-import { getAvatarUrl } from '../../util/getAvatarUrl';
-import FolderIcon from '../../assets/icon_component/Folder';
-import TaskListIcon from '../../assets/icon_component/TaskListIcon';
-const userId = JSON.parse(localStorage.getItem('userId'));
+} from "../../store/slice/space";
+import NotificationsModal from "../Modals/NotificationsModal";
+import LeftArrow from "../../assets/left_arrow.svg";
+import VerticalDots from "../../assets/vertical_dots.svg";
+import HorizontalDots from "../../assets/horizontal_dots.svg";
+import BellIcon from "../../assets/icon_component/NotificationIcon";
+import { toggleFullSidebar } from "../../store/slice/screen";
+import { get_notifications } from "../../api/notification";
+import { useRef } from "react";
+import { getAvatarUrl } from "../../util/getAvatarUrl";
+import FolderIcon from "../../assets/icon_component/Folder";
+import TaskListIcon from "../../assets/icon_component/TaskListIcon";
+const userId = JSON.parse(localStorage.getItem("userId"));
 
 const TopNav = () => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -34,7 +34,7 @@ const TopNav = () => {
 
   useEffect(() => {
     // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const jwt = JSON.parse(localStorage.getItem('jwt'));
+    const jwt = JSON.parse(localStorage.getItem("jwt"));
     // setUserInfo(userInfo);
     setJwt(jwt);
   }, []);
@@ -49,22 +49,22 @@ const TopNav = () => {
 const NotLoggedInTopNav = () => {
   const location = useLocation();
   const currentPage =
-    location.pathname === '/login'
-      ? 'login'
-      : location.pathname === '/register'
-      ? 'register'
-      : 'login';
+    location.pathname === "/login"
+      ? "login"
+      : location.pathname === "/register"
+      ? "register"
+      : "login";
   return (
     <div className="flex justify-between w-full py-[15px] px-[50px]">
       <div className="flex items-center gap-2">
         <img src={LogoIcon} alt="logo" />
-        <h1 className="text-[#6576FF] text-[20px]">TaskM</h1>
+        <h1 className="text-[#6576FF] text-[20px]">Beta Squad</h1>
       </div>
       <Link
-        to={`${currentPage === 'register' ? '/' : '/register'}`}
+        to={`${currentPage === "register" ? "/" : "/register"}`}
         className="bg-[#6576FF] px-[30px] py-[10px] text-white rounded-md font-normal text-sm cursor-pointer"
       >
-        {currentPage === 'register' ? 'Login' : 'Register'}
+        {currentPage === "register" ? "Login" : "Register"}
       </Link>
     </div>
   );
@@ -91,8 +91,8 @@ const LoggedInTopNav = () => {
     all: null,
     count: 0,
   });
-  const isProjectScreen = useLocation().pathname.startsWith('/projects');
-  const [selectedNotificationTab, setSelectedNotificationTab] = useState('all');
+  const isProjectScreen = useLocation().pathname.startsWith("/projects");
+  const [selectedNotificationTab, setSelectedNotificationTab] = useState("all");
   const workspaceMembers = useSelector(
     (state) => state.workspace.workspaceMembers
   );
@@ -101,8 +101,8 @@ const LoggedInTopNav = () => {
   const { participantID } = useParams();
 
   const isManageWorkspaceScreen =
-    useLocation().pathname.search('manage-workspace') !== -1;
-  const isProfileScreen = useLocation().pathname.search('profile') !== -1;
+    useLocation().pathname.search("manage-workspace") !== -1;
+  const isProfileScreen = useLocation().pathname.search("profile") !== -1;
   const userMenuDropDownRef = useRef();
   const notificationDropDownRef = useRef();
 
@@ -130,7 +130,7 @@ const LoggedInTopNav = () => {
     dispatch(setSelectedSpaceId(null));
     dispatch(setSelectedSpaceObject({}));
     localStorage.clear();
-    navigate('/');
+    navigate("/");
   };
 
   const fetchNotification = async () => {
@@ -166,13 +166,13 @@ const LoggedInTopNav = () => {
   // Auto close user drop down menu
   useEffect(() => {
     document.addEventListener(
-      'click',
+      "click",
       (e) => handleClickOutside(userMenuDropDownRef, e, setShowDropDownMenu),
       true
     );
     return () => {
       document.removeEventListener(
-        'click',
+        "click",
         (e) => handleClickOutside(userMenuDropDownRef, e, setShowDropDownMenu),
         true
       );
@@ -182,7 +182,7 @@ const LoggedInTopNav = () => {
   // Auto close notification drop down menu
   useEffect(() => {
     document.addEventListener(
-      'click',
+      "click",
       (e) =>
         handleClickOutside(
           notificationDropDownRef,
@@ -193,7 +193,7 @@ const LoggedInTopNav = () => {
     );
     return () => {
       document.removeEventListener(
-        'click',
+        "click",
         (e) =>
           handleClickOutside(userMenuDropDownRef, e, setShowNotificationModal),
         true
@@ -242,7 +242,7 @@ const LoggedInTopNav = () => {
             <span className="bg-[#6576FF]/[0.16] p-2 rounded-full">
               <TaskListIcon
                 className="w-[20px] h-[20px]"
-                style={{ fill: '#6576FF' }}
+                style={{ fill: "#6576FF" }}
               />
             </span>
             <p className="text-[#031124] text-[15px] font-medium">
@@ -296,13 +296,13 @@ const LoggedInTopNav = () => {
             <div
               ref={notificationDropDownRef}
               className={`z-[999] origin-top-right scale-0 pointer-events-none ${
-                showNotificationModal ? 'scale-100 pointer-events-auto' : ''
+                showNotificationModal ? "scale-100 pointer-events-auto" : ""
               } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[34px] px-[16px] pb-[20px] flex flex-col`}
             >
               {/* Title */}
               <div className="flex items-center justify-between">
                 <h1 className="text-[#031124] text-[20px] font-bold leading-[30px]">
-                  Notifications{' '}
+                  Notifications{" "}
                   <span className="font-normal">
                     ({notifications.count ?? 0})
                   </span>
@@ -316,21 +316,21 @@ const LoggedInTopNav = () => {
                 <ul className="flex items-center gap-[28px]">
                   <li
                     className={`text-[15px] font-medium cursor-pointer ${
-                      selectedNotificationTab === 'all'
-                        ? 'text-[#6576FF] border-b-2 border-[#6576FF]'
-                        : 'text-[#818892]'
+                      selectedNotificationTab === "all"
+                        ? "text-[#6576FF] border-b-2 border-[#6576FF]"
+                        : "text-[#818892]"
                     }`}
-                    onClick={() => setSelectedNotificationTab('all')}
+                    onClick={() => setSelectedNotificationTab("all")}
                   >
                     All
                   </li>
                   <li
                     className={`text-[15px] font-medium cursor-pointer ${
-                      selectedNotificationTab === 'unread'
-                        ? 'text-[#6576FF] border-b-2 border-[#6576FF]'
-                        : 'text-[#818892]'
+                      selectedNotificationTab === "unread"
+                        ? "text-[#6576FF] border-b-2 border-[#6576FF]"
+                        : "text-[#818892]"
                     }`}
-                    onClick={() => setSelectedNotificationTab('unread')}
+                    onClick={() => setSelectedNotificationTab("unread")}
                   >
                     Unread
                   </li>
@@ -383,7 +383,7 @@ const LoggedInTopNav = () => {
           <div
             ref={userMenuDropDownRef}
             className={`z-[999] origin-top-right scale-0 pointer-events-none ${
-              showDropDownMenu ? 'scale-100 pointer-events-auto' : ''
+              showDropDownMenu ? "scale-100 pointer-events-auto" : ""
             } transition-transform absolute top-[50px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
           >
             <h2 className="px-[20px] text-[#818892] text-[16px]">Workspaces</h2>
@@ -406,8 +406,8 @@ const LoggedInTopNav = () => {
                       }}
                       className={`${
                         selectedWorkspaceId === workspace._id
-                          ? 'bg-gray-100'
-                          : ''
+                          ? "bg-gray-100"
+                          : ""
                       } flex items-center gap-3 py-[10px] px-[20px] cursor-pointer`}
                     >
                       {workspace?.logo ? (
@@ -483,7 +483,7 @@ const AllNotification = ({ notifications }) => {
           <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
             <div className="flex items-center gap-[17px]">
               <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                <BellIcon style={{ fill: '#13E5C0' }} />
+                <BellIcon style={{ fill: "#13E5C0" }} />
               </div>
               <p className="text-[#031124]">{notification.message}</p>
             </div>
@@ -542,7 +542,7 @@ const UnreadNotification = ({ notifications }) => {
           <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
             <div className="flex items-center gap-[17px]">
               <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                <BellIcon style={{ fill: '#FB397F' }} />
+                <BellIcon style={{ fill: "#FB397F" }} />
               </div>
               <p className="text-[#031124]">{notification.message}</p>
             </div>

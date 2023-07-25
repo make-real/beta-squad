@@ -1,37 +1,37 @@
-import React, { useEffect } from 'react';
-import { CloseMenuBtn, Plus } from '../../assets/icons';
-import LogoIcon from '../../assets/logo.svg';
-import BorderedPlusIcon from '../../assets/borderedplus.svg';
-import SearchIcon from '../../assets/search.svg';
-import SquadIcon from '../../assets/icon_component/Squad';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import FolderIcon from '../../assets/icon_component/Folder';
-import PrivateFolderIcon from '../../assets/icon_component/PrivateFolder';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { CloseMenuBtn, Plus } from "../../assets/icons";
+import LogoIcon from "../../assets/logo.svg";
+import BorderedPlusIcon from "../../assets/borderedplus.svg";
+import SearchIcon from "../../assets/search.svg";
+import SquadIcon from "../../assets/icon_component/Squad";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import FolderIcon from "../../assets/icon_component/Folder";
+import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   get_space_data,
   get_workspace_data,
   get_workspace_member,
-} from '../../api/workSpace';
+} from "../../api/workSpace";
 import {
   addWorkSpace,
   addWorkspaceMembers,
   setSelectedWorkSpaceId,
-} from '../../store/slice/workspace';
+} from "../../store/slice/workspace";
 import {
   addSpace,
   setSelectedSpaceId,
   setSelectedSpaceObject,
-} from '../../store/slice/space';
-import { useSelector } from 'react-redux';
-import BriefCaseIcon from '../../assets/briefcase.svg';
-import { ModalSearchSpace, ModalSpaceCreate } from '../Sidebar';
-import CreateSquadModal from '../Home/Projects/Modals/CreateSquadModal';
-import CreateWorkspaceModal from '../ManageWorkspace/Modals/CreateWorkspaceModal';
-import { toggleFullSidebar } from '../../store/slice/screen';
-import { getAvatarUrl } from '../../util/getAvatarUrl';
-import images from '../../assets';
+} from "../../store/slice/space";
+import { useSelector } from "react-redux";
+import BriefCaseIcon from "../../assets/briefcase.svg";
+import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
+import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
+import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal";
+import { toggleFullSidebar } from "../../store/slice/screen";
+import { getAvatarUrl } from "../../util/getAvatarUrl";
+import images from "../../assets";
 
 const SideNavbar = () => {
   const navigate = useNavigate();
@@ -63,9 +63,9 @@ const SideNavbar = () => {
   const params = useParams();
 
   const manageWorkspacePage =
-    location.pathname === '/settings/manage-workspace';
-  const profilePage = location.pathname === '/settings/profile';
-  const defaultPage = location.pathname.startsWith('/projects');
+    location.pathname === "/settings/manage-workspace";
+  const profilePage = location.pathname === "/settings/profile";
+  const defaultPage = location.pathname.startsWith("/projects");
 
   useEffect(() => {
     if (selectedWorkspace) {
@@ -82,9 +82,9 @@ const SideNavbar = () => {
     }
   };
 
-  const user = JSON.parse(localStorage.getItem('userInfo'));
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  const userImg = JSON.parse(localStorage.getItem('userInfo'))?.avatar;
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const userId = JSON.parse(localStorage.getItem("userId"));
+  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
   useEffect(() => {
     const getWorkSpaceData = async () => {
@@ -120,7 +120,7 @@ const SideNavbar = () => {
         // dispatch(setSelectedSpaceId(data.spaces[0]?._id));
         // dispatch(setSelectedSpaceObject(data.spaces[0]));
       } catch (error) {
-        console.log('space selection ==> ', error);
+        console.log("space selection ==> ", error);
       }
     };
 
@@ -128,34 +128,34 @@ const SideNavbar = () => {
   }, [selectedWorkspace, params?.workspace_id]);
 
   const openChat = (id) => {
-    navigate('single-chat/' + id);
+    navigate("single-chat/" + id);
   };
 
   const isFirstTime =
-    JSON.parse(localStorage.getItem('stepFinished')) === true
+    JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : (workspaces?.length === 1 && allSpaces?.length === 0) ||
-        (allSpaces[0]?.name === 'Onboarding' &&
+        (allSpaces[0]?.name === "Onboarding" &&
           [...members.filter((m) => m?._id !== user?._id)].length === 0);
 
   const firstTimeSquad =
-    JSON.parse(localStorage.getItem('stepFinished')) === true
+    JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
-      : (allSpaces?.length === 0 || allSpaces[0]?.name === 'Onboarding') &&
+      : (allSpaces?.length === 0 || allSpaces[0]?.name === "Onboarding") &&
         allSpaces.length === 1;
 
   const firstTimeMember =
-    JSON.parse(localStorage.getItem('stepFinished')) === true
+    JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : [...members.filter((m) => m?._id !== user?._id)].length === 0;
 
   const squadOnDrop = (e) => {
     e.preventDefault();
-    e.target.classList.remove('border-b-2');
-    e.target.classList.remove('border-[#6576FF]');
+    e.target.classList.remove("border-b-2");
+    e.target.classList.remove("border-[#6576FF]");
 
-    const targetId = e.target.getAttribute('data-id');
-    const draggedId = e.dataTransfer.getData('id');
+    const targetId = e.target.getAttribute("data-id");
+    const draggedId = e.dataTransfer.getData("id");
 
     const newOrder = [...allSpaces];
 
@@ -179,12 +179,12 @@ const SideNavbar = () => {
     <>
       <div
         className={`${
-          fullSidebar ? 'min-w-[225px] w-[225px]' : 'w-max items-center'
+          fullSidebar ? "min-w-[225px] w-[225px]" : "w-max items-center"
         } bg-[#2C3782] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
       >
         <div
           className={`flex items-center justify-between mb-[32px] ${
-            fullSidebar ? 'pl-[25px] pr-[10px]' : 'pl-[25px] pr-[25px]'
+            fullSidebar ? "pl-[25px] pr-[10px]" : "pl-[25px] pr-[25px]"
           }`}
         >
           {fullSidebar && (
@@ -193,7 +193,7 @@ const SideNavbar = () => {
               className="flex items-center gap-4"
             >
               <img src={LogoIcon} alt="" className="w-[28px] h-[28px]" />
-              <h1 className="text-[#C4CEFE] text-[20px]">TaskM</h1>
+              <h1 className="text-[#C4CEFE] text-[20px]">Beta Squad</h1>
             </Link>
           )}
           <div
@@ -204,7 +204,7 @@ const SideNavbar = () => {
           >
             <CloseMenuBtn
               className={`text-white w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
-                fullSidebar ? '' : 'rotate-180'
+                fullSidebar ? "" : "rotate-180"
               }`}
             />
           </div>
@@ -217,8 +217,8 @@ const SideNavbar = () => {
                                     } 
                                 ${
                                   fullSidebar
-                                    ? 'pl-[25px] pr-[10px]'
-                                    : 'pl-[25px] pr-[25px]'
+                                    ? "pl-[25px] pr-[10px]"
+                                    : "pl-[25px] pr-[25px]"
                                 }`}
             >
               <div className="flex items-center gap-3">
@@ -250,8 +250,8 @@ const SideNavbar = () => {
                                     } 
                                 ${
                                   fullSidebar
-                                    ? 'pl-[25px]'
-                                    : 'pl-[25px] pr-[25px]'
+                                    ? "pl-[25px]"
+                                    : "pl-[25px] pr-[25px]"
                                 }`}
                 >
                   {workspace?.logo ? (
@@ -283,8 +283,8 @@ const SideNavbar = () => {
                                     } 
                                 ${
                                   fullSidebar
-                                    ? 'pl-[25px] pr-[10px]'
-                                    : 'pl-[25px] pr-[25px]'
+                                    ? "pl-[25px] pr-[10px]"
+                                    : "pl-[25px] pr-[25px]"
                                 }`}
           >
             <div className="flex items-center gap-3">
@@ -329,12 +329,12 @@ const SideNavbar = () => {
                 setSelectedChat(null);
               }}
               className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                selectedChat ? '' : selectedSpace ? '' : 'bg-[#6576FF10]'
+                selectedChat ? "" : selectedSpace ? "" : "bg-[#6576FF10]"
               } 
                                 ${
                                   fullSidebar
-                                    ? 'pl-[25px]'
-                                    : 'pl-[25px] pr-[25px]'
+                                    ? "pl-[25px]"
+                                    : "pl-[25px] pr-[25px]"
                                 }`}
             >
               {currentWorkspace?.logo ? (
@@ -399,33 +399,33 @@ const SideNavbar = () => {
             {(!isFirstTime || !firstTimeSquad) && (
               <div className="mt-[10px] flex flex-col">
                 {allSpaces.map((space, idx) => {
-                  if (space.name === 'Onboarding') return;
+                  if (space.name === "Onboarding") return;
                   return (
                     <div
                       key={idx}
                       draggable={true}
                       onDragStart={(e) => {
                         e.dataTransfer.setData(
-                          'id',
-                          e.target.getAttribute('data-id')
+                          "id",
+                          e.target.getAttribute("data-id")
                         );
                       }}
                       onDragOver={(e) => {
                         e.preventDefault();
                       }}
                       onDragLeave={(e) => {
-                        e.target.classList.remove('border-b-2');
-                        e.target.classList.remove('border-[#6576FF]');
+                        e.target.classList.remove("border-b-2");
+                        e.target.classList.remove("border-[#6576FF]");
                       }}
                       onDragEnter={(e) => {
-                        e.target.classList.add('border-b-2');
-                        e.target.classList.add('border-[#6576FF]');
+                        e.target.classList.add("border-b-2");
+                        e.target.classList.add("border-[#6576FF]");
                       }}
                       onDrop={squadOnDrop}
                       data-id={space._id}
                       className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                        selectedSpace === space._id ? 'bg-[#6576FF10]' : ''
-                      }  ${fullSidebar ? 'pl-[25px]' : 'pl-[25px] pr-[25px]'}`}
+                        selectedSpace === space._id ? "bg-[#6576FF10]" : ""
+                      }  ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                       onClick={() => {
                         dispatch(setSelectedSpaceId(space._id));
                         dispatch(setSelectedSpaceObject(space));
@@ -435,7 +435,7 @@ const SideNavbar = () => {
                         );
                       }}
                     >
-                      {space.privacy === 'public' ? (
+                      {space.privacy === "public" ? (
                         <FolderIcon
                           style={{
                             fill: space.color,
@@ -468,8 +468,8 @@ const SideNavbar = () => {
           <div className="mt-[10px] flex flex-col">
             <div
               className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
-                selectedChat === userId ? 'bg-[#6576FF10]' : ''
-              } ${fullSidebar ? 'pl-[25px]' : 'pl-[25px] pr-[25px]'}`}
+                selectedChat === userId ? "bg-[#6576FF10]" : ""
+              } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
               onClick={() => {
                 dispatch(setSelectedSpaceId(null));
                 dispatch(setSelectedSpaceObject(null));
@@ -516,9 +516,9 @@ const SideNavbar = () => {
                         key={idx}
                         className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
                           selectedChat?._id === member?._id
-                            ? 'bg-[#6576FF10]'
-                            : ''
-                        } ${fullSidebar ? 'pl-[25px]' : 'pl-[25px] pr-[25px]'}`}
+                            ? "bg-[#6576FF10]"
+                            : ""
+                        } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                         onClick={() => {
                           // openChat(member._id)
                           dispatch(setSelectedSpaceId(null));
@@ -549,11 +549,11 @@ const SideNavbar = () => {
         {/* Footer Copyright */}
         <p
           className={`text-[#C4CEFE] ${
-            fullSidebar ? 'text-[12px] pl-[25px]' : 'text-[22px]'
+            fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"
           } mt-auto mb-[16px]`}
         >
           &copy;
-          {fullSidebar && <span className="ml-[10px]">Taskmanager 2022</span>}
+          {fullSidebar && <span className="ml-[10px]">Beta Squad 2023</span>}
         </p>
       </div>
 
