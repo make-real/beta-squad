@@ -209,7 +209,7 @@ const CreateSquadModal = () => {
     }
 
     // reset all input fields...
-    setCreateNewSpace({ name: "", color: "", privacy: "" });
+    setCreateNewSpace({ name: "", color: "", privacy: "", description: "" });
   };
 
   const handleChange = (e, privacy) => {

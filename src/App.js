@@ -13,41 +13,41 @@ import {
   Preferences,
   PageNotFound,
   CardAsList,
-} from './components';
+} from "./components";
 import {
   Routes,
   Route,
   Navigate,
   useParams,
   useNavigate,
-} from 'react-router-dom';
-import { fetchUserToken } from './util/fetchUserToken';
-import { ToastContainer } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import WorkspaceSettings from './components/UserSettings/WorkspaceSettings';
-import Tags from './components/UserSettings/Tags';
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import SingleChat from './components/Chat/Single/Chat';
-import GroupChat from './components/Chat/Group/Chat';
-import TopNav from './components/Navs/TopNavbar';
-import Home from './components/Home/Home';
-import ManageWorkspaceScreen from './components/ManageWorkspace/ManageWorkspace';
-import ProfileScreen from './components/Profile/Profile';
-import CardDetails from './components/Board/CardDetails';
-import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { addWorkSpace, setSelectedWorkSpaceId } from './store/slice/workspace';
-import { get_space_data, get_workspace_data } from './api/workSpace';
-import { addSpace } from './store/slice/space';
-import SquadScreen from './components/Home/SquadScreen';
+} from "react-router-dom";
+import { fetchUserToken } from "./util/fetchUserToken";
+import { ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+import WorkspaceSettings from "./components/UserSettings/WorkspaceSettings";
+import Tags from "./components/UserSettings/Tags";
+import "react-toastify/dist/ReactToastify.css";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import SingleChat from "./components/Chat/Single/Chat";
+import GroupChat from "./components/Chat/Group/Chat";
+import TopNav from "./components/Navs/TopNavbar";
+import Home from "./components/Home/Home";
+import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
+import ProfileScreen from "./components/Profile/Profile";
+import CardDetails from "./components/Board/CardDetails";
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
+import { get_space_data, get_workspace_data } from "./api/workSpace";
+import { addSpace } from "./store/slice/space";
+import SquadScreen from "./components/Home/SquadScreen";
 import {
   setSelectedSpaceObject,
   setSelectedSpaceId,
-} from './store/slice/space';
-import { initFullSidebar } from './store/slice/screen';
-import NavigateUser from './components/Home/NavigateUser';
+} from "./store/slice/space";
+import { initFullSidebar } from "./store/slice/screen";
+import NavigateUser from "./components/Home/NavigateUser";
 import {
   addCall,
   addIndicationData,
@@ -58,10 +58,11 @@ import {
   incrementCallTime,
   initializeRtcEngine,
   initializeSocket,
-} from './store/slice/global';
-import MiniCall from './components/call/MiniCall';
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import SingleScreen from './components/Home/SingleScreen';
+} from "./store/slice/global";
+import MiniCall from "./components/call/MiniCall";
+import AgoraRTC from "agora-rtc-sdk-ng";
+import SingleScreen from "./components/Home/SingleScreen";
+import ComingSoonModal from "./components/Modals/ComingSoonModal";
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
@@ -104,7 +105,7 @@ const ProjectRoute = ({ children }) => {
         const { data } = await get_space_data(params.workspace_id);
         dispatch(addSpace(data.spaces));
       } catch (error) {
-        console.log('space selection ==> ', error);
+        console.log("space selection ==> ", error);
       }
     };
     getSpaceData();
@@ -168,22 +169,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    socket?.on('ON_CALL', (call) => {
+    socket?.on("ON_CALL", (call) => {
       dispatch(addCall(call));
 
       setTimeout(() => dispatch(ignoreCall()), 60000);
     });
 
-    socket?.on('ON_CALL_UPDATED', (call) => {
+    socket?.on("ON_CALL_UPDATED", (call) => {
       dispatch(addCall(call));
     });
 
-    socket?.on('ON_JOIN_CALL', async (call, token) => {
+    socket?.on("ON_JOIN_CALL", async (call, token) => {
       dispatch(addCall(call));
       dispatch(callReceived(true));
 
       await RtcEngine?.join(
-        'd650cc9984014529827ee1a4bcb345fc',
+        "d650cc9984014529827ee1a4bcb345fc",
         call?.channelId,
         token,
         uid
@@ -196,18 +197,18 @@ const App = () => {
       await RtcEngine?.publish([localAudioTrack]);
     });
 
-    RtcEngine?.on('user-published', async (user, mediaType) => {
-      console.log('####################################');
-      console.log('user-published %s', mediaType);
-      console.log('####################################');
+    RtcEngine?.on("user-published", async (user, mediaType) => {
+      console.log("####################################");
+      console.log("user-published %s", mediaType);
+      console.log("####################################");
 
       await RtcEngine?.subscribe(user, mediaType);
-      console.log('subscribe success');
+      console.log("subscribe success");
 
       // Subscribe to the remote user when the SDK triggers the "user-published" event.
 
       // Subscribe and play the remote video in the container If the remote user publishes a video track.
-      if (mediaType == 'video') {
+      if (mediaType == "video") {
         dispatch(
           addRemoteVideoTrack({
             uid: user.uid,
@@ -221,7 +222,7 @@ const App = () => {
         // remoteAudioTrack.play();
       }
       // Subscribe and play the remote audio track If the remote user publishes the audio track only.
-      if (mediaType == 'audio') {
+      if (mediaType == "audio") {
         const remoteAudioTrack = user.audioTrack;
         // const remoteUserId = user.uid.toString();
 
@@ -229,12 +230,12 @@ const App = () => {
       }
 
       // Listen for the "user-unpublished" event.
-      RtcEngine?.on('user-unpublished', (user) => {
-        console.log(user.uid + 'has left the channel');
+      RtcEngine?.on("user-unpublished", (user) => {
+        console.log(user.uid + "has left the channel");
       });
     });
 
-    RtcEngine?.on('volume-indicator', (volumes) => {
+    RtcEngine?.on("volume-indicator", (volumes) => {
       volumes.forEach((volume) => {
         console.log(`UID ${volume.uid} Level ${volume.level}`);
 
@@ -243,17 +244,17 @@ const App = () => {
     });
 
     return () => {
-      RtcEngine?.off('user-published');
-      RtcEngine?.off('user-unpublished');
-      RtcEngine?.off('volume-indicator');
-      socket?.off('ON_CALL_UPDATED');
-      socket?.off('ON_CALL');
-      socket?.off('ON_JOIN_CALL');
+      RtcEngine?.off("user-published");
+      RtcEngine?.off("user-unpublished");
+      RtcEngine?.off("volume-indicator");
+      socket?.off("ON_CALL_UPDATED");
+      socket?.off("ON_CALL");
+      socket?.off("ON_JOIN_CALL");
     };
   }, [socket, uid, RtcEngine]);
 
   useEffect(() => {
-    socket?.on('ON_CALL_END', async (c) => {
+    socket?.on("ON_CALL_END", async (c) => {
       try {
         dispatch(callReceived(false));
 
@@ -266,7 +267,7 @@ const App = () => {
     });
 
     return () => {
-      socket?.off('ON_CALL_END');
+      socket?.off("ON_CALL_END");
     };
   }, [socket, call]);
 
@@ -577,7 +578,7 @@ const App = () => {
       </Routes>
 
       {/* theme="dark" */}
-      <ToastContainer theme="colored" style={{ fontSize: '18px' }} />
+      <ToastContainer theme="colored" style={{ fontSize: "18px" }} />
     </main>
   );
 };

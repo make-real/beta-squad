@@ -32,6 +32,9 @@ import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal
 import { toggleFullSidebar } from "../../store/slice/screen";
 import { getAvatarUrl } from "../../util/getAvatarUrl";
 import images from "../../assets";
+import { Comment } from "postcss";
+import ComingSoonModal from "../Modals/ComingSoonModal";
+import { useCommingSoonContext } from "../../context/FeatureContext";
 
 const SideNavbar = () => {
   const navigate = useNavigate();
@@ -61,6 +64,8 @@ const SideNavbar = () => {
   const location = useLocation();
 
   const params = useParams();
+
+  const { showModal, setShowModal } = useCommingSoonContext();
 
   const manageWorkspacePage =
     location.pathname === "/settings/manage-workspace";
@@ -488,6 +493,8 @@ const SideNavbar = () => {
             </div>
           </div>
         )}
+        {/* modal */}
+        {showModal && <ComingSoonModal setShowModal={setShowModal} />}
 
         {/* Chats */}
         {!isFirstTime || !firstTimeMember
@@ -496,7 +503,12 @@ const SideNavbar = () => {
                 {fullSidebar && (
                   <div className="flex items-center justify-between pl-[17px] pr-[10px]">
                     <h2 className="text-[#6576FF] opacity-80">Chats</h2>
-                    <div className="flex items-center gap-2">
+                    <div
+                      className="flex items-center gap-2"
+                      onClick={() => {
+                        setShowModal(!showModal);
+                      }}
+                    >
                       <img
                         src={SearchIcon}
                         alt="search"
