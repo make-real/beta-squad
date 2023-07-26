@@ -479,7 +479,8 @@ const SideNavbar = () => {
                 dispatch(setSelectedSpaceId(null));
                 dispatch(setSelectedSpaceObject(null));
                 setSelectedChat(userId);
-                navigate(`/projects/${selectedWorkspace}/chat/${userId}`);
+                // navigate(`/projects/${selectedWorkspace}/chat/${userId}`);
+                setShowModal(!showModal);
               }}
             >
               <img

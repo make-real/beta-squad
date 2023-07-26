@@ -22,6 +22,7 @@ import { callReceived } from "../../../store/slice/global";
 
 import ring from "../../../assets/ring.wav";
 import { useRef } from "react";
+import { useCommingSoonContext } from "../../../context/FeatureContext";
 
 const SingleChat = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const SingleChat = () => {
   const [showType, setShowType] = useState("grid");
 
   const dispatch = useDispatch();
+  const { showModal, setShowModal } = useCommingSoonContext();
 
   useEffect(() => {
     if (workspaceMembers) {
@@ -125,13 +127,19 @@ const SingleChat = () => {
                 <div className="flex items-center gap-[22px] relative">
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall("video")}
+                    onClick={() => {
+                      //startCall("video")
+                      setShowModal(!showModal);
+                    }}
                   >
                     <img src={VideoCallIcon} alt="video_call" />
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall("audio")}
+                    onClick={() => {
+                      //startCall("audio")
+                      setShowModal(!showModal);
+                    }}
                   >
                     <img src={AudioCallIcon} alt="audio_call" />
                   </div>

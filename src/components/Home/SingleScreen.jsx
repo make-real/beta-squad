@@ -16,9 +16,11 @@ import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import images from "../../assets";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { AddBtn } from "../Board";
+import { useCommingSoonContext } from "../../context/FeatureContext";
 
 const SingleScreen = () => {
   const location = useLocation();
+  const { showModal, setShowModal } = useCommingSoonContext();
 
   const { participantID, workspace_id } = useParams();
   const [selectedTab, setSelectedTab] = useState("messages");
@@ -110,13 +112,19 @@ const SingleScreen = () => {
                 <div className="flex items-center gap-[22px] relative">
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall("video")}
+                    onClick={() => {
+                      //startCall("video")
+                      setShowModal(!showModal);
+                    }}
                   >
                     <img src={VideoCallIcon} alt="video_call" />
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => startCall("audio")}
+                    onClick={() => {
+                      //startCall("audio")
+                      setShowModal(!showModal);
+                    }}
                   >
                     <img src={AudioCallIcon} alt="audio_call" />
                   </div>
