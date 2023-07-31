@@ -73,7 +73,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
           userInfo={userInfo}
         />
       ) : (
-        <div className="relative pt-[40px] px-[40px] bg-[#FFF] h-full flex flex-col no-scrollbar pb-[40px]">
+        <div className="relative bg-[#FFF] h-full flex flex-col no-scrollbar">
           <div className="w-full h-full flex flex-col bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px] overflow-hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center">

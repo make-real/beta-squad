@@ -1,5 +1,5 @@
 import CrossIcon from "../../assets/cross.svg";
-import Development from "../../assets/images/development.jpg";
+import Development from "../../assets/images/development.avif";
 
 import { useCommingSoonContext } from "../../context/FeatureContext";
 export default function ComingSoonModal() {

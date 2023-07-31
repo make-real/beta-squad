@@ -82,7 +82,7 @@ const SingleScreen = () => {
 
   return (
     <div className="bg-[#FFF] w-full h-full">
-      <div className="relative pt-[40px] pb-[40px] px-[40px] h-full flex flex-col">
+      <div className="relative h-full flex flex-col">
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[36px] flex flex-col">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[11px]">

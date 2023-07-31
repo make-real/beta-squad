@@ -96,14 +96,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
   return (
     <div className="bg-[#FFF] w-full h-full">
-      <div
-        className={`relative ${
-          selectedTab === "messages" || selectedTab === "board"
-            ? "pt-[40px]"
-            : "pt-[40px]"
-        } px-[40px] pb-[40px] bg-[#FFF] h-full flex flex-col`}
-      >
-        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px] flex flex-col">
+      <div className={`relative bg-[#FFF] h-full flex flex-col`}>
+        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] flex flex-col">
           <div className="flex items-center justify-between">
             {/* <div className="flex items-center gap-[10px]">
                             <FolderIcon className="w-[20px] h-[20px]" style={{ fill: selectedSpace?.color }} />
