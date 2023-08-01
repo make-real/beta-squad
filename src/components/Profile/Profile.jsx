@@ -127,7 +127,7 @@ const Profile = () => {
               />
             </div>
             <div className="mt-[44px] flex w-full gap-[30px]">
-              <div className="w-full">
+              {/* <div className="w-full">
                 <p className="text-[#818892] text-[14px] font-semibold">
                   User name
                 </p>
@@ -139,7 +139,7 @@ const Profile = () => {
                   onChange={handleChange}
                   value={userData?.fullName}
                 />
-              </div>
+              </div> */}
               <div className="w-full">
                 <p className="text-[#818892] text-[14px] font-semibold">
                   Full name

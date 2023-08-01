@@ -264,7 +264,7 @@ const SingleBoardScreen = ({ showType }) => {
       {userId ? (
         showType === "grid" ? (
           <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
-            <p>grid view</p>
+            {/* <p>grid view</p> */}
             {/* <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"
