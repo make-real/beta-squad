@@ -13,6 +13,7 @@ import VideoCallIcon from "../../assets/video_call.svg";
 import AudioCallIcon from "../../assets/audio_call.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
+import Development from "../../assets/images/development.avif";
 import images from "../../assets";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { AddBtn } from "../Board";
@@ -260,11 +261,17 @@ const SingleBoardScreen = ({ showType }) => {
   //   };
 
   return (
-    <section className={`duration-200 overflow-auto customScroll h-full`}>
+    <section className={`duration-200 overflow-hidden customScroll h-full`}>
       {userId ? (
         showType === "grid" ? (
-          <div className="py-4 flex gap-3 items-start  min-w-fit h-[98vh]">
+          <div>
             {/* <p>grid view</p> */}
+            <div className="flex flex-col items-center justify-center">
+              <img src={Development} alt="" />
+              <h1 className="text-[#6576FF] opacity-80 text-2xl">
+                We are developing this feature
+              </h1>
+            </div>
             {/* <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"
