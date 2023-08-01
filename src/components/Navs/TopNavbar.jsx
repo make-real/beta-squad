@@ -238,16 +238,29 @@ const LoggedInTopNav = () => {
             </p>
           </div>
         ) : isProjectScreen && selectedWorkspaceId && userId ? (
-          <div className="flex items-center gap-3">
-            <span className="bg-[#6576FF]/[0.16] p-2 rounded-full">
-              <TaskListIcon
-                className="w-[20px] h-[20px]"
-                style={{ fill: "#6576FF" }}
+          // <div className="flex items-center gap-3">
+          //   <span className="bg-[#6576FF]/[0.16] p-2 rounded-full">
+          //     <TaskListIcon
+          //       className="w-[20px] h-[20px]"
+          //       style={{ fill: "#6576FF" }}
+          //     />
+          //   </span>
+          //   <p className="text-[#031124] text-[15px] font-medium">
+          //     My Task List
+          //   </p>
+          // </div>
+          <div className="flex items-center gap-[11px]">
+            <div className="relative">
+              <img
+                src={selectedMember?.avatar}
+                alt=""
+                className="w-[27px] h-[27px] rounded-full border-[2px] border-[#6576FF] object-cover"
               />
-            </span>
-            <p className="text-[#031124] text-[15px] font-medium">
-              My Task List
-            </p>
+              <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] bottom-0 right-[-4px]"></div>
+            </div>
+            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
+              {selectedMember?.fullName}
+            </h2>
           </div>
         ) : participantID && selectedMember ? (
           <div className="flex items-center">

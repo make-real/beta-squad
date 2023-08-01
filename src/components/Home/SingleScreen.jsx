@@ -86,7 +86,25 @@ const SingleScreen = () => {
       <div className="relative h-full flex flex-col">
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[36px] flex flex-col">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-[11px]">
+            <div className="flex items-center gap-[45px]">
+              {Object.keys(TabsName).map((value, idx) => {
+                return (
+                  <a
+                    href={`#${value.toLowerCase()}`}
+                    key={idx}
+                    onClick={() => setSelectedTab(value)}
+                    className={`${
+                      selectedTab === value
+                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                        : "text-[#818892]"
+                    } text-[19px] font-medium  pb-[10px] cursor-pointer`}
+                  >
+                    {TabsName[value]}
+                  </a>
+                );
+              })}
+            </div>
+            {/* <div className="flex items-center gap-[11px]">
               <div className="relative">
                 <img
                   src={selectedMember?.avatar}
@@ -98,7 +116,7 @@ const SingleScreen = () => {
               <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                 {selectedMember?.fullName}
               </h2>
-            </div>
+            </div> */}
 
             <div className="flex items-center">
               <div className="flex items-center gap-[12px]">
@@ -146,26 +164,6 @@ const SingleScreen = () => {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-          <div className="mt-[30px]">
-            <div className="flex items-center gap-[45px]">
-              {Object.keys(TabsName).map((value, idx) => {
-                return (
-                  <a
-                    href={`#${value.toLowerCase()}`}
-                    key={idx}
-                    onClick={() => setSelectedTab(value)}
-                    className={`${
-                      selectedTab === value
-                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                        : "text-[#818892]"
-                    } text-[19px] font-medium  pb-[10px] cursor-pointer`}
-                  >
-                    {TabsName[value]}
-                  </a>
-                );
-              })}
             </div>
           </div>
           <div className="w-full mt-[40px] h-full overflow-hidden">
@@ -261,13 +259,13 @@ const SingleBoardScreen = ({ showType }) => {
   //   };
 
   return (
-    <section className={`duration-200 overflow-hidden customScroll h-full`}>
+    <section className="duration-200 overflow-hidden">
       {userId ? (
         showType === "grid" ? (
-          <div>
-            {/* <p>grid view</p> */}
-            <div className="flex flex-col items-center justify-center">
-              <img src={Development} alt="" />
+          <div className="flex flex-col items-center justify-center">
+            <div className="h-full relative w-full max-w-[40%] max-h-[50%] bg-white rounded-[16px] px-[62px] py-[50px] overflow-y-scroll no-scrollbar flex flex-col items-center justify-center">
+              {/* <p>grid view</p> */}
+              <img src={Development} alt="" className="h-1/8" />
               <h1 className="text-[#6576FF] opacity-80 text-2xl">
                 We are developing this feature
               </h1>
@@ -307,8 +305,14 @@ const SingleBoardScreen = ({ showType }) => {
             /> */}
           </div>
         ) : (
-          <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">
-            <p>stack view</p>
+          <div className="flex flex-col items-center justify-center">
+            <div className="h-full relative w-full max-w-[40%] max-h-[50%] bg-white rounded-[16px] px-[62px] py-[50px] overflow-y-scroll no-scrollbar flex flex-col items-center justify-center">
+              <img src={Development} alt="" className="h-1/8" />
+              <h1 className="text-[#6576FF] opacity-80 text-2xl">
+                We are developing this feature
+              </h1>
+            </div>
+            {/* <p>stack view</p> */}
             {/* <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"
