@@ -76,7 +76,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
         <div className="relative bg-[#FFF] h-full flex flex-col no-scrollbar">
           <div className="w-full h-full flex flex-col bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px] overflow-hidden">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 {currentWorkspace?.logo ? (
                   <div className="mr-[12px] w-[32px] h-[32px] ">
                     <img
@@ -94,6 +94,30 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                   {currentWorkspace?.name}
                 </h2>
                 <div className="w-[9px] h-[9px] bg-[#FF3659] rounded-full"></div>
+              </div> */}
+              <div className="flex items-center gap-[50px]">
+                <a
+                  href={`#projects`}
+                  onClick={() => setSelectedTab("projects")}
+                  className={`${
+                    selectedTab === "projects"
+                      ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                      : "text-[#818892]"
+                  } text-[19px] font-medium  pb-[10px] cursor-pointer`}
+                >
+                  Projects
+                </a>
+                <a
+                  href={`#squad_members`}
+                  onClick={() => setSelectedTab("squad_members")}
+                  className={`${
+                    selectedTab === "squad_members"
+                      ? "border-b-2 border-b-[#6576FF] text-[#031124]"
+                      : "text-[#818892]"
+                  } text-[19px] font-medium  pb-[10px] cursor-pointer`}
+                >
+                  Squad Members
+                </a>
               </div>
               <div className="flex items-center">
                 <div className="flex items-center gap-[12px]">
@@ -121,30 +145,6 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               </div>
             </div>
             <div className="mt-[30px] h-full flex flex-col overflow-hidden">
-              <div className="flex items-center gap-[50px]">
-                <a
-                  href={`#projects`}
-                  onClick={() => setSelectedTab("projects")}
-                  className={`${
-                    selectedTab === "projects"
-                      ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                      : "text-[#818892]"
-                  } text-[19px] font-medium  pb-[10px] cursor-pointer`}
-                >
-                  Projects
-                </a>
-                <a
-                  href={`#squad_members`}
-                  onClick={() => setSelectedTab("squad_members")}
-                  className={`${
-                    selectedTab === "squad_members"
-                      ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                      : "text-[#818892]"
-                  } text-[19px] font-medium  pb-[10px] cursor-pointer`}
-                >
-                  Squad Members
-                </a>
-              </div>
               <div className="w-full h-[1px] bg-[#ECECEC]"></div>
               {Tabs[selectedTab]}
             </div>

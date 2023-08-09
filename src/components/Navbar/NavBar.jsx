@@ -55,8 +55,6 @@ const NavBar = ({ selectedSpaceId }) => {
         {/* 🟨🟨🟨 Left Side */}
         <div className="flex items-center gap-5">
           <div className="w-12 h-12">
-            {/* <img src={asserts.haySpace} alt="logo" /> */}
-
             {currentSelectedSpace?.privacy?.includes("private") ? (
               <SpaceLogoLock
                 color={currentSelectedSpace?.color || "#57BEC7"}

@@ -237,7 +237,10 @@ const LoggedInTopNav = () => {
               {selectedSpace?.name}
             </p>
           </div>
-        ) : isProjectScreen && selectedWorkspaceId && userId ? (
+        ) : isProjectScreen &&
+          selectedWorkspaceId &&
+          userId &&
+          selectedMember ? (
           // <div className="flex items-center gap-3">
           //   <span className="bg-[#6576FF]/[0.16] p-2 rounded-full">
           //     <TaskListIcon

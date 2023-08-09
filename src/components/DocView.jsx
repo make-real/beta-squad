@@ -1,11 +1,11 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
-import Popup from 'reactjs-popup';
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import Popup from "reactjs-popup";
 
 const DocView = ({ button, index, docs }) => {
   const getExt = (filename) => {
     return (
-      filename?.substring(filename?.lastIndexOf('.') + 1, filename?.length) ||
+      filename?.substring(filename?.lastIndexOf(".") + 1, filename?.length) ||
       filename
     );
   };
@@ -16,11 +16,11 @@ const DocView = ({ button, index, docs }) => {
       modal
       nested
       contentStyle={{
-        width: '90vw',
-        height: '90vh',
-        borderRadius: '1rem',
-        padding: '1rem',
-        overflow: 'auto',
+        width: "90vw",
+        height: "90vh",
+        borderRadius: "1rem",
+        padding: "1rem",
+        overflow: "auto",
       }}
     >
       {(close) => (
@@ -36,10 +36,9 @@ const DocView = ({ button, index, docs }) => {
               config={{
                 noRenderer: {
                   overrideComponent: ({ document, fileName }) => {
-                    const fileText = fileName || document?.fileType || '';
-                    // console.log(document);
+                    const fileText = fileName || document?.fileType || "";
                     if (fileText) {
-                      return document?.fileType?.includes('video') ? (
+                      return document?.fileType?.includes("video") ? (
                         <video width="auto" height="auto" autoPlay controls>
                           <source
                             src={document?.uri}
@@ -47,7 +46,7 @@ const DocView = ({ button, index, docs }) => {
                           />
                           Your browser does not support the video tag.
                         </video>
-                      ) : document?.fileType?.includes('audio') ? (
+                      ) : document?.fileType?.includes("audio") ? (
                         <audio width="auto" height="auto" autoPlay controls>
                           <source
                             src={document?.uri}
@@ -56,7 +55,7 @@ const DocView = ({ button, index, docs }) => {
                           Your browser does not support the audio element.
                         </audio>
                       ) : (
-                        ''
+                        ""
                       );
                     }
                     return <div>no renderer</div>;
@@ -64,14 +63,14 @@ const DocView = ({ button, index, docs }) => {
                 },
                 loadingRenderer: {
                   overrideComponent: ({ document, fileName }) => {
-                    const fileText = fileName || document?.fileType || '';
+                    const fileText = fileName || document?.fileType || "";
                     if (fileText) {
                       return <div>loading ({fileText})</div>;
                     }
                     return <div>loading</div>;
                   },
                 },
-                csvDelimiter: '~',
+                csvDelimiter: "~",
                 pdfZoom: {
                   defaultZoom: 1.1,
                   zoomJump: 0.2,
