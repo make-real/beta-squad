@@ -40,7 +40,7 @@ const TopNav = () => {
   }, []);
 
   return (
-    <div className="bg-white shadow-md min-h-[70px] max-h-[70px] w-full flex">
+    <div className="bg-white border-b-[0.5px] min-h-[70px] max-h-[70px] w-full flex">
       {jwt ? <LoggedInTopNav /> : <NotLoggedInTopNav />}
     </div>
   );

@@ -127,19 +127,6 @@ const Profile = () => {
               />
             </div>
             <div className="mt-[44px] flex w-full gap-[30px]">
-              {/* <div className="w-full">
-                <p className="text-[#818892] text-[14px] font-semibold">
-                  User name
-                </p>
-                <input
-                  type="text"
-                  placeholder="Enter your name"
-                  className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
-                  name="fullName"
-                  onChange={handleChange}
-                  value={userData?.fullName}
-                />
-              </div> */}
               <div className="w-full">
                 <p className="text-[#818892] text-[14px] font-semibold">
                   Full name
@@ -151,6 +138,20 @@ const Profile = () => {
                   name="fullName"
                   onChange={handleChange}
                   value={userData?.fullName}
+                />
+              </div>
+              <div className="w-full">
+                <p className="text-[#818892] text-[14px] font-semibold">
+                  Email
+                </p>
+                <input
+                  disabled
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
+                  name="email"
+                  onChange={handleChange}
+                  value={userData?.email}
                 />
               </div>
             </div>

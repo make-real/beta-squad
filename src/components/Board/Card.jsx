@@ -125,7 +125,7 @@ const Card = ({ card, listID }) => {
         ref={dropDownRef}
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
-        className="group relative w-[285px] h-fit bg-white px-3 py-3 rounded-2xl cursor-grab hover:bg-gray-200"
+        className="group relative w-[285px] h-fit bg-white px-3 py-1 rounded-2xl cursor-grab hover:bg-gray-200"
       >
         {/* top-right shape */}
         <span
@@ -139,32 +139,14 @@ const Card = ({ card, listID }) => {
             style={{ backgroundColor: "#FF3659" }}
           />
         )}
-
-        {!!card.assignee?.length && (
-          <div className="mb-3 flex">
-            {card.assignee?.map((user, i) => (
-              <div style={{ marginLeft: i ? "-5px" : 0 }}>
-                {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt=""
-                    className="w-7 h-7 rounded-full bg-white"
-                  />
-                ) : (
-                  <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
-                    {user?.fullName.charAt(0)}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
         <div className="flex justify-between items-center mb-2">
-          <p className="text-sm mr-4 text-gray-800 font-bold line-clamp-2">
-            {card.name}
-          </p>
-
+          <div className="py-2 text-white flex gap-1 flex-wrap">
+            {card?.tags?.length
+              ? card?.tags?.map((tag) => (
+                  <CardChip small tag={tag} key={tag?.name} />
+                ))
+              : null}
+          </div>
           <div
             style={{
               backgroundColor: progress === 4 && "#54CC7C",
@@ -184,62 +166,14 @@ const Card = ({ card, listID }) => {
                         )} */}
           </div>
         </div>
+
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-sm mr-4 text-gray-800 font-bold line-clamp-2">
+            {card.name}
+          </p>
+        </div>
         <div className="text-sm text-gray-800">
           <p className="line-clamp-2">{localCard?.description || ""}</p>
-        </div>
-        <div className="pt-5 text-white flex gap-1 flex-wrap">
-          {card?.tags?.length
-            ? card?.tags?.map((tag) => (
-                <CardChip small tag={tag} key={tag?.name} />
-              ))
-            : null}
-        </div>
-
-        <div className="absolute top-2 right-2 flex">
-          {/* {!!progress && (
-                        <div
-                            style={{
-                                backgroundColor:
-                                    progress === 4
-                                        ? selectedSpaceObj?.color
-                                        : 'grey',
-                            }}
-                            className={`mt-[2px] flex items-center justify-center w-7 h-7 rounded-full text-white`}
-                        >
-                            {progress === 4 ? (
-                                <RightOK className="w-4 h-4" />
-                            ) : (
-                                <span className="text-[8px] text-center">
-                                    {progressStatus(progress)}%
-                                </span>
-                            )}
-                        </div>
-                    )} */}
-          {/* {visible && (
-                        <Dropdown
-                            width={200}
-                            button={
-                                <DotsSingle
-                                    className={`cursor-pointer ml-1 py-1.5 w-6 h-8 rounded-lg hover:bg-gray-300 duration-200 text-gray-400 active:bg-gray-300`}
-                                />
-                            }
-                            menu={({ closePopup }) => (
-                                <CardSettingDropDown
-                                    close={closePopup}
-                                    right={true}
-                                    cardID={card._id}
-                                    listID={listID}
-                                    progress={progress}
-                                    setProgress={setProgress}
-                                    noteDone={noteDone}
-                                    setNoteDone={setNoteDone}
-                                    setCardSettingDropDownToggle={
-                                        setCardSettingDropDownToggle
-                                    }
-                                />
-                            )}
-                        />
-                    )} */}
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
@@ -291,6 +225,25 @@ const Card = ({ card, listID }) => {
                                   </div>
                                 )}
                               /> */}
+          </div>
+        )}
+        {!!card.assignee?.length && (
+          <div className="mb-3 flex pt-2">
+            {card.assignee?.map((user, i) => (
+              <div style={{ marginLeft: i ? "-5px" : 0 }}>
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt=""
+                    className="w-7 h-7 rounded-full bg-white"
+                  />
+                ) : (
+                  <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
+                    {user?.fullName.charAt(0)}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         )}
 

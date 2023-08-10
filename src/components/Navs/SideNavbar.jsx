@@ -180,12 +180,13 @@ const SideNavbar = () => {
     dispatch(addSpace(newOrder));
   };
 
+  // #2C3782
   return (
     <>
       <div
         className={`${
           fullSidebar ? "min-w-[225px] w-[225px]" : "w-max items-center"
-        } bg-[#2C3782] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
+        } bg-[#FAFAFA] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
       >
         <div
           className={`flex items-center justify-between mb-[32px] ${
@@ -198,7 +199,7 @@ const SideNavbar = () => {
               className="flex items-center gap-4"
             >
               <img src={LogoIcon} alt="" className="w-[28px] h-[28px]" />
-              <h1 className="text-[#C4CEFE] text-[20px]">Beta Squad</h1>
+              <h1 className="text-[#0D1282] text-[20px]">Beta Squad</h1>
             </Link>
           )}
           <div
@@ -208,7 +209,7 @@ const SideNavbar = () => {
             }}
           >
             <CloseMenuBtn
-              className={`text-white w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
+              className={`text-[#0D1282] w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
                 fullSidebar ? "" : "rotate-180"
               }`}
             />
@@ -314,7 +315,7 @@ const SideNavbar = () => {
               </div>
 
               {fullSidebar && (
-                <p className="text-[14px] text-[#FFFFFF] font-semibold">
+                <p className="text-[14px] text-[#0D1282] font-semibold">
                   Profile
                 </p>
               )}
@@ -356,7 +357,7 @@ const SideNavbar = () => {
                 </div>
               )}
               {fullSidebar && (
-                <p className="text-[14px] text-white">
+                <p className="text-[14px] text-black">
                   {currentWorkspace?.name}
                 </p>
               )}
@@ -370,7 +371,7 @@ const SideNavbar = () => {
               <div
                 className={`flex items-center justify-between pl-[17px] pr-[10px]`}
               >
-                <h2 className="text-[#6576FF] opacity-80">My Squad</h2>
+                <h2 className="text-[#0D1282]">My Squad</h2>
                 <div className="flex items-center gap-2">
                   {/* <div
                                         className="w-max"
@@ -391,7 +392,7 @@ const SideNavbar = () => {
                     <img
                       src={BorderedPlusIcon}
                       alt=""
-                      className="cursor-pointer"
+                      className="cursor-pointer text-[#0D1282]"
                     />
                   </div>
                 </div>
@@ -456,7 +457,7 @@ const SideNavbar = () => {
                         />
                       )}
                       {fullSidebar && (
-                        <p className="text-[14px] text-[#C4CEFE] pointer-events-none">
+                        <p className="text-[14px] text-[#000] pointer-events-none">
                           {space.name}
                         </p>
                       )}
@@ -489,7 +490,7 @@ const SideNavbar = () => {
                 alt=""
               />
               {fullSidebar && (
-                <p className="text-[#C4CEFE] text-[14px]">My Task List</p>
+                <p className="text-[#0D1282] text-[14px]">My Task List</p>
               )}
             </div>
           </div>
@@ -503,7 +504,7 @@ const SideNavbar = () => {
               <div className="mt-[44px]">
                 {fullSidebar && (
                   <div className="flex items-center justify-between pl-[17px] pr-[10px]">
-                    <h2 className="text-[#6576FF] opacity-80">Chats</h2>
+                    <h2 className="text-[#0D1282]">Chats</h2>
                     <div
                       className="flex items-center gap-2"
                       onClick={() => {
@@ -548,7 +549,7 @@ const SideNavbar = () => {
                           alt=""
                         />
                         {fullSidebar && (
-                          <p className="text-[#C4CEFE] text-[14px]">
+                          <p className="text-[#000] text-[14px]">
                             {member.fullName}
                           </p>
                         )}
