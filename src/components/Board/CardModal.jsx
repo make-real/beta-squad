@@ -69,7 +69,7 @@ const CardModal = ({
     content: "",
   });
 
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
 
   useEffect(() => {
     const getCard = async () => {

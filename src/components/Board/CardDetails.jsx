@@ -71,6 +71,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const [deleteAttachFile, setDeleteAttachFile] = useState("");
   const [deleteAttachFileLoading, setDeleteAttachFileLoading] = useState(false);
   const [editDescription, setEditDescription] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [images, setImages] = useState({
     isOpen: false,
     currentImage: 0,
@@ -81,15 +82,18 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     content: "",
   });
 
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false);
+
+  console.log("CARD", localCard?._id);
+  const getCard = async () => {
+    const { data } = await getSingleCard(workspace_id, listID, id);
+    setLocalCard(data?.card);
+  };
 
   useEffect(() => {
-    const getCard = async () => {
-      const { data } = await getSingleCard(workspace_id, listID, id);
-      setLocalCard(data?.card);
-    };
-
-    getCard();
+    getCard().then(() => {
+      setShowChat(true);
+    });
   }, [workspace_id, listID, id]);
 
   // useEffect(() => {
