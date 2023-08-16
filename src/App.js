@@ -63,6 +63,8 @@ import MiniCall from "./components/call/MiniCall";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import SingleScreen from "./components/Home/SingleScreen";
 import ComingSoonModal from "./components/Modals/ComingSoonModal";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "./firebase";
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
@@ -283,6 +285,11 @@ const App = () => {
       clearInterval(interval);
     };
   }, [call?.data?.participants]);
+
+  useEffect(() => {
+    // Track a custom event
+    logEvent(analytics, "user-track");
+  }, []);
 
   return (
     <main className="overflow-hidden">

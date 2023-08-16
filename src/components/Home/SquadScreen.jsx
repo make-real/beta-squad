@@ -1,36 +1,16 @@
 import React, { useRef } from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import VideoCallIcon from "../../assets/video_call.svg";
 import AudioCallIcon from "../../assets/audio_call.svg";
+import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import BackArrowIcon from "../../assets/back_arrow.svg";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setSelectedSpaceId,
-  setSelectedSpaceObject,
-} from "../../store/slice/space";
-import FolderIcon from "../../assets/icon_component/Folder";
-import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import Board from "../Board/Board";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
-import Folder from "../../assets/icon_component/Folder";
-import Draggable from "react-draggable";
-import CallEnd from "../../assets/icon_component/CallEnd";
-import ringing from "../../assets/ringing.mp3";
-import VideoOff from "../../assets/icon_component/VideoOff";
-import MicrophoneOff from "../../assets/icon_component/MicrophoneOff";
-import MicrophoneOn from "../../assets/icon_component/MicrophoneOn";
-import More from "../../assets/icon_component/More";
-
-import AgoraRTC from "agora-rtc-sdk-ng";
-import ReceiveCall from "../../assets/icon_component/ReceiveCall";
-import { async } from "@firebase/util";
 import { addLocalAudioTrack, callReceived } from "../../store/slice/global";
+import { get_space_members, remove_space_members } from "../../api/space";
 
 import ring from "../../assets/ring.wav";
 import { useCommingSoonContext } from "../../context/FeatureContext";
@@ -40,6 +20,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { participantID, workspace_id } = useParams();
   const [selectedTab, setSelectedTab] = useState("board");
   const [showType, setShowType] = useState("grid");
+  const [showChat, setShowChat] = useState(true);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const { socket, call } = useSelector((state) => state.global);
@@ -48,6 +29,29 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const location = useLocation();
 
   const ringRef = useRef();
+
+  const [members, setMembers] = useState([]);
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  const fetchSquadMembers = async () => {
+    try {
+      const { data } = await get_space_members(selectedSpace?._id);
+      console.log(data);
+      setMembers(data?.members);
+    } catch (err) {
+      // toast.error(err?.message, {
+      //     autoClose: 3000,
+      // })
+      console.log("Error occured ==> ", err);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedSpace) {
+      fetchSquadMembers();
+    }
+  }, [selectedSpace]);
 
   useEffect(() => {
     if (call?.data) {
@@ -89,9 +93,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   };
 
   const TabsName = {
-    messages: "Messages",
+    // messages: "Messages",
     board: "Board",
-    members: "Members",
+    // members: "Members",
   };
 
   return (
@@ -103,7 +107,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                             <FolderIcon className="w-[20px] h-[20px]" style={{ fill: selectedSpace?.color }} />
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">{selectedSpace?.name}</h2>
                         </div> */}
-            <div className="flex items-center gap-[50px]">
+            <div className="flex items-center gap-[50px] w-full">
               {Object.keys(TabsName).map((value, idx) => {
                 return (
                   <a
@@ -122,14 +126,45 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
               })}
             </div>
 
-            <div className="flex items-center">
-              <div className="flex items-center gap-[12px]">
-                {/* <img src={SearchIcon} alt="search" className="" />
-                <input
-                  type="text"
-                  placeholder="Search here"
-                  className=" placeholder:text-[#99A6B9] border-none outline-none"
-                /> */}
+            <div className="flex items-center justify-between w-1/2">
+              <div className="flex items-center">
+                <div
+                  className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg space-x-5 mr-5`}
+                >
+                  <span
+                    className={`rounded-full ring-[1px] p-1 ${
+                      showChat
+                        ? "bg-[#54CC7C] ring-[#ECECEC]"
+                        : "ring-[#54CC7C]"
+                    } text-black font-bold grid place-items-center`}
+                    onClick={() => setShowChat((showChat) => !showChat)}
+                  >
+                    <ChatBubbleBottomCenterTextIcon
+                      className={`w-5 h-5 ${
+                        showChat ? "text-white" : "text-[#54CC7C]"
+                      } `}
+                    />
+                  </span>
+                </div>
+                {members.map((user, i) => (
+                  <div className="ml-[-10px]">
+                    {user.avatar ? (
+                      <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                        <img
+                          src={user.avatar}
+                          alt=""
+                          className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                        />
+                      </span>
+                    ) : (
+                      <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                        <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
+                          {i || user?.fullName.charAt(0)}
+                        </p>
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
               <div className="flex items-center gap-[22px] relative">
                 <div
@@ -157,9 +192,13 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
             <div className={`h-full w-full pb-10 mx-auto  overflow-hidden`}>
               {TabsScreen["board"]}
             </div>
-            <div className={`h-full w-1/2 pb-10 mx-auto  overflow-hidden ml-5`}>
-              {TabsScreen["messages"]}
-            </div>
+            {showChat && (
+              <div
+                className={`h-full w-1/2 pb-10 mx-auto  overflow-hidden ml-5`}
+              >
+                {TabsScreen["messages"]}
+              </div>
+            )}
           </div>
         </div>
       </div>
