@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import LogoIcon from "../../assets/logo.svg";
+import LogoIcon from "../../assets/squad_logo.png";
 import NotificationIcon from "../../assets/notification.svg";
 import ArrowDown from "../../assets/arrowdown.svg";
 import SettingsIcon from "../../assets/setting.svg";
@@ -57,8 +57,8 @@ const NotLoggedInTopNav = () => {
   return (
     <div className="flex justify-between w-full py-[15px] px-[50px]">
       <div className="flex items-center gap-2">
-        <img src={LogoIcon} alt="logo" />
-        <h1 className="text-[#6576FF] text-[20px]">Beta Squad</h1>
+        <img src={LogoIcon} alt="logo" height={35} width={35} />
+        <h1 className="text-[#0D1282] text-[20px] font-semibold">Squad</h1>
       </div>
       <Link
         to={`${currentPage === "register" ? "/" : "/register"}`}
