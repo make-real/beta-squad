@@ -38,7 +38,7 @@ import { useCommingSoonContext } from "../../context/FeatureContext";
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("messages");
+  const [selectedTab, setSelectedTab] = useState("board");
   const [showType, setShowType] = useState("grid");
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -97,8 +97,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   return (
     <div className="bg-[#FFF] w-full h-full">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
-        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] flex flex-col">
-          <div className="flex items-center justify-between">
+        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
+          <div className="flex flex-row items-center justify-between pb-[20px]">
             {/* <div className="flex items-center gap-[10px]">
                             <FolderIcon className="w-[20px] h-[20px]" style={{ fill: selectedSpace?.color }} />
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">{selectedSpace?.name}</h2>
@@ -124,58 +124,41 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
             <div className="flex items-center">
               <div className="flex items-center gap-[12px]">
-                <img src={SearchIcon} alt="search" className="" />
+                {/* <img src={SearchIcon} alt="search" className="" />
                 <input
                   type="text"
                   placeholder="Search here"
                   className=" placeholder:text-[#99A6B9] border-none outline-none"
-                />
+                /> */}
               </div>
-              {selectedTab === "messages" ? (
-                <div className="flex items-center gap-[22px] relative">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      //startCall("video")
-                      setShowModal(!showModal);
-                    }}
-                  >
-                    <img src={VideoCallIcon} alt="video_call" />
-                  </div>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      //startCall("audio");
-                      setShowModal(!showModal);
-                    }}
-                  >
-                    <img src={AudioCallIcon} alt="audio_call" />
-                  </div>
+              <div className="flex items-center gap-[22px] relative">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //startCall("video")
+                    setShowModal(!showModal);
+                  }}
+                >
+                  <img src={VideoCallIcon} alt="video_call" />
                 </div>
-              ) : (
-                <div className="flex items-center gap-[22px]">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => setShowType("grid")}
-                  >
-                    <GridIcon isSelected={showType === "grid"} />
-                  </div>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => setShowType("stack")}
-                  >
-                    <RowVerticalIcon isSelected={showType === "stack"} />
-                  </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //startCall("audio");
+                    setShowModal(!showModal);
+                  }}
+                >
+                  <img src={AudioCallIcon} alt="audio_call" />
                 </div>
-              )}
+              </div>
             </div>
           </div>
-          <div className=" flex flex-col h-full">
-            {/* <div className="w-full h-[1px] bg-[#ECECEC]"></div> */}
-            <div
-              className={`h-full w-full pb-10 mx-auto mt-[30px]  overflow-hidden`}
-            >
-              {TabsScreen[selectedTab]}
+          <div className=" flex flex-row h-full">
+            <div className={`h-full w-full pb-10 mx-auto  overflow-hidden`}>
+              {TabsScreen["board"]}
+            </div>
+            <div className={`h-full w-1/2 pb-10 mx-auto  overflow-hidden ml-5`}>
+              {TabsScreen["messages"]}
             </div>
           </div>
         </div>

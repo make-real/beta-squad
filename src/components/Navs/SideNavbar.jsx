@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { CloseMenuBtn, Plus } from "../../assets/icons";
-import LogoIcon from "../../assets/logo.svg";
+import LogoIcon from "../../assets/logo.jpeg";
+import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
 import SearchIcon from "../../assets/search.svg";
 import SquadIcon from "../../assets/icon_component/Squad";
@@ -199,7 +200,9 @@ const SideNavbar = () => {
               className="flex items-center gap-4"
             >
               <img src={LogoIcon} alt="" className="w-[28px] h-[28px]" />
-              <h1 className="text-[#0D1282] text-[20px]">Beta Squad</h1>
+              <h1 className="text-[#0D1282] text-[20px] font-semibold">
+                Squad
+              </h1>
             </Link>
           )}
           <div
@@ -208,11 +211,18 @@ const SideNavbar = () => {
               dispatch(toggleFullSidebar());
             }}
           >
-            <CloseMenuBtn
+            <img
+              src={CollapseIcon}
+              alt=""
               className={`text-[#0D1282] w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
                 fullSidebar ? "" : "rotate-180"
               }`}
             />
+            {/* <CloseMenuBtn
+              className={`text-[#0D1282] w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
+                fullSidebar ? "" : "rotate-180"
+              }`}
+            /> */}
           </div>
         </div>
         {/* Manage Workspace Sidebar */}
@@ -334,8 +344,8 @@ const SideNavbar = () => {
                 navigate(`/projects/${selectedWorkspace}`);
                 setSelectedChat(null);
               }}
-              className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                selectedChat ? "" : selectedSpace ? "" : "bg-[#6576FF10]"
+              className={`flex items-center gap-3 cursor-pointer py-[10px] mx-2 rounded-lg ${
+                selectedChat ? "" : selectedSpace ? "" : "bg-[#CBCCE1]"
               } 
                                 ${
                                   fullSidebar
@@ -399,7 +409,7 @@ const SideNavbar = () => {
               </div>
             )}
             {!fullSidebar && (
-              <h1 className="text-[#6576FF80] text-center">Squad</h1>
+              <h1 className="text-[#0D1282] text-center">Squad</h1>
             )}
             {/* Squads List */}
             {(!isFirstTime || !firstTimeSquad) && (
@@ -429,8 +439,8 @@ const SideNavbar = () => {
                       }}
                       onDrop={squadOnDrop}
                       data-id={space._id}
-                      className={`flex items-center gap-3 cursor-pointer py-[10px] ${
-                        selectedSpace === space._id ? "bg-[#6576FF10]" : ""
+                      className={`flex items-center gap-3 cursor-pointer py-[10px] rounded-lg mx-2 ${
+                        selectedSpace === space._id ? "bg-[#CBCCE1]" : ""
                       }  ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                       onClick={() => {
                         dispatch(setSelectedSpaceId(space._id));
@@ -520,7 +530,7 @@ const SideNavbar = () => {
                   </div>
                 )}
                 {!fullSidebar && (
-                  <h1 className="text-[#6576FF80] text-center">Chats</h1>
+                  <h1 className="text-[#0D1282] text-center">Chats</h1>
                 )}
                 {/* Chats List */}
                 <div className="mt-[10px] flex flex-col">
@@ -528,9 +538,9 @@ const SideNavbar = () => {
                     member?._id !== userId ? (
                       <div
                         key={idx}
-                        className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
+                        className={`flex items-center cursor-pointer py-[10px] gap-[10px] mx-2 rounded-lg ${
                           selectedChat?._id === member?._id
-                            ? "bg-[#6576FF10]"
+                            ? "bg-[#CBCCE1]"
                             : ""
                         } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                         onClick={() => {
@@ -562,12 +572,12 @@ const SideNavbar = () => {
           : null}
         {/* Footer Copyright */}
         <p
-          className={`text-[#C4CEFE] ${
+          className={`text-[#0D1282] ${
             fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"
           } mt-auto mb-[16px]`}
         >
           &copy;
-          {fullSidebar && <span className="ml-[10px]">Beta Squad 2023</span>}
+          {fullSidebar && <span className="ml-[10px]">makereal.io 2023</span>}
         </p>
       </div>
 

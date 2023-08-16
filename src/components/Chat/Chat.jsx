@@ -8,7 +8,7 @@ const Chat = () => {
   return (
     // <div className="w-full pb-10 mx-auto mt-[40px] h-full">
     <div
-      className={`border border-[#ECECEC] pb-5 rounded-lg h-full flex flex-col`}
+      className={`border border-[#ECECEC] pb-3 rounded-lg h-full flex flex-col bg-[#F5F5F5]`}
     >
       <div
         style={
