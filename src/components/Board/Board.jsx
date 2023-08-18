@@ -195,13 +195,13 @@ const Board = ({ showType }) => {
             </DragDropContext>
 
             {/*  + Add a list | Button UI */}
-            <AddBtn
+            {/* <AddBtn
               loading={listLoading}
               showType={showType}
               placeHolder="Add list name..."
               btnText="list"
               onSubmit={(text) => handleBoardListCreation(squadId, text)}
-            />
+            /> */}
           </div>
         ) : (
           <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">

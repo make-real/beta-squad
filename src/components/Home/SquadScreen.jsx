@@ -11,9 +11,12 @@ import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
 import { addLocalAudioTrack, callReceived } from "../../store/slice/global";
 import { get_space_members, remove_space_members } from "../../api/space";
+import { AddBtn } from "../Board";
+import { addBoardListApiCall } from "../../hooks/useFetch";
 
 import ring from "../../assets/ring.wav";
 import { useCommingSoonContext } from "../../context/FeatureContext";
+import { useBoardCardContext } from "../../context/BoardCardContext";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -21,9 +24,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const [selectedTab, setSelectedTab] = useState("board");
   const [showType, setShowType] = useState("grid");
   const [showChat, setShowChat] = useState(true);
+  const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const { socket, call } = useSelector((state) => state.global);
+  const { addBoardList } = useBoardCardContext();
 
   const { state } = useLocation();
   const location = useLocation();
@@ -33,6 +38,28 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const [members, setMembers] = useState([]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  const handleBoardListCreation = async (squadId, text) => {
+    const listObject = { name: text };
+    setListLoading(true);
+
+    try {
+      const { data } = await addBoardListApiCall(squadId, listObject);
+      setListLoading(false);
+      addBoardList(data.list);
+
+      // toast.success(`${data?.list?.name} - list create successfully`, {
+      //     autoClose: 3000,
+      // });
+    } catch (error) {
+      console.log(error.response.data);
+
+      setListLoading(false);
+      // toast.error(error?.response?.data?.issue?.message, {
+      //     autoClose: 3000,
+      // });
+    }
+  };
 
   const fetchSquadMembers = async () => {
     try {
@@ -102,12 +129,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     <div className="bg-[#FFF] w-full h-full">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
-          <div className="flex flex-row items-center justify-between pb-[20px]">
+          <div className="flex flex-row items-center justify-between py-[10px]">
             {/* <div className="flex items-center gap-[10px]">
                             <FolderIcon className="w-[20px] h-[20px]" style={{ fill: selectedSpace?.color }} />
                             <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">{selectedSpace?.name}</h2>
                         </div> */}
-            <div className="flex items-center gap-[50px] w-full">
+            <div className="flex items-center w-full justify-between">
               {Object.keys(TabsName).map((value, idx) => {
                 return (
                   <a
@@ -124,6 +151,19 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   </a>
                 );
               })}
+              {/* <AddBtn
+                loading={listLoading}
+                showType={showType}
+                placeHolder="Add list name..."
+                btnText="list"
+                onSubmit={(text) => handleBoardListCreation(workspace_id, text)}
+              /> */}
+              <div
+                className="border-2 p-1 rounded-md cursor-pointer mr-3 select-none flex items-center"
+                onClick={(text) => handleBoardListCreation(workspace_id, text)}
+              >
+                <h3 className="text-gray-400 text-md">New board</h3>
+              </div>
             </div>
 
             <div className="flex items-center justify-between w-1/2">
@@ -189,13 +229,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
             </div>
           </div>
           <div className=" flex flex-row h-full">
-            <div className={`h-full w-full pb-10 mx-auto  overflow-hidden`}>
+            <div className={`h-full w-full pb-5 mx-auto  overflow-hidden`}>
               {TabsScreen["board"]}
             </div>
             {showChat && (
-              <div
-                className={`h-full w-1/2 pb-10 mx-auto  overflow-hidden ml-5`}
-              >
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
                 {TabsScreen["messages"]}
               </div>
             )}

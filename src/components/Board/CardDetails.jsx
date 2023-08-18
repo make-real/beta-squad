@@ -352,12 +352,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-8 bg-[#031124]/[0.4] h-full overflow-y-scroll no-scrollbar`}
+        className={`duration-200 p-5 bg-[#031124]/[0.4] h-full no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
 
-        <div className="relative bg-white p-8 rounded-2xl">
+        <div className="relative bg-white p-8 rounded-2xl h-full">
           <span
             className={`absolute top-0 left-0 rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8`}
             style={{ backgroundColor: localCard?.color }}
@@ -599,8 +599,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
           {/* main part */}
           <div className="flex flex-1 min-h-0 gap-5">
-            <div className={`flex flex-col ${showChat ? "w-7/12" : "w-full"} `}>
-              <div className="overflow-y-auto h-full">
+            <div
+              className={`flex flex-col ${
+                showChat ? "w-7/12" : "w-full"
+              } h-[72vh]`}
+            >
+              <div className="overflow-y-scroll">
                 {/* show routing */}
                 {/* <div className="flex items-center py-4 text-gray-400 ">
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
