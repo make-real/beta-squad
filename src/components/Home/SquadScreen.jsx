@@ -13,22 +13,31 @@ import { addLocalAudioTrack, callReceived } from "../../store/slice/global";
 import { get_space_members, remove_space_members } from "../../api/space";
 import { AddBtn } from "../Board";
 import { addBoardListApiCall } from "../../hooks/useFetch";
-
+import { get_tags } from "../../api/tags";
 import ring from "../../assets/ring.wav";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import { useBoardCardContext } from "../../context/BoardCardContext";
+import AddMember from "../../assets/icons/svg/AddMember";
+import Message from "../../assets/icons/svg/Message";
+import PlusIcon from "../../assets/plus.svg";
+import FileIcon from "../../assets/icons/svg/FileIcon";
+import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
+import GoogleMeet from "../../assets/images/meet.png";
+import board from "../../store/slice/board";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("board");
+  const [selectedTab, setSelectedTab] = useState("all");
   const [showType, setShowType] = useState("grid");
   const [showChat, setShowChat] = useState(true);
+  const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const { socket, call } = useSelector((state) => state.global);
-  const { addBoardList } = useBoardCardContext();
+  const { addBoardList, addBoard, setAddBoard } = useBoardCardContext();
+  const [tags, setTags] = useState();
 
   const { state } = useLocation();
   const location = useLocation();
@@ -61,9 +70,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   };
 
+  console.log("SpaceID: ", selectedSpaceId);
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
+
       console.log(data);
       setMembers(data?.members);
     } catch (err) {
@@ -73,6 +84,31 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
       console.log("Error occured ==> ", err);
     }
   };
+
+  const getTags = async () => {
+    try {
+      // GET Method || For fetching all tag's under specific workShop
+      const { data } = await get_tags({
+        workSpaceId: selectedSpace?._id,
+      });
+
+      setTags(data);
+      // tags
+      // const remainTag = data?.tags.filter(
+      //   ({ _id }) => !localCard?.tags?.some((tag) => tag._id === _id)
+      // );
+
+      //setOptions(remainTag);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTags();
+  }, []);
+
+  console.log("TAGS: ", tags);
 
   useEffect(() => {
     if (selectedSpace) {
@@ -113,63 +149,105 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   }, [location]);
 
+  const addBoardRef = React.useRef();
+
   const TabsScreen = {
     messages: <Chat />,
-    board: <Board selectedSpaceId={workspace_id} showType={showType} />,
+    board: (
+      <Board
+        selectedSpaceId={workspace_id}
+        showType={showType}
+        addBoardRef={addBoardRef}
+      />
+    ),
     members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
   };
 
   const TabsName = {
-    // messages: "Messages",
-    board: "Board",
-    // members: "Members",
+    all: "All",
+    //importtant: "Important",
   };
-
   return (
     <div className="bg-[#FFF] w-full h-full">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
-            {/* <div className="flex items-center gap-[10px]">
-                            <FolderIcon className="w-[20px] h-[20px]" style={{ fill: selectedSpace?.color }} />
-                            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">{selectedSpace?.name}</h2>
-                        </div> */}
             <div className="flex items-center w-full justify-between">
-              {Object.keys(TabsName).map((value, idx) => {
-                return (
-                  <a
-                    href={`#${value.toLowerCase()}`}
-                    key={idx}
-                    onClick={() => setSelectedTab(value)}
-                    className={`${
-                      selectedTab === value
-                        ? "border-b-2 border-b-[#6576FF] text-[#031124]"
-                        : "text-[#818892]"
-                    } text-[19px] font-medium   cursor-pointer`}
-                  >
-                    {TabsName[value]}
-                  </a>
-                );
-              })}
-              {/* <AddBtn
-                loading={listLoading}
-                showType={showType}
-                placeHolder="Add list name..."
-                btnText="list"
-                onSubmit={(text) => handleBoardListCreation(workspace_id, text)}
-              /> */}
+              <div className="flex items-center">
+                {Object.keys(TabsName).map((value, idx) => {
+                  return (
+                    <a
+                      href={`#${value.toLowerCase()}`}
+                      key={idx}
+                      onClick={() => setSelectedTab(value)}
+                      className={`${
+                        selectedTab === value
+                          ? " text-[#6576FF] bg-[#EEF2FF] py-2 px-5 rounded-lg"
+                          : "text-[#818892]"
+                      } text-md cursor-pointer mr-3`}
+                    >
+                      {TabsName[value]}
+                    </a>
+                  );
+                })}
+              </div>
               <div
                 className="border-2 p-1 rounded-md cursor-pointer mr-3 select-none flex items-center"
-                onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                // onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                onClick={() => {
+                  setAddBoard(!addBoard);
+                  if (addBoard === false) {
+                    addBoardRef.current.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }
+                }}
               >
+                <img
+                  src={PlusIcon}
+                  alt=""
+                  style={{
+                    height: 15,
+                    width: 15,
+                  }}
+                />
                 <h3 className="text-gray-400 text-md">New board</h3>
               </div>
             </div>
 
             <div className="flex items-center justify-between w-1/2">
               <div className="flex items-center">
+                <div className="flex items-center justify-start">
+                  {members.slice(0, 3).map((user, i) => (
+                    <div className="ml-[-10px]">
+                      {user.avatar ? (
+                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                          <img
+                            src={user.avatar}
+                            alt=""
+                            className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                          />
+                        </span>
+                      ) : (
+                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                          <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
+                            {i || user?.fullName.charAt(0)}
+                          </p>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                  <div
+                    className="ml-[-10px]"
+                    onClick={() => setShowSquadMembers(!showSquadMembers)}
+                  >
+                    <AddMember />
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-[22px] relative">
                 <div
-                  className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg space-x-5 mr-5`}
+                  className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                 >
                   <span
                     className={`rounded-full ring-[1px] p-1 ${
@@ -186,27 +264,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     />
                   </span>
                 </div>
-                {members.map((user, i) => (
-                  <div className="ml-[-10px]">
-                    {user.avatar ? (
-                      <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
-                        <img
-                          src={user.avatar}
-                          alt=""
-                          className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
-                        />
-                      </span>
-                    ) : (
-                      <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
-                        <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
-                          {i || user?.fullName.charAt(0)}
-                        </p>
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-[22px] relative">
                 <div
                   className="cursor-pointer"
                   onClick={() => {
@@ -214,7 +271,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     setShowModal(!showModal);
                   }}
                 >
-                  <img src={VideoCallIcon} alt="video_call" />
+                  <FileIcon />
+                  {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
                 <div
                   className="cursor-pointer"
@@ -223,7 +281,28 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     setShowModal(!showModal);
                   }}
                 >
-                  <img src={AudioCallIcon} alt="audio_call" />
+                  <CalendarIcon />
+                  {/* <img src={AudioCallIcon} alt="audio_call" /> */}
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //startCall("audio");
+                    // setShowModal(!showModal);
+                  }}
+                >
+                  <a
+                    className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
+                    href="https://meet.google.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={GoogleMeet}
+                      alt="google_mmet"
+                      className="h-5 w-5"
+                    />
+                  </a>
                 </div>
               </div>
             </div>
@@ -232,7 +311,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
             <div className={`h-full w-full pb-5 mx-auto  overflow-hidden`}>
               {TabsScreen["board"]}
             </div>
-            {showChat && (
+            {showSquadMembers && (
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                {TabsScreen["members"]}
+              </div>
+            )}
+            {!showSquadMembers && showChat && (
               <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
                 {TabsScreen["messages"]}
               </div>

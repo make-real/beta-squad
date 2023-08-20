@@ -16,10 +16,10 @@ import { filterStatus } from "../../store/slice/board";
 import BoardStackList from "./BoardStackList";
 import { useParams } from "react-router-dom";
 
-const Board = ({ showType }) => {
+const Board = ({ showType, addBoardRef }) => {
   const { squadId } = useParams();
 
-  const { handleDragEnd, boardLists, setBoardList, addBoardList } =
+  const { handleDragEnd, boardLists, setBoardList, addBoardList, addBoard } =
     useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
 
@@ -195,13 +195,16 @@ const Board = ({ showType }) => {
             </DragDropContext>
 
             {/*  + Add a list | Button UI */}
-            {/* <AddBtn
-              loading={listLoading}
-              showType={showType}
-              placeHolder="Add list name..."
-              btnText="list"
-              onSubmit={(text) => handleBoardListCreation(squadId, text)}
-            /> */}
+            {addBoard && (
+              <AddBtn
+                loading={listLoading}
+                showType={showType}
+                placeHolder="Add list name..."
+                btnText="list"
+                onSubmit={(text) => handleBoardListCreation(squadId, text)}
+              />
+            )}
+            <div ref={addBoardRef} />
           </div>
         ) : (
           <div className="py-4 flex flex-col gap-3 items-start  min-w-fit h-[98vh]">
@@ -232,13 +235,15 @@ const Board = ({ showType }) => {
             </DragDropContext>
 
             {/*  + Add a list | Button UI */}
-            <AddBtn
-              loading={listLoading}
-              showType={showType}
-              placeHolder="Add list name..."
-              btnText="list"
-              onSubmit={(text) => handleBoardListCreation(squadId, text)}
-            />
+            {addBoard && (
+              <AddBtn
+                loading={listLoading}
+                showType={showType}
+                placeHolder="Add list name..."
+                btnText="list"
+                onSubmit={(text) => handleBoardListCreation(squadId, text)}
+              />
+            )}
           </div>
         )
       ) : (
