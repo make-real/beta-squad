@@ -28,7 +28,7 @@ import board from "../../store/slice/board";
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedTab, setSelectedTab] = useState("All");
   const [showType, setShowType] = useState("grid");
   const [showChat, setShowChat] = useState(true);
   const [showSquadMembers, setShowSquadMembers] = useState(false);
@@ -38,6 +38,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { socket, call } = useSelector((state) => state.global);
   const { addBoardList, addBoard, setAddBoard } = useBoardCardContext();
   const [tags, setTags] = useState();
+  const [TabsName, setTabsName] = useState(["All"]);
 
   const { state } = useLocation();
   const location = useLocation();
@@ -78,9 +79,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
       console.log(data);
       setMembers(data?.members);
     } catch (err) {
-      // toast.error(err?.message, {
-      //     autoClose: 3000,
-      // })
       console.log("Error occured ==> ", err);
     }
   };
@@ -89,16 +87,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     try {
       // GET Method || For fetching all tag's under specific workShop
       const { data } = await get_tags({
-        workSpaceId: selectedSpace?._id,
+        workSpaceId: workspace_id,
       });
 
       setTags(data);
-      // tags
-      // const remainTag = data?.tags.filter(
-      //   ({ _id }) => !localCard?.tags?.some((tag) => tag._id === _id)
-      // );
-
-      //setOptions(remainTag);
+      const remainTag = data?.tags.map((item) => item?.name);
+      setTabsName(["All", ...remainTag]);
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +102,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     getTags();
   }, []);
 
-  console.log("TAGS: ", tags);
+  //console.log("TAGS: ", tags);
 
   useEffect(() => {
     if (selectedSpace) {
@@ -163,10 +157,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
   };
 
-  const TabsName = {
-    all: "All",
-    //importtant: "Important",
-  };
+  // const TabsName = {
+  //   all: "All",
+  //   //importtant: "Important",
+  // };
   return (
     <div className="bg-[#FFF] w-full h-full">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
@@ -174,19 +168,19 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
               <div className="flex items-center">
-                {Object.keys(TabsName).map((value, idx) => {
+                {TabsName.map((value, idx) => {
                   return (
                     <a
-                      href={`#${value.toLowerCase()}`}
+                      //href={`#${value.toLowerCase()}`}
                       key={idx}
                       onClick={() => setSelectedTab(value)}
                       className={`${
                         selectedTab === value
                           ? " text-[#6576FF] bg-[#EEF2FF] py-2 px-5 rounded-lg"
-                          : "text-[#818892]"
+                          : "text-[#818892] px-2"
                       } text-md cursor-pointer mr-3`}
                     >
-                      {TabsName[value]}
+                      {value}
                     </a>
                   );
                 })}
