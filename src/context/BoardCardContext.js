@@ -9,6 +9,14 @@ export const BoardCardContext = ({ children }) => {
   const [addBoard, setAddBoard] = useState(false);
 
   const [boardLists, setBoardList] = useState([]);
+  const [filteredLists, setFilteredLists] = useState([]);
+  const [tag, setTag] = useState("All");
+
+  console.log("BOARDLIST: ", boardLists);
+
+  const filterBoardList = (tag) => {
+    const copy = [...boardLists];
+  };
 
   const addBoardList = (newListObj) =>
     setBoardList((pre) => [...pre, newListObj]);
