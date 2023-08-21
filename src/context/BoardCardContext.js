@@ -14,8 +14,31 @@ export const BoardCardContext = ({ children }) => {
 
   console.log("BOARDLIST: ", boardLists);
 
-  const filterBoardList = (tag) => {
-    const copy = [...boardLists];
+  const filterBoardList = (filter_tag) => {
+    // if (!filter_tag || filter_tag === "All") {
+    //   setFilteredLists(boardLists);
+    //   return;
+    // }
+    const list = [...boardLists];
+
+    let new_list = [];
+
+    list.map((board) => {
+      let cards = [];
+      board.cards.forEach((card) => {
+        card.tags.forEach((tag) => {
+          if (tag.name === filter_tag) {
+            cards.push(card);
+          }
+        });
+      });
+      if (cards.length) {
+        let new_board = { ...board, cards };
+        new_list.push(new_board);
+      }
+    });
+
+    setFilteredLists(new_list);
   };
 
   const addBoardList = (newListObj) =>
@@ -129,11 +152,13 @@ export const BoardCardContext = ({ children }) => {
         removeCard,
         handleDragEnd,
         toggleCardModal,
-
+        filterBoardList,
         cardDetails,
         setCardDetails,
         addBoard,
         setAddBoard,
+        filteredLists,
+        setFilteredLists,
       }}
     >
       {children}

@@ -20,12 +20,15 @@ export const CommingSoonContext = ({ children }) => {
 
 export const AppStateContext = ({ children }) => {
   const [showChat, setShowChat] = useState(true);
+  const [selectedTab, setSelectedTab] = useState("All");
 
   return (
     <AppState.Provider
       value={{
         showChat,
         setShowChat,
+        selectedTab,
+        setSelectedTab,
       }}
     >
       {children}

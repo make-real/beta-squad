@@ -30,16 +30,23 @@ import board from "../../store/slice/board";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
-  const { showChat, setShowChat } = useAppStateContext();
+  const { showChat, setShowChat, selectedTab, setSelectedTab } =
+    useAppStateContext();
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("All");
   const [showType, setShowType] = useState("grid");
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const { socket, call } = useSelector((state) => state.global);
-  const { addBoardList, addBoard, setAddBoard } = useBoardCardContext();
+  const {
+    addBoardList,
+    addBoard,
+    setAddBoard,
+    filterBoardList,
+    setFilteredLists,
+    boardLists,
+  } = useBoardCardContext();
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
 
@@ -121,6 +128,22 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   }, [call?.data?.participants]);
 
+  useEffect(() => {
+    if (!selectedTab) {
+      setSelectedTab("All");
+    }
+  }, []);
+
+  console.log("TAB: ", selectedTab);
+
+  useEffect(() => {
+    if (selectedTab === "All") {
+      setFilteredLists(boardLists);
+    } else {
+      filterBoardList(selectedTab);
+    }
+  }, [selectedTab, boardLists]);
+
   const startCall = (type) => {
     if (call?.data) return;
 
@@ -132,19 +155,19 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     socket?.emit("START_CALL", selectedSpaceId, false, type);
   };
 
-  useEffect(() => {
-    if (state?.tab) {
-      setSelectedTab(state?.tab ?? "messages");
-      window.history.replaceState({}, document.title);
-    }
-  }, [state?.tab]);
+  // useEffect(() => {
+  //   if (state?.tab) {
+  //     setSelectedTab(state?.tab ?? "messages");
+  //     window.history.replaceState({}, document.title);
+  //   }
+  // }, [state?.tab]);
 
-  useEffect(() => {
-    let tab = location?.hash?.slice(1);
-    if (tab) {
-      setSelectedTab(tab);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   let tab = location?.hash?.slice(1);
+  //   if (tab) {
+  //     setSelectedTab(tab);
+  //   }
+  // }, [location]);
 
   const addBoardRef = React.useRef();
 

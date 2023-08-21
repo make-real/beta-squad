@@ -19,8 +19,15 @@ import { useParams } from "react-router-dom";
 const Board = ({ showType, addBoardRef }) => {
   const { squadId } = useParams();
 
-  const { handleDragEnd, boardLists, setBoardList, addBoardList, addBoard } =
-    useBoardCardContext();
+  const {
+    handleDragEnd,
+    boardLists,
+    setBoardList,
+    addBoardList,
+    addBoard,
+    filteredLists,
+    setFilterdLists,
+  } = useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
 
   useEffect(() => {
@@ -32,6 +39,7 @@ const Board = ({ showType, addBoardRef }) => {
           );
 
           setBoardList(data.lists);
+          setFilterdLists(data.lists);
           // setBoardList(data.lists?.reverse()?.slice(0));
         }
       } catch (error) {
@@ -110,7 +118,7 @@ const Board = ({ showType, addBoardRef }) => {
   };
 
   const filterdBoardList = () => {
-    let boardCopy = [...boardLists];
+    let boardCopy = [...filteredLists];
 
     boardCopy = boardCopy.map((brd) => {
       const filteredCard = brd?.cards?.filter((card) => {
