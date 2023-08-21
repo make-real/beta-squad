@@ -166,7 +166,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
-            <div className="flex items-center w-full justify-between">
+            <div className="flex items-center w-full justify-between mr-4">
               <div className="flex items-center">
                 {TabsName.map((value, idx) => {
                   return (
@@ -186,7 +186,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
-                className="border-2 p-1 rounded-md cursor-pointer mr-3 select-none flex items-center"
+                className="border-2 p-1  rounded-md cursor-pointer mr-3  select-none flex items-center "
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 onClick={() => {
                   setAddBoard(!addBoard);
@@ -209,13 +209,13 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between w-1/2">
+            <div className="flex items-center justify-between  w-1/2">
               <div className="flex items-center">
                 <div className="flex items-center justify-start">
                   {members.slice(0, 3).map((user, i) => (
                     <div className="ml-[-10px]">
                       {user.avatar ? (
-                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                        <span className="rounded-full  ml-[-3px]  text-black font-bold grid place-items-center p-1">
                           <img
                             src={user.avatar}
                             alt=""
