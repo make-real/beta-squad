@@ -1,7 +1,7 @@
 import { BoardCardContext } from "./context/BoardCardContext";
 import { UserInfoContext } from "./context/UserInfoContext";
 import { StyleContext } from "./context/StyleContext";
-import { CommingSoonContext } from "./context/FeatureContext";
+import { CommingSoonContext, AppStateContext } from "./context/FeatureContext";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import ReactDOM from "react-dom/client";
@@ -38,7 +38,9 @@ root.render(
         <UserInfoContext>
           <StyleContext>
             <CommingSoonContext>
-              <App />
+              <AppStateContext>
+                <App />
+              </AppStateContext>
               <ComingSoonModal />
             </CommingSoonContext>
           </StyleContext>

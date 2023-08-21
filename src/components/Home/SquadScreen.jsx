@@ -15,7 +15,10 @@ import { AddBtn } from "../Board";
 import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
 import ring from "../../assets/ring.wav";
-import { useCommingSoonContext } from "../../context/FeatureContext";
+import {
+  useAppStateContext,
+  useCommingSoonContext,
+} from "../../context/FeatureContext";
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import AddMember from "../../assets/icons/svg/AddMember";
 import Message from "../../assets/icons/svg/Message";
@@ -27,10 +30,10 @@ import board from "../../store/slice/board";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
+  const { showChat, setShowChat } = useAppStateContext();
   const { participantID, workspace_id } = useParams();
   const [selectedTab, setSelectedTab] = useState("All");
   const [showType, setShowType] = useState("grid");
-  const [showChat, setShowChat] = useState(true);
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
