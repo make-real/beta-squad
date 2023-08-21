@@ -167,7 +167,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center w-[1/2] overflow-x-scroll">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
@@ -249,7 +249,14 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         ? "bg-[#54CC7C] ring-[#ECECEC]"
                         : "ring-[#54CC7C]"
                     } text-black font-bold grid place-items-center`}
-                    onClick={() => setShowChat((showChat) => !showChat)}
+                    onClick={() => {
+                      if (showSquadMembers) {
+                        setShowSquadMembers(!showSquadMembers);
+                        if (!showChat) {
+                          setShowChat(!showChat);
+                        }
+                      } else setShowChat((showChat) => !showChat);
+                    }}
                   >
                     <ChatBubbleBottomCenterTextIcon
                       className={`w-5 h-5 ${
