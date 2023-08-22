@@ -15,7 +15,10 @@ import { AddBtn } from "../Board";
 import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
 import ring from "../../assets/ring.wav";
-import { useCommingSoonContext } from "../../context/FeatureContext";
+import {
+  useAppStateContext,
+  useCommingSoonContext,
+} from "../../context/FeatureContext";
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import AddMember from "../../assets/icons/svg/AddMember";
 import Message from "../../assets/icons/svg/Message";
@@ -27,16 +30,24 @@ import board from "../../store/slice/board";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
+  const { showChat, setShowChat, selectedTab, setSelectedTab } =
+    useAppStateContext();
   const { participantID, workspace_id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("All");
   const [showType, setShowType] = useState("grid");
-  const [showChat, setShowChat] = useState(true);
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const { socket, call } = useSelector((state) => state.global);
-  const { addBoardList, addBoard, setAddBoard } = useBoardCardContext();
+  const {
+    addBoardList,
+    addBoard,
+    setAddBoard,
+    filterBoardList,
+    filteredList,
+    setFilteredLists,
+    boardLists,
+  } = useBoardCardContext();
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
 
@@ -92,7 +103,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
       setTags(data);
       const remainTag = data?.tags.map((item) => item?.name);
-      setTabsName(["All", ...remainTag]);
+      setTabsName(["All", ...remainTag, "Done"]);
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +111,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
   useEffect(() => {
     getTags();
-  }, []);
+  }, [selectedSpace]);
 
   //console.log("TAGS: ", tags);
 
@@ -118,6 +129,22 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   }, [call?.data?.participants]);
 
+  useEffect(() => {
+    if (!selectedTab) {
+      setSelectedTab("All");
+    }
+  }, []);
+
+  console.log("TAB: ", selectedTab);
+
+  useEffect(() => {
+    if (selectedTab === "All") {
+      setFilteredLists(boardLists);
+    } else {
+      filterBoardList(selectedTab);
+    }
+  }, [selectedTab, filteredList]);
+
   const startCall = (type) => {
     if (call?.data) return;
 
@@ -129,19 +156,19 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     socket?.emit("START_CALL", selectedSpaceId, false, type);
   };
 
-  useEffect(() => {
-    if (state?.tab) {
-      setSelectedTab(state?.tab ?? "messages");
-      window.history.replaceState({}, document.title);
-    }
-  }, [state?.tab]);
+  // useEffect(() => {
+  //   if (state?.tab) {
+  //     setSelectedTab(state?.tab ?? "messages");
+  //     window.history.replaceState({}, document.title);
+  //   }
+  // }, [state?.tab]);
 
-  useEffect(() => {
-    let tab = location?.hash?.slice(1);
-    if (tab) {
-      setSelectedTab(tab);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   let tab = location?.hash?.slice(1);
+  //   if (tab) {
+  //     setSelectedTab(tab);
+  //   }
+  // }, [location]);
 
   const addBoardRef = React.useRef();
 
@@ -166,7 +193,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
-            <div className="flex items-center w-full justify-between mr-4">
+            <div className="flex items-center w-full justify-between">
               <div className="flex items-center">
                 {TabsName.map((value, idx) => {
                   return (
@@ -249,7 +276,14 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         ? "bg-[#54CC7C] ring-[#ECECEC]"
                         : "ring-[#54CC7C]"
                     } text-black font-bold grid place-items-center`}
-                    onClick={() => setShowChat((showChat) => !showChat)}
+                    onClick={() => {
+                      if (showSquadMembers) {
+                        setShowSquadMembers(!showSquadMembers);
+                        if (!showChat) {
+                          setShowChat(!showChat);
+                        }
+                      } else setShowChat((showChat) => !showChat);
+                    }}
                   >
                     <ChatBubbleBottomCenterTextIcon
                       className={`w-5 h-5 ${

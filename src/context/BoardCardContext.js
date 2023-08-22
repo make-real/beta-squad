@@ -9,6 +9,50 @@ export const BoardCardContext = ({ children }) => {
   const [addBoard, setAddBoard] = useState(false);
 
   const [boardLists, setBoardList] = useState([]);
+  const [filteredLists, setFilteredLists] = useState([]);
+  const [tag, setTag] = useState("All");
+
+  console.log("BOARDLIST: ", boardLists);
+
+  const filterBoardList = (filter_tag) => {
+    const list = [...boardLists];
+
+    let new_list = [];
+
+    if (filter_tag === "Done") {
+      list.map((board) => {
+        let cards = [];
+        board.cards.forEach((card) => {
+          if (card.progress === 4) {
+            cards.push(card);
+          }
+        });
+        if (cards.length) {
+          let new_board = { ...board, cards };
+          new_list.push(new_board);
+        }
+      });
+      setFilteredLists(new_list);
+      return;
+    }
+
+    list.map((board) => {
+      let cards = [];
+      board.cards.forEach((card) => {
+        card.tags.forEach((tag) => {
+          if (tag.name === filter_tag) {
+            cards.push(card);
+          }
+        });
+      });
+      if (cards.length) {
+        let new_board = { ...board, cards };
+        new_list.push(new_board);
+      }
+    });
+
+    setFilteredLists(new_list);
+  };
 
   const addBoardList = (newListObj) =>
     setBoardList((pre) => [...pre, newListObj]);
@@ -121,11 +165,13 @@ export const BoardCardContext = ({ children }) => {
         removeCard,
         handleDragEnd,
         toggleCardModal,
-
+        filterBoardList,
         cardDetails,
         setCardDetails,
         addBoard,
         setAddBoard,
+        filteredLists,
+        setFilteredLists,
       }}
     >
       {children}
