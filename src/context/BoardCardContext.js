@@ -15,13 +15,26 @@ export const BoardCardContext = ({ children }) => {
   console.log("BOARDLIST: ", boardLists);
 
   const filterBoardList = (filter_tag) => {
-    // if (!filter_tag || filter_tag === "All") {
-    //   setFilteredLists(boardLists);
-    //   return;
-    // }
     const list = [...boardLists];
 
     let new_list = [];
+
+    if (filter_tag === "Done") {
+      list.map((board) => {
+        let cards = [];
+        board.cards.forEach((card) => {
+          if (card.progress === 4) {
+            cards.push(card);
+          }
+        });
+        if (cards.length) {
+          let new_board = { ...board, cards };
+          new_list.push(new_board);
+        }
+      });
+      setFilteredLists(new_list);
+      return;
+    }
 
     list.map((board) => {
       let cards = [];

@@ -26,7 +26,7 @@ const Board = ({ showType, addBoardRef }) => {
     addBoardList,
     addBoard,
     filteredLists,
-    setFilterdLists,
+    setFilteredLists,
   } = useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
 
@@ -39,7 +39,7 @@ const Board = ({ showType, addBoardRef }) => {
           );
 
           setBoardList(data.lists);
-          setFilterdLists(data.lists);
+          setFilteredLists(data.lists);
           // setBoardList(data.lists?.reverse()?.slice(0));
         }
       } catch (error) {

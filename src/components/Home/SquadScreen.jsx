@@ -44,6 +44,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     addBoard,
     setAddBoard,
     filterBoardList,
+    filteredList,
     setFilteredLists,
     boardLists,
   } = useBoardCardContext();
@@ -102,7 +103,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
       setTags(data);
       const remainTag = data?.tags.map((item) => item?.name);
-      setTabsName(["All", ...remainTag]);
+      setTabsName(["All", ...remainTag, "Done"]);
     } catch (error) {
       console.log(error);
     }
@@ -142,7 +143,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     } else {
       filterBoardList(selectedTab);
     }
-  }, [selectedTab, boardLists]);
+  }, [selectedTab, filteredList]);
 
   const startCall = (type) => {
     if (call?.data) return;
@@ -193,7 +194,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
-              <div className="flex items-center w-[75%] overflow-x-auto no-scrollbar">
+              <div className="flex items-center w-[80%] overflow-x-auto no-scrollbar">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
