@@ -1,5 +1,6 @@
 const AddMember = () => {
   return (
+    <>
     <svg
       width="28"
       height="28"
@@ -31,6 +32,8 @@ const AddMember = () => {
         fill="white"
       />
     </svg>
+   
+    </>
   );
 };
 

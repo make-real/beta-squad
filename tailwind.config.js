@@ -4,6 +4,9 @@ module.exports = {
   mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    fontFamily:{
+      'inter':'Inter, sans-serif;'
+    },
     extend: {
       colors: colors,
       gridTemplateColumns: {
@@ -14,6 +17,7 @@ module.exports = {
         // Simple 24 row grid
         24: "repeat(24, minmax(0, 1fr))",
       },
+   
     },
   },
   plugins: [require("@tailwindcss/line-clamp")],

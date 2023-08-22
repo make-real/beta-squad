@@ -12,7 +12,7 @@ const CardChip = ({ tag, close, small,Sohel }) => {
       <div style={{
        backgroundColor: `${tag?.color}90`,
       }} className={`w-[8px] h-[8px]  rounded-full opacity-100`}></div>{" "}
-      <span> {tag?.name}</span>
+      <span className="font-inter"> {tag?.name}</span>
     </span>
 
     // <span

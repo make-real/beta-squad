@@ -169,12 +169,12 @@ const Card = ({ card, listID }) => {
         </div>
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-sm mr-4 text-gray-800 font-bold line-clamp-2">
+          <p className="text-sm mr-4 font-inter text-gray-800 font-bold line-clamp-2">
             {card.name}
           </p>
         </div>
         <div className="text-sm text-gray-800">
-          <p className="line-clamp-2">{localCard?.description || ""}</p>
+          <p className="line-clamp-2 font-inter">{localCard?.description || ""}</p>
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
