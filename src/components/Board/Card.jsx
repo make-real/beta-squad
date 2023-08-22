@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
+  const Sohel=card?.color;
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -143,7 +144,7 @@ const Card = ({ card, listID }) => {
           <div className="py-2 text-white flex gap-1 flex-wrap">
             {card?.tags?.length
               ? card?.tags?.map((tag) => (
-                  <CardChip small tag={tag} key={tag?.name} />
+                  <CardChip small  tag={tag} Sohel={Sohel} key={tag?.name} />
                 ))
               : null}
           </div>
