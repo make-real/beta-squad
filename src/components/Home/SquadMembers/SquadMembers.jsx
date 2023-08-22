@@ -109,12 +109,12 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                 </div>
             ) : (
                 showType === 'stack' && ( */}
-      <div className="overflow-y-scroll no-scrollbar  bg-[#ECECEC80] py-10 px-2 rounded-2xl">
+      <div className="overflow-y-scroll no-scrollbar   bg-[#ECECEC80] py-10 px-2 rounded-2xl">
         <div className="flex flex-col items-center gap-[10px]">
           {members.map((member) => {
             const user = members.find((m) => m?._id === userInfo?._id);
             return (
-              <div className="relative w-full h-[75px] rounded-[16px] bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+              <div className="relative w-full h-[75px] rounded-[16px] shadow-md bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                 {user?.role === "owner" ||
                 user?.role === "manager" ||
                 user?.role === "admin"
