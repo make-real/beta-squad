@@ -27,6 +27,7 @@ import FileIcon from "../../assets/icons/svg/FileIcon";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
+import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -203,8 +204,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                       onClick={() => setSelectedTab(value)}
                       className={`${
                         selectedTab === value
-                          ? " text-[#6576FF] bg-[#EEF2FF] py-2 px-5 rounded-lg"
-                          : "text-[#818892] px-2"
+                          ? " text-[#6576FF] font-inter bg-[#EEF2FF] py-2 px-5 rounded-lg"
+                          : "text-[#818892] font-inter px-2"
                       } text-md cursor-pointer mr-3`}
                     >
                       {value}
@@ -232,7 +233,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     width: 15,
                   }}
                 />
-                <h3 className="text-gray-400 text-md">New board</h3>
+                <h3 className="text-gray-400 text-md font-inter">New board</h3>
               </div>
             </div>
 
@@ -262,7 +263,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     className="ml-[-10px]"
                     onClick={() => setShowSquadMembers(!showSquadMembers)}
                   >
-                    <AddMember />
+                 {
+                  showSquadMembers ? <AddMember />: <AddMemberBefore /> 
+                 }   
                   </div>
                 </div>
               </div>
