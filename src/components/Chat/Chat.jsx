@@ -8,7 +8,7 @@ const Chat = () => {
   return (
     // <div className="w-full pb-10 mx-auto mt-[40px] h-full">
     <div
-      className={`border border-[#ECECEC] pb-3 rounded-lg h-full flex flex-col bg-[#F5F5F5]`}
+      className={`border border-[#ECECEC] pb-3 rounded-lg custom-shadow h-full flex flex-col bg-[#F5F5F5]`}
     >
       <div
         style={
@@ -19,7 +19,7 @@ const Chat = () => {
             // marginTop: "70px",
           }
         }
-        className={`overflow-y-auto hide-scrollbar  overflow-x-hidden border-b-[0.5px] pt-5 customScroll flex-1 ${
+        className={`overflow-y-auto hide-scrollbar custom-shadow overflow-x-hidden border-b-[0.5px] pt-5 customScroll flex-1 ${
           messageToRespond ? "h-[calc(100%-245px)]" : "h-[calc(100%-145px)]"
         }
                     `}

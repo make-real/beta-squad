@@ -114,7 +114,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
           {members.map((member) => {
             const user = members.find((m) => m?._id === userInfo?._id);
             return (
-              <div className="relative w-full h-[75px] rounded-[16px] shadow-md bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+              <div className="relative w-full h-[75px] rounded-[16px] custom-shadow bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                 {user?.role === "owner" ||
                 user?.role === "manager" ||
                 user?.role === "admin"
@@ -154,12 +154,12 @@ const SquadMembers = ({ showType, selectedSpace }) => {
           })}
           <div
             onClick={() => setShowAddMemberModal(true)}
-            className="w-full h-[75px] rounded-[16px] flex items-center justify-center gap-[16px] cursor-pointer"
+            className="w-full h-[75px] custom-shadow rounded-[16px] flex items-center justify-center gap-[16px] cursor-pointer"
           >
-            <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
+            <div className="w-[36px]  h-[36px] rounded-full bg-white flex items-center justify-center">
               <img src={PlusIcon} alt="" />
             </div>
-            <h1 className="text-[#818892]">Add Teams</h1>
+            <h1 className="text-[#818892] ">Add Teams</h1>
           </div>
         </div>
       </div>

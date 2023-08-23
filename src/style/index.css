@@ -95,6 +95,11 @@ body {
   }
 }
 
+
+.custom-shadow{
+  box-shadow:0 0 12px 4px hsla(0,0%,81%,.75)
+}
+
 /* =====chat ======= */
 
 .input-style {
