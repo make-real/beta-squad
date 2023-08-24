@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
+  const Sohel=card?.color;
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -143,7 +144,7 @@ const Card = ({ card, listID }) => {
           <div className="py-2 text-white flex gap-1 flex-wrap">
             {card?.tags?.length
               ? card?.tags?.map((tag) => (
-                  <CardChip small tag={tag} key={tag?.name} />
+                  <CardChip small  tag={tag} Sohel={Sohel} key={tag?.name} />
                 ))
               : null}
           </div>
@@ -168,12 +169,12 @@ const Card = ({ card, listID }) => {
         </div>
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-sm mr-4 text-gray-800 font-bold line-clamp-2">
+          <p className="text-sm mr-4 font-inter text-gray-800 font-bold line-clamp-2">
             {card.name}
           </p>
         </div>
         <div className="text-sm text-gray-800">
-          <p className="line-clamp-2">{localCard?.description || ""}</p>
+          <p className="line-clamp-2 font-inter">{localCard?.description || ""}</p>
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
