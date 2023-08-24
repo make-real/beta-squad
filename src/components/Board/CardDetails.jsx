@@ -604,7 +604,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 showChat ? "w-7/12" : "w-full"
               } h-[72vh]`}
             >
-              <div className="overflow-y-scroll">
+              <div className="overflow-y-scroll no-scrollbar">
                 {/* show routing */}
                 {/* <div className="flex items-center py-4 text-gray-400 ">
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
@@ -726,11 +726,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
                           <input
                             type="text"
+                            id="large-input"
                             defaultValue={item.content}
                             onBlur={(e) =>
                               handle_check_list_update_on_change(e, item._id)
                             }
-                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200"
+                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-auto text-centerd"
                           />
                           <div
                             onClick={() =>

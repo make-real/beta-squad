@@ -12,12 +12,14 @@ import ConfirmDialog from "./ConfirmDialog";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
 // import { toast } from 'react-toastify';
 import { Link } from "react-router-dom";
+import moment from "moment";
+import Flag from "../../assets/icons/svg/Flag";
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
-  const Sohel=card?.color;
+  const Sohel = card?.color;
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -31,6 +33,8 @@ const Card = ({ card, listID }) => {
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const [localCard, setLocalCard] = useState(card);
+
+  console.log("Card Details: ", card);
 
   // useEffect(() => {
   //     const getCard = async () => {
@@ -144,7 +148,7 @@ const Card = ({ card, listID }) => {
           <div className="py-2 text-white flex gap-1 flex-wrap">
             {card?.tags?.length
               ? card?.tags?.map((tag) => (
-                  <CardChip small  tag={tag} Sohel={Sohel} key={tag?.name} />
+                  <CardChip small tag={tag} Sohel={Sohel} key={tag?.name} />
                 ))
               : null}
           </div>
@@ -174,7 +178,9 @@ const Card = ({ card, listID }) => {
           </p>
         </div>
         <div className="text-sm text-gray-800">
-          <p className="line-clamp-2 font-inter">{localCard?.description || ""}</p>
+          <p className="line-clamp-2 font-inter">
+            {localCard?.description || ""}
+          </p>
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
@@ -228,6 +234,10 @@ const Card = ({ card, listID }) => {
                               /> */}
           </div>
         )}
+        <div className="flex items-center">
+          <Flag />
+          <p>{moment(card.endDate).format("MMMM DD")}</p>
+        </div>
         {!!card.assignee?.length && (
           <div className="mb-3 flex pt-2">
             {card.assignee?.map((user, i) => (

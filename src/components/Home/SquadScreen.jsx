@@ -27,7 +27,6 @@ import FileIcon from "../../assets/icons/svg/FileIcon";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
-import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -214,7 +213,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
-                className="border-2 p-1  rounded-md cursor-pointer mr-3  select-none flex items-center "
+                className="border-2 p-1 rounded-md cursor-pointer select-none flex items-center"
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 onClick={() => {
                   setAddBoard(!addBoard);
@@ -239,13 +238,13 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between  w-1/2">
+            <div className="flex items-center justify-between w-1/2 ml-5">
               <div className="flex items-center">
                 <div className="flex items-center justify-start">
                   {members.slice(0, 3).map((user, i) => (
                     <div className="ml-[-10px]">
                       {user.avatar ? (
-                        <span className="rounded-full  ml-[-3px]  text-black font-bold grid place-items-center p-1">
+                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
                           <img
                             src={user.avatar}
                             alt=""
@@ -265,7 +264,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     className="ml-[-10px]"
                     onClick={() => setShowSquadMembers(!showSquadMembers)}
                   >
-                    {showSquadMembers ? <AddMember /> : <AddMemberBefore />}
+                    <AddMember />
                   </div>
                 </div>
               </div>
