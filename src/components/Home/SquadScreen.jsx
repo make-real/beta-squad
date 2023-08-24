@@ -143,7 +143,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     } else {
       filterBoardList(selectedTab);
     }
-  }, [selectedTab, filteredList]);
+  }, [selectedTab, filteredList, boardLists]);
 
   const startCall = (type) => {
     if (call?.data) return;
@@ -205,7 +205,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         selectedTab === value
                           ? " text-[#6576FF] bg-[#EEF2FF] py-2 px-5 rounded-lg"
                           : "text-[#818892] px-2"
-                      } text-md cursor-pointer mr-3`}
+                      } text-md cursor-pointer mr-3 whitespace-nowrap`}
                     >
                       {value}
                     </a>
@@ -232,7 +232,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     width: 15,
                   }}
                 />
-                <h3 className="text-gray-400 text-md">New board</h3>
+                <h3 className="text-gray-400 text-md whitespace-nowrap">
+                  New board
+                </h3>
               </div>
             </div>
 
