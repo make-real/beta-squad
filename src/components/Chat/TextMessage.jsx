@@ -92,7 +92,7 @@ const Message = ({
           }`}
         >
           <h6
-            className={`font-bold text-[#7C04EC] ${
+            className={` font-inter font-medium text-[#7C04EC] ${
               msg?.sender?._id === userId ? "hidden" : ""
             }`}
           >

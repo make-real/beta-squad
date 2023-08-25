@@ -22,11 +22,12 @@ import {
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import AddMember from "../../assets/icons/svg/AddMember";
 import Message from "../../assets/icons/svg/Message";
-import PlusIcon from "../../assets/plus.svg";
+import PlusIcon from "../../assets/pus.svg";
 import FileIcon from "../../assets/icons/svg/FileIcon";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
+import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -189,7 +190,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   //   //importtant: "Important",
   // };
   return (
-    <div className="bg-[#FFF] w-full h-full">
+    <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
@@ -203,9 +204,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                       onClick={() => setSelectedTab(value)}
                       className={`${
                         selectedTab === value
-                          ? " text-[#6576FF] bg-[#EEF2FF] py-2 px-5 rounded-lg"
+                          ? " text-[#6576FF] font-inter bg-[#EEF2FF] py-2 px-5 rounded-lg"
                           : "text-[#818892] px-2"
-                      } text-md cursor-pointer mr-3 whitespace-nowrap`}
+                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap`}
                     >
                       {value}
                     </a>
@@ -213,7 +214,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
-                className="border-2 p-1 rounded-md cursor-pointer select-none flex items-center"
+                className="border-2 p-1 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 onClick={() => {
                   setAddBoard(!addBoard);
@@ -244,7 +245,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   {members.slice(0, 3).map((user, i) => (
                     <div className="ml-[-10px]">
                       {user.avatar ? (
-                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                        <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
                           <img
                             src={user.avatar}
                             alt=""
@@ -264,7 +265,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     className="ml-[-10px]"
                     onClick={() => setShowSquadMembers(!showSquadMembers)}
                   >
-                    <AddMember />
+                    {
+                      showSquadMembers ?  <AddMember />:<AddMemberBefore />
+                    }
                   </div>
                 </div>
               </div>

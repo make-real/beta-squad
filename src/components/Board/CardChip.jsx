@@ -1,4 +1,4 @@
-const CardChip = ({ tag, close, small,Sohel }) => {
+const CardChip = ({ tag, close, small }) => {
   return (
     <span
       className={`px-2 flex items-center gap-2 py-1 w-fit rounded-full`}
