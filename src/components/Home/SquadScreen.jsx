@@ -195,7 +195,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
-              <div className="flex items-center w-[75%] overflow-x-auto">
+              <div className="flex items-center w-[75%] ">
                 {TabsName.map((value, idx) => {
                   return (
                     <a

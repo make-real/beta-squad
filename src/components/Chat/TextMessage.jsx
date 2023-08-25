@@ -115,10 +115,11 @@ const Message = ({
         </div>
 
         {msg?.replayOf && (
-          <div className="mb-2 border-l-4 pl-3 border-blue-500 bg-white text-neutral-500 p-3 rounded-md mentioned-message-wrapper">
+          <div className="mb-2 border-l-4 pl-3  border-blue-500 bg-white text-neutral-500 p-3 rounded-md mentioned-message-wrapper">
             <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
+            
             />
             <span
               className={`${
@@ -128,7 +129,7 @@ const Message = ({
               }`}
             >
               <p
-                className={`text-sm block`}
+                className={`text-sm font-inter block`}
                 dangerouslySetInnerHTML={{
                   __html: populateUsers(msg.replayOf.content),
                 }}
