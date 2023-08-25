@@ -233,7 +233,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                     width: 15,
                   }}
                 />
-                <h3 className="text-gray-400 text-md whitespace-nowrap">
+                <h3 className="text-gray-400 font-inter text-md whitespace-nowrap">
                   New board
                 </h3>
               </div>

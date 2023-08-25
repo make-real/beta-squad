@@ -407,9 +407,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 </p>
               )}
 
-              <p className="font-[400] text-sm text-[#818892]">
-                {nameOfBoardList || "On Progress"}
-              </p>
+             {
+              localCard?.startDate &&  <p className="font-[400] text-sm text-[#818892]">
+              Created - {formatDate(localCard.startDate, "MMM, dd")}
+             </p>
+             }
             </div>
 
             <div className="flex items-center space-x-5 relative">
@@ -447,7 +449,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
               {/* chat */}
               <div
-                className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg space-x-5`}
+                className={`cursor-pointer hover:bg-gray-200  p-1 rounded-lg space-x-5`}
               >
                 <span
                   className={`rounded-full ring-[1px] p-1 ${
@@ -476,11 +478,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                           localCard.assignee.map((user, i) => (
                             <div className="ml-[-20px]">
                               {user.avatar ? (
-                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                <span className="rounded-full    text-black font-bold grid place-items-center p-1">
                                   <img
                                     src={user.avatar}
                                     alt=""
-                                    className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
+                                    className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
                                   />
                                 </span>
                               ) : (
@@ -602,7 +604,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
             <div
               className={`flex flex-col ${
                 showChat ? "w-7/12" : "w-full"
-              } h-[72vh]`}
+              } h-[60vh]`}
             >
               <div className="overflow-y-scroll no-scrollbar">
                 {/* show routing */}

@@ -130,7 +130,7 @@ const Card = ({ card, listID }) => {
         ref={dropDownRef}
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
-        className="group relative w-[285px] h-fit bg-white px-3 py-1 rounded-2xl cursor-grab hover:bg-gray-200"
+        className="group relative w-[285px] h-fit bg-white px-3 py-3 rounded-2xl cursor-grab hover:bg-gray-200"
       >
         {/* top-right shape */}
         <span
@@ -144,7 +144,9 @@ const Card = ({ card, listID }) => {
             style={{ backgroundColor: "#FF3659" }}
           />
         )}
-        <div className="flex justify-between items-center mb-2">
+        {
+          card?.tags?.length>0 && 
+          <div className="flex justify-between items-center mb-2">
           <div className="py-2 text-white flex gap-1 flex-wrap">
             {card?.tags?.length
               ? card?.tags?.map((tag) => (
@@ -171,7 +173,8 @@ const Card = ({ card, listID }) => {
                         )} */}
           </div>
         </div>
-
+        }
+       
         <div className="flex justify-between items-center mb-2">
           <p className="text-[16px] leading-6 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
