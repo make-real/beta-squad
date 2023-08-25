@@ -63,7 +63,7 @@ body {
 
 .customScroll::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background-color: #999;
+  background-color: rgba(203, 204, 226, 1);
 }
 
 .customScroll::-webkit-scrollbar-thumb:hover {
