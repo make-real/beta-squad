@@ -4,7 +4,7 @@ const CardChip = ({ tag, close, small }) => {
       className={`px-2 flex items-center gap-2 py-1 w-fit rounded-full`}
       style={{
         color: "#6B7280",
-        backgroundColor: `${tag?.color}10`,
+       
         border: `1px solid #E5E7EB`,
         fontSize: small ? "9px" : "10px",
       }}
