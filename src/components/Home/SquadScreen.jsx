@@ -225,7 +225,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 onClick={() => {}}
               >
                 <Check/>
-                <h3 className="text-gray-400 font-inter text-md whitespace-nowrap">
+                <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
                  Done
                 </h3>
               </div>
@@ -242,7 +242,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 }}
               >
                 <Add />
-                <h3 className="text-gray-400 font-inter text-md whitespace-nowrap">
+                <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
                   New board
                 </h3>
               </div>

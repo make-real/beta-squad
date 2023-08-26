@@ -5,8 +5,8 @@ const Add = () => {
     <svg
     viewBox="0 0 512 512"
     fill="#fdb0cc"
-    width="24"
-    height="24"
+    width="18"
+    height="18"
     className=""
   >
     <path
