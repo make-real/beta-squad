@@ -272,9 +272,12 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                             </div>
                         )}
                         {!isRecording ? (
-                            <div className="w-full flex items-stretch justify-between relative border bg-[#ececec] rounded-md px-3 py-2">
+                            <>
+                            <div className="w-full flex items-stretch justify-between relative   bg-white rounded-[20px] px-3 py-2">
                                 <MentionsInput
+                                  
                                     value={input}
+                                    placeholder="Write message"
                                     onChange={(e) => setInput(e.target.value)}
                                     singleLine={input.length >= 50 ? false : true}
                                     onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
@@ -305,7 +308,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                         displayTransform={(id) => users.find((user) => user.id === id).display}
                                     />
                                 </MentionsInput>
-                                <div className="text-gray-400 flex mt-[5px]">
+                                <div className="text-gray-400 flex mt-[5px] ">
                                     <div className="px-2 cursor-pointer relative">
                                         <BiMicrophone
                                             size={20}
@@ -315,8 +318,13 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                     </div>
                                     {/* )} */}
 
-                                    <label className="px-1.5 cursor-pointer relative" htmlFor="userInputFile" onClick={() => handleAttach()}>
-                                        <ImAttachment className="duration-300  hover:text-blue-500 " onClick={() => handleAttach()} />
+                                  
+                                </div>
+                                
+                            </div>
+                            <div className="flex mt-3 mx-3 text-[#818892] ">
+                                <label className="px-1.5 cursor-pointer relative" htmlFor="userInputFile" onClick={() => handleAttach()}>
+                                        <ImAttachment className="duration-300   hover:text-blue-500 " onClick={() => handleAttach()} />
                                         <input type="file" id="userInputFile" className="hidden" multiple onChange={onMediaFilePicked} />
                                     </label>
                                     <div className="px-2 cursor-pointer relative">
@@ -325,13 +333,13 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                     <div className="px-2 cursor-pointer duration-300  hover:text-blue-500 relative">
                                         <BsEmojiSmile onClick={() => handleEmoji()} />
                                         {showEmojis && (
-                                            <div className="absolute  right-0 bottom-8">
+                                            <div className="absolute  left-[72px] bottom-8">
                                                 <Picker onEmojiClick={onEmojiClick} />
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </>
                         ) : (
                             <div className="w-full flex align-middle">
                                 <div className="mr-5 my-auto">

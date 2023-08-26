@@ -39,7 +39,7 @@ const Message = ({
       console.log(error);
     }
   };
-
+console.log(msg?.createdAt)
   const reaction = msg?.reactions?.find(
     (r) => r?.reactor?._id === userId
   )?.reaction;
@@ -54,9 +54,12 @@ const Message = ({
 
   return (
     <div
+      style={{}}
       className={`flex ${
         msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""
-      } pl-6 pr-8 py-1.5 relative user-box
+      } pl-6 pr-8 py-1.5 relative  user-box ${
+        msg?.reactions.length ? "mb-4" : ""
+      }
       `}
     >
       {/* <div
@@ -92,26 +95,12 @@ const Message = ({
           }`}
         >
           <h6
-            className={` font-inter font-medium text-[#7C04EC] ${
+            className={` text-[12px] leading-[15px] font-medium text-[#7C04EC] ${
               msg?.sender?._id === userId ? "hidden" : ""
             }`}
           >
             {msg?.sender?.fullName}
           </h6>
-          <small
-            className={`flex flex-row-reverse gap-2 ${
-              msg?.sender?._id === userId
-                ? "text-[#ACB0B6] font-[400] mr-auto"
-                : "ml-auto text-[#ACB0B6] font-[400] w-24"
-            }`}
-          >
-            {moment(msg?.createdAt).fromNow()}{" "}
-            {msg?.sender?._id === userId ? (
-              <img src={tickIcon} alt="" />
-            ) : (
-              <img src={images.clockIcon} alt="" />
-            )}
-          </small>
         </div>
 
         {msg?.replayOf && (
@@ -119,7 +108,6 @@ const Message = ({
             <RenderAttachment
               message={msg.replayOf}
               scrollToBottom={scrollToBottom}
-            
             />
             <span
               className={`${
@@ -147,7 +135,7 @@ const Message = ({
           />
         )}
         <p
-          className={`text-sm pt-1 ${
+          className={`text-sm font-light  ${
             msg?.sender?._id === userId ? "text-[#031124]" : "text-[#031124]"
           }`}
           dangerouslySetInnerHTML={{
@@ -155,14 +143,28 @@ const Message = ({
           }}
         ></p>
 
+        <small
+          className={`flex  justify-end mb-0 gap-2 ${
+            msg?.sender?._id === userId
+              ? "text-[#ACB0B6] font-[400]  "
+              : " text-[#ACB0B6]  font-[400] "
+          }`}
+        >
+          {moment(msg?.createdAt).format('LT')}{" "}
+          {msg?.sender?._id === userId && <img src={tickIcon} alt="" />}
+        </small>
+
         {msg?.sendingFailed && (
           <h1 className="text-red-500">Sending Failed!</h1>
         )}
 
         {Boolean(msg?.reactions.length) && (
-          <div className="absolute right-0 -bottom-4 flex bg-white border border-gray-200 text-gray-500 rounded-3xl py-1 px-2">
+          <div className="absolute left-4 -bottom-[15px]  flex bg-white border border-gray-200 text-gray-500  rounded-[14px] py-1 px-4">
             {msg?.reactions?.map((data, idx) => (
-              <p key={idx} className="text-lg tooltip-box select-none">
+              <p
+                key={idx}
+                className="text-[12px] font-inter font-normal tooltip-box select-none"
+              >
                 {data?.reaction}
                 <p className="tooltip-text select-none">
                   {data?.reactor?.fullName}
