@@ -605,7 +605,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
               className={`flex flex-col ${
                 showChat ? "w-7/12" : "w-full"
               } h-[60vh]`}
-            >
+             >
               <div className="overflow-y-scroll no-scrollbar">
                 {/* show routing */}
                 {/* <div className="flex items-center py-4 text-gray-400 ">
