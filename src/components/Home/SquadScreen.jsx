@@ -28,6 +28,7 @@ import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
 import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
+import ShowFile from "./ShowFile/ShowFile";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -36,6 +37,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { participantID, workspace_id } = useParams();
   const [showType, setShowType] = useState("grid");
   const [showSquadMembers, setShowSquadMembers] = useState(false);
+  const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -175,6 +177,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
   const TabsScreen = {
     messages: <Chat />,
+    file: <ShowFile />,
     board: (
       <Board
         selectedSpaceId={workspace_id}
@@ -263,11 +266,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   ))}
                   <div
                     className="ml-[-10px]"
-                    onClick={() => setShowSquadMembers(!showSquadMembers)}
+                    onClick={() => {
+                      setShowSquadMembers(!showSquadMembers);
+                      setShowFile(false);
+                    }}
                   >
-                    {
-                      showSquadMembers ?  <AddMember />:<AddMemberBefore />
-                    }
+                    {showSquadMembers ? <AddMember /> : <AddMemberBefore />}
                   </div>
                 </div>
               </div>
@@ -287,7 +291,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         if (!showChat) {
                           setShowChat(!showChat);
                         }
+                        if (showChat) {
+                        }
                       } else setShowChat((showChat) => !showChat);
+                      setShowFile(false);
                     }}
                   >
                     <ChatBubbleBottomCenterTextIcon
@@ -301,10 +308,19 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   className="cursor-pointer"
                   onClick={() => {
                     //startCall("video")
-                    setShowModal(!showModal);
+
+                    setShowSquadMembers(false);
+
+                    setShowChat(false);
+
+                    setShowFile(!showFile);
                   }}
                 >
-                  <FileIcon />
+                  <FileIcon
+                    className={`w-5 h-5 ${
+                      showFile ? "text-white" : "text-[#54CC7C]"
+                    } `}
+                  />
                   {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
                 <div
@@ -347,6 +363,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
             {showSquadMembers && (
               <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
                 {TabsScreen["members"]}
+              </div>
+            )}
+            {!showSquadMembers && !showChat && showFile && (
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                {TabsScreen["file"]}
               </div>
             )}
             {!showSquadMembers && showChat && (

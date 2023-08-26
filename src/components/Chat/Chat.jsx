@@ -13,7 +13,7 @@ const Chat = () => {
      
       
     }}
-      className={`border ml-5 border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
+      className={`border  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
     >
       <div
         style={
