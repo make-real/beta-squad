@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import VideoCallIcon from "../../assets/video_call.svg";
 import AudioCallIcon from "../../assets/audio_call.svg";
-import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+import { ChatBubbleBottomCenterTextIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Board from "../Board/Board";
@@ -29,6 +29,9 @@ import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
 import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
 import ShowFile from "./ShowFile/ShowFile";
+import Add from "../../assets/icon_component/Add";
+import { RightArrow, RightOK } from "../../assets/icons";
+import Check from "../../assets/icons/svg/Check";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -217,7 +220,17 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
-                className="border-2 p-1 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
+                className="border-2 p-1 px-3 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
+                // onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                onClick={() => {}}
+              >
+                <Check/>
+                <h3 className="text-gray-400 font-inter text-md whitespace-nowrap">
+                 Done
+                </h3>
+              </div>
+              <div
+                className="border-2 p-1 px-3 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 onClick={() => {
                   setAddBoard(!addBoard);
@@ -228,14 +241,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   }
                 }}
               >
-                <img
-                  src={PlusIcon}
-                  alt=""
-                  style={{
-                    height: 15,
-                    width: 15,
-                  }}
-                />
+                <Add />
                 <h3 className="text-gray-400 font-inter text-md whitespace-nowrap">
                   New board
                 </h3>
