@@ -65,9 +65,10 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
       )}
 
       <div
+      className=" w-[230px]		lg:w-[250px] xl:w-[300px]"
         id={`waveform_${rendomID}`}
         style={{
-          width: "300px",
+          
         }}
       />
     </div>

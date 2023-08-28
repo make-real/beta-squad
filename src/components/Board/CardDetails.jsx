@@ -352,7 +352,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-5 bg-[#031124]/[0.4] h-full no-scrollbar`}
+        className={`duration-200 p-5 bg-[#031124]/[0.4] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
@@ -600,13 +600,15 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
           )}
 
           {/* main part */}
-          <div className="flex flex-1 min-h-0 gap-5">
+          {/* overflow issue fixed here */}
+          <div className="flex  h-5/6	 gap-5">
             <div
+           
               className={`flex flex-col ${
                 showChat ? "w-7/12" : "w-full"
-              } h-[60vh]`}
+              } `}
              >
-              <div className="overflow-y-scroll no-scrollbar">
+              <div className="overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll sm:overflow-scroll  no-scrollbar">
                 {/* show routing */}
                 {/* <div className="flex items-center py-4 text-gray-400 ">
                                     <span className="text-xs font-bold cursor-pointer hover:text-teal-500">
@@ -928,7 +930,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 </div>
               </div>
             </div>
-            {showChat ? (
+           {/* <div className="lg:h-60 h-60 md:h-[50vh] sm:h-[40vh] xl:h-[80vh]" >
+          
+           </div> */}
+           {showChat ? (
               <CardMessage listId={listID} cardId={localCard._id} />
             ) : null}
           </div>
