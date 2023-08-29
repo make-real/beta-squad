@@ -84,7 +84,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
   const [showChat, setShowChat] = useState(false);
 
-  console.log("CARD", localCard?._id);
+  
   const getCard = async () => {
     const { data } = await getSingleCard(workspace_id, listID, id);
     setLocalCard(data?.card);
@@ -347,7 +347,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
-  console.log(localCard?.attachments);
+ 
 
   return (
     <React.Fragment>

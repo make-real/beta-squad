@@ -25,7 +25,7 @@ const CardMessage = ({ listId, cardId }) => {
 
         setComments((prev) => {
           if (data.comments[0]?._id !== prev[prev.length - 1]?._id) {
-            console.log(data.comments[0]?._id, prev[prev.length - 1]?._id);
+           
             return data.comments.reverse();
           } else {
             return prev;

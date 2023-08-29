@@ -17,7 +17,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
-      console.log(data);
+     
       setMembers(data?.members);
     } catch (err) {
       // toast.error(err?.message, {

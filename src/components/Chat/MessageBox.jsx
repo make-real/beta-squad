@@ -36,7 +36,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
     const user = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
 
-    // console.log(messageToRespond);
+  
 
     useEffect(() => {
         if (Boolean(selectedSpaceId)) {
@@ -155,7 +155,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                     },
                 };
                 const { data } = await api(config);
-                console.log(data);
+                
             }
             setUploadPercentage(0);
         } catch (error) {

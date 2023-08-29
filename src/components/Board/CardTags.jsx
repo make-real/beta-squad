@@ -41,7 +41,7 @@ const CardTags = (props) => {
     listID,
     handleDataChange,
   } = props || {};
-  console.log(props)
+ 
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);

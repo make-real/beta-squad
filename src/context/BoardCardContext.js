@@ -12,7 +12,7 @@ export const BoardCardContext = ({ children }) => {
   const [filteredLists, setFilteredLists] = useState([]);
   const [tag, setTag] = useState("All");
 
-  console.log("BOARDLIST: ", boardLists);
+
 
   const filterBoardList = (filter_tag) => {
     const list = [...boardLists];

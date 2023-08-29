@@ -88,12 +88,12 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   };
 
-  console.log("SpaceID: ", selectedSpaceId);
+
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
 
-      console.log(data);
+     
       setMembers(data?.members);
     } catch (err) {
       console.log("Error occured ==> ", err);
@@ -120,7 +120,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   }, [selectedSpace]);
 
   //console.log("TAGS: ", tags);
-  console.log(TabsName)
+
   useEffect(() => {
     if (selectedSpace) {
       fetchSquadMembers();

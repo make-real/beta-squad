@@ -75,7 +75,7 @@ const Board = ({ showType, addBoardRef }) => {
 
   const dragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-    console.log(result);
+   
 
     try {
       handleDragEnd(
