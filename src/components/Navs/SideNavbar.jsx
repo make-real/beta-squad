@@ -3,6 +3,8 @@ import { CloseMenuBtn, Plus } from "../../assets/icons";
 import LogoIcon from "../../assets/logo.jpeg";
 import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
+import Squad from "../../assets/Squad.svg";
+import ChatIcon from "../../assets/ChatIcon.svg";
 import SearchIcon from "../../assets/search.svg";
 import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
@@ -381,7 +383,14 @@ const SideNavbar = () => {
               <div
                 className={`flex items-center justify-between pl-[17px] pr-[10px]`}
               >
-                <h2 className="text-[#0D1282]">My Squad</h2>
+             <div className="flex gap-2 pl-[17px]">
+             <img
+                      src={Squad}
+                      alt=""
+                      className="cursor-pointer text-[#0D1282] "
+                    />
+                <h2 className="text-[#0D1282] font-normal leading-[36px]">My  Squad</h2>
+             </div>
                 <div className="flex items-center gap-2">
                   {/* <div
                                         className="w-max"
@@ -402,7 +411,7 @@ const SideNavbar = () => {
                     <img
                       src={BorderedPlusIcon}
                       alt=""
-                      className="cursor-pointer text-[#0D1282]"
+                      className="cursor-pointer text-[#0D1282] "
                     />
                   </div>
                 </div>
@@ -480,7 +489,7 @@ const SideNavbar = () => {
         )}
 
         {/* Task List */}
-        {defaultPage && fullSidebar && (
+        {/* {defaultPage && fullSidebar && (
           <div className="mt-[10px] flex flex-col">
             <div
               className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
@@ -504,7 +513,7 @@ const SideNavbar = () => {
               )}
             </div>
           </div>
-        )}
+        )} */}
         {/* modal */}
         {showModal && <ComingSoonModal setShowModal={setShowModal} />}
 
@@ -514,7 +523,14 @@ const SideNavbar = () => {
               <div className="mt-[44px]">
                 {fullSidebar && (
                   <div className="flex items-center justify-between pl-[17px] pr-[10px]">
+                    <div className="flex gap-2 pl-[13px]">
+                    <img
+                        src={ChatIcon}
+                        alt="search"
+                        className="cursor-pointer"
+                      />
                     <h2 className="text-[#0D1282]">Chats</h2>
+                    </div>
                     <div
                       className="flex items-center gap-2"
                       onClick={() => {
@@ -572,12 +588,12 @@ const SideNavbar = () => {
           : null}
         {/* Footer Copyright */}
         <p
-          className={`text-[#0D1282] ${
+          className={`text-[#0D1282] text-center ${
             fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"
-          } mt-auto mb-[16px]`}
+          } mt-auto mb-[16px] align-middle`}
         >
           &copy;
-          {fullSidebar && <span className="ml-[10px]">makereal.io 2023</span>}
+          {fullSidebar && <span className=" pl-2 text-center">makereal.io 2023</span>}
         </p>
       </div>
 
