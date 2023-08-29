@@ -19,6 +19,7 @@ import Flag from "../../assets/icons/svg/Flag";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
+ 
 
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
@@ -34,7 +35,7 @@ const Card = ({ card, listID }) => {
 
   const [localCard, setLocalCard] = useState(card);
 
-  console.log("Card Details: ", card);
+
 
   // useEffect(() => {
   //     const getCard = async () => {

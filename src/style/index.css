@@ -55,25 +55,31 @@ body {
   font-family: "Lexend", sans-serif;
 }
 
+
 .customScroll::-webkit-scrollbar {
   width: 0px;
-  
+ 
   height: 10px;
+  margin-top:'10px' !important;
+  
 }
 
 .customScroll::-webkit-scrollbar-thumb {
   border-radius: 5px;
+ 
   background-color: rgba(203, 204, 226, 1);
 }
 
 .customScroll::-webkit-scrollbar-thumb:hover {
   background-color: #555;
+ 
 }
 
 .customScroll::-webkit-scrollbar-track {
   border-radius: 5px;
   border: 1px solid #bbb;
   background-color: #f8f8f8;
+  
 }
 .customHScroll::-webkit-scrollbar {
   width: 10px;

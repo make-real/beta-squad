@@ -39,7 +39,7 @@ const Message = ({
       console.log(error);
     }
   };
-console.log(msg?.createdAt)
+
   const reaction = msg?.reactions?.find(
     (r) => r?.reactor?._id === userId
   )?.reaction;

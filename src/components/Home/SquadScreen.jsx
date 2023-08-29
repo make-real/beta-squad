@@ -120,7 +120,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
   }, [selectedSpace]);
 
   //console.log("TAGS: ", tags);
-
+  console.log(TabsName)
   useEffect(() => {
     if (selectedSpace) {
       fetchSquadMembers();
@@ -141,7 +141,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   }, []);
 
-  console.log("TAB: ", selectedTab);
+ 
 
   useEffect(() => {
     if (selectedTab === "All") {
@@ -202,7 +202,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
               <div className="flex items-center w-[75%] ">
-                {TabsName.map((value, idx) => {
+                {TabsName.slice(0,6).map((value, idx) => {
                   return (
                     <a
                       //href={`#${value.toLowerCase()}`}
@@ -220,9 +220,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
+                onClick={() => setSelectedTab('Done')}
                 className="border-2 p-1 px-3 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                onClick={() => {}}
+                
               >
                 <Check/>
                 <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
