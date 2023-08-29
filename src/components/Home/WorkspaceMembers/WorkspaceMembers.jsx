@@ -20,6 +20,7 @@ const SquadMembers = ({ showType }) => {
     )
 
     const [members, setMembers] = useState([])
+   
     const [showAddMemberModal, setShowAddMemberModal] = useState(false)
     const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false)
     const [updateMemberData, setUpdateMemberData] = useState(null)
@@ -53,6 +54,7 @@ const SquadMembers = ({ showType }) => {
         try {
             const { data } = await get_workspace_member(selectedWorkspace)
             setMembers(data?.teamMembers)
+            
         } catch (err) {
             console.log('Error occured ==> ', err)
         }
@@ -65,12 +67,12 @@ const SquadMembers = ({ showType }) => {
     return (
         <>
             {showType === 'grid' ? (
-                <div className="mt-[30px] flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
+                <div className="mt-[10px] flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
                     <div
                         onClick={() => setShowAddMemberModal(true)}
-                        className="w-[297px] h-[162px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+                        className="w-[297px] h-[90px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
                     >
-                        <div className="w-[60px] h-[60px] rounded-full bg-white flex items-center justify-center">
+                        <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
                             <img src={PlusIcon} alt="" />
                         </div>
                     </div>
@@ -79,7 +81,7 @@ const SquadMembers = ({ showType }) => {
                             (m) => m?._id === userInfo?._id
                         )
                         return (
-                            <div className="relative w-[297px] h-[162px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
+                            <div className="relative w-[297px] h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
                                 {user?.role === 'owner' ||
                                 user?.role === 'manager' ||
                                 user?.role === 'admin'
@@ -131,12 +133,13 @@ const SquadMembers = ({ showType }) => {
                         <div className="flex flex-col items-center gap-[10px]">
                             <div
                                 onClick={() => setShowAddMemberModal(true)}
-                                className="w-full h-[51px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+                                className="w-full h-[10px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
                             >
                                 <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
                                     <img src={PlusIcon} alt="" />
                                 </div>
                             </div>
+                            
                             {members.map((member) => {
                                 const user = members.find(
                                     (m) => m?._id === userInfo?._id
@@ -144,6 +147,7 @@ const SquadMembers = ({ showType }) => {
                                 return (
                                     <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                                         <div className="flex items-center gap-[10px]">
+                                           
                                             <img
                                                 src={
                                                     member?.avatar ??
@@ -155,7 +159,7 @@ const SquadMembers = ({ showType }) => {
                                                 className="w-[50px] h-[50px] object-cover rounded-full"
                                             />
                                             <h2 className="text-[#424D5B] font-semibold">
-                                                {member?.fullName}
+                                                {member?.fullName} 
                                             </h2>
                                         </div>
                                         <div className="flex items-center gap-[16px]">
