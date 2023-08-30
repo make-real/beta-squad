@@ -139,7 +139,7 @@ const AssigneeUser = ({
                         >
                             <MinusIcon className="w-4 h-4 text-white bg-[#FF3659] rounded-full" />
                             {user.avatar ? (
-                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
                                         src={user.avatar}
                                         alt=""
@@ -147,7 +147,7 @@ const AssigneeUser = ({
                                     />
                                 </span>
                             ) : (
-                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
                                         {user?.fullName.charAt(0)}
                                     </p>
@@ -178,7 +178,7 @@ const AssigneeUser = ({
                         >
                             <PlusIcon className="w-4 h-4 text-white bg-[#54CC7C] rounded-full" />
                             {user.avatar ? (
-                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
                                         src={user.avatar}
                                         alt=""
@@ -186,7 +186,7 @@ const AssigneeUser = ({
                                     />
                                 </span>
                             ) : (
-                                <span className="rounded-full ring-[1px] bg-white ring-[#ECECEC] text-black font-bold grid place-items-center p-1">
+                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
                                         {user?.fullName.charAt(0)}
                                     </p>
