@@ -333,7 +333,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                     <div className="px-2 cursor-pointer duration-300  hover:text-blue-500 relative">
                                         <BsEmojiSmile onClick={() => handleEmoji()} />
                                         {showEmojis && (
-                                            <div className="absolute  left-[72px] bottom-8">
+                                            <div className="absolute  left-[14px] bottom-8">
                                                 <Picker onEmojiClick={onEmojiClick} />
                                             </div>
                                         )}

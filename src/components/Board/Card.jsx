@@ -14,6 +14,7 @@ import { cardUpdateApiCall } from "../../hooks/useFetch";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import Flag from "../../assets/icons/svg/Flag";
+import Check from "../../assets/card-check.svg";
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
@@ -157,14 +158,14 @@ const Card = ({ card, listID }) => {
           </div>
           <div
             style={{
-              backgroundColor: progress === 4 && "#54CC7C",
+              // backgroundColor: progress === 4 && "#54CC7C",
               // progress === 4
               //     ? '#54CC7C'
               //     : selectedSpaceObj?.color,
             }}
             className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
           >
-            {progress === 4 && <CheckIcon className="w-4 h-4" />}
+            {progress === 4 && <img src={Check} alt="" className="w-6 h-6" /> }
             {/* {progress === 4 ? (
                             <CheckIcon className="w-4 h-4" />
                         ) : (

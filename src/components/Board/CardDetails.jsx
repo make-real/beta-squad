@@ -347,7 +347,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
- 
+ console.log(localCard)
 
   return (
     <React.Fragment>

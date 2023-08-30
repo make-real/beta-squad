@@ -405,10 +405,10 @@ const TextMessage = ({
       ) : forComment ? null : (
         <div className="grid place-items-center h-[60vh] text-gray-700">
           <div className="text-center space-y-3">
-            <img src={images.chattingStart} alt="" className="w-36 mx-auto" />
-            <h2 className="text-2xl font-bold">What a quiet team!</h2>
-            <p>
-              Don’t be shy, send a message to your team and <br /> fill this
+            <img src={images.chattingStart} alt="" className="w-28 mx-auto" />
+            <h2 className="text-lg font-bold">What a quiet team!</h2>
+            <p className="px-2 text-sm">
+              Don’t be shy, send a message to your team and  fill this
               empty space.
             </p>
           </div>

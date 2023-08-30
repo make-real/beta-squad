@@ -48,6 +48,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
     }
   }, [selectedSpace]);
 
+
   return (
     <>
       {/* {showType === 'grid' ? (
