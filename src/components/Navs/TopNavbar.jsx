@@ -40,7 +40,7 @@ const TopNav = () => {
   }, []);
 
   return (
-    <div className="bg-white border-b-[0.5px] min-h-[70px] max-h-[70px] w-full flex">
+    <div className="bg-white border-b-[0.5px] min-h-[50px] lg:min-h-[70px] max-h-[70px] w-full flex">
       {jwt ? <LoggedInTopNav /> : <NotLoggedInTopNav />}
     </div>
   );
@@ -57,12 +57,12 @@ const NotLoggedInTopNav = () => {
   return (
     <div className="flex justify-between w-full py-[15px] px-[50px]">
       <div className="flex items-center gap-2">
-        <img src={LogoIcon} alt="logo" height={35} width={35} />
-        <h1 className="text-[#0D1282] text-[20px] font-semibold">Squad</h1>
+        <img src={LogoIcon} className="h-[28px] w-[28px] lg:w-[35px] lg:h-[35px] xl:h-[35px] xl:w-[35px]" alt="logo"  />
+        <h1 className="text-[#0D1282] text-[18px] xl:text-[20px]  lg:text-[20px] font-semibold">Squad</h1>
       </div>
       <Link
         to={`${currentPage === "register" ? "/" : "/register"}`}
-        className="bg-[#0D1282] px-[30px] py-[10px] text-white rounded-md font-normal text-sm cursor-pointer"
+        className="bg-[#0D1282] px-[26px] py-[8px] lg:py-[10px] xl:py-[10px] text-white rounded-md font-normal text-xs cursor-pointer"
       >
         {currentPage === "register" ? "Login" : "Register"}
       </Link>
