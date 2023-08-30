@@ -1,7 +1,10 @@
 import React, { useRef } from "react";
 import VideoCallIcon from "../../assets/video_call.svg";
 import AudioCallIcon from "../../assets/audio_call.svg";
-import { ChatBubbleBottomCenterTextIcon, CheckIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleBottomCenterTextIcon,
+  CheckIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Board from "../Board/Board";
@@ -88,13 +91,13 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   };
 
-
   const fetchSquadMembers = async () => {
     try {
-      const { data } = await get_space_members(selectedSpace?._id);
+      if (selectedSpace?._id) {
+        const { data } = await get_space_members(selectedSpace?._id);
 
-     
-      setMembers(data?.members);
+        setMembers(data?.members);
+      }
     } catch (err) {
       console.log("Error occured ==> ", err);
     }
@@ -109,7 +112,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
 
       setTags(data);
       const remainTag = data?.tags.map((item) => item?.name);
-      setTabsName(["All", ...remainTag, "Done"]);
+      setTabsName(["All", ...remainTag]);
     } catch (error) {
       console.log(error);
     }
@@ -141,11 +144,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     }
   }, []);
 
- 
-
   useEffect(() => {
     if (selectedTab === "All") {
-      setFilteredLists(boardLists);
+      filterBoardList("All");
     } else {
       filterBoardList(selectedTab);
     }
@@ -220,18 +221,21 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 })}
               </div>
               <div
-                onClick={() => setSelectedTab('Done')}
+                onClick={() => setSelectedTab("Done")}
                 className={`${
-                  selectedTab === 'Done'
+                  selectedTab === "Done"
                     ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
                     : "text-[#818892] "
                 } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                
               >
-                <Check size='18' />
-                <h3 className={ `${selectedTab==='Done'?'text-[#6576FF]':'text-gray-400'}  font-inter text-sm whitespace-nowrap`}>
-                 Done
+                <Check size="18" />
+                <h3
+                  className={`${
+                    selectedTab === "Done" ? "text-[#6576FF]" : "text-gray-400"
+                  }  font-inter text-sm whitespace-nowrap`}
+                >
+                  Done
                 </h3>
               </div>
               <div

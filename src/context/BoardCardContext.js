@@ -10,9 +10,6 @@ export const BoardCardContext = ({ children }) => {
 
   const [boardLists, setBoardList] = useState([]);
   const [filteredLists, setFilteredLists] = useState([]);
-  const [tag, setTag] = useState("All");
-
-
 
   const filterBoardList = (filter_tag) => {
     const list = [...boardLists];
@@ -36,11 +33,31 @@ export const BoardCardContext = ({ children }) => {
       return;
     }
 
+    if (filter_tag === "All") {
+      list.map((board) => {
+        let cards = [];
+        board.cards.forEach((card) => {
+          if (card.progress !== 4) {
+            cards.push(card);
+          }
+        });
+        if (cards.length) {
+          let new_board = { ...board, cards };
+          new_list.push(new_board);
+        }
+      });
+      setFilteredLists(new_list);
+      return;
+    }
+
     list.map((board) => {
       let cards = [];
       board.cards.forEach((card) => {
         card.tags.forEach((tag) => {
-          if (tag.name === filter_tag) {
+          if (filter_tag === "All" && card.progress !== 4) {
+            cards.push(card);
+          }
+          if (tag.name === filter_tag && card.progress !== 4) {
             cards.push(card);
           }
         });

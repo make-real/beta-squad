@@ -84,7 +84,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
   const [showChat, setShowChat] = useState(false);
 
-  
   const getCard = async () => {
     const { data } = await getSingleCard(workspace_id, listID, id);
     setLocalCard(data?.card);
@@ -347,8 +346,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
- console.log(localCard)
-
   return (
     <React.Fragment>
       <section
@@ -407,11 +404,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 </p>
               )}
 
-             {
-              localCard?.startDate &&  <p className="font-[400] text-sm text-[#818892]">
-              Created - {formatDate(localCard.startDate, "MMM, dd")}
-             </p>
-             }
+              {localCard?.startDate && (
+                <p className="font-[400] text-sm text-[#818892]">
+                  Created - {formatDate(localCard.startDate, "MMM, dd")}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center space-x-5 relative">
@@ -602,12 +599,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
           {/* main part */}
           {/* overflow issue fixed here */}
           <div className="flex  h-5/6	 gap-5">
-            <div
-           
-              className={`flex flex-col ${
-                showChat ? "w-7/12" : "w-full"
-              } `}
-             >
+            <div className={`flex flex-col ${showChat ? "w-7/12" : "w-full"} `}>
               <div className="overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll sm:overflow-scroll  no-scrollbar">
                 {/* show routing */}
                 {/* <div className="flex items-center py-4 text-gray-400 ">
@@ -930,10 +922,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 </div>
               </div>
             </div>
-           {/* <div className="lg:h-60 h-60 md:h-[50vh] sm:h-[40vh] xl:h-[80vh]" >
+            {/* <div className="lg:h-60 h-60 md:h-[50vh] sm:h-[40vh] xl:h-[80vh]" >
           
            </div> */}
-           {showChat ? (
+            {showChat ? (
               <CardMessage listId={listID} cardId={localCard._id} />
             ) : null}
           </div>

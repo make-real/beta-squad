@@ -20,8 +20,6 @@ import Check from "../../assets/card-check.svg";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
- 
-
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -35,8 +33,6 @@ const Card = ({ card, listID }) => {
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const [localCard, setLocalCard] = useState(card);
-
-
 
   // useEffect(() => {
   //     const getCard = async () => {
@@ -146,37 +142,38 @@ const Card = ({ card, listID }) => {
             style={{ backgroundColor: "#FF3659" }}
           />
         )}
-        {
-          card?.tags?.length>0 && 
+        {card?.tags?.length > 0 && (
           <div className="flex justify-between items-center mb-2">
-          <div className="py-2 text-white flex gap-1 flex-wrap">
-            {card?.tags?.length
-              ? card?.tags?.map((tag) => (
-                  <CardChip small tag={tag}  key={tag?.name} />
-                ))
-              : null}
-          </div>
-          <div
-            style={{
-              // backgroundColor: progress === 4 && "#54CC7C",
-              // progress === 4
-              //     ? '#54CC7C'
-              //     : selectedSpaceObj?.color,
-            }}
-            className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
-          >
-            {progress === 4 && <img src={Check} alt="" className="w-6 h-6" /> }
-            {/* {progress === 4 ? (
+            <div className="py-2 text-white flex gap-1 flex-wrap">
+              {card?.tags?.length
+                ? card?.tags?.map((tag) => (
+                    <CardChip small tag={tag} key={tag?.name} />
+                  ))
+                : null}
+            </div>
+            <div
+              style={
+                {
+                  // backgroundColor: progress === 4 && "#54CC7C",
+                  // progress === 4
+                  //     ? '#54CC7C'
+                  //     : selectedSpaceObj?.color,
+                }
+              }
+              className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
+            >
+              {progress === 4 && <img src={Check} alt="" className="w-6 h-6" />}
+              {/* {progress === 4 ? (
                             <CheckIcon className="w-4 h-4" />
                         ) : (
                             <span className="text-[8px] text-center">
                                 {progressStatus(progress)}%
                             </span>
                         )} */}
+            </div>
           </div>
-        </div>
-        }
-       
+        )}
+
         <div className="flex justify-between items-center mb-2">
           <p className="text-[16px] leading-6 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
@@ -239,10 +236,14 @@ const Card = ({ card, listID }) => {
                               /> */}
           </div>
         )}
-        <div className="flex items-center gap-2 ">
-          <Flag />
-          <p className="text-gray-400">{moment(card.endDate).format("MMMM DD")}</p>
-        </div>
+        {card.endDate && (
+          <div className="flex items-center gap-2 ">
+            <Flag />
+            <p className="text-gray-400">
+              {moment(card.endDate).format("MMMM DD")}
+            </p>
+          </div>
+        )}
         {!!card.assignee?.length && (
           <div className="mb-3 flex pt-2">
             {card.assignee?.map((user, i) => (
