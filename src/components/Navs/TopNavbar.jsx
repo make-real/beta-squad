@@ -62,7 +62,7 @@ const NotLoggedInTopNav = () => {
       </div>
       <Link
         to={`${currentPage === "register" ? "/" : "/register"}`}
-        className="bg-[#6576FF] px-[30px] py-[10px] text-white rounded-md font-normal text-sm cursor-pointer"
+        className="bg-[#0D1282] px-[30px] py-[10px] text-white rounded-md font-normal text-sm cursor-pointer"
       >
         {currentPage === "register" ? "Login" : "Register"}
       </Link>

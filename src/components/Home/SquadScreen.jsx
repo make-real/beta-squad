@@ -213,7 +213,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                         selectedTab === value
                           ? " text-[#6576FF] font-inter py-1 bg-slate-200 px-2  rounded-lg"
                           : "text-[#818892] "
-                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap  `}
+                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap px-2  py-1 `}
                     >
                       {value}
                     </a>

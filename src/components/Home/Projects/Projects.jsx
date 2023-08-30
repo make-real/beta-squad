@@ -15,9 +15,11 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { squadBorderClassName } from "../../../constant/data";
+import { get_workspace_member } from "../../../api/workSpace";
 
 const Projects = ({ showType,showCreateSquadModal,setShowCreateSquadModal}) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
+    const [members, setMembers] = useState([])
     const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
     const [deletingProject, setDeletingProject] = useState({
         done: false,
@@ -57,6 +59,20 @@ const Projects = ({ showType,showCreateSquadModal,setShowCreateSquadModal}) => {
         }));
     };
 
+    const fetchWorkspaceMembers = async () => {
+        try {
+            const { data } = await get_workspace_member(selectedWorkspace)
+            setMembers(data?.teamMembers)
+            
+        } catch (err) {
+            console.log('Error occured ==> ', err)
+        }
+    }
+
+    useEffect(() => {
+        fetchWorkspaceMembers()
+    }, [])
+    console.log(members)
     const { id } = useParams();
 
     // useEffect(() => {
