@@ -13,7 +13,7 @@ import { get_space_members } from '../../../api/space'
 import { get_workspace_member } from '../../../api/workSpace'
 import { getAvatarUrl } from '../../../util/getAvatarUrl'
 
-const SquadMembers = ({ showType }) => {
+const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => {
     const selectedSpace = useSelector((state) => state.space.selectedSpace)
     const selectedWorkspace = useSelector(
         (state) => state.workspace.selectedWorkspace
@@ -21,7 +21,7 @@ const SquadMembers = ({ showType }) => {
 
     const [members, setMembers] = useState([])
    
-    const [showAddMemberModal, setShowAddMemberModal] = useState(false)
+
     const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false)
     const [updateMemberData, setUpdateMemberData] = useState(null)
     const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false)
@@ -67,15 +67,15 @@ const SquadMembers = ({ showType }) => {
     return (
         <>
             {showType === 'grid' ? (
-                <div className="mt-[10px] flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar">
-                    <div
+                <div className="mt-[10px] flex gap-[30px] flex-wrap  h-full">
+                    {/* <div
                         onClick={() => setShowAddMemberModal(true)}
                         className="w-[297px] h-[90px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
                     >
                         <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
                             <img src={PlusIcon} alt="" />
                         </div>
-                    </div>
+                    </div> */}
                     {members.map((member) => {
                         const user = members.find(
                             (m) => m?._id === userInfo?._id

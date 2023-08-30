@@ -16,14 +16,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { squadBorderClassName } from "../../../constant/data";
 
-const Projects = ({ showType }) => {
+const Projects = ({ showType,showCreateSquadModal,setShowCreateSquadModal}) => {
     const [deleteProjectData, setDeleteProjectData] = useState(null);
     const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
     const [deletingProject, setDeletingProject] = useState({
         done: false,
         show: false,
     });
-    const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
     const [editProjectData, setEditProjectData] = useState(null);
     const [showEditSquadModal, setShowEditSquadModal] = useState(false);
     const workspaces = useSelector((state) => state.workspace.workspaces);
@@ -73,7 +72,7 @@ const Projects = ({ showType }) => {
     return (
         <>
             {showType === "grid" ? (
-                <div className=" flex gap-[30px] flex-wrap overflow-y-scroll no-scrollbar items-start min-h-[200px]">
+                <div className=" flex gap-[30px] flex-wrap   items-start ">
                     {allSpaces.map((space) => {
                         if (space.name === "Onboarding") return;
                         return (
@@ -109,14 +108,14 @@ const Projects = ({ showType }) => {
                         );
                     })}
 
-                    <div
+                    {/* <div
                         onClick={() => setShowCreateSquadModal(true)}
                         className="w-[214px] h-[110px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
                     >
                         <div className="w-[60px] h-[60px] rounded-full bg-white flex items-center justify-center">
                             <img src={PlusIcon} alt="" />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             ) : (
                 showType === "stack" && (

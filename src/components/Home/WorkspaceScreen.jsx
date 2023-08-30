@@ -3,6 +3,7 @@ import SearchIcon from "../../assets/search.svg";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import { useState } from "react";
+import PlusIcon from "../../assets/plus.svg";
 import Projects from "./Projects/Projects";
 import WorkspaceMembers from "./WorkspaceMembers/WorkspaceMembers";
 import { useEffect } from "react";
@@ -23,6 +24,8 @@ import { useLocation } from "react-router-dom";
 const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
   const [showType, setShowType] = useState("grid");
+  const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false)
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const { selectedSpace, allSpaces } = useSelector((state) => state.space);
   const { workspaces, selectedWorkspace } = useSelector(
@@ -73,8 +76,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
           userInfo={userInfo}
         />
       ) : (
-        <div className="relative bg-[#FFF] h-full flex flex-col no-scrollbar">
-          <div className="w-full h-full flex flex-col bg-white rounded-[16px] px-[40px] mt-[25px]  overflow-hidden">
+        <div className="relative bg-[#FFF] h-full flex overflow-auto flex-col no-scrollbar">
+          <div className="w-full h-full flex flex-col bg-white rounded-[16px] px-[40px] mt-[25px] overflow-auto no-scrollbar">
             <div className="flex items-center ">
               {/* <div className="flex items-center">
                 {currentWorkspace?.logo ? (
@@ -122,30 +125,54 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 </div>
               </div> */}
             </div>
-            <span
-              className={`
+            <div className="flex gap-12 pt-6 items-center">
+              <span
+                className={`
                     
               text-[#031124]
-                    
-                  text-[19px] font-medium  pb-[10px] `}
-            >
-              Projects
-            </span>
-
-            <div className="mt-[5px] min-h-fit	 flex flex-col overflow-hidden">
-              <Projects showType={showType} />
+             
+                  text-[19px] font-medium   `}
+              >
+                Projects
+              </span>
+              <div
+                onClick={() => setShowCreateSquadModal(true)}
+                className="w-[25px] h-[25px] rounded-full bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+              >
+                <div className="w-[16px] h-[16px] rounded-full bg-white flex items-center justify-center">
+                  <img src={PlusIcon} alt="" />
+                </div>
+              </div>
             </div>
-            <span
-              className={`
+
+            <div className=" py-8  ">
+              <Projects
+                showCreateSquadModal={showCreateSquadModal}
+                showType={showType}
+                setShowCreateSquadModal={setShowCreateSquadModal}
+              />
+            </div>
+            <div className="flex gap-12 pt-6 items-center">
+              <span
+                className={`
                     
-                text-[#031124]
-                    
-                  text-[19px] font-medium  pb-[10px] `}
-            >
-              Team Members
-            </span>
-            <div className="mt-[5px] min-h-fit	 flex flex-col overflow-hidden">
-              <WorkspaceMembers showType={showType} />
+              text-[#031124]
+             
+                  text-[19px] font-medium   `}
+              >
+                Team Members
+              </span>
+              <div
+                  onClick={() => setShowAddMemberModal(true)}
+                className="w-[25px] h-[25px] rounded-full bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+              >
+                <div className="w-[16px] h-[16px] rounded-full bg-white flex items-center justify-center">
+                  <img src={PlusIcon} alt="" />
+                </div>
+              </div>
+            </div>
+            <div className=" py-8 ">
+              <WorkspaceMembers showAddMemberModal={showAddMemberModal} setShowAddMemberModal={setShowAddMemberModal}   showType={showType} />
             </div>
           </div>
         </div>
