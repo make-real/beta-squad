@@ -201,8 +201,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
           <div className="flex flex-row items-center justify-between py-[10px]">
             <div className="flex items-center w-full justify-between">
-              <div className="flex items-center w-[75%]  overflow-auto pb-1 customHScroll">
-                {TabsName.slice(0,6).map((value, idx) => {
+              <div className="flex items-center w-[68%]   overflow-auto pb-1 customHScroll">
+                {TabsName.map((value, idx) => {
                   return (
                     <a
                       //href={`#${value.toLowerCase()}`}
@@ -210,9 +210,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                       onClick={() => setSelectedTab(value)}
                       className={`${
                         selectedTab === value
-                          ? " text-[#6576FF] font-inter   rounded-lg"
+                          ? " text-[#6576FF] font-inter py-1 bg-slate-200 px-2  rounded-lg"
                           : "text-[#818892] "
-                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap `}
+                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap  `}
                     >
                       {value}
                     </a>
@@ -221,16 +221,16 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
               </div>
               <div
                 onClick={() => setSelectedTab('Done')}
-                className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
+                className={`${
+                  selectedTab === 'Done'
+                    ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
+                    : "text-[#818892] "
+                } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 
               >
                 <Check size='18' />
-                <h3 className={ ` ${
-                        selectedTab === 'Done'
-                          ? " text-[#6576FF] font-inter   rounded-lg"
-                          : "text-[#818892] "
-                      }  text-gray-400 font-inter text-sm whitespace-nowrap`}>
+                <h3 className={ `${selectedTab==='Done'?'text-[#6576FF]':'text-gray-400'}  font-inter text-sm whitespace-nowrap`}>
                  Done
                 </h3>
               </div>
