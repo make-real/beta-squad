@@ -139,7 +139,7 @@ const Login = () => {
   return (
     <section className="lg:flex h-full  lg:justify-between  lg:items-center w-[70%]  gap-10  mx-auto">
       {/* left side */}
-      <div className="w-[455px]   hidden lg:flex lg:visible">
+      <div className="w-[455px]   hidden xl:flex md:flex lg:flex lg:visible ">
         <div className="pt-10">
           <div className="pt-8 pl-9 pr-4 text-sm">
             <img src={loginImg} alt="bg2" className="w-full top-8 left-8" />
@@ -157,12 +157,12 @@ const Login = () => {
       ) : forgotPassword ? (
         <div className="mt-20">
           <div className="space-y-2 mb-8">
-            <h2 className="font-bold text-2xl">Forgot Password</h2>
+            <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Forgot Password</h2>
             <p className="text-gray-500 text-xs">
               Provide your account’s email for which you want to reset your
               password{" "}
               <button
-                className="text-blue-600"
+                className="text-[#0D1282]"
                 onClick={() => {
                   setForgotPassword(false);
                   setErrorInfo({});
@@ -194,7 +194,7 @@ const Login = () => {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-blue-600 placeholder:text-xs text-sm"
+                  className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-[#0D1282] placeholder:text-xs text-sm"
                   placeholder="Enter email address"
                   onChange={handleUserInput}
                 />
@@ -208,14 +208,14 @@ const Login = () => {
             </span>
 
             <div>
-              <button className="w-full py-2.5 text-white text-xs bg-[#6576FF] rounded">
+              <button className="w-full py-2.5 text-white text-xs bg-[#0D1282] rounded">
                 {loader ? <Loader dark /> : "Next"}
               </button>
             </div>
           </form>
         </div>
       ) : (
-        <div className="mt-20 lg:w-[40%]  mx-auto">
+        <div className="bg-white px-10 py-2 mt-20 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
           <div className="space-y-2 mb-8">
             <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Login</h2>
             <p className="text-gray-500 text-xs">
@@ -333,7 +333,7 @@ const Login = () => {
             )}
           </form>
           <button
-            className="w-full py-2.5 text-[#3699FF] text-xs bg-[#E0F7FF] rounded flex justify-center items-center gap-2 mt-5"
+            className="w-full py-2.5 text-[#0D1282] text-xs bg-[#E0F7FF] rounded flex justify-center items-center gap-2 mt-5"
             onClick={googleAuth}
           >
             {gloader ? (

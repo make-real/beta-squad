@@ -183,14 +183,14 @@ const CodeVerificationForm = ({
     return forgotCodeVerify ? (
         <div className="mt-20">
             <div className="space-y-2 mb-8">
-                <h2 className="font-bold text-2xl">New Credential</h2>
+                <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">New Credential</h2>
                 <p className="text-gray-500 text-xs">
                     Your Identity has been verified! Set your new password
                 </p>
             </div>
 
             <form
-                className="flex flex-col gap-8 w-96"
+                className="flex flex-col gap-8 w-full"
                 onSubmit={handleConfirmPasswordSubmit}
             >
                 <span>
@@ -210,7 +210,7 @@ const CodeVerificationForm = ({
                             type={type ? 'password' : 'text'}
                             name="password"
                             id="password"
-                            className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
+                            className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
                             placeholder="Enter password"
                             onBlur={handleUserInput}
                         />
@@ -240,7 +240,7 @@ const CodeVerificationForm = ({
                             type={type ? 'password' : 'text'}
                             name="confirmPassword"
                             id="confirmPassword"
-                            className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
+                            className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
                             placeholder="Confirm password"
                             onBlur={handleUserInput}
                         />
@@ -278,8 +278,8 @@ const CodeVerificationForm = ({
                     )}
                     {sussessInfo.message && (
                         <span className="flex justify-start items-center gap-1 mt-2">
-                            <FcCheckmark className="text-[#6576FF]" />
-                            <p className="text-xs text-[#6576FF]">
+                            <FcCheckmark className="text-[#0D1282]" />
+                            <p className="text-xs text-[#0D1282]">
                                 {sussessInfo.message}
                             </p>
                         </span>
@@ -287,19 +287,19 @@ const CodeVerificationForm = ({
                 </span>
 
                 <div>
-                    <button className="w-96 py-2.5 text-white text-xs bg-[#6576FF] rounded">
+                    <button className="w-full py-2.5 text-white text-xs bg-[#0D1282] rounded">
                         {loader ? <Loader dark /> : 'Update'}
                     </button>
                 </div>
             </form>
         </div>
     ) : (
-        <div className="">
+        <div className="mt-20 ">
             <div className="space-y-2 mb-8">
-                <h2 className="font-bold text-2xl">Code Verification</h2>
+                <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Code Verification</h2>
                 <p className="text-gray-500 text-xs">
                     Enter one time password sent on{' '}
-                    <span className="text-blue-600">
+                    <span className="text-[#0D1282]">
                         {registerUserEmail || 'example@gmail.com'}
                     </span>
                 </p>
@@ -359,15 +359,15 @@ const CodeVerificationForm = ({
                     onChange={setValue}
                     numInputs={6}
                     separator={<span></span>}
-                    containerStyle="justify-between gap-4 items-center"
-                    inputStyle="bg-[#ECECEC] !w-14 !h-14 rounded-md text-4xl text-center outline-blue-500"
+                    containerStyle=" justify-between gap-4 items-center"
+                    inputStyle="bg-[#ECECEC] md:!w-10 md:!h-10 xl:!w-14 lg:!w-14 xl:!h-14 lg:!h-14 rounded-md text-4xl text-center outline-blue-500"
                     focusStyle
                 />
 
                 <p className="text-gray-500 text-xs">
                     Didn’t get code yet?{' '}
                     <button
-                        className="text-blue-600 underline"
+                        className="text-[#0D1282] underline"
                         onClick={() => handleResendOTP()}
                     >
                         Resend OTP
@@ -375,7 +375,7 @@ const CodeVerificationForm = ({
                 </p>
                 <div>
                     <button
-                        className="w-96 py-2.5 text-white text-xs bg-[#6576FF] rounded"
+                        className="w-full py-2.5 text-white text-xs bg-[#0D1282] rounded"
                         onClick={() => handleSubmit()}
                     >
                         {loader ? <Loader dark /> : 'Verify Code'}

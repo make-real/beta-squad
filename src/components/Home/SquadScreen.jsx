@@ -200,9 +200,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
-          <div className="flex flex-row items-center justify-between py-[10px]">
-            <div className="flex items-center w-full justify-between">
-              <div className="flex items-center w-[68%]   overflow-auto pb-1 customHScroll">
+          <div className="flex flex-row items-center  py-[10px]">
+            <div className="flex items-center w-full gap-8">
+              <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
@@ -220,7 +220,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   );
                 })}
               </div>
-              <div
+             <div className="flex">
+             <div
                 onClick={() => setSelectedTab("Done")}
                 className={`${
                   selectedTab === "Done"
@@ -255,9 +256,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   New board
                 </h3>
               </div>
+             </div>
             </div>
 
-            <div className="flex items-center justify-between w-1/2 ml-5">
+            <div className="flex items-center justify-between w-1/2 ">
               <div className="flex items-center">
                 <div className="flex items-center justify-start">
                   {members.slice(0, 3).map((user, i) => (

@@ -96,30 +96,30 @@ const Register = () => {
     const uid = JSON.parse(localStorage.getItem('userId'));
 
     return (
-        <section className="flex justify-between items-center gap-10 w-[70%] mx-auto h-fit my-auto">
-            <div className="w-[455px] text-white">
+        <section className="lg:flex h-full  xl:flex xl:justify-between  md:justify-between xl:items-center md:flex md:items-center   lg:justify-between  lg:items-center w-[70%]  gap-10  mx-auto">
+            <div className="w-[455px]    hidden xl:flex md:flex lg:flex lg:visible text-white">
                 <div className="">
                     <div className="pt-8 pl-9 pr-4 text-sm">
-                        <img src={loginImg} alt="bg2" className="w-96" />
+                        <img src={loginImg} alt="bg2" className="w-full" />
                     </div>
                 </div>
             </div>
 
             {!uid ? (
-                <div className="bg-white px-10 py-2 rounded-md my-8">
+                <div className="bg-white px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
                     <div>
                         <div className="space-y-2 mb-8">
-                            <h2 className="font-bold text-2xl">Register</h2>
+                            <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Register</h2>
                             <p className="text-gray-500 text-xs">
                                 Already have an account?{' '}
-                                <Link className="text-blue-600" to="/">
+                                <Link className="text-[#0D1282]" to="/">
                                     Login
                                 </Link>
                             </p>
                         </div>
 
                         <form
-                            className="flex flex-col gap-8 w-96"
+                            className="flex flex-col gap-8 w-full"
                             onSubmit={handleSubmit}
                         >
                             <span>
@@ -139,7 +139,7 @@ const Register = () => {
                                         type="text"
                                         name="fullName"
                                         id="name"
-                                        className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-blue-600 placeholder:text-xs text-sm"
+                                        className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-[#0D1282] placeholder:text-xs text-sm"
                                         placeholder="Enter full name"
                                         onChange={handleUserInput}
                                     />
@@ -170,7 +170,7 @@ const Register = () => {
                                         type="email"
                                         name="email"
                                         id="email"
-                                        className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-blue-600 placeholder:text-xs text-sm"
+                                        className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-[#0D1282] placeholder:text-xs text-sm"
                                         placeholder="Enter email address"
                                         onChange={handleUserInput}
                                     />
@@ -201,7 +201,7 @@ const Register = () => {
                                         type={type ? 'password' : 'text'}
                                         name="password"
                                         id="password"
-                                        className="bg-[#ECECEC] w-96 pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
+                                        className="bg-[#ECECEC] w-full pl-8 py-2.5 rounded outline-pink-400 placeholder:text-xs text-sm"
                                         placeholder="Enter password"
                                         onChange={handleUserInput}
                                     />
@@ -242,7 +242,7 @@ const Register = () => {
                                 </span>
                             </div>
                             <div>
-                                <button className="w-96 py-2.5 text-white text-xs bg-[#6576FF] rounded">
+                                <button className="w-full py-2.5 text-white text-xs bg-[#0D1282] rounded">
                                     {loader ? <Loader dark /> : 'Register'}
                                 </button>
                             </div>
@@ -258,7 +258,7 @@ const Register = () => {
                         </form>
 
                         <button
-                            className="w-96 py-2.5 text-[#3699FF] text-xs bg-[#E0F7FF] rounded flex justify-center items-center gap-2 mt-5"
+                            className="w-full py-2.5 text-[#0D1282] text-xs bg-[#E0F7FF] rounded flex justify-center items-center gap-2 mt-5"
                             onClick={googleAuth}
                         >
                             {gloader ? (

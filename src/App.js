@@ -65,6 +65,7 @@ import SingleScreen from "./components/Home/SingleScreen";
 import ComingSoonModal from "./components/Modals/ComingSoonModal";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "./firebase";
+import Welcome from "./components/LoginRegistration/Welcome";
 
 const ProtectedRoute = ({ children }) => {
   const jwt = fetchUserToken() || false;
@@ -310,6 +311,14 @@ const App = () => {
           element={
             <AuthRoute>
               <Register />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="welcomeuser"
+          element={
+            <AuthRoute>
+              <Welcome />
             </AuthRoute>
           }
         />
