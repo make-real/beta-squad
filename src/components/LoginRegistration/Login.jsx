@@ -155,7 +155,7 @@ const Login = () => {
           handleForgotPassword={handleForgotPassword}
         />
       ) : forgotPassword ? (
-        <div className="mt-20">
+        <div className="mt-20 bg-white lg:px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8 ">
           <div className="space-y-2 mb-8">
             <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Forgot Password</h2>
             <p className="text-gray-500 text-xs">
@@ -215,7 +215,7 @@ const Login = () => {
           </form>
         </div>
       ) : (
-        <div className="bg-white px-10 py-2 mt-20 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
+        <div className="bg-white lg:px-10 py-2 mt-20 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
           <div className="space-y-2 mb-8">
             <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Login</h2>
             <p className="text-gray-500 text-xs">
@@ -292,7 +292,7 @@ const Login = () => {
                 </span>
               )}
             </span>
-            <div className="flex justify-between items-center w-full">
+            <div className="flex justify-between items-center w-full ">
               <span className="flex gap-1">
                 <input type="checkbox" name="remember" id="remember" />
                 <p className="text-xs text-gray-500">Remember me</p>
