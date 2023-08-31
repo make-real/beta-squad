@@ -200,7 +200,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
     <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
-          <div className="flex flex-row items-center  py-[10px]">
+          <div className="flex flex-row items-center gap-4  py-[10px]">
             <div className="flex items-center w-full gap-8">
               <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">
                 {TabsName.map((value, idx) => {
@@ -240,7 +240,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                 </h3>
               </div>
               <div
-                className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center mr-2 gap-1"
+                className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
                 // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 onClick={() => {
                   setAddBoard(!addBoard);

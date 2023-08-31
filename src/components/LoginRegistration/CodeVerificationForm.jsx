@@ -181,7 +181,7 @@ const CodeVerificationForm = ({
     };
 
     return forgotCodeVerify ? (
-        <div className="mt-20">
+        <div className="mt-20 bg-white xl:px-10 lg:px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
             <div className="space-y-2 mb-8">
                 <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">New Credential</h2>
                 <p className="text-gray-500 text-xs">
@@ -294,7 +294,7 @@ const CodeVerificationForm = ({
             </form>
         </div>
     ) : (
-        <div className="mt-20 ">
+        <div className="mt-20 mt-20 bg-white xl:px-10 lg:px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
             <div className="space-y-2 mb-8">
                 <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Code Verification</h2>
                 <p className="text-gray-500 text-xs">

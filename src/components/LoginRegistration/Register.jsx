@@ -106,7 +106,7 @@ const Register = () => {
             </div>
 
             {!uid ? (
-                <div className="bg-white px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
+                <div className="bg-white lg:px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8">
                     <div>
                         <div className="space-y-2 mb-8">
                             <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Register</h2>

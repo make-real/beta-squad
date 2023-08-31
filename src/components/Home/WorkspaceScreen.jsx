@@ -8,7 +8,7 @@ import Projects from "./Projects/Projects";
 import WorkspaceMembers from "./WorkspaceMembers/WorkspaceMembers";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import BorderedPlusIcon from "../../assets/borderedplus.svg";
+import BorderedPlusIcon from "../../assets/add.svg";
 import { boxHexColorCodes } from "../../constant/data";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -131,7 +131,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                     
               text-[#031124]
              
-                  text-[19px] font-medium   `}
+                  text-[19px] font-bold   `}
               >
                 Projects
               </span>
@@ -157,19 +157,18 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 className={`
                     
               text-[#031124]
-             
-                  text-[19px] font-medium   `}
+               
+                  text-[19px] font-bold   `}
               >
                 Team Members
               </span>
-              <div
-                  onClick={() => setShowAddMemberModal(true)}
-                className="w-[25px] h-[25px] rounded-full bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
-              >
-                <div className="w-[16px] h-[16px] rounded-full bg-white flex items-center justify-center">
-                  <img src={PlusIcon} alt="" />
-                </div>
-              </div>
+              <img
+                onClick={() => setShowAddMemberModal(true)}
+                      src={BorderedPlusIcon}
+                      alt=""
+                      className="cursor-pointer text-[#0D1282] "
+                    />
+             
             </div>
             <div className=" py-8 ">
               <WorkspaceMembers showAddMemberModal={showAddMemberModal} setShowAddMemberModal={setShowAddMemberModal}   showType={showType} />
