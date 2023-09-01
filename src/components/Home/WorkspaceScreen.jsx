@@ -125,7 +125,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 </div>
               </div> */}
             </div>
-            <div className="flex gap-12 pt-6 items-center">
+            <div className="flex gap-4 pt-6 items-center">
               <span
                 className={`
                     
@@ -152,7 +152,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 setShowCreateSquadModal={setShowCreateSquadModal}
               />
             </div>
-            <div className="flex gap-12 pt-6 items-center">
+            <div className="flex gap-4 pt-6 items-center">
               <span
                 className={`
                     

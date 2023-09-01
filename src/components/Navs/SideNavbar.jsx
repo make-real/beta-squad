@@ -38,6 +38,7 @@ import images from "../../assets";
 import { Comment } from "postcss";
 import ComingSoonModal from "../Modals/ComingSoonModal";
 import { useCommingSoonContext } from "../../context/FeatureContext";
+import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
 
 const SideNavbar = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ const SideNavbar = () => {
   const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
+  const [showAddMemberModal,setShowAddMemberModal]=useState(false)
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
@@ -529,19 +531,19 @@ const SideNavbar = () => {
                         alt="search"
                         className="cursor-pointer"
                       />
-                    <h2 className="text-[#0D1282]">Chats</h2>
+                    <h2 className="text-[#0D1282]">Chat</h2>
                     </div>
                     <div
                       className="flex items-center gap-2"
                       onClick={() => {
-                        setShowModal(!showModal);
+                        setShowAddMemberModal(!showAddMemberModal);
                       }}
                     >
                       <img
-                        src={SearchIcon}
-                        alt="search"
-                        className="cursor-pointer"
-                      />
+                      src={BorderedPlusIcon}
+                      alt=""
+                      className="cursor-pointer text-[#0D1282] "
+                    />
                     </div>
                   </div>
                 )}
@@ -614,6 +616,9 @@ const SideNavbar = () => {
       {showCreateSquadModal && (
         <CreateSquadModal setShowCreateSquadModal={setShowCreateSquadModal} />
       )}
+          {showAddMemberModal && (
+                <AddMemberModal setShowAddMemberModal={setShowAddMemberModal} />
+            )}
     </>
   );
 };
