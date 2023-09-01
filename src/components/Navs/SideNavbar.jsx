@@ -279,11 +279,11 @@ const SideNavbar = () => {
                       <img
                         src={workspace?.logo}
                         alt=""
-                        className="w-full h-full bg-black  border border-[#5951F4] rounded-full"
+                        className="w-full h-full bg-[#2C3782]  border border-[#5951F4] rounded-full"
                       />
                     </div>
                   ) : (
-                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl  text-black border font-medium text-[14px]">
+                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl  text-white border font-medium text-[14px]">
                       {workspace?.name.charAt(0)}
                     </div>
                   )}

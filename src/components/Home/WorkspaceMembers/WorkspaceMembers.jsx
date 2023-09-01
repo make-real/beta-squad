@@ -64,6 +64,9 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
         fetchWorkspaceMembers()
     }, [showRemovedModal])
 
+
+
+ 
     return (
         <>
             {showType === 'grid' ? (
@@ -107,8 +110,8 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
                                         <h2 className="text-[#424D5B] font-semibold">
                                             {member?.fullName}
                                         </h2>
-                                        <p className="text-[#818892]">
-                                            {member?.username}
+                                        <p className="text-[#818892] text-[13px] w-[120px]">
+                                            {member?.email}
                                         </p>
                                     </div>
                                 </div>

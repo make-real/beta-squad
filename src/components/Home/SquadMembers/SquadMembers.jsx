@@ -17,7 +17,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
-     
+
       setMembers(data?.members);
     } catch (err) {
       // toast.error(err?.message, {
@@ -47,7 +47,6 @@ const SquadMembers = ({ showType, selectedSpace }) => {
       fetchSquadMembers();
     }
   }, [selectedSpace]);
-
 
   return (
     <>
@@ -111,7 +110,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
             ) : (
                 showType === 'stack' && ( */}
       <div className="overflow-y-scroll  h-[90%] no-scrollbar custom-shadow bg-[#ECECEC80] py-10 px-2 rounded-2xl">
-      <div className="flex  flex-col items-center gap-[10px]">
+        <div className="flex  flex-col items-center gap-[10px]">
           {members.map((member) => {
             const user = members.find((m) => m?._id === userInfo?._id);
             return (
@@ -141,15 +140,17 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                     alt=""
                     className="w-[50px] h-[50px] object-cover rounded-full"
                   />
-                  <h2 className="text-[#424D5B] font-semibold">
-                    {member?.fullName}
-                  </h2>
+                  <div className="flex flex-col ">
+                    <h2 className="text-[#424D5B] font-semibold">
+                      {member?.fullName}
+                    </h2>
+                    <p className="text-[#818892] text-[14px]">{member?.email}</p>
+                  </div>
                 </div>
                 <div className="flex items-center gap-[16px]">
                   <p className="text-[#818892]">{member?.designation}</p>
                   {/* <img src={ArrowDown} alt="" /> */}
                 </div>
-                <p className="text-[#818892]">{member?.email}</p>
               </div>
             );
           })}

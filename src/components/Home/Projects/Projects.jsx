@@ -9,122 +9,139 @@ import EditSquadModal from "./Modals/EditSquadModal";
 import CreateSquadModal from "./Modals/CreateSquadModal";
 import { useDispatch } from "react-redux";
 import {
-    setSelectedSpaceId,
-    setSelectedSpaceObject,
+  setSelectedSpaceId,
+  setSelectedSpaceObject,
 } from "../../../store/slice/space";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { squadBorderClassName } from "../../../constant/data";
 import { get_workspace_member } from "../../../api/workSpace";
 
-const Projects = ({ showType,showCreateSquadModal,setShowCreateSquadModal}) => {
-    const [deleteProjectData, setDeleteProjectData] = useState(null);
-    const [members, setMembers] = useState([])
-    const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
-    const [deletingProject, setDeletingProject] = useState({
-        done: false,
-        show: false,
-    });
-    const [editProjectData, setEditProjectData] = useState(null);
-    const [showEditSquadModal, setShowEditSquadModal] = useState(false);
-    const workspaces = useSelector((state) => state.workspace.workspaces);
-    const { selectedSpace, allSpaces } = useSelector((state) => state.space);
-    const selectedWorkspace = useSelector(
-        (state) => state.workspace.selectedWorkspace
-    );
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+const Projects = ({
+  showType,
+  showCreateSquadModal,
+  setShowCreateSquadModal,
+}) => {
+  const [deleteProjectData, setDeleteProjectData] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
+  const [deletingProject, setDeletingProject] = useState({
+    done: false,
+    show: false,
+  });
+  const [editProjectData, setEditProjectData] = useState(null);
+  const [showEditSquadModal, setShowEditSquadModal] = useState(false);
+  const workspaces = useSelector((state) => state.workspace.workspaces);
+  const { selectedSpace, allSpaces } = useSelector((state) => state.space);
+  const selectedWorkspace = useSelector(
+    (state) => state.workspace.selectedWorkspace
+  );
 
-    const prepareDeleteProject = (projectData) => {
-        setDeleteProjectData(projectData);
-        setShowDeleteProjectModal(true);
-    };
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const prepareEditProject = (projectData) => {
-        setEditProjectData(projectData);
-        setShowEditSquadModal(true);
-    };
+  const prepareDeleteProject = (projectData) => {
+    setDeleteProjectData(projectData);
+    setShowDeleteProjectModal(true);
+  };
 
-    const cancelEditProject = () => {
-        setEditProjectData(null);
-        setShowEditSquadModal(false);
-    };
+  const prepareEditProject = (projectData) => {
+    setEditProjectData(projectData);
+    setShowEditSquadModal(true);
+  };
 
-    const cancelDeletionFunc = () => {
-        setDeleteProjectData(null);
-        setDeletingProject((prev) => ({
-            ...prev,
-            done: false,
-            show: false,
-        }));
-    };
+  const cancelEditProject = () => {
+    setEditProjectData(null);
+    setShowEditSquadModal(false);
+  };
 
-    const fetchWorkspaceMembers = async () => {
-        try {
-            const { data } = await get_workspace_member(selectedWorkspace)
-            setMembers(data?.teamMembers)
-            
-        } catch (err) {
-            console.log('Error occured ==> ', err)
-        }
+  const cancelDeletionFunc = () => {
+    setDeleteProjectData(null);
+    setDeletingProject((prev) => ({
+      ...prev,
+      done: false,
+      show: false,
+    }));
+  };
+
+  const fetchWorkspaceMembers = async () => {
+    try {
+      const { data } = await get_workspace_member(selectedWorkspace);
+      setMembers(data?.teamMembers);
+    } catch (err) {
+      console.log("Error occured ==> ", err);
     }
+  };
 
-    useEffect(() => {
-        fetchWorkspaceMembers()
-    }, [])
-    console.log(members)
-    const { id } = useParams();
+  useEffect(() => {
+    fetchWorkspaceMembers();
+  }, [workspaces]);
 
-    // useEffect(() => {
-    //     window.onload = () => {
-    //         if (!id) {
-    //             if (workspaces.length <= 0) {
-    //                 navigate("/settings/manage-workspace");
-    //             }
-    //         }
-    //     };
-    // }, [workspaces]);
 
-    return (
-        <>
-            {showType === "grid" ? (
-                <div className=" flex gap-[30px] flex-wrap   items-start ">
-                    {allSpaces.map((space) => {
-                        if (space.name === "Onboarding") return;
-                        return (
-                            <div
-                                style={{
-                                    backgroundColor: space.color + "10",
-                                }}
-                                className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
-                                    squadBorderClassName[space.color]
-                                }`}
-                            >
-                                <div
-                                    onClick={() => {
-                                        dispatch(setSelectedSpaceId(space._id));
-                                        dispatch(setSelectedSpaceObject(space));
-                                        navigate(
-                                            `/projects/${selectedWorkspace}/squad/${space._id}`
-                                        );
-                                    }}
-                                    className="absolute inset-0 w-full h-full cursor-pointer"
-                                ></div>
-                                <EditDeleteMenu
-                                    deleteFunc={prepareDeleteProject}
-                                    editFunc={prepareEditProject}
-                                    data={space}
-                                    className="absolute top-[10px] right-[10px]"
-                                />
-                                <FolderIcon style={{ fill: space.color }} />
-                                <p className="text-[#424D5B] font-semibold cursor-pointer">
-                                    {space.name}
-                                </p>
-                            </div>
-                        );
-                    })}
+  const adminUser = members?.find((m) => m?._id === userInfo?._id);
 
-                    {/* <div
+  const { id } = useParams();
+
+  // useEffect(() => {
+  //     window.onload = () => {
+  //         if (!id) {
+  //             if (workspaces.length <= 0) {
+  //                 navigate("/settings/manage-workspace");
+  //             }
+  //         }
+  //     };
+  // }, [workspaces]);
+
+  return (
+    <>
+      {showType === "grid" ? (
+        <div className=" flex gap-[30px] flex-wrap   items-start ">
+          {allSpaces.map((space) => {
+            if (space.name === "Onboarding") return;
+            return (
+            
+
+                <>
+               
+                 <div
+                style={{
+                  backgroundColor: space.color + "10",
+                }}
+                className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
+                  squadBorderClassName[space.color]
+                }`}
+              >
+                <div
+                  onClick={() => {
+                    dispatch(setSelectedSpaceId(space._id));
+                    dispatch(setSelectedSpaceObject(space));
+                    navigate(
+                      `/projects/${selectedWorkspace}/squad/${space._id}`
+                    );
+                  }}
+                  className="absolute inset-0 w-full h-full cursor-pointer"
+                ></div>
+
+                {
+                 adminUser?.role==='owner'&& <EditDeleteMenu
+                    deleteFunc={prepareDeleteProject}
+                    editFunc={prepareEditProject}
+                    data={space}
+                    className="absolute top-[10px] right-[10px]"
+                  />
+                }
+               
+                <FolderIcon style={{ fill: space.color }} />
+                <p className="text-[#424D5B] font-semibold cursor-pointer">
+                  {space.name}
+                </p>
+              </div></>
+               
+            );
+          })}
+
+          {/* <div
                         onClick={() => setShowCreateSquadModal(true)}
                         className="w-[214px] h-[110px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
                     >
@@ -132,86 +149,80 @@ const Projects = ({ showType,showCreateSquadModal,setShowCreateSquadModal}) => {
                             <img src={PlusIcon} alt="" />
                         </div>
                     </div> */}
+        </div>
+      ) : (
+        showType === "stack" && (
+          <div className="flex flex-col gap-[10px] mt-[30px] overflow-y-scroll h-full no-scrollbar max-h-[550px]">
+            <div
+              onClick={() => setShowCreateSquadModal(true)}
+              className="w-full min-h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
+            >
+              <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
+                <img src={PlusIcon} alt="" />
+              </div>
+            </div>
+            {allSpaces.map((space) => {
+              return (
+                <div
+                  style={{
+                    backgroundColor: space.color + "10",
+                  }}
+                  className={`relative w-full min-h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
+                >
+                  <div
+                    onClick={() => {
+                      dispatch(setSelectedSpaceId(space._id));
+                      dispatch(setSelectedSpaceObject(space));
+                      navigate(
+                        `/projects/${selectedWorkspace}/squad/${space._id}`
+                      );
+                    }}
+                    className="absolute inset-0 w-full h-full cursor-pointer"
+                  ></div>
+                  <EditDeleteMenu
+                    data={space}
+                    editFunc={prepareEditProject}
+                    deleteFunc={prepareDeleteProject}
+                    className="absolute top-[10px] right-[10px]"
+                    boxClassName="right-[30px]"
+                  />
+                  <FolderIcon style={{ fill: space.color }} />
+                  <p className="text-[#424D5B] font-semibold cursor-pointer">
+                    {space.name}
+                  </p>
                 </div>
-            ) : (
-                showType === "stack" && (
-                    <div className="flex flex-col gap-[10px] mt-[30px] overflow-y-scroll h-full no-scrollbar max-h-[550px]">
-                        <div
-                            onClick={() => setShowCreateSquadModal(true)}
-                            className="w-full min-h-[56px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
-                        >
-                            <div className="w-[36px] h-[36px] rounded-full bg-white flex items-center justify-center">
-                                <img src={PlusIcon} alt="" />
-                            </div>
-                        </div>
-                        {allSpaces.map((space) => {
-                            return (
-                                <div
-                                    style={{
-                                        backgroundColor: space.color + "10",
-                                    }}
-                                    className={`relative w-full min-h-[80px] rounded-[16px] flex items-center px-[17px] gap-[16px]`}
-                                >
-                                    <div
-                                        onClick={() => {
-                                            dispatch(
-                                                setSelectedSpaceId(space._id)
-                                            );
-                                            dispatch(
-                                                setSelectedSpaceObject(space)
-                                            );
-                                            navigate(
-                                                `/projects/${selectedWorkspace}/squad/${space._id}`
-                                            );
-                                        }}
-                                        className="absolute inset-0 w-full h-full cursor-pointer"
-                                    ></div>
-                                    <EditDeleteMenu
-                                        data={space}
-                                        editFunc={prepareEditProject}
-                                        deleteFunc={prepareDeleteProject}
-                                        className="absolute top-[10px] right-[10px]"
-                                        boxClassName="right-[30px]"
-                                    />
-                                    <FolderIcon style={{ fill: space.color }} />
-                                    <p className="text-[#424D5B] font-semibold cursor-pointer">
-                                        {space.name}
-                                    </p>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )
-            )}
+              );
+            })}
+          </div>
+        )
+      )}
 
-            {showDeleteProjectModal && (
-                <DeleteProjectModal
-                    setDeleteProjectData={setDeleteProjectData}
-                    setShowDeleteProjectModal={setShowDeleteProjectModal}
-                    setDeletingProject={setDeletingProject}
-                    data={deleteProjectData}
-                />
-            )}
-            {deletingProject.show && (
-                <DeletingProjectModal
-                    data={deleteProjectData}
-                    {...deletingProject}
-                    cancelDeletion={cancelDeletionFunc}
-                />
-            )}
-            {showEditSquadModal && (
-                <EditSquadModal
-                    data={editProjectData}
-                    cancelEditProject={cancelEditProject}
-                />
-            )}
-            {showCreateSquadModal && (
-                <CreateSquadModal
-                    setShowCreateSquadModal={setShowCreateSquadModal}
-                />
-            )}
-        </>
-    );
+      {showDeleteProjectModal && (
+        <DeleteProjectModal
+          setDeleteProjectData={setDeleteProjectData}
+          setShowDeleteProjectModal={setShowDeleteProjectModal}
+          setDeletingProject={setDeletingProject}
+          data={deleteProjectData}
+        />
+      )}
+      {deletingProject.show && (
+        <DeletingProjectModal
+          data={deleteProjectData}
+          {...deletingProject}
+          cancelDeletion={cancelDeletionFunc}
+        />
+      )}
+      {showEditSquadModal && (
+        <EditSquadModal
+          data={editProjectData}
+          cancelEditProject={cancelEditProject}
+        />
+      )}
+      {showCreateSquadModal && (
+        <CreateSquadModal setShowCreateSquadModal={setShowCreateSquadModal} />
+      )}
+    </>
+  );
 };
 
 export default Projects;
