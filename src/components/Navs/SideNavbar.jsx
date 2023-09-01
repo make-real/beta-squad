@@ -245,7 +245,7 @@ const SideNavbar = () => {
                 <img className="w-[25px] h-[25px]" src={BriefCaseIcon} alt="" />
 
                 {fullSidebar && (
-                  <p className="text-[14px] text-[#C4CEFE] font-semibold">
+                  <p className="text-[14px] text-[#424D5B] font-semibold">
                     Workspaces
                   </p>
                 )}
@@ -279,16 +279,16 @@ const SideNavbar = () => {
                       <img
                         src={workspace?.logo}
                         alt=""
-                        className="w-full h-full bg-white  border border-[#5951F4] rounded-full"
+                        className="w-full h-full bg-black  border border-[#5951F4] rounded-full"
                       />
                     </div>
                   ) : (
-                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
+                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-black border font-medium text-[14px]">
                       {workspace?.name.charAt(0)}
                     </div>
                   )}
                   {fullSidebar && (
-                    <p className="text-[14px] text-white">{workspace?.name}</p>
+                    <p className="text-[14px] text-[#424D5B]">{workspace?.name}</p>
                   )}
                 </div>
               </Link>
