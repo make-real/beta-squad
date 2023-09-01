@@ -283,7 +283,7 @@ const SideNavbar = () => {
                       />
                     </div>
                   ) : (
-                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-black border font-medium text-[14px]">
+                    <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl  text-black border font-medium text-[14px]">
                       {workspace?.name.charAt(0)}
                     </div>
                   )}
@@ -340,7 +340,8 @@ const SideNavbar = () => {
         {/* Default Project Sidebar */}
         {/* Workspace */}
         {defaultPage && (
-          <div className="flex flex-col gap-3">
+          <div className="flex justify-between  items-center ">
+
             <div
               onClick={() => {
                 dispatch(setSelectedSpaceId(null));
@@ -348,17 +349,17 @@ const SideNavbar = () => {
                 navigate(`/projects/${selectedWorkspace}`);
                 setSelectedChat(null);
               }}
-              className={`flex items-center gap-3 cursor-pointer py-[10px] mx-2 rounded-lg ${
+              className={`flex items-center gap-3 cursor-pointer py-[10px] px-10 mx-2 rounded-lg ${
                 selectedChat ? "" : selectedSpace ? "" : "bg-[#CBCCE1]"
               } 
                                 ${
                                   fullSidebar
-                                    ? "pl-[25px]"
+                                    ? "ml-[30px] pl-2"
                                     : "pl-[25px] pr-[25px]"
                                 }`}
             >
               {currentWorkspace?.logo ? (
-                <div className="w-[32px] h-[32px] ">
+                <div className="w-[28px] h-[28px] ">
                   <img
                     src={currentWorkspace?.logo}
                     alt=""
@@ -366,7 +367,7 @@ const SideNavbar = () => {
                   />
                 </div>
               ) : (
-                <div className="w-[25px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
+                <div className=" w-[30px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
                   {currentWorkspace?.name.charAt(0)}
                 </div>
               )}
@@ -376,12 +377,25 @@ const SideNavbar = () => {
                 </p>
               )}
             </div>
+            {
+              fullSidebar &&   <div
+              className="w-max mr-2"
+              onClick={() => setShowCreateSquadModal(true)}
+            >
+              <img
+                src={BorderedPlusIcon}
+                alt=""
+                className="cursor-pointer text-[#0D1282] "
+              />
+            </div>
+            }
+         
           </div>
         )}
         {/* Squad */}
         {defaultPage && (
           <div className="mt-[16px]">
-            {fullSidebar && (
+            {/* {fullSidebar && (
               <div
                 className={`flex items-center justify-between pl-[17px] pr-[10px]`}
               >
@@ -394,18 +408,7 @@ const SideNavbar = () => {
                 <h2 className="text-[#0D1282] font-normal leading-[36px]">My  Squad</h2>
              </div>
                 <div className="flex items-center gap-2">
-                  {/* <div
-                                        className="w-max"
-                                        // onClick={() =>
-                                        //     setSpaceSearchModal(true)
-                                        // }
-                                    >
-                                        <img
-                                            src={SearchIcon}
-                                            alt="search"
-                                            className="cursor-pointer"
-                                        />
-                                    </div> */}
+               
                   <div
                     className="w-max"
                     onClick={() => setShowCreateSquadModal(true)}
@@ -418,7 +421,7 @@ const SideNavbar = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
             {!fullSidebar && (
               <h1 className="text-[#0D1282] text-center">Squad</h1>
             )}

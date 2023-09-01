@@ -11,9 +11,11 @@ import useAuth from "../../hooks/auth";
 import loginImg from "../../assets/images/OBJECTS.svg";
 import { RiErrorWarningLine } from "react-icons/ri";
 import CodeVerificationForm from "./CodeVerificationForm";
+import { useMatchMedia } from "../../hooks/useMatchMedia";
 
 const Login = () => {
   const navigate = useNavigate();
+  const isDesktopResolution = useMatchMedia("(max-width:600px)", true);
   const { setLoginUserInfo } = useUserInfoContext();
   const [loader, setLoader] = useState(false);
   const [userInput, setUserInput] = useState({ email: "", password: "" });
@@ -47,7 +49,12 @@ const Login = () => {
         setLoginUserInfo(data.loggedUser);
 
         // navigate user into user profile page...
-        navigate("/projects");
+
+        if (isDesktopResolution) {
+          navigate("/welcomeuser");
+        } else {
+          navigate("/projects");
+        }
 
         setLoader(false);
       } else {
@@ -157,7 +164,9 @@ const Login = () => {
       ) : forgotPassword ? (
         <div className="mt-20 bg-white lg:px-10 py-2 rounded-md lg:w-[40%] xl:w-[50%] mx-auto my-8 ">
           <div className="space-y-2 mb-8">
-            <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">Forgot Password</h2>
+            <h2 className="font-bold lg:text-2xl xl:text-2xl text-lg">
+              Forgot Password
+            </h2>
             <p className="text-gray-500 text-xs">
               Provide your account’s email for which you want to reset your
               password{" "}
@@ -226,7 +235,10 @@ const Login = () => {
             </p>
           </div>
 
-          <form className="flex flex-col gap-8 w-full mx-auto" onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col gap-8 w-full mx-auto"
+            onSubmit={handleSubmit}
+          >
             <span>
               <label
                 className="block text-xs text-gray-500 mb-2"

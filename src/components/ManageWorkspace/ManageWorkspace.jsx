@@ -99,14 +99,14 @@ const ManageWorkspace = () => {
                 Workspace
               </h2>
               <div className="flex items-center">
-                <div className="flex items-center gap-[12px]">
+                {/* <div className="flex items-center gap-[12px]">
                   <img src={SearchIcon} alt="search" className="" />
                   <input
                     type="text"
                     placeholder="Search here"
                     className=" placeholder:text-[#99A6B9] border-none outline-none"
                   />
-                </div>
+                </div> */}
                 {/* <div className="flex items-center gap-[22px]">
                                 <div
                                     className="cursor-pointer"
@@ -134,7 +134,7 @@ const ManageWorkspace = () => {
                     key={workspace._id + "-" + i}
                     className="relative w-[215px] min-h-[156px] bg-[#67BFFF10] rounded-[16px] pb-[20px]"
                   >
-                    <div className="absolute h-[6px] w-[37%] bg-[#67BFFF] rounded-bl-[4px] rounded-br-[4px] left-[31px] top-0"></div>
+                    {/* <div className="absolute h-[6px] w-[37%] bg-[#67BFFF] rounded-bl-[4px] rounded-br-[4px] left-[31px] top-0"></div> */}
                     <EditDeleteMenu
                       data={workspace}
                       editFunc={prepareEditWorkspace}
