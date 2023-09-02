@@ -53,7 +53,7 @@ const SideNavbar = () => {
   const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
-  const [showAddMemberModal,setShowAddMemberModal]=useState(false)
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [userNotificationSMS, setUserNotificationSMS] = useState(false);
   const [userNotificationBell, setUserNotificationBell] = useState(false);
   const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
@@ -288,7 +288,9 @@ const SideNavbar = () => {
                     </div>
                   )}
                   {fullSidebar && (
-                    <p className="text-[14px] text-[#424D5B]">{workspace?.name}</p>
+                    <p className="text-[14px] text-[#424D5B]">
+                      {workspace?.name}
+                    </p>
                   )}
                 </div>
               </Link>
@@ -341,7 +343,6 @@ const SideNavbar = () => {
         {/* Workspace */}
         {defaultPage && (
           <div className="flex justify-between  items-center ">
-
             <div
               onClick={() => {
                 dispatch(setSelectedSpaceId(null));
@@ -349,7 +350,7 @@ const SideNavbar = () => {
                 navigate(`/projects/${selectedWorkspace}`);
                 setSelectedChat(null);
               }}
-              className={`flex items-center gap-3 cursor-pointer py-[10px] px-10 mx-2 rounded-lg ${
+              className={`flex items-center gap-3 cursor-pointer py-[10px] justify-between px-[34px] mx-2 rounded-lg ${
                 selectedChat ? "" : selectedSpace ? "" : "bg-[#CBCCE1]"
               } 
                                 ${
@@ -372,29 +373,28 @@ const SideNavbar = () => {
                 </div>
               )}
               {fullSidebar && (
-                <p className="text-[14px] text-black">
+                <p className="text-[14px]  text-black">
                   {currentWorkspace?.name}
                 </p>
               )}
+              {fullSidebar && (
+                <div
+                  className="w-max  "
+                  onClick={() => setShowCreateSquadModal(true)}
+                >
+                  <img
+                    src={BorderedPlusIcon}
+                    alt=""
+                    className="cursor-pointer text-[#0D1282] "
+                  />
+                </div>
+              )}
             </div>
-            {
-              fullSidebar &&   <div
-              className="w-max mr-2"
-              onClick={() => setShowCreateSquadModal(true)}
-            >
-              <img
-                src={BorderedPlusIcon}
-                alt=""
-                className="cursor-pointer text-[#0D1282] "
-              />
-            </div>
-            }
-         
           </div>
         )}
         {/* Squad */}
         {defaultPage && (
-          <div className="mt-[16px]">
+          <div className="">
             {/* {fullSidebar && (
               <div
                 className={`flex items-center justify-between pl-[17px] pr-[10px]`}
@@ -529,12 +529,12 @@ const SideNavbar = () => {
                 {fullSidebar && (
                   <div className="flex items-center justify-between pl-[17px] pr-[10px]">
                     <div className="flex gap-2 pl-[13px]">
-                    <img
+                      <img
                         src={ChatIcon}
                         alt="search"
                         className="cursor-pointer"
                       />
-                    <h2 className="text-[#0D1282]">Chat</h2>
+                      <h2 className="text-[#0D1282]">Chat</h2>
                     </div>
                     <div
                       className="flex items-center gap-2"
@@ -543,10 +543,10 @@ const SideNavbar = () => {
                       }}
                     >
                       <img
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
+                        src={BorderedPlusIcon}
+                        alt=""
+                        className="cursor-pointer text-[#0D1282] "
+                      />
                     </div>
                   </div>
                 )}
@@ -598,7 +598,9 @@ const SideNavbar = () => {
           } mt-auto mb-[16px] align-middle`}
         >
           &copy;
-          {fullSidebar && <span className=" pl-2 text-center">makereal.io 2023</span>}
+          {fullSidebar && (
+            <span className=" pl-2 text-center">makereal.io 2023</span>
+          )}
         </p>
       </div>
 
@@ -619,9 +621,9 @@ const SideNavbar = () => {
       {showCreateSquadModal && (
         <CreateSquadModal setShowCreateSquadModal={setShowCreateSquadModal} />
       )}
-          {showAddMemberModal && (
-                <AddMemberModal setShowAddMemberModal={setShowAddMemberModal} />
-            )}
+      {showAddMemberModal && (
+        <AddMemberModal setShowAddMemberModal={setShowAddMemberModal} />
+      )}
     </>
   );
 };

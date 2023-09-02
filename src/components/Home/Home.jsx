@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import WorkspaceScreen from './WorkspaceScreen';
-import { useNavigate, useParams } from 'react-router-dom';
-import { get_workspace_data } from '../../api/workSpace';
-import LoadingScreen from '../Loading/LoadingScreen';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import WorkspaceScreen from "./WorkspaceScreen";
+import { useNavigate, useParams } from "react-router-dom";
+import { get_workspace_data } from "../../api/workSpace";
+import LoadingScreen from "../Loading/LoadingScreen";
+import { useMatchMedia } from "../../hooks/useMatchMedia";
 
 const Home = () => {
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
-
+  const isMobileDevice = useMatchMedia("( max-width: 480px)", true);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
 
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
@@ -46,15 +47,21 @@ const Home = () => {
   useEffect(() => {
     if (params.workspace_id) return;
     if (loading) return;
-    console.log('should', shouldChangeRoute);
+    console.log("should", shouldChangeRoute);
     if (shouldChangeRoute) {
-      navigate('/settings/manage-workspace');
+      navigate("/settings/manage-workspace");
     } else {
-      localStorage.setItem('hasWorkspace', 'yes');
-      localStorage.setItem('stepFinished', true);
+      localStorage.setItem("hasWorkspace", "yes");
+      localStorage.setItem("stepFinished", true);
       navigate(`/projects/${tmpData._id}`);
     }
-  }, [loading, navigate, params?.workspace_id, shouldChangeRoute, tmpData?._id]);
+  }, [
+    loading,
+    navigate,
+    params?.workspace_id,
+    shouldChangeRoute,
+    tmpData?._id,
+  ]);
 
   // return currentWorkspace && selectedSpaceId ? (
   //     <SquadScreen
@@ -67,7 +74,13 @@ const Home = () => {
   return loading ? (
     <LoadingScreen />
   ) : (
-    <WorkspaceScreen currentWorkspace={currentWorkspace} />
+    <div>
+      {isMobileDevice ? (
+        "sohel"
+      ) : (
+        <WorkspaceScreen currentWorkspace={currentWorkspace} />
+      )}
+    </div>
   );
 };
 
