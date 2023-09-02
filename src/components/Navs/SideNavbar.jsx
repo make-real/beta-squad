@@ -209,6 +209,7 @@ const SideNavbar = () => {
               </h1>
             </Link>
           )}
+
           <div
             className="w-max"
             onClick={() => {
@@ -341,30 +342,35 @@ const SideNavbar = () => {
 
         {/* Default Project Sidebar */}
         {/* Workspace */}
+
         {defaultPage && (
-          <div className="flex justify-between  items-center ">
-            <div
-              onClick={() => {
-                dispatch(setSelectedSpaceId(null));
-                dispatch(setSelectedSpaceObject(null));
-                navigate(`/projects/${selectedWorkspace}`);
-                setSelectedChat(null);
-              }}
-              className={`flex items-center gap-3 cursor-pointer py-[10px] justify-between px-[34px] mx-2 rounded-lg ${
-                selectedChat ? "" : selectedSpace ? "" : "bg-[#CBCCE1]"
-              } 
-                                ${
-                                  fullSidebar
-                                    ? "ml-[30px] pl-2"
-                                    : "pl-[25px] pr-[25px]"
-                                }`}
-            >
+          <div
+          onClick={() => {
+            dispatch(setSelectedSpaceId(null));
+            dispatch(setSelectedSpaceObject(null));
+            navigate(`/projects/${selectedWorkspace}`);
+            setSelectedChat(null);
+          }}
+            className={`  flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
+              selectedChat
+                ? ""
+                : selectedSpace
+                ? "justify-between"
+                : "bg-[#CBCCE1] "
+            } 
+                        ${
+                          fullSidebar
+                            ? "pl-[25px] pr-[25px]"
+                            : "pl-[25px] pr-[25px]"
+                        }`}
+          >
+            <div className="flex items-center gap-3">
               {currentWorkspace?.logo ? (
                 <div className="w-[28px] h-[28px] ">
                   <img
                     src={currentWorkspace?.logo}
                     alt=""
-                    className="w-full h-full bg-white  border border-[#5951F4] rounded-full"
+                    className="w-full h-full bg-white    rounded-full"
                   />
                 </div>
               ) : (
@@ -372,26 +378,81 @@ const SideNavbar = () => {
                   {currentWorkspace?.name.charAt(0)}
                 </div>
               )}
+
               {fullSidebar && (
                 <p className="text-[14px]  text-black">
                   {currentWorkspace?.name}
                 </p>
               )}
-              {fullSidebar && (
-                <div
-                  className="w-max  "
-                  onClick={() => setShowCreateSquadModal(true)}
-                >
-                  <img
-                    src={BorderedPlusIcon}
-                    alt=""
-                    className="cursor-pointer text-[#0D1282] "
-                  />
-                </div>
-              )}
             </div>
+            {fullSidebar && (
+              <img
+              onClick={() => setShowCreateSquadModal(true)}
+                src={BorderedPlusIcon}
+                alt=""
+              />
+            )}
           </div>
         )}
+        {/* {defaultPage && (
+          <div className="flex justify-between  items-center w-full ">
+            <div
+              onClick={() => {
+                dispatch(setSelectedSpaceId(null));
+                dispatch(setSelectedSpaceObject(null));
+                navigate(`/projects/${selectedWorkspace}`);
+                setSelectedChat(null);
+              }}
+              className={` bg-[#6576FF20] flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
+                selectedChat
+                  ? ""
+                  : selectedSpace
+                  ? "justify-between"
+                  : "bg-[#CBCCE1] "
+              } 
+                                ${
+                                  fullSidebar
+                                    ? "pl-[25px] pr-[25px]"
+                                    : "pl-[25px] pr-[25px]"
+                                }`}
+            >
+              <div className="flex gap-2 items-center">
+                {currentWorkspace?.logo ? (
+                  <div className="w-[28px] h-[28px] ">
+                    <img
+                      src={currentWorkspace?.logo}
+                      alt=""
+                      className="w-full h-full bg-white    rounded-full"
+                    />
+                  </div>
+                ) : (
+                  <div className=" w-[30px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
+                    {currentWorkspace?.name.charAt(0)}
+                  </div>
+                )}
+                {fullSidebar && (
+                  <p className="text-[14px]  text-black">
+                    {currentWorkspace?.name}
+                  </p>
+                )}
+              </div>
+              <div>
+                {fullSidebar && (
+                  <div
+                    className="w-max    text-end"
+                    onClick={() => setShowCreateSquadModal(true)}
+                  >
+                    <img
+                      src={BorderedPlusIcon}
+                      alt=""
+                      className="cursor-pointer text-[#0D1282] "
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )} */}
         {/* Squad */}
         {defaultPage && (
           <div className="">

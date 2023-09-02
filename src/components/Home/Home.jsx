@@ -5,11 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { get_workspace_data } from "../../api/workSpace";
 import LoadingScreen from "../Loading/LoadingScreen";
 import { useMatchMedia } from "../../hooks/useMatchMedia";
+import useWindowSize from "../../hooks/useWindowSize";
 
 const Home = () => {
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
+  const size = useWindowSize();
   const isMobileDevice = useMatchMedia("( max-width: 480px)", true);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
 
@@ -74,13 +76,7 @@ const Home = () => {
   return loading ? (
     <LoadingScreen />
   ) : (
-    <div>
-      {isMobileDevice ? (
-        "sohel"
-      ) : (
-        <WorkspaceScreen currentWorkspace={currentWorkspace} />
-      )}
-    </div>
+    <WorkspaceScreen currentWorkspace={currentWorkspace} />
   );
 };
 

@@ -98,6 +98,7 @@ const ManageWorkspace = () => {
               <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                 Workspace
               </h2>
+             
               <div className="flex items-center">
                 {/* <div className="flex items-center gap-[12px]">
                   <img src={SearchIcon} alt="search" className="" />

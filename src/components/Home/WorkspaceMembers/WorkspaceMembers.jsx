@@ -66,7 +66,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
 
 
 
- 
+ console.log(members)
     return (
         <>
             {showType === 'grid' ? (
