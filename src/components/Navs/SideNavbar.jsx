@@ -351,7 +351,7 @@ const SideNavbar = () => {
             navigate(`/projects/${selectedWorkspace}`);
             setSelectedChat(null);
           }}
-            className={`  flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
+            className={` mb-0 flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
               selectedChat
                 ? ""
                 : selectedSpace
@@ -588,7 +588,7 @@ const SideNavbar = () => {
           ? defaultPage && (
               <div className="mt-[44px]">
                 {fullSidebar && (
-                  <div className="flex items-center justify-between pl-[17px] pr-[10px]">
+                  <div className="flex items-center justify-between pl-[17px] pr-[24px]">
                     <div className="flex gap-2 pl-[13px]">
                       <img
                         src={ChatIcon}

@@ -430,7 +430,7 @@ const LoggedInTopNav = () => {
                         <img
                           src={workspace.logo}
                           alt=""
-                          className="border border-[#5951F4] w-[22px] h-[22px] bg-white rounded-full"
+                          className="  w-[24px] h-[24px] bg-white rounded-full"
                         />
                       ) : (
                         <div className="w-[22px] h-[22px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-white border font-medium text-[14px]">
