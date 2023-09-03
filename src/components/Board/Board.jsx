@@ -6,7 +6,7 @@ import {
   updateListOrder,
 } from "../../hooks/useFetch";
 import { AddBtn, BoardList } from ".";
-// import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import useAxios from "../../api/index";
@@ -58,24 +58,23 @@ const Board = ({ showType, addBoardRef }) => {
     try {
       const { data } = await addBoardListApiCall(squadId, listObject);
       setListLoading(false);
-      addBoardList(data.list);
+      window.location.reload();
+      //addBoardList(data.list);
 
       // toast.success(`${data?.list?.name} - list create successfully`, {
-      //     autoClose: 3000,
+      //   autoClose: 3000,
       // });
     } catch (error) {
       console.log(error.response.data);
-
       setListLoading(false);
       // toast.error(error?.response?.data?.issue?.message, {
-      //     autoClose: 3000,
+      //   autoClose: 3000,
       // });
     }
   };
 
   const dragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-   
 
     try {
       handleDragEnd(
