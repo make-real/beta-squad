@@ -41,10 +41,8 @@ export const BoardCardContext = ({ children }) => {
             cards.push(card);
           }
         });
-        if (cards.length) {
-          let new_board = { ...board, cards };
-          new_list.push(new_board);
-        }
+        let new_board = { ...board, cards };
+        new_list.push(new_board);
       });
       setFilteredLists(new_list);
       return;
@@ -71,8 +69,11 @@ export const BoardCardContext = ({ children }) => {
     setFilteredLists(new_list);
   };
 
-  const addBoardList = (newListObj) =>
+  const addBoardList = (newListObj) => {
+    console.log("PRE: ", boardLists);
+    console.log(newListObj);
     setBoardList((pre) => [...pre, newListObj]);
+  };
 
   const updateBoardList = (id, text) => {
     setBoardList((pre) =>

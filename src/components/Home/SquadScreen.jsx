@@ -265,15 +265,15 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               <div className="flex items-center">
                 <div className="flex items-center justify-start">
                   {singleMember ? (
-                  <div className="ml-[-10px]">
-                    <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
-                      <img
-                        src={singleMember}
-                        alt=""
-                        className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
-                      />
-                    </span>
-                  </div>
+                    <div className="ml-[-10px]">
+                      <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
+                        <img
+                          src={singleMember}
+                          alt=""
+                          className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                        />
+                      </span>
+                    </div>
                   ) : (
                     <>
                       {members.slice(0, 3).map((user, i) => (
