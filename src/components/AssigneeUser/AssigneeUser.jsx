@@ -143,7 +143,7 @@ const AssigneeUser = ({
                                     <img
                                         src={user.avatar}
                                         alt=""
-                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
+                                        className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
                             ) : (
@@ -182,7 +182,7 @@ const AssigneeUser = ({
                                     <img
                                         src={user.avatar}
                                         alt=""
-                                        className="h-5 w-5 text-[#14BCBE] flex justify-center items-center rounded-full"
+                                        className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
                             ) : (

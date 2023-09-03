@@ -18,6 +18,7 @@ import images from "../../assets";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { AddBtn } from "../Board";
 import { useCommingSoonContext } from "../../context/FeatureContext";
+import SquadScreen from "./SquadScreen";
 
 const SingleScreen = () => {
   const location = useLocation();
@@ -42,6 +43,8 @@ const SingleScreen = () => {
     }
   }, [workspaceMembers, participantID]);
 
+
+  const singleMember=selectedMember?.avatar
   useEffect(() => {
     getMessages();
   }, [participantID, workspace_id]);
@@ -83,7 +86,8 @@ const SingleScreen = () => {
 
   return (
     <div className="bg-[#FFF] w-full h-full">
-      <div className="relative h-full flex flex-col">
+
+      {/* <div className="relative h-full flex flex-col">
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[36px] flex flex-col">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[45px]">
@@ -104,7 +108,7 @@ const SingleScreen = () => {
                 );
               })}
             </div>
-            {/* <div className="flex items-center gap-[11px]">
+            <div className="flex items-center gap-[11px]">
               <div className="relative">
                 <img
                   src={selectedMember?.avatar}
@@ -116,7 +120,7 @@ const SingleScreen = () => {
               <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                 {selectedMember?.fullName}
               </h2>
-            </div> */}
+            </div>
 
             <div className="flex items-center">
               <div className="flex items-center gap-[12px]">
@@ -132,7 +136,7 @@ const SingleScreen = () => {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      //startCall("video")
+                      startCall("video")
                       setShowModal(!showModal);
                     }}
                   >
@@ -141,7 +145,7 @@ const SingleScreen = () => {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      //startCall("audio")
+                      startCall("audio")
                       setShowModal(!showModal);
                     }}
                   >
@@ -170,7 +174,9 @@ const SingleScreen = () => {
             {TabsScreen[selectedTab]}
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <SquadScreen singleMember={singleMember} />
     </div>
   );
 };
@@ -178,9 +184,9 @@ const SingleScreen = () => {
 // Single Chat work should done here.........
 const SingleChatScreen = () => {
   const { participantID, workspace_id } = useParams();
-
+      
   const [messageToRespond, setMessageToRespond] = useState();
-
+ 
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -36,7 +36,7 @@ import Add from "../../assets/icon_component/Add";
 import { RightArrow, RightOK } from "../../assets/icons";
 import Check from "../../assets/icons/svg/Check";
 
-const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
+const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
@@ -220,67 +220,84 @@ const SquadScreen = ({ currentWorkspace, selectedSpace }) => {
                   );
                 })}
               </div>
-             <div className="flex">
-             <div
-                onClick={() => setSelectedTab("Done")}
-                className={`${
-                  selectedTab === "Done"
-                    ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
-                    : "text-[#818892] "
-                } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
-                // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-              >
-                <Check size="18" />
-                <h3
+              <div className="flex">
+                <div
+                  onClick={() => setSelectedTab("Done")}
                   className={`${
-                    selectedTab === "Done" ? "text-[#6576FF]" : "text-gray-400"
-                  }  font-inter text-sm whitespace-nowrap`}
+                    selectedTab === "Done"
+                      ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
+                      : "text-[#818892] "
+                  } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
+                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
                 >
-                  Done
-                </h3>
+                  <Check size="18" />
+                  <h3
+                    className={`${
+                      selectedTab === "Done"
+                        ? "text-[#6576FF]"
+                        : "text-gray-400"
+                    }  font-inter text-sm whitespace-nowrap`}
+                  >
+                    Done
+                  </h3>
+                </div>
+                <div
+                  className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
+                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                  onClick={() => {
+                    setAddBoard(!addBoard);
+                    if (addBoard === false) {
+                      addBoardRef.current.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
+                  <Add />
+                  <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
+                    New board
+                  </h3>
+                </div>
               </div>
-              <div
-                className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
-                // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                onClick={() => {
-                  setAddBoard(!addBoard);
-                  if (addBoard === false) {
-                    addBoardRef.current.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-              >
-                <Add />
-                <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
-                  New board
-                </h3>
-              </div>
-             </div>
             </div>
 
             <div className="flex items-center justify-between w-1/2 ">
               <div className="flex items-center">
                 <div className="flex items-center justify-start">
-                  {members.slice(0, 3).map((user, i) => (
-                    <div className="ml-[-10px]">
-                      {user.avatar ? (
-                        <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
-                          <img
-                            src={user.avatar}
-                            alt=""
-                            className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
-                          />
-                        </span>
-                      ) : (
-                        <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
-                          <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
-                            {i || user?.fullName.charAt(0)}
-                          </p>
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                  {singleMember ? (
+                  <div className="ml-[-10px]">
+                    <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
+                      <img
+                        src={singleMember}
+                        alt=""
+                        className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                      />
+                    </span>
+                  </div>
+                  ) : (
+                    <>
+                      {members.slice(0, 3).map((user, i) => (
+                        <div className="ml-[-10px]">
+                          {user.avatar ? (
+                            <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
+                              <img
+                                src={user.avatar}
+                                alt=""
+                                className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                              />
+                            </span>
+                          ) : (
+                            <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                              <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
+                                {i || user?.fullName.charAt(0)}
+                              </p>
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  )}
+
                   <div
                     className="ml-[-10px]"
                     onClick={() => {

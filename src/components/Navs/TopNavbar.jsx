@@ -257,7 +257,7 @@ const LoggedInTopNav = () => {
               <img
                 src={selectedMember?.avatar}
                 alt=""
-                className="w-[27px] h-[27px] rounded-full border-[2px] border-[#6576FF] object-cover"
+                className="w-[29px] h-[29px] rounded-full  object-cover"
               />
               <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] bottom-0 right-[-4px]"></div>
             </div>
