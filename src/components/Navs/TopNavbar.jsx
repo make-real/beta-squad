@@ -26,6 +26,7 @@ import { useRef } from "react";
 import { getAvatarUrl } from "../../util/getAvatarUrl";
 import FolderIcon from "../../assets/icon_component/Folder";
 import TaskListIcon from "../../assets/icon_component/TaskListIcon";
+import PrivateFolder from "../../assets/icon_component/PrivateFolder";
 const userId = JSON.parse(localStorage.getItem("userId"));
 
 const TopNav = () => {
@@ -229,7 +230,7 @@ const LoggedInTopNav = () => {
                         <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
                             /
                         </p> */}
-            <FolderIcon
+            <PrivateFolder
               className="w-[20px] h-[20px]"
               style={{ fill: selectedSpace?.color }}
             />

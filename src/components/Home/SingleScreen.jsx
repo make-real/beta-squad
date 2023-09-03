@@ -44,7 +44,7 @@ const SingleScreen = () => {
   }, [workspaceMembers, participantID]);
 
 
-  const singleMember=selectedMember?.avatar
+  const singleMember=true
   useEffect(() => {
     getMessages();
   }, [participantID, workspace_id]);
