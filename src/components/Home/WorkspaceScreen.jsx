@@ -24,6 +24,7 @@ import { useLocation } from "react-router-dom";
 const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
   const [showType, setShowType] = useState("grid");
+  
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false)
   const members = useSelector((state) => state.workspace.workspaceMembers);
@@ -66,6 +67,9 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
+
+
+      const adminUser = members?.find((m) => m?._id === userInfo?._id);
 
   return (
     <>
@@ -136,12 +140,14 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 Projects
               </span>
             
-                <img
-                onClick={() => setShowCreateSquadModal(true)}
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
+                {
+                  adminUser.role==='owner' &&<img
+                  onClick={() => setShowCreateSquadModal(true)}
+                        src={BorderedPlusIcon}
+                        alt=""
+                        className="cursor-pointer text-[#0D1282] "
+                      />
+                }
              
             </div>
 
@@ -162,12 +168,15 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Team Members
               </span>
-              <img
+              {
+                adminUser.role==='owner' && <img
                 onClick={() => setShowAddMemberModal(true)}
                       src={BorderedPlusIcon}
                       alt=""
                       className="cursor-pointer text-[#0D1282] "
                     />
+              }
+             
              
             </div>
             <div className=" py-8 ">

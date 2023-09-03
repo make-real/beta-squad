@@ -11,11 +11,12 @@ import useAuth from "../../hooks/auth";
 import loginImg from "../../assets/images/OBJECTS.svg";
 import { RiErrorWarningLine } from "react-icons/ri";
 import CodeVerificationForm from "./CodeVerificationForm";
-import { useMatchMedia } from "../../hooks/useMatchMedia";
+
+import useWindowSize from "../../hooks/useWindowSize";
 
 const Login = () => {
   const navigate = useNavigate();
-  const isDesktopResolution = useMatchMedia("(max-width:600px)", true);
+  const size = useWindowSize();
   const { setLoginUserInfo } = useUserInfoContext();
   const [loader, setLoader] = useState(false);
   const [userInput, setUserInput] = useState({ email: "", password: "" });
@@ -50,8 +51,8 @@ const Login = () => {
 
         // navigate user into user profile page...
 
-        if (isDesktopResolution) {
-          navigate("/welcomeuser");
+        if (size.width < 600) {
+          navigate("/welcome");
         } else {
           navigate("/projects");
         }
@@ -107,7 +108,7 @@ const Login = () => {
   };
 
   const onSuccess = async (res) => {
-    console.log(res);
+  
 
     const result = res?.profileObj;
     const token = res?.tokenId;
@@ -118,7 +119,7 @@ const Login = () => {
       // dispatch({ type: AUTH, data: { result, token } });
 
       // after user login, redirect user at the index page...
-      navigate("/");
+      navigate("/welcome");
     } catch (error) {
       console.log(error);
     }

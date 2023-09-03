@@ -19,7 +19,7 @@ import { addOneWorkspace, addWorkSpace } from "../../store/slice/workspace";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import LoadingScreen from "../Loading/LoadingScreen";
-
+import BorderedPlusIcon from "../../assets/add.svg";
 const ManageWorkspace = () => {
   const [showType, setShowType] = useState("grid");
   const allWorkspaces = useSelector((state) => state.workspace.workspaces);
@@ -94,10 +94,16 @@ const ManageWorkspace = () => {
       ) : (
         <div className="relative bg-[#FFF] h-full flex flex-col">
           <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px]">
-            <div className="flex items-center justify-between">
+            <div className="flex gap-4  items-center">
               <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                 Workspace
               </h2>
+              <img
+              onClick={() => setShowCreateWorkspaceModal(true)}
+                      src={BorderedPlusIcon}
+                      alt=""
+                      className="cursor-pointer text-[#0D1282] "
+                    />
              
               <div className="flex items-center">
                 {/* <div className="flex items-center gap-[12px]">
@@ -176,14 +182,14 @@ const ManageWorkspace = () => {
                   </div>
                 );
               })}
-              <div
+              {/* <div
                 onClick={() => setShowCreateWorkspaceModal(true)}
                 className="relative w-[215px] h-[156px] bg-[#ECECEC40] rounded-[16px] flex items-center justify-center cursor-pointer"
               >
                 <div className="w-[60px] h-[60px] rounded-full flex items-center justify-center bg-white shadow-sm">
                   <img src={PlusIcon} alt="" />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
