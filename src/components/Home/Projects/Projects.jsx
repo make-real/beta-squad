@@ -76,7 +76,7 @@ const Projects = ({
 
   useEffect(() => {
     fetchWorkspaceMembers();
-  }, [workspaces]);
+  }, []);
 
 
   const adminUser = members?.find((m) => m?._id === userInfo?._id);
