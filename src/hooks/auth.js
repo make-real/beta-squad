@@ -4,7 +4,6 @@ import { auth } from "../firebase";
 import { o_auth_login } from "../api/auth";
 import { useUserInfoContext } from "../context/UserInfoContext";
 import { useNavigate } from "react-router-dom";
-import useWindowSize from "./useWindowSize";
 
 const provider = new GoogleAuthProvider();
 
@@ -13,9 +12,8 @@ function useAuth() {
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
     const [error, setError] = useState(null);
-const size = useWindowSize();
+
     const googleAuth = async () => {
-        
         setLoader(true);
         try {
             const result = await signInWithPopup(auth, provider);

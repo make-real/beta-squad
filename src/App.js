@@ -315,7 +315,7 @@ const App = () => {
           }
         />
         <Route
-          path="welcome"
+          path="welcomeuser"
           element={
             <AuthRoute>
               <Welcome />
