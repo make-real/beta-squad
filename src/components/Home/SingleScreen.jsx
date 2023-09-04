@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import PrivateMessageBox from "../Chat/PrivateMessageBox";
 import SearchIcon from "../../assets/search.svg";
 import VideoCallIcon from "../../assets/video_call.svg";
 import AudioCallIcon from "../../assets/audio_call.svg";
+import GoogleMeet from "../../assets/images/meet.png";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import Development from "../../assets/images/development.avif";
@@ -19,11 +20,31 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { AddBtn } from "../Board";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import SquadScreen from "./SquadScreen";
+import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
+import Add from "../../assets/icon_component/Add";
+import Check from "../../assets/icons/svg/Check";
+import { useBoardCardContext } from "../../context/BoardCardContext";
+import { get_tags } from "../../api/tags";
+import FileIcon from "../../assets/icons/svg/FileIcon";
+import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+import ShowFile from "./ShowFile/ShowFile";
 
 const SingleScreen = () => {
   const location = useLocation();
+  const {
+    addBoardList,
+    addBoard,
+    setAddBoard,
+    filterBoardList,
+    filteredList,
+    setFilteredLists,
+    boardLists,
+  } = useBoardCardContext();
   const { showModal, setShowModal } = useCommingSoonContext();
-
+  const [tabsName,setTabsName]=useState(["All"])
+  const [tags, setTags] = useState();
+  const [showFile,setShowFile]=useState(false)
+  const [showChat,setShowChat]=useState(false)
   const { participantID, workspace_id } = useParams();
   const [selectedTab, setSelectedTab] = useState("messages");
   const [selectedMember, setSelectedMember] = useState({});
@@ -67,6 +88,7 @@ const SingleScreen = () => {
   };
   const TabsScreen = {
     messages: <SingleChatScreen participantID={participantID} />,
+    file: <ShowFile />,
     board: (
       <SingleBoardScreen participantID={participantID} showType={showType} />
     ),
@@ -77,12 +99,32 @@ const SingleScreen = () => {
     board: "Board",
   };
 
+
+  const addBoardRef = React.useRef();
   useEffect(() => {
     let tab = location.hash.slice(1);
     if (tab) {
       setSelectedTab(tab);
     }
   }, [location]);
+  const getTags = async () => {
+    try {
+      // GET Method || For fetching all tag's under specific workShop
+      const { data } = await get_tags({
+        workSpaceId: workspace_id,
+      });
+
+      setTags(data);
+      const remainTag = data?.tags.map((item) => item?.name);
+      setTabsName(["All", ...remainTag]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTags();
+  }, []);
 
   return (
     <div className="bg-[#FFF] w-full h-full">
@@ -175,8 +217,168 @@ const SingleScreen = () => {
           </div>
         </div>
       </div> */}
+      {/* test*/}
+      <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
+      <div className={`relative bg-[#FFF] h-full flex flex-col`}>
+        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
+          <div className="flex flex-row items-center gap-4  py-[10px]">
+            <div className="flex items-center w-full gap-8">
+              <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">
+                {tabsName.map((value, idx) => {
+                  return (
+                    <a
+                      //href={`#${value.toLowerCase()}`}
+                      key={idx}
+                      onClick={() => setSelectedTab(value)}
+                      className={`${
+                        selectedTab === value
+                          ? " text-[#6576FF] font-inter py-1 bg-slate-200 px-2  rounded-lg"
+                          : "text-[#818892] "
+                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap px-2  py-1 `}
+                    >
+                      {value}
+                    </a>
+                  );
+                })}
+              </div>
+              <div className="flex">
+                <div
+                  onClick={() => setSelectedTab("Done")}
+                  className={`${
+                    selectedTab === "Done"
+                      ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
+                      : "text-[#818892] "
+                  } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
+                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                >
+                  <Check size="18" />
+                  <h3
+                    className={`${
+                      selectedTab === "Done"
+                        ? "text-[#6576FF]"
+                        : "text-gray-400"
+                    }  font-inter text-sm whitespace-nowrap`}
+                  >
+                    Done
+                  </h3>
+                </div>
+                <div
+                  className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
+                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
+                  onClick={() => {
+                    setAddBoard(!addBoard);
+                    if (addBoard === false) {
+                      addBoardRef.current.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
+                  <Add />
+                  <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
+                    New board
+                  </h3>
+                </div>
+              </div>
+            </div>
 
-      <SquadScreen singleMember={singleMember} />
+            <div className="flex items-center justify-between w-1/2 ">
+             
+              <div className="flex items-center gap-[22px] relative">
+                <div
+                  className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
+                >
+                  <span
+                    className={`rounded-full ring-[1px] p-1 ${
+                      showChat
+                        ? "bg-[#54CC7C] ring-[#ECECEC]"
+                        : "ring-[#54CC7C]"
+                    } text-black font-bold grid place-items-center`}
+                    onClick={() => {
+                      setShowChat((showChat) => !showChat);
+                     
+                    }}
+                  >
+                    <ChatBubbleBottomCenterTextIcon
+                      className={`w-5 h-5 ${
+                        showChat ? "text-white" : "text-[#54CC7C]"
+                      } `}
+                    />
+                  </span>
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                   
+
+                
+
+                    setShowChat(false);
+
+                    setShowFile(!showFile);
+                  }}
+                >
+                  <FileIcon
+                    className={`w-5 h-5 ${
+                      showFile ? "text-white" : "text-[#54CC7C]"
+                    } `}
+                  />
+                 
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //startCall("audio");
+                    setShowModal(!showModal);
+                  }}
+                >
+                  <CalendarIcon />
+                  {/* <img src={AudioCallIcon} alt="audio_call" /> */}
+                </div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //startCall("audio");
+                    // setShowModal(!showModal);
+                  }}
+                >
+                  <a
+                    className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
+                    href="https://meet.google.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={GoogleMeet}
+                      alt="google_mmet"
+                      className="h-5 w-5"
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className=" flex flex-row h-full">
+            <div className={`h-full w-full pb-5 mx-auto  overflow-hidden`}>
+              {TabsScreen["board"]}
+            </div>
+        
+            {!showChat && showFile && (
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                {TabsScreen["file"]}
+              </div>
+            )}
+            { showChat && (
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                {TabsScreen["messages"]}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+      {/* <SquadScreen singleMember={singleMember} /> */}
     </div>
   );
 };

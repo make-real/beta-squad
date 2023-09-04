@@ -375,7 +375,9 @@ const LoggedInTopNav = () => {
           </div>
 
           <div className="mx-[35px] h-full w-[2px] bg-[#031124] opacity-10"></div>
-          <div className="flex gap-4">
+          <div
+          onClick={() => setShowDropDownMenu(!showDropDownMenu)}
+          className="flex gap-4 cursor-pointer">
             <div className="">
               <h1 className="text-[14px] font-semibold">
                 {userInfo?.fullName}
@@ -393,7 +395,7 @@ const LoggedInTopNav = () => {
               className="w-[15px] cursor-pointer"
               src={ArrowDown}
               alt="dropdown menu"
-              onClick={() => setShowDropDownMenu(!showDropDownMenu)}
+              
             />
           </div>
           {/* User Dropdown Menu */}
@@ -401,7 +403,7 @@ const LoggedInTopNav = () => {
             ref={userMenuDropDownRef}
             className={`z-[999] origin-top-right scale-0 pointer-events-none ${
               showDropDownMenu ? "scale-100 pointer-events-auto" : ""
-            } transition-transform absolute top-[50px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
+            }  absolute top-[55px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
           >
             <h2 className="px-[20px] text-[#818892] text-[16px]">Workspaces</h2>
             <div className="mt-[15px] flex flex-col">
