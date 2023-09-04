@@ -1,5 +1,5 @@
 import React from "react";
-import PlusIcon from "../../../assets/plus.svg";
+import BorderedPlusIcon from "../../../assets/add.svg";
 import ArrowDown from "../../../assets/arrowdown.svg";
 import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
 import { useState } from "react";
@@ -158,8 +158,8 @@ const SquadMembers = ({ showType, selectedSpace }) => {
             onClick={() => setShowAddMemberModal(true)}
             className="w-full h-[75px]  rounded-[16px] flex items-center justify-center gap-[16px] cursor-pointer"
           >
-            <div className="w-[36px]  h-[36px] rounded-full bg-white flex items-center justify-center">
-              <img src={PlusIcon} alt="" />
+            <div className="w-[36px]  h-[36px] rounded-full  flex items-center justify-center">
+              <img src={BorderedPlusIcon} alt="" />
             </div>
             <h1 className="text-[#818892] ">Add Teams</h1>
           </div>
