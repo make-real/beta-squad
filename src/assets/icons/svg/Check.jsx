@@ -9,15 +9,15 @@ const Check = ({size}) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       stroke="#ff0000"
-      stroke-width="0.00024000000000000003"
+      strokeWidth="0.00024000000000000003"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
         id="SVGRepo_tracerCarrier"
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke="#CCCCCC"
-        stroke-width="0.048"
+        strokeWidth="0.048"
       ></g>
       <g id="SVGRepo_iconCarrier">
         {" "}

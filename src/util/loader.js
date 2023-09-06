@@ -15,7 +15,7 @@ export const loader = () => {
                         y2="64"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="195.9"
@@ -24,7 +24,7 @@ export const loader = () => {
                         y2="82.7"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="224"
@@ -33,7 +33,7 @@ export const loader = () => {
                         y2="128"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="195.9"
@@ -42,7 +42,7 @@ export const loader = () => {
                         y2="173.3"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="128"
@@ -51,7 +51,7 @@ export const loader = () => {
                         y2="192"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="60.1"
@@ -60,7 +60,7 @@ export const loader = () => {
                         y2="173.3"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="32"
@@ -69,7 +69,7 @@ export const loader = () => {
                         y2="128"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                     <line
                         x1="60.1"
@@ -78,7 +78,7 @@ export const loader = () => {
                         y2="82.7"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="24"
+                        strokeWidth="24"
                     ></line>
                 </svg>
             </div>
