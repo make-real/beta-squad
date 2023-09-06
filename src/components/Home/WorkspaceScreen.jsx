@@ -23,9 +23,10 @@ import { useLocation } from "react-router-dom";
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
+  const [role, setRole] = useState("");
   const [showType, setShowType] = useState("grid");
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
-  const [showAddMemberModal, setShowAddMemberModal] = useState(false)
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const { selectedSpace, allSpaces } = useSelector((state) => state.space);
   const { workspaces, selectedWorkspace } = useSelector(
@@ -135,20 +136,22 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Projects
               </span>
-            
+
+              {role?.role === "owner" && (
                 <img
-                onClick={() => setShowCreateSquadModal(true)}
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
-             
+                  onClick={() => setShowCreateSquadModal(true)}
+                  src={BorderedPlusIcon}
+                  alt=""
+                  className="cursor-pointer text-[#0D1282] "
+                />
+              )}
             </div>
 
             <div className=" py-8  ">
               <Projects
                 showCreateSquadModal={showCreateSquadModal}
                 showType={showType}
+                setRole={setRole}
                 setShowCreateSquadModal={setShowCreateSquadModal}
               />
             </div>
@@ -162,16 +165,21 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Team Members
               </span>
-              <img
-                onClick={() => setShowAddMemberModal(true)}
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
-             
+              {role?.role === "owner" && (
+                <img
+                  onClick={() => setShowAddMemberModal(true)}
+                  src={BorderedPlusIcon}
+                  alt=""
+                  className="cursor-pointer text-[#0D1282] "
+                />
+              )}
             </div>
             <div className=" py-8 ">
-              <WorkspaceMembers showAddMemberModal={showAddMemberModal} setShowAddMemberModal={setShowAddMemberModal}   showType={showType} />
+              <WorkspaceMembers
+                showAddMemberModal={showAddMemberModal}
+                setShowAddMemberModal={setShowAddMemberModal}
+                showType={showType}
+              />
             </div>
           </div>
         </div>

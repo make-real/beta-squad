@@ -21,9 +21,11 @@ const Projects = ({
   showType,
   showCreateSquadModal,
   setShowCreateSquadModal,
+  setRole
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
   const [members, setMembers] = useState([]);
+  const [isAdmin,setIsAdmin]=useState("")
   const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
   const [deletingProject, setDeletingProject] = useState({
     done: false,
@@ -78,8 +80,14 @@ const Projects = ({
     fetchWorkspaceMembers();
   }, []);
 
+ useEffect(()=>{
+ const admin= members?.find((m) => m?._id === userInfo?._id);
+ setIsAdmin(admin)
+ setRole(admin)
+ },[members])
 
-  const adminUser = members?.find((m) => m?._id === userInfo?._id);
+
+
 
   const { id } = useParams();
 
@@ -124,7 +132,7 @@ const Projects = ({
                 ></div>
 
                 {
-                 adminUser?.role==='owner'&& <EditDeleteMenu
+                 isAdmin?.role==='owner'&& <EditDeleteMenu
                     deleteFunc={prepareDeleteProject}
                     editFunc={prepareEditProject}
                     data={space}
