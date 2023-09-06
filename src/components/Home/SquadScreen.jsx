@@ -197,9 +197,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   //   //importtant: "Important",
   // };
   return (
-    <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
+    <div className="bg-[#FFF] w-full h-full mb-0 pb-0 mt-[80px]">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
-        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[70px] flex flex-col">
+        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[80px] flex flex-col">
           <div className="flex flex-row items-center gap-4  py-[10px]">
             <div className="flex items-center w-full gap-8">
               <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">

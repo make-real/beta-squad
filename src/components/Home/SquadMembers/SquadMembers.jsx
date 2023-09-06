@@ -47,7 +47,9 @@ const SquadMembers = ({ showType, selectedSpace }) => {
       fetchSquadMembers();
     }
   }, [selectedSpace]);
-
+ 
+  const userRole = members?.find((m) => m._id === userInfo._id);
+ 
   return (
     <>
       {/* {showType === 'grid' ? (
@@ -112,19 +114,17 @@ const SquadMembers = ({ showType, selectedSpace }) => {
       <div className="overflow-y-scroll  h-[90%] no-scrollbar custom-shadow bg-[#ECECEC80] py-10 px-2 rounded-2xl">
         <div className="flex  flex-col items-center gap-[10px]">
           {members.map((member) => {
-            const user = members.find((m) => m?._id === userInfo?._id);
+            
             return (
-              <div className="relative w-full h-[75px] rounded-[16px]  bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
-                {user?.role === "owner" ||
-                user?.role === "manager" ||
-                user?.role === "admin"
-                  ? userInfo?._id !== member?._id && (
-                      //   <div
-                      //     onClick={() => removeMember(member)}
-                      //     className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                      //   >
-                      //     <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                      //   </div>
+              <div key={member._id} className="relative w-full h-[75px] rounded-[16px]  bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
+                {userRole?.role ==='manager' && (
+                      <>
+                        {/* <div
+                         onClick={() => removeMember(member)}
+                         className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
+                        >
+                        <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                      </div> */}
                       <div className="absolute right-[10px] w-[16px] h-[16px] rounded-full flex items-center justify-center cursor-pointer">
                         <EditDeleteMenu
                           deleteFunc={() => removeMember(member)}
@@ -132,8 +132,9 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                           data={selectedSpace}
                         />
                       </div>
+                      </>
                     )
-                  : null}
+                 }
                 <div className="flex items-center gap-[10px]">
                   <img
                     src={member?.avatar}

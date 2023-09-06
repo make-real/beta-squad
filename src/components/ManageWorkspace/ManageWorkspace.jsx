@@ -85,6 +85,7 @@ const ManageWorkspace = () => {
       ? false
       : workspaces?.length > 0;
 
+     
   return (
     <>
       {loading ? (
@@ -93,7 +94,7 @@ const ManageWorkspace = () => {
         <CreateWorkspace />
       ) : (
         <div className="relative bg-[#FFF] h-full flex flex-col">
-          <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[20px]">
+          <div className="w-full h-full bg-white rounded-[16px] px-[40px] mb-4 pb-[20px]">
             <div className="flex gap-4  items-center">
               <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
                 Workspace

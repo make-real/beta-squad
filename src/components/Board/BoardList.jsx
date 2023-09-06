@@ -103,7 +103,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                 >
                     <div
                         {...provided.dragHandleProps}
-                        className="overflow-hidden flex justify-between items-center my-3"
+                        className="overflow-hidden  flex justify-between items-center my-3"
                         ref={dropDownRef}
                     >
                         {toggleEdit ? (

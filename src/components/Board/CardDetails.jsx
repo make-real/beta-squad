@@ -346,10 +346,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
+
+
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-5 bg-[#031124]/[0.4] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
+        className={`duration-200 p-5  bg-[#031124]/[0.4] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}

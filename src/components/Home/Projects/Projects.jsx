@@ -102,6 +102,7 @@ const Projects = ({
             return (
               <>
                 <div
+                key={space._id}
                   style={{
                     backgroundColor: space.color + "10",
                   }}

@@ -165,9 +165,16 @@ const LoggedInTopNav = () => {
   };
 
   // Auto close user drop down menu
+
+
   useEffect(() => {
     document.addEventListener(
       "click",
+      (e) => handleClickOutside(userMenuDropDownRef, e, setShowDropDownMenu),
+      true
+    );
+    document.addEventListener(
+      "keydown",
       (e) => handleClickOutside(userMenuDropDownRef, e, setShowDropDownMenu),
       true
     );
@@ -180,6 +187,7 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
+ 
   // Auto close notification drop down menu
   useEffect(() => {
     document.addEventListener(
@@ -192,6 +200,7 @@ const LoggedInTopNav = () => {
         ),
       true
     );
+   
     return () => {
       document.removeEventListener(
         "click",
@@ -199,6 +208,14 @@ const LoggedInTopNav = () => {
           handleClickOutside(userMenuDropDownRef, e, setShowNotificationModal),
         true
       );
+      document.removeEventListener(
+        "keydown",
+        (e) =>
+          handleClickOutside(userMenuDropDownRef, e, setShowNotificationModal),
+        true
+      );
+    
+
     };
   }, []);
 
