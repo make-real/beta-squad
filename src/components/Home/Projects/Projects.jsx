@@ -21,7 +21,8 @@ const Projects = ({
   showType,
   showCreateSquadModal,
   setShowCreateSquadModal,
-  setRole
+  setRole,
+  setLoading
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
   const [members, setMembers] = useState([]);
@@ -81,12 +82,14 @@ const Projects = ({
   }, []);
 
  useEffect(()=>{
- const admin= members?.find((m) => m?._id === userInfo?._id);
+  setLoading(true)
+ const admin= members?.filter((m) => m?._id === userInfo?._id);
+ setLoading(false)
  setIsAdmin(admin)
  setRole(admin)
  },[members])
 
-
+console.log(isAdmin[0]?.role)
 
 
   const { id } = useParams();

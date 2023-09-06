@@ -5,6 +5,8 @@ import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
 import Squad from "../../assets/Squad.svg";
 import ChatIcon from "../../assets/ChatIcon.svg";
+import SmsIcon from '../../assets/sms.svg'
+import ClockIcon from '../../assets/clock.svg'
 import SearchIcon from "../../assets/search.svg";
 import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
@@ -51,6 +53,8 @@ const SideNavbar = () => {
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [newWorkSpace, setNewWorkSpace] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
@@ -184,6 +188,30 @@ const SideNavbar = () => {
     );
     dispatch(addSpace(newOrder));
   };
+
+//  active status
+
+useEffect(() => {
+  function onlineHandler() {
+      setIsOnline(true);
+  }
+
+  function offlineHandler() {
+      setIsOnline(false);
+  }
+
+  window.addEventListener("online", onlineHandler);
+  window.addEventListener("offline", offlineHandler);
+
+
+  return () => {
+      window.removeEventListener("online", onlineHandler);
+      window.removeEventListener("offline", offlineHandler);
+  };
+}, []);
+const isActive=false
+
+
 
   // #2C3782
   return (
@@ -635,16 +663,34 @@ const SideNavbar = () => {
                           );
                         }}
                       >
-                        <img
+                        {
+                          isOnline ? <>
+                          <div className="relative">
+                          {/* <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] top-0 left-[-4px]"></div> */}
+                           <img
+                          src={member?.avatar ?? getAvatarUrl(member?.fullName)}
+                          className="w-[28px] h-[28px] rounded-full border object-cover"
+                          alt=""
+                        />
+                          </div>
+                          {/* <img src={SmsIcon} alt="" className="w-[16px] h-[16px]" /> */}
+                        {fullSidebar && (
+                          <p className="text-[#000] flex items-center gap-1 text-[14px]">
+                            {member.fullName} 
+                          </p>
+                        )}</>:<>
+                           <img
                           src={member?.avatar ?? getAvatarUrl(member?.fullName)}
                           className="w-[28px] h-[28px] rounded-full border object-cover"
                           alt=""
                         />
                         {fullSidebar && (
-                          <p className="text-[#000] text-[14px]">
-                            {member.fullName}
+                          <p className="text-[#000] flex items-center gap-[4px] text-[14px]">
+                            {member.fullName} <img src={ClockIcon} alt="" className="w-[16px] h-[16px]" /> <span className="text-[8px]">10min</span>
                           </p>
-                        )}
+                        )}</>
+                        }
+                       
                       </div>
                     ) : null
                   )}

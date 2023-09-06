@@ -20,11 +20,13 @@ import CrossIcon from "../../assets/cross.svg";
 import InboxIcon from "../../assets/inbox.svg";
 import { validateEmail } from "../../util/helpers";
 import { useLocation } from "react-router-dom";
+import LoadingScreen from "../Loading/LoadingScreen";
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
   const [role, setRole] = useState("");
   const [showType, setShowType] = useState("grid");
+  const [loading, setLoading] = useState(true);
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const members = useSelector((state) => state.workspace.workspaceMembers);
@@ -137,18 +139,24 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 Projects
               </span>
 
-              {role?.role === "owner" && (
-                <img
-                  onClick={() => setShowCreateSquadModal(true)}
-                  src={BorderedPlusIcon}
-                  alt=""
-                  className="cursor-pointer text-[#0D1282] "
-                />
-              )}
+              {
+                loading ? <LoadingScreen/>:  <>
+                {role === "owner" && (
+                  <img
+                    onClick={() => setShowCreateSquadModal(true)}
+                    src={BorderedPlusIcon}
+                    alt=""
+                    className="cursor-pointer text-[#0D1282] "
+                  />
+                )}</>
+              }
+
+            
             </div>
 
             <div className=" py-8  ">
               <Projects
+              setLoading={setLoading}
                 showCreateSquadModal={showCreateSquadModal}
                 showType={showType}
                 setRole={setRole}
