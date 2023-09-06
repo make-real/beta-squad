@@ -21,12 +21,12 @@ const Projects = ({
   showType,
   showCreateSquadModal,
   setShowCreateSquadModal,
-  setRole,
-  setLoading
+
+  userRole,
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
   const [members, setMembers] = useState([]);
-  const [isAdmin,setIsAdmin]=useState("")
+
   const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
   const [deletingProject, setDeletingProject] = useState({
     done: false,
@@ -81,17 +81,6 @@ const Projects = ({
     fetchWorkspaceMembers();
   }, []);
 
- useEffect(()=>{
-  setLoading(true)
- const admin= members?.filter((m) => m?._id === userInfo?._id);
- setLoading(false)
- setIsAdmin(admin)
- setRole(admin)
- },[members])
-
-console.log(isAdmin[0]?.role)
-
-
   const { id } = useParams();
 
   // useEffect(() => {
@@ -111,44 +100,41 @@ console.log(isAdmin[0]?.role)
           {allSpaces.map((space) => {
             if (space.name === "Onboarding") return;
             return (
-            
-
-                <>
-               
-                 <div
-                style={{
-                  backgroundColor: space.color + "10",
-                }}
-                className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
-                  squadBorderClassName[space.color]
-                }`}
-              >
+              <>
                 <div
-                  onClick={() => {
-                    dispatch(setSelectedSpaceId(space._id));
-                    dispatch(setSelectedSpaceObject(space));
-                    navigate(
-                      `/projects/${selectedWorkspace}/squad/${space._id}`
-                    );
+                  style={{
+                    backgroundColor: space.color + "10",
                   }}
-                  className="absolute inset-0 w-full h-full cursor-pointer"
-                ></div>
+                  className={`relative w-[214px] h-[110px] rounded-[16px] border border-transparent flex items-center px-[17px] gap-[16px] ${
+                    squadBorderClassName[space.color]
+                  }`}
+                >
+                  <div
+                    onClick={() => {
+                      dispatch(setSelectedSpaceId(space._id));
+                      dispatch(setSelectedSpaceObject(space));
+                      navigate(
+                        `/projects/${selectedWorkspace}/squad/${space._id}`
+                      );
+                    }}
+                    className="absolute inset-0 w-full h-full cursor-pointer"
+                  ></div>
 
-                {
-                 isAdmin?.role==='owner'&& <EditDeleteMenu
-                    deleteFunc={prepareDeleteProject}
-                    editFunc={prepareEditProject}
-                    data={space}
-                    className="absolute top-[10px] right-[10px]"
-                  />
-                }
-               
-                <FolderIcon style={{ fill: space.color }} />
-                <p className="text-[#424D5B] font-semibold cursor-pointer">
-                  {space.name}
-                </p>
-              </div></>
-               
+                  {userRole?.role === "owner" && (
+                    <EditDeleteMenu
+                      deleteFunc={prepareDeleteProject}
+                      editFunc={prepareEditProject}
+                      data={space}
+                      className="absolute top-[10px] right-[10px]"
+                    />
+                  )}
+
+                  <FolderIcon style={{ fill: space.color }} />
+                  <p className="text-[#424D5B] font-semibold cursor-pointer">
+                    {space.name}
+                  </p>
+                </div>
+              </>
             );
           })}
 

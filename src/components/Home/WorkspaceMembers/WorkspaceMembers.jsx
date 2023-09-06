@@ -13,7 +13,7 @@ import { get_space_members } from '../../../api/space'
 import { get_workspace_member } from '../../../api/workSpace'
 import { getAvatarUrl } from '../../../util/getAvatarUrl'
 
-const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => {
+const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRole }) => {
     const selectedSpace = useSelector((state) => state.space.selectedSpace)
     const selectedWorkspace = useSelector(
         (state) => state.workspace.selectedWorkspace
@@ -66,7 +66,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
 
 
 
- console.log(members)
+
     return (
         <>
             {showType === 'grid' ? (
@@ -80,15 +80,12 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
                         </div>
                     </div> */}
                     {members.map((member) => {
-                        const user = members.find(
-                            (m) => m?._id === userInfo?._id
-                        )
+                      
                         return (
-                            <div className="relative w-[297px] h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                {user?.role === 'owner' ||
-                                user?.role === 'manager' ||
-                                user?.role === 'admin'
-                                    ? userInfo?._id !== member?._id && (
+                            <div key={member._id} className="relative w-[297px] h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
+                                {userRole?.role === 'owner' 
+                                
+                                     && (
                                           <EditDeleteMenu
                                               deleteFunc={prepareDeleteMember}
                                               data={member}
@@ -96,7 +93,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal }) => 
                                               className="absolute top-[10px] right-[10px]"
                                           />
                                       )
-                                    : null}
+                                   }
                                 <div className="flex gap-[10px]">
                                     <img
                                         src={

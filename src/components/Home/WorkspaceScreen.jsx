@@ -26,7 +26,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
   const [role, setRole] = useState("");
   const [showType, setShowType] = useState("grid");
-  const [loading, setLoading] = useState(true);
+
+
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const members = useSelector((state) => state.workspace.workspaceMembers);
@@ -69,6 +70,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
+
+  const userRole = members?.find((m) => m._id === userInfo._id);
 
   return (
     <>
@@ -139,27 +142,23 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
                 Projects
               </span>
 
-              {
-                loading ? <LoadingScreen/>:  <>
-                {role === "owner" && (
+              <>
+                {userRole?.role === "owner" && (
                   <img
                     onClick={() => setShowCreateSquadModal(true)}
                     src={BorderedPlusIcon}
                     alt=""
                     className="cursor-pointer text-[#0D1282] "
                   />
-                )}</>
-              }
-
-            
+                )}
+              </>
             </div>
 
             <div className=" py-8  ">
               <Projects
-              setLoading={setLoading}
+                userRole={userRole}
                 showCreateSquadModal={showCreateSquadModal}
                 showType={showType}
-                setRole={setRole}
                 setShowCreateSquadModal={setShowCreateSquadModal}
               />
             </div>
@@ -173,7 +172,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Team Members
               </span>
-              {role?.role === "owner" && (
+              {userRole?.role === "owner" && (
                 <img
                   onClick={() => setShowAddMemberModal(true)}
                   src={BorderedPlusIcon}
@@ -184,6 +183,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
             </div>
             <div className=" py-8 ">
               <WorkspaceMembers
+                userRole={userRole}
                 showAddMemberModal={showAddMemberModal}
                 setShowAddMemberModal={setShowAddMemberModal}
                 showType={showType}
