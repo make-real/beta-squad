@@ -722,14 +722,14 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             />
                           </label>
 
-                          <input
+                          <textarea
                             type="text"
                             id="large-input"
                             defaultValue={item.content}
                             onBlur={(e) =>
                               handle_check_list_update_on_change(e, item._id)
                             }
-                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-auto text-centerd"
+                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-auto text-centerd mt-6"
                           />
                           <div
                             onClick={() =>
