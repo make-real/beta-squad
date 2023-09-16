@@ -7,6 +7,7 @@ import {
   EyeIcon,
   CheckCircleIcon,
   CheckIcon,
+  CommandLineIcon,
 } from "@heroicons/react/24/outline";
 import ConfirmDialog from "./ConfirmDialog";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
@@ -15,6 +16,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import Flag from "../../assets/icons/svg/Flag";
 import Check from "../../assets/card-check.svg";
+import { GoCommentDiscussion } from "react-icons/go";
+import { GrAttachment } from "react-icons/gr";
+
+//
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
@@ -245,6 +250,7 @@ const Card = ({ card, listID }) => {
           </div>
         )}
         {!!card.assignee?.length && (
+          <>
           <div className="mb-3 flex pt-2">
             {card.assignee?.map((user, i) => (
               <div style={{ marginLeft: i ? "-5px" : 0 }}>
@@ -262,6 +268,17 @@ const Card = ({ card, listID }) => {
               </div>
             ))}
           </div>
+            <div className="flex justify-end">
+            <><div className="flex ">
+              <GoCommentDiscussion className="mt-1"/>
+            <p className="mx-1">{card.commentsCount}</p></div>
+            </>
+            <><div className="flex ">
+              <GrAttachment className="mt-1"/>
+            <p className="mx-1">{card.attachmentsCount}</p></div>
+            </>
+            </div>
+          </>
         )}
 
         {/* hover element */}

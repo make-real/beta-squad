@@ -328,7 +328,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   </span>
                 </div>
                 <div
-                  className="cursor-pointer   hover:bg-gray-200"
+                  className="cursor-pointer rounded-md  hover:bg-gray-200"
                   onClick={() => {
                     //startCall("video")
 
