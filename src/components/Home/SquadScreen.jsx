@@ -35,6 +35,8 @@ import ShowFile from "./ShowFile/ShowFile";
 import Add from "../../assets/icon_component/Add";
 import { RightArrow, RightOK } from "../../assets/icons";
 import Check from "../../assets/icons/svg/Check";
+import { PiFolderOpenBold } from "react-icons/pi";
+
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const { showModal, setShowModal } = useCommingSoonContext();
@@ -197,7 +199,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   //   //importtant: "Important",
   // };
   return (
-    <div className="bg-[#FFF] w-full h-full mb-0 pb-0 mt-[80px]">
+    <div className="bg-[#FFF] w-full h-full mb-0 pb-0 -mt-[80px]">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[80px] flex flex-col">
           <div className="flex flex-row items-center gap-4  py-[10px]">
@@ -289,6 +291,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                     onClick={() => {
                       setShowSquadMembers(!showSquadMembers);
                       setShowFile(false);
+                      setShowChat(false);
                     }}
                   >
                     {showSquadMembers ? <AddMember /> : <AddMemberBefore />}
@@ -325,7 +328,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   </span>
                 </div>
                 <div
-                  className="cursor-pointer"
+                  className="cursor-pointer   hover:bg-gray-200"
                   onClick={() => {
                     //startCall("video")
 
@@ -336,11 +339,20 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                     setShowFile(!showFile);
                   }}
                 >
-                  <FileIcon
+                  <span
+                    className={`rounded-full ring-[1px] p-1 ${
+                      showFile
+                        ? "bg-[#54CC7C] "
+                        : "ring-[#54CC7C] "
+                    }  font-bold grid place-items-center`}
+                    
+                  >
+                  <PiFolderOpenBold
                     className={`w-5 h-5 ${
                       showFile ? "text-white" : "text-[#54CC7C]"
                     } `}
                   />
+                  </span>
                   {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
                 <div
@@ -395,6 +407,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                 {TabsScreen["messages"]}
               </div>
             )}
+            {/* {!showSquadMembers && !showChat && !showFile && (
+              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                {TabsScreen["board"]}
+              </div>
+            )} */}
           </div>
         </div>
       </div>
