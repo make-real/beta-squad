@@ -328,7 +328,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   </span>
                 </div>
                 <div
-                  className="cursor-pointer   hover:bg-gray-200"
+                  className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {
                     //startCall("video")
 
@@ -342,7 +342,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   <span
                     className={`rounded-full ring-[1px] p-1 ${
                       showFile
-                        ? "bg-[#54CC7C] "
+                        ? "bg-[#54CC7C] ring-[#ECECEC]"
                         : "ring-[#54CC7C] "
                     }  font-bold grid place-items-center`}
                     
@@ -356,7 +356,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
                 <div
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {
                     //startCall("audio");
                     setShowModal(!showModal);
@@ -366,7 +366,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   {/* <img src={AudioCallIcon} alt="audio_call" /> */}
                 </div>
                 <div
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {
                     //startCall("audio");
                     // setShowModal(!showModal);

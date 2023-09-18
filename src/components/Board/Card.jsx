@@ -7,6 +7,7 @@ import {
   EyeIcon,
   CheckCircleIcon,
   CheckIcon,
+  CommandLineIcon,
 } from "@heroicons/react/24/outline";
 import ConfirmDialog from "./ConfirmDialog";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
@@ -15,6 +16,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import Flag from "../../assets/icons/svg/Flag";
 import Check from "../../assets/card-check.svg";
+import { GoCommentDiscussion } from "react-icons/go";
+import { GrAttachment } from "react-icons/gr";
+
+//
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 
@@ -121,6 +126,12 @@ const Card = ({ card, listID }) => {
 
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
+  const assignee = card.assignee
+  const assineesLength = card.assignee.length
+  const neededLength = assineesLength - 5;
+  const sliced = assignee.slice(0,5)
+ 
+  const neededValue = neededLength > 0
 
   return (
     <>
@@ -245,23 +256,48 @@ const Card = ({ card, listID }) => {
           </div>
         )}
         {!!card.assignee?.length && (
+          <>
+          <div className="flex">
           <div className="mb-3 flex pt-2">
-            {card.assignee?.map((user, i) => (
+            {sliced?.map((user, i) => (
               <div style={{ marginLeft: i ? "-5px" : 0 }}>
                 {user.avatar ? (
-                  <img
+                 <div className="flex"> <img
                     src={user.avatar}
                     alt=""
                     className="w-7 h-7 rounded-full bg-white"
                   />
+                  
+                  </div>
                 ) : (
                   <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
                     {user?.fullName.charAt(0)}
                   </p>
                 )}
+                
               </div>
             ))}
           </div>
+          <div className="-mx-2 mt-2  bg-transparent">
+          {neededValue ? 
+          <p  className="w-7 h-7 rounded-full bg-red-300 text-center">+{neededLength}</p> : " "}
+            </div>
+
+
+
+
+          </div>
+            <div className="flex justify-end">
+            <><div className="flex ">
+              <GoCommentDiscussion className="mt-1"/>
+            <p className="mx-1">{card.commentsCount}</p></div>
+            </>
+            <><div className="flex ">
+              <GrAttachment className="mt-1"/>
+            <p className="mx-1">{card.attachmentsCount}</p></div>
+            </>
+            </div>
+          </>
         )}
 
         {/* hover element */}

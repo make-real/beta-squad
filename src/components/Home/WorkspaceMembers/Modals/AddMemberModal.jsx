@@ -29,7 +29,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
 
     try {
       setLoading(!loading);
-      await add_workspace_member(currentWorkspace._id, memberData.email);
+      await add_workspace_member(currentWorkspace._id, memberData.email, memberData.role);
       setLoading(!loading);
 
       // display a notification for user
@@ -87,30 +87,20 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
               name="email"
             />
           </div>
-          {/* <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
-                        Member Type
+          <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
+                        Role
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
                         <img src={TaguserIcon} alt="" />
-                        <select
-                            id=""
-                            className="w-full bg-transparent text-[#818892] text-[14px] border-none outline-none"
-                            onChange={handleChange}
-                            name="role"
-                        >
-                            <option selected value="">
-                                Select member type
-                            </option>
-                            {Object.values(WORKSPACE_ROLE).map((role) => (
-                                <option
-                                    selected={memberData.role === role}
-                                    value={role}
-                                >
-                                    {role}
-                                </option>
-                            ))}
-                        </select>
-                    </div> */}
+                        <input
+              className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
+              type="text"
+              placeholder="E.g. Designer"
+              onChange={handleChange}
+              value={memberData.role}
+              name="role"
+            />
+                    </div>
 
           {errMsg && (
             <span className="flex justify-start items-center gap-1 mt-2">

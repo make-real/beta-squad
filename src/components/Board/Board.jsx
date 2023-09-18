@@ -193,7 +193,7 @@ const Board = ({ showType, addBoardRef }) => {
                         key={boardList?._id}
                         boardList={boardList}
                         listIndex={index}
-                      />
+                        />
                     ))}
                     {provided.placeholder}
                   </div>

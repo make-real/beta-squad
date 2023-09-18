@@ -51,6 +51,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const { margin } = useStyleContext();
 
   const [localCard, setLocalCard] = useState({});
+  
 
   const [noteDone, setNoteDone] = useState(false);
   const [progress, setProgress] = useState(localCard?.progress);
@@ -85,7 +86,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const [showChat, setShowChat] = useState(false);
 
   const getCard = async () => {
-    const { data } = await getSingleCard(workspace_id, listID, id);
+    const { data } = await getSingleCard(workspace_id, listID, id,);
     setLocalCard(data?.card);
   };
 
@@ -136,7 +137,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     }
     // }
   };
-
+  
   const handle_card_description_update_enter_btn = async (e) => {
     // if (e.key === 'Enter' && !e.shiftKey) {
     const cardTagObject = {
@@ -346,12 +347,13 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
-
+  const time = localCard
+  console.log(time)
 
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-5  bg-[#031124]/[0.4] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
+        className={`duration-200 p-5  bg-[#ECECEC]/[0.7] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
@@ -406,9 +408,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                 </p>
               )}
 
-              {localCard?.startDate && (
+              {localCard?.createdAt && (
                 <p className="font-[400] text-sm text-[#818892]">
-                  Created - {formatDate(localCard.startDate, "MMM, dd")}
+                  Created - {formatDate(localCard.createdAt, "MMM dd yyyy")}
                 </p>
               )}
             </div>
@@ -708,7 +710,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                     {localCard?.checkList?.length > 0 &&
                       localCard?.checkList?.map((item) => (
                         <div
-                          className="flex items-center justify-between"
+                          className="flex items-center justify-between overflow-visible"
                           key={item._id}
                         >
                           <label>
@@ -721,15 +723,19 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                               }
                             />
                           </label>
+ 
 
-                          <textarea
+            {/* There is a issue */}
+
+
+                          <input
                             type="text"
                             id="large-input"
                             defaultValue={item.content}
                             onBlur={(e) =>
                               handle_check_list_update_on_change(e, item._id)
                             }
-                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-auto text-centerd mt-6"
+                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-full text-centerd "
                           />
                           <div
                             onClick={() =>

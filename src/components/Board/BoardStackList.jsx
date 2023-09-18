@@ -79,6 +79,16 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
         open: { opacity: 1, y: 0 },
         closed: { opacity: 0, y: '-100%' },
     };
+ 
+ 
+ 
+ 
+ 
+    // There is a issue of scrolling
+
+
+
+
 
     return (
         <Draggable draggableId={boardList?._id} index={listIndex}>
@@ -86,7 +96,7 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
                 <div
                     {...provided.draggableProps}
                     ref={provided.innerRef}
-                    className={`w-full mb-1 flex flex-col bg-[#ECECEC]/[0.4] p-1 rounded-2xl`}
+                    className={`w-full mb-1 flex flex-col bg-[#ECECEC]/[0.4] p-1 rounded-2xl `}
                 >
                     <div
                         className="overflow-hidden flex justify-between items-center my-2 py-1 px-4"

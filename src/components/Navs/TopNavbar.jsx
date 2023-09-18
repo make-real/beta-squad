@@ -27,7 +27,9 @@ import { getAvatarUrl } from "../../util/getAvatarUrl";
 import FolderIcon from "../../assets/icon_component/Folder";
 import TaskListIcon from "../../assets/icon_component/TaskListIcon";
 import PrivateFolder from "../../assets/icon_component/PrivateFolder";
+import { BsSearch } from "react-icons/bs";
 const userId = JSON.parse(localStorage.getItem("userId"));
+
 
 const TopNav = () => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -133,7 +135,7 @@ const LoggedInTopNav = () => {
     localStorage.clear();
     navigate("/");
   };
-
+  console.log(get_notifications)
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
@@ -247,13 +249,23 @@ const LoggedInTopNav = () => {
                         <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
                             /
                         </p> */}
-            <PrivateFolder
+            {/* <PrivateFolder
               className="w-[20px] h-[20px]"
               style={{ fill: selectedSpace?.color }}
             />
             <p className="text-[#031124] text-[15px] font-medium">
               {selectedSpace?.name}
-            </p>
+            </p> */}
+            <div className="flex">
+            <BsSearch className="text-blue-700 mx-5 my-4"/>
+            <input
+                            type="text"
+                            id="large-input"
+                            placeholder={"Search(Coming soon)"}
+                            className="flex-1 mx-2 -mx-3 my-2 -px-2 py-0.5 bg-[#ECECEC]/[0.7] rounded-full px-32 pb-1 pt-1 border outline-none border-white focus:border-teal-600 duration-200 resize-y h-full text-centerd "
+                          />
+            </div>
+            
           </div>
         ) : isProjectScreen &&
           selectedWorkspaceId &&
