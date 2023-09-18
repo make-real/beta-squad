@@ -126,6 +126,12 @@ const Card = ({ card, listID }) => {
 
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
+  const assignee = card.assignee
+  const assineesLength = card.assignee.length
+  const neededLength = assineesLength - 5;
+  const sliced = assignee.slice(0,5)
+ 
+  const neededValue = neededLength > 0
 
   return (
     <>
@@ -251,22 +257,35 @@ const Card = ({ card, listID }) => {
         )}
         {!!card.assignee?.length && (
           <>
+          <div className="flex">
           <div className="mb-3 flex pt-2">
-            {card.assignee?.map((user, i) => (
+            {sliced?.map((user, i) => (
               <div style={{ marginLeft: i ? "-5px" : 0 }}>
                 {user.avatar ? (
-                  <img
+                 <div className="flex"> <img
                     src={user.avatar}
                     alt=""
                     className="w-7 h-7 rounded-full bg-white"
                   />
+                  
+                  </div>
                 ) : (
                   <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
                     {user?.fullName.charAt(0)}
                   </p>
                 )}
+                
               </div>
             ))}
+          </div>
+          <div className="-mx-2 mt-2  bg-transparent">
+          {neededValue ? 
+          <p  className="w-7 h-7 rounded-full bg-red-300 text-center">+{neededLength}</p> : " "}
+            </div>
+
+
+
+
           </div>
             <div className="flex justify-end">
             <><div className="flex ">

@@ -116,11 +116,20 @@ const UpdateMemberModal = ({
                         </select>
                     </div> */}
                     <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
-                        Member Type
+                        Role
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
                         <img src={TaguserIcon} alt="" />
-                        <select
+                        <input
+              className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
+              type="text"
+              placeholder="E.g. Designer"
+              onChange={handleChange}
+              value={editData.role}
+              name="role"
+            />
+                    </div>
+                        {/* <select
                             name="role"
                             onChange={handleChange}
                             id=""
@@ -142,8 +151,8 @@ const UpdateMemberModal = ({
                                     </option>
                                 );
                             })}
-                        </select>
-                    </div>
+                        </select> */}
+                   
                     <div className="flex items-center mt-[40px] gap-[30px]">
                         <button
                             onClick={cancleUpdateMember}

@@ -353,7 +353,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-5  bg-[#031124]/[0.4] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
+        className={`duration-200 p-5  bg-[#ECECEC]/[0.7] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
@@ -723,6 +723,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                               }
                             />
                           </label>
+ 
+
+            {/* There is a issue */}
+
 
                           <input
                             type="text"
@@ -731,7 +735,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                             onBlur={(e) =>
                               handle_check_list_update_on_change(e, item._id)
                             }
-                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-auto text-centerd "
+                            className="flex-1 mx-2 my-2 px-2 py-0.5 rounded-md border outline-none border-white focus:border-teal-600 duration-200 resize-y h-full text-centerd "
                           />
                           <div
                             onClick={() =>
