@@ -101,27 +101,27 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                    <div>  
                                     
 
-                                   {member?.role === 'owner' ? (<div className="-my-2 w-3/12 bg-green-400 rounded-full ml-20 mb-2">
+                                   {member?.role === 'owner' ? (<div className="-my-2 w-3/12 text-sm bg-green-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
                                             {member.role}
                                         </p>
                                        
                                     </div>)
                                       : member?.role ==="admin" ? (
-                                        <div className="-my-2 w-3/12 bg-red-400 rounded-full ml-20 mb-2">
+                                        <div className="-my-2 w-3/12 text-sm bg-red-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
                                             {member.role}
                                         </p>
                                         </div> 
                                       )
                                       : member?.role === "moderator" ? (
-                                        <div className="-my-2 w-3/12 bg-purple-400 rounded-full ml-20 mb-2">
+                                        <div className="-my-2 w-3/12 text-sm bg-purple-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
                                             {member.role}
                                         </p>
                                         </div> 
                                       )
-                                      : (<div className="-my-2 w-3/12 bg-orange-400 rounded-full ml-20 mb-2">
+                                      : (<div className="-my-2 w-3/12 text-sm bg-orange-400 rounded-full ml-16 mb-2">
                                       <p className="text-black text-center">
                                           {member.role}
                                       </p>

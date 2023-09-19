@@ -353,7 +353,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   return (
     <React.Fragment>
       <section
-        className={`duration-200 p-5  bg-[#ECECEC]/[0.7] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
+        className={`duration-200 p-5  bg-[#9cb4db20] h-full overflow-scroll lg:overflow-scroll md:overflow-scroll xl:overflow-scroll  no-scrollbar`}
       >
         {/* <div className="flex flex-col relative h-[90vh] max-w-[1800px] overflow-hidden p-5"> */}
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
@@ -874,7 +874,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   </div>
 
                   {attachFileLoading && (
-                    <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-[#ECECEC]/[0.7] grid place-items-center">
+                    <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-[#9cb4db20] grid place-items-center">
                       <div className="loading_continuous"></div>
                     </div>
                   )}

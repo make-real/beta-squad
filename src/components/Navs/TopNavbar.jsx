@@ -96,6 +96,7 @@ const LoggedInTopNav = () => {
     all: null,
     count: 0,
   });
+  console.log(notifications)
   const isProjectScreen = useLocation().pathname.startsWith("/projects");
   const [selectedNotificationTab, setSelectedNotificationTab] = useState("all");
   const workspaceMembers = useSelector(
@@ -137,10 +138,11 @@ const LoggedInTopNav = () => {
     localStorage.clear();
     navigate("/");
   };
-  console.log(get_notifications)
+  // console.log(get_notifications)
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
+      const AllNotification = data.notification;
       const seenNotifications = data.notifications.filter(
         (n) => n.seen === true
       );
@@ -148,6 +150,7 @@ const LoggedInTopNav = () => {
         (n) => n.seen === false
       );
       setNotifications({
+        all: AllNotification,
         seen: seenNotifications,
         unseen: unseenNotifications,
         count: data.notifications?.length,
@@ -259,9 +262,9 @@ const LoggedInTopNav = () => {
                     ({notifications.count ?? 0})
                   </span>
                 </h1>
-                <div className="cursor-pointer">
+                {/* <div className="cursor-pointer">
                   <img src={VerticalDots} alt="" />
-                </div>
+                </div> */}
               </div>
               {/* Tab */}
               <div className="mt-[8px] border-b border-b-[#ECECEC]">
@@ -289,10 +292,10 @@ const LoggedInTopNav = () => {
                 </ul>
               </div>
               <div className="mt-[16px] flex items-center justify-between">
-                <p className="text-[#818892] text-[15px] font-medium">
+                {/* <p className="text-[#818892] text-[15px] font-medium">
                   Earlier
-                </p>
-                <p
+                </p> */}
+                {/* <p
                   onClick={() => {
                     setShowNotificationBox(true);
                     setShowNotificationModal(false);
@@ -300,7 +303,7 @@ const LoggedInTopNav = () => {
                   className="text-[#6576FF] text-[15px] cursor-pointer"
                 >
                   See All
-                </p>
+                </p> */}
               </div>
               {/* Content */}
               <div className="mt-[18px] h-full overflow-hidden">
