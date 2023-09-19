@@ -279,13 +279,13 @@ const isActive=false
                   </p>
                 )}
               </div>
-              {fullSidebar && (
+              {/* {fullSidebar && (
                 <img
                   onClick={() => setShowCreateWorkspaceModal(true)}
                   src={BorderedPlusIcon}
                   alt=""
                 />
-              )}
+              )} */}
             </div>
 
             {workspaces?.map((workspace, idx) => (
@@ -413,13 +413,13 @@ const isActive=false
                 </p>
               )}
             </div>
-            {fullSidebar && (
+            {/* {fullSidebar && (
               <img
               onClick={() => setShowCreateSquadModal(true)}
                 src={BorderedPlusIcon}
                 alt=""
               />
-            )}
+            )} */}
           </div>
         )}
         {/* {defaultPage && (

@@ -236,7 +236,10 @@ const LoggedInTopNav = () => {
       <div
         className={`relative py-[15px] pl-[19px] pr-[66px] flex items-center w-full justify-between`}
       >
+        
         <Search/>
+       
+        
 
         <div className="flex items-center h-full">
           <div className="relative">
