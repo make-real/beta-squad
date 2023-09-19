@@ -87,6 +87,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
               name="email"
             />
           </div>
+          {/* There is a issue */}
           <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
                         Designation
                     </p>
