@@ -95,7 +95,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
                         <input
               className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
               type="text"
-              placeholder="E.g. Admin/Moderator/User"
+              placeholder="E.g. Designer"
               onChange={handleChange}
               value={memberData.designation}
               name="designation"
