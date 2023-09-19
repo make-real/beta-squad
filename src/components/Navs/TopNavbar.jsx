@@ -28,7 +28,9 @@ import FolderIcon from "../../assets/icon_component/Folder";
 import TaskListIcon from "../../assets/icon_component/TaskListIcon";
 import PrivateFolder from "../../assets/icon_component/PrivateFolder";
 import { BsSearch } from "react-icons/bs";
+import Search from "./search";
 const userId = JSON.parse(localStorage.getItem("userId"));
+
 
 
 const TopNav = () => {
@@ -94,6 +96,7 @@ const LoggedInTopNav = () => {
     all: null,
     count: 0,
   });
+  console.log(notifications)
   const isProjectScreen = useLocation().pathname.startsWith("/projects");
   const [selectedNotificationTab, setSelectedNotificationTab] = useState("all");
   const workspaceMembers = useSelector(
@@ -135,10 +138,11 @@ const LoggedInTopNav = () => {
     localStorage.clear();
     navigate("/");
   };
-  console.log(get_notifications)
+  // console.log(get_notifications)
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
+      const AllNotification = data.notification;
       const seenNotifications = data.notifications.filter(
         (n) => n.seen === true
       );
@@ -146,6 +150,7 @@ const LoggedInTopNav = () => {
         (n) => n.seen === false
       );
       setNotifications({
+        all: AllNotification,
         seen: seenNotifications,
         unseen: unseenNotifications,
         count: data.notifications?.length,
@@ -231,103 +236,7 @@ const LoggedInTopNav = () => {
       <div
         className={`relative py-[15px] pl-[19px] pr-[66px] flex items-center w-full justify-between`}
       >
-        {isProjectScreen && selectedSpaceId ? (
-          <div className="flex items-center gap-3">
-            {/* <div
-                            onClick={() => {
-                                dispatch(setSelectedSpaceId(null))
-                                dispatch(setSelectedSpaceObject({}))
-                                navigate(`/projects/${selectedWorkspaceId}`)
-                            }}
-                            className="mr-[20px] cursor-pointer"
-                        >
-                            <img src={LeftArrow} alt="back_arrow" />
-                        </div>
-                        <p className="mr-[12px] font-medium text-[15px] text-[#818892]">
-                            {currentWorkspace?.name}
-                        </p>
-                        <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
-                            /
-                        </p> */}
-            {/* <PrivateFolder
-              className="w-[20px] h-[20px]"
-              style={{ fill: selectedSpace?.color }}
-            />
-            <p className="text-[#031124] text-[15px] font-medium">
-              {selectedSpace?.name}
-            </p> */}
-            <div className="flex">
-            <BsSearch className="text-blue-700 mx-5 my-4"/>
-            <input
-                            type="text"
-                            id="large-input"
-                            placeholder={"Search(Coming soon)"}
-                            className="flex-1 mx-2 -mx-3 my-2 -px-2 py-0.5 bg-[#ECECEC]/[0.7] rounded-full px-32 pb-1 pt-1 border outline-none border-white focus:border-teal-600 duration-200 resize-y h-full text-centerd "
-                          />
-            </div>
-            
-          </div>
-        ) : isProjectScreen &&
-          selectedWorkspaceId &&
-          userId &&
-          selectedMember ? (
-          // <div className="flex items-center gap-3">
-          //   <span className="bg-[#6576FF]/[0.16] p-2 rounded-full">
-          //     <TaskListIcon
-          //       className="w-[20px] h-[20px]"
-          //       style={{ fill: "#6576FF" }}
-          //     />
-          //   </span>
-          //   <p className="text-[#031124] text-[15px] font-medium">
-          //     My Task List
-          //   </p>
-          // </div>
-          <div className="flex items-center gap-[11px]">
-            <div className="relative">
-              <img
-                src={selectedMember?.avatar}
-                alt=""
-                className="w-[29px] h-[29px] rounded-full  object-cover"
-              />
-              <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] bottom-0 right-[-4px]"></div>
-            </div>
-            <h2 className="text-[20px] text-[#424D5B] font-semibold mr-[9px]">
-              {selectedMember?.fullName}
-            </h2>
-          </div>
-        ) : participantID && selectedMember ? (
-          <div className="flex items-center">
-            <div
-              onClick={() => {
-                dispatch(setSelectedSpaceId(null));
-                dispatch(setSelectedSpaceObject({}));
-                navigate(`/projects/${selectedWorkspaceId}`);
-              }}
-              className="mr-[20px] cursor-pointer"
-            >
-              <img src={LeftArrow} alt="back_arrow" />
-            </div>
-            <p className="mr-[12px] font-medium text-[15px] text-[#818892]">
-              {currentWorkspace?.name}
-            </p>
-            <p className="mr-[10px] text-[#00000020] text-[15px] font-medium">
-              /
-            </p>
-            <p className="text-[#031124] text-[15px] font-medium">
-              {selectedMember?.fullName}
-            </p>
-          </div>
-        ) : isProjectScreen && selectedWorkspaceId ? (
-          <h1 className="font-medium text-[18px] text-[#031124]">
-            {currentWorkspace?.name}
-          </h1>
-        ) : isManageWorkspaceScreen ? (
-          <h1 className="font-medium text-[18px] text-[#031124]">Workspace</h1>
-        ) : isProfileScreen ? (
-          <h1 className="font-medium text-[18px] text-[#031124]">Profile</h1>
-        ) : (
-          <div></div>
-        )}
+        <Search/>
 
         <div className="flex items-center h-full">
           <div className="relative">
@@ -353,9 +262,9 @@ const LoggedInTopNav = () => {
                     ({notifications.count ?? 0})
                   </span>
                 </h1>
-                <div className="cursor-pointer">
+                {/* <div className="cursor-pointer">
                   <img src={VerticalDots} alt="" />
-                </div>
+                </div> */}
               </div>
               {/* Tab */}
               <div className="mt-[8px] border-b border-b-[#ECECEC]">
@@ -383,10 +292,10 @@ const LoggedInTopNav = () => {
                 </ul>
               </div>
               <div className="mt-[16px] flex items-center justify-between">
-                <p className="text-[#818892] text-[15px] font-medium">
+                {/* <p className="text-[#818892] text-[15px] font-medium">
                   Earlier
-                </p>
-                <p
+                </p> */}
+                {/* <p
                   onClick={() => {
                     setShowNotificationBox(true);
                     setShowNotificationModal(false);
@@ -394,7 +303,7 @@ const LoggedInTopNav = () => {
                   className="text-[#6576FF] text-[15px] cursor-pointer"
                 >
                   See All
-                </p>
+                </p> */}
               </div>
               {/* Content */}
               <div className="mt-[18px] h-full overflow-hidden">

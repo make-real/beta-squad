@@ -278,21 +278,21 @@ const Card = ({ card, listID }) => {
               </div>
             ))}
           </div>
-          <div className="-mx-2 mt-2  bg-transparent">
+          <div className="-mx-2 mt-2">
           {neededValue ? 
-          <p  className="w-7 h-7 rounded-full bg-red-300 text-center">+{neededLength}</p> : " "}
+          <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
             </div>
 
-
+           
 
 
           </div>
-            <div className="flex justify-end">
-            <><div className="flex ">
-              <GoCommentDiscussion className="mt-1"/>
+          <div className="flex  justify-end">
+            <><div className="flex -my-10 mr-3">
+              <GoCommentDiscussion className="mt-1 "/>
             <p className="mx-1">{card.commentsCount}</p></div>
             </>
-            <><div className="flex ">
+            <><div className="flex -my-10 ">
               <GrAttachment className="mt-1"/>
             <p className="mx-1">{card.attachmentsCount}</p></div>
             </>

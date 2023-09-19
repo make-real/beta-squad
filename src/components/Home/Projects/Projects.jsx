@@ -39,7 +39,7 @@ const Projects = ({
   const selectedWorkspace = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
-
+  
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const navigate = useNavigate();
   const dispatch = useDispatch();

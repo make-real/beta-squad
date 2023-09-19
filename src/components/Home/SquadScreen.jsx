@@ -204,7 +204,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[80px] flex flex-col">
           <div className="flex flex-row items-center gap-4  py-[10px]">
             <div className="flex items-center w-full gap-8">
-              <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">
+              <div className="flex items-center w-[60%]   overflow-auto pb-1 hover:customHScroll">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
