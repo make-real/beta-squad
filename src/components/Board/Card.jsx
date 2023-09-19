@@ -278,9 +278,9 @@ const Card = ({ card, listID }) => {
               </div>
             ))}
           </div>
-          <div className="-mx-2 mt-2  bg-transparent">
+          <div className="-mx-1 mt-2">
           {neededValue ? 
-          <p  className="w-7 h-7 rounded-full bg-red-300 text-center">+{neededLength}</p> : " "}
+          <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
             </div>
 
 

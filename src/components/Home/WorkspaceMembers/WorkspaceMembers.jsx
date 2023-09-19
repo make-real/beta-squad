@@ -22,6 +22,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     const [members, setMembers] = useState([])
    
 
+
     const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false)
     const [updateMemberData, setUpdateMemberData] = useState(null)
     const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false)
@@ -65,7 +66,10 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     }, [showRemovedModal])
 
 
+    let roles = members?.role
+    console.log(members)
 
+    // Isuues Here
 
     return (
         <>
@@ -82,8 +86,8 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                     {members.map((member) => {
                       
                         return (
-                            <div key={member._id} className="relative w-[297px] h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                {userRole?.role === 'owner' 
+                            <div key={member._id} className="relative w-[297px] h-[110px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
+                                {member?.role === 'owner' 
                                 
                                      && (
                                           <EditDeleteMenu
@@ -94,7 +98,45 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                           />
                                       )
                                    }
+                                   <div>  
+                                    
+
+                                   {member?.role === 'owner' ? (<div className="-my-2 w-3/12 bg-green-400 rounded-full ml-20 mb-2">
+                                        <p className="text-black text-center">
+                                            {member.role}
+                                        </p>
+                                       
+                                    </div>)
+                                      : member?.role ==="admin" ? (
+                                        <div className="-my-2 w-3/12 bg-red-400 rounded-full ml-20 mb-2">
+                                        <p className="text-black text-center">
+                                            {member.role}
+                                        </p>
+                                        </div> 
+                                      )
+                                      : member?.role === "moderator" ? (
+                                        <div className="-my-2 w-3/12 bg-purple-400 rounded-full ml-20 mb-2">
+                                        <p className="text-black text-center">
+                                            {member.role}
+                                        </p>
+                                        </div> 
+                                      )
+                                      : (<div className="-my-2 w-3/12 bg-orange-400 rounded-full ml-20 mb-2">
+                                      <p className="text-black text-center">
+                                          {member.role}
+                                      </p>
+                                      </div>)}
+
+
+
+
+
+
+
+
+                                    
                                 <div className="flex gap-[10px]">
+                                
                                     <img
                                         src={
                                             member?.avatar ??
@@ -111,15 +153,10 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                             {member?.email}
                                         </p>
                                     </div>
+                                    
                                 </div>
-                                {member?.designation && (
-                                    <div className="flex items-center gap-[16px] mt-[13px]">
-                                        <p className="text-[#818892]">
-                                            {member.designation}
-                                        </p>
-                                        <img src={ArrowDown} alt="" />
-                                    </div>
-                                )}
+                              
+                                </div>
                                 {/* <p className="text-[#818892] mt-[10px]">
                                     {member.email}
                                 </p> */}
@@ -164,7 +201,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                         </div>
                                         <div className="flex items-center gap-[16px]">
                                             <p className="text-[#818892]">
-                                                {member?.designation}
+                                                {member?.role}
                                             </p>
                                             {/* <img src={ArrowDown} alt="" /> */}
                                         </div>

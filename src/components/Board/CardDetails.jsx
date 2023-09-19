@@ -716,7 +716,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                           <label>
                             <input
                               type="checkbox"
-                              className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF] accent-[#6576FF] focus:ring-red-900 leading-none"
+                              className="w-4 h-4 cursor-pointer rounded-full border border-[#6576FF] accent-[#6576FF] focus:ring-red-900"
                               defaultChecked={item.checked}
                               onClick={(e) =>
                                 handle_check_list_update_on_change(e, item._id)
@@ -874,7 +874,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   </div>
 
                   {attachFileLoading && (
-                    <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/70 grid place-items-center">
+                    <div className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-[#ECECEC]/[0.7] grid place-items-center">
                       <div className="loading_continuous"></div>
                     </div>
                   )}
