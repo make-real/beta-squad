@@ -98,36 +98,36 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                           />
                                       )
                                    }
-                                   <div>  
+                                   <div className=''>  
                                     
-
-                                   {member?.role === 'owner' ? (<div className="-my-2 w-3/12 text-sm bg-green-400 rounded-full ml-16 mb-2">
+                                    <div>
+                                   {member?.role === 'owner' ? (<div className="-my-2 w-[50px] text-xs bg-green-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
                                             {member.role}
                                         </p>
                                        
                                     </div>)
                                       : member?.role ==="admin" ? (
-                                        <div className="-my-2 w-3/12 text-sm bg-red-400 rounded-full ml-16 mb-2">
+                                        <div className="-my-2 w-[50px] text-xs bg-red-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
                                             {member.role}
                                         </p>
                                         </div> 
                                       )
                                       : member?.role === "moderator" ? (
-                                        <div className="-my-2 w-3/12 text-sm bg-purple-400 rounded-full ml-16 mb-2">
-                                        <p className="text-black text-center">
+                                        <div className="-my-2 w-[50px] text-xs bg-purple-700 rounded-full ml-16 mb-2">
+                                        <p className="text-white text-center">
                                             {member.role}
                                         </p>
                                         </div> 
                                       )
-                                      : (<div className="-my-2 w-3/12 text-sm bg-orange-400 rounded-full ml-16 mb-2">
-                                      <p className="text-black text-center">
+                                      : (<div className="-my-2 w-[50px] text-xs bg-red-700 rounded-full ml-16 mb-2">
+                                      <p className="text-white text-center">
                                           {member.role}
                                       </p>
                                       </div>)}
 
-
+                                      </div>
 
 
 
@@ -163,7 +163,9 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                             </div>
                         )
                     })}
+                    
                 </div>
+                
             ) : (
                 showType === 'stack' && (
                     <div className="h-full overflow-y-scroll no-scrollbar mt-[30px] max-h-[650px]">

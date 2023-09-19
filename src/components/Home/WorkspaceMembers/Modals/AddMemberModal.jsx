@@ -16,7 +16,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
   );
   const [memberData, setMemberData] = useState({
     email: "",
-    role: "",
+    designation: "",
   });
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
 
     try {
       setLoading(!loading);
-      await add_workspace_member(currentWorkspace._id, memberData.email, memberData.role);
+      await add_workspace_member(currentWorkspace._id, memberData.email, memberData.designation);
       setLoading(!loading);
 
       // display a notification for user
@@ -88,19 +88,20 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
             />
           </div>
           <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
-                        Role
+                        Designation
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
                         <img src={TaguserIcon} alt="" />
                         <input
               className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
               type="text"
-              placeholder="E.g. Designer"
+              placeholder="E.g. Admin/Moderator/User"
               onChange={handleChange}
-              value={memberData.role}
-              name="role"
+              value={memberData.designation}
+              name="designation"
             />
                     </div>
+
 
           {errMsg && (
             <span className="flex justify-start items-center gap-1 mt-2">
