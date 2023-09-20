@@ -127,11 +127,24 @@ const Card = ({ card, listID }) => {
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
   const assignee = card.assignee
-  const assineesLength = card.assignee.length
+  let assineesLength ;
+  if(assignee){
+      assineesLength = assignee.length
+  }
+  else {
+    assineesLength = 0
+  }
   const neededLength = assineesLength - 5;
-  const sliced = assignee.slice(0,5)
+  let sliced;
+   if(assignee){
+       sliced = assignee.slice(0,5)
+   }
+   else{
+         sliced= []
+   }
  
   const neededValue = neededLength > 0
+  
 
   return (
     <>
@@ -279,7 +292,7 @@ const Card = ({ card, listID }) => {
             ))}
           </div>
           <div className="-mx-2 mt-2">
-          {neededValue ? 
+          {card?.assignee && neededValue ? 
           <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
             </div>
 
