@@ -315,7 +315,7 @@ const LoggedInTopNav = () => {
             </div>
           </div>
 
-          <div className="mx-[35px] h-full w-[2px] bg-[#031124] opacity-10"></div>
+          <div className="mx-[26px] h-full w-[2px] bg-[#031124] opacity-10"></div>
           <div
           onClick={() => setShowDropDownMenu(!showDropDownMenu)}
           className="flex gap-4 cursor-pointer">
