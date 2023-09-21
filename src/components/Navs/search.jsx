@@ -13,8 +13,8 @@ function Search() {
           <input
             type="text"
             id="large-input"
-            placeholder={'Search (Coming soon)'}
-            className="flex-1 mx-2 -mx-3 my-2 h-[40px] -px-2 py-0.5 bg-[#9cb4db20] rounded-full px-32 pb-1 pt-1 border outline-none border-white focus:border-teal-600 duration-200 resize-y h-full text-center"
+            placeholder='Search (Coming soon)'
+            className="flex-1 mx-2 my-2 h-[40px] -px-2 py-0.5 bg-[#9cb4db20] rounded-full px-32 pb-1 pt-1 border outline-none border-white focus:border-teal-600 duration-200 resize-y  text-center"
           />
         </div>
       </div>
