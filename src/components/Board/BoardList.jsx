@@ -130,6 +130,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                         ) : (
                             <p className="text-[#818892] flex-1 py-1 px-4">
                                 {boardList?.name || 'Development'}
+                                
                             </p>
                         )}
 
