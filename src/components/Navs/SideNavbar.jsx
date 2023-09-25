@@ -5,8 +5,8 @@ import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
 import Squad from "../../assets/Squad.svg";
 import ChatIcon from "../../assets/ChatIcon.svg";
-import SmsIcon from '../../assets/sms.svg'
-import ClockIcon from '../../assets/clock.svg'
+import SmsIcon from "../../assets/sms.svg";
+import ClockIcon from "../../assets/clock.svg";
 import SearchIcon from "../../assets/search.svg";
 import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
@@ -41,6 +41,7 @@ import { Comment } from "postcss";
 import ComingSoonModal from "../Modals/ComingSoonModal";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
+import { useUserInfoContext } from "../../context/UserInfoContext";
 
 const SideNavbar = () => {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ const SideNavbar = () => {
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
+
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
@@ -67,8 +69,16 @@ const SideNavbar = () => {
     (state) => state.workspace.selectedWorkspace
   );
   const [selectedChat, setSelectedChat] = useState(null);
+  const { loginUserInfo } = useUserInfoContext();
 
   const members = useSelector((state) => state.workspace.workspaceMembers);
+  
+  const adminRoll = members?.filter((member) => member.role === "owner");
+  console.log(adminRoll[0]?._id)
+  const showPlusButton = adminRoll.map(
+    (admin) => admin?._id === loginUserInfo?._id
+  );
+ 
 
   const location = useLocation();
 
@@ -189,29 +199,26 @@ const SideNavbar = () => {
     dispatch(addSpace(newOrder));
   };
 
-//  active status
+  //  active status
 
-useEffect(() => {
-  function onlineHandler() {
+  useEffect(() => {
+    function onlineHandler() {
       setIsOnline(true);
-  }
+    }
 
-  function offlineHandler() {
+    function offlineHandler() {
       setIsOnline(false);
-  }
+    }
 
-  window.addEventListener("online", onlineHandler);
-  window.addEventListener("offline", offlineHandler);
+    window.addEventListener("online", onlineHandler);
+    window.addEventListener("offline", offlineHandler);
 
-
-  return () => {
+    return () => {
       window.removeEventListener("online", onlineHandler);
       window.removeEventListener("offline", offlineHandler);
-  };
-}, []);
-const isActive=false
-
-
+    };
+  }, []);
+  const isActive = false;
 
   // #2C3782
   return (
@@ -373,12 +380,12 @@ const isActive=false
 
         {defaultPage && (
           <div
-          onClick={() => {
-            dispatch(setSelectedSpaceId(null));
-            dispatch(setSelectedSpaceObject(null));
-            navigate(`/projects/${selectedWorkspace}`);
-            setSelectedChat(null);
-          }}
+            onClick={() => {
+              dispatch(setSelectedSpaceId(null));
+              dispatch(setSelectedSpaceObject(null));
+              navigate(`/projects/${selectedWorkspace}`);
+              setSelectedChat(null);
+            }}
             className={` mb-0 flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
               selectedChat
                 ? ""
@@ -413,13 +420,19 @@ const isActive=false
                 </p>
               )}
             </div>
-            {/* {fullSidebar && (
-              <img
-              onClick={() => setShowCreateSquadModal(true)}
-                src={BorderedPlusIcon}
-                alt=""
-              />
-            )} */}
+
+            {/* bug issue */}
+            {showPlusButton[0] && (
+              <div>
+                {fullSidebar && (
+                  <img
+                    onClick={() => setShowCreateSquadModal(true)}
+                    src={BorderedPlusIcon}
+                    alt=""
+                  />
+                )}
+              </div>
+            )}
           </div>
         )}
         {/* {defaultPage && (
@@ -631,11 +644,17 @@ const isActive=false
                         setShowAddMemberModal(!showAddMemberModal);
                       }}
                     >
-                      <img
+                      {/* bug issue */}
+
+                     {
+                      showPlusButton[0] && (
+                        <img
                         src={BorderedPlusIcon}
                         alt=""
                         className="cursor-pointer text-[#0D1282] "
                       />
+                      )
+                     }
                     </div>
                   </div>
                 )}
@@ -663,34 +682,48 @@ const isActive=false
                           );
                         }}
                       >
-                        {
-                          isOnline ? <>
-                          <div className="relative">
-                          {/* <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] top-0 left-[-4px]"></div> */}
-                           <img
-                          src={member?.avatar ?? getAvatarUrl(member?.fullName)}
-                          className="w-[28px] h-[28px] rounded-full border object-cover"
-                          alt=""
-                        />
-                          </div>
-                          {/* <img src={SmsIcon} alt="" className="w-[16px] h-[16px]" /> */}
-                        {fullSidebar && (
-                          <p className="text-[#000] flex items-center gap-1 text-[14px]">
-                            {member.fullName} 
-                          </p>
-                        )}</>:<>
-                           <img
-                          src={member?.avatar ?? getAvatarUrl(member?.fullName)}
-                          className="w-[28px] h-[28px] rounded-full border object-cover"
-                          alt=""
-                        />
-                        {fullSidebar && (
-                          <p className="text-[#000] flex items-center gap-[4px] text-[14px]">
-                            {member.fullName} <img src={ClockIcon} alt="" className="w-[16px] h-[16px]" /> <span className="text-[8px]">10min</span>
-                          </p>
-                        )}</>
-                        }
-                       
+                        {isOnline ? (
+                          <>
+                            <div className="relative">
+                              {/* <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] top-0 left-[-4px]"></div> */}
+                              <img
+                                src={
+                                  member?.avatar ??
+                                  getAvatarUrl(member?.fullName)
+                                }
+                                className="w-[28px] h-[28px] rounded-full border object-cover"
+                                alt=""
+                              />
+                            </div>
+                            {/* <img src={SmsIcon} alt="" className="w-[16px] h-[16px]" /> */}
+                            {fullSidebar && (
+                              <p className="text-[#000] flex items-center gap-1 text-[14px]">
+                                {member.fullName}
+                              </p>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <img
+                              src={
+                                member?.avatar ?? getAvatarUrl(member?.fullName)
+                              }
+                              className="w-[28px] h-[28px] rounded-full border object-cover"
+                              alt=""
+                            />
+                            {fullSidebar && (
+                              <p className="text-[#000] flex items-center gap-[4px] text-[14px]">
+                                {member.fullName}{" "}
+                                <img
+                                  src={ClockIcon}
+                                  alt=""
+                                  className="w-[16px] h-[16px]"
+                                />{" "}
+                                <span className="text-[8px]">10min</span>
+                              </p>
+                            )}
+                          </>
+                        )}
                       </div>
                     ) : null
                   )}

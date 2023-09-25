@@ -26,6 +26,8 @@ const Members = () => {
   const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [search, setSearch] = React.useState("");
 
+  console.log(members)
+
   useEffect(() => {
     getSpaceMember();
     getWorkspaceMember();

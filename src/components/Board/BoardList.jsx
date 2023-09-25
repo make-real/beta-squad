@@ -100,7 +100,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
-                >
+                >  
                     <div
                         {...provided.dragHandleProps}
                         className="overflow-hidden  flex justify-between items-center my-3"

@@ -78,6 +78,7 @@ export const resendVerificationCode = (email) =>
 // GET Methods
 export const getUserProfileInfo = (userId) =>
     useFetch(`/users/profile/${userId}`);
+
 export const getUserBySearch = (userQuery) =>
     useFetch(`/users?search=${userQuery}`);
 

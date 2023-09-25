@@ -368,7 +368,7 @@ const SideBar = () => {
               <div className='hover:bg-[#344453] duration-200 flex items-center space-x-3 p-2 cursor-pointer rounded-lg mr-2 w-full '>
                 <p className='text-sideBarTextColor font-bold w-full text-sm'>
                   CHATS
-                </p>{" "}
+                </p>
                 <Search />
               </div>
 
