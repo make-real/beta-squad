@@ -250,6 +250,7 @@ const Board = ({ showType, addBoardRef }) => {
                 btnText="list"
                 onSubmit={(text) => handleBoardListCreation(squadId, text)}
               />
+              
             )}
           </div>
         )

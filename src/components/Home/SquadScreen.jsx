@@ -62,6 +62,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
 
+  
+
   const { state } = useLocation();
   const location = useLocation();
 
@@ -69,7 +71,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
   const [members, setMembers] = useState([]);
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  
 
   const handleBoardListCreation = async (squadId, text) => {
     const listObject = { name: text };
@@ -207,7 +209,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
              
              
              
-             
+             {console.log(TabsName)}
               {/* issue is here */}
               <div className="flex items-center w-[60%] overflow-hidden   hover:overflow-auto pb-1">
                 {TabsName.map((value, idx) => {
