@@ -67,7 +67,6 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
 
 
     let roles = members?.role
-    console.log(members)
 
     // Isuues Here
 

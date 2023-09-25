@@ -21,12 +21,16 @@ export const UserInfoContext = ({ children }) => {
         getUserInfo();
     }, []);
 
+
+
     useEffect(() => {
         if (!JSON.parse(localStorage.getItem("userInfo"))) {
             localStorage.setItem("userInfo", JSON.stringify(loginUserInfo));
         }
         dispatch(setUserInfo(loginUserInfo));
     }, [loginUserInfo]);
+
+    console.log(loginUserInfo)
 
     return (
         <UserInfo.Provider value={{ loginUserInfo, setLoginUserInfo }}>

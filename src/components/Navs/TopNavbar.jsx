@@ -77,6 +77,7 @@ const NotLoggedInTopNav = () => {
 
 const LoggedInTopNav = () => {
   const userInfo = useSelector((state) => state.userInfo.userInfo);
+ 
 
   const selectedWorkspaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
@@ -96,7 +97,7 @@ const LoggedInTopNav = () => {
     all: null,
     count: 0,
   });
-  console.log(notifications)
+
   const isProjectScreen = useLocation().pathname.startsWith("/projects");
   const [selectedNotificationTab, setSelectedNotificationTab] = useState("all");
   const workspaceMembers = useSelector(

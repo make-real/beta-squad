@@ -82,7 +82,7 @@ const Projects = ({
   }, []);
 
   const { id } = useParams();
-   console.log(allSpaces)
+ 
   // useEffect(() => {
   //     window.onload = () => {
   //         if (!id) {

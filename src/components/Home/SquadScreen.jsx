@@ -209,7 +209,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
              
              
               {/* issue is here */}
-              <div className="flex items-center w-[60%]   overflow-auto pb-1">
+              <div className="flex items-center w-[60%] overflow-hidden   hover:overflow-auto pb-1">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
