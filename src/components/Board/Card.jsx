@@ -107,7 +107,7 @@ const Card = ({ card, listID }) => {
       );
       updateCard(listID, card._id, data.updatedCard);
     } catch (error) {
-      console.log(error?.response?.data?.issue?.message);
+  
       // toast.error(`${error?.response?.data?.issue?.message}`, {
       //     autoClose: 3000,
       // });
@@ -144,6 +144,7 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
+  console.log()
   
 
   return (
@@ -156,9 +157,11 @@ const Card = ({ card, listID }) => {
       >
         {/* top-right shape */}
         <span
-          className="absolute top-0 left-0 h-4 w-4 rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
+          className="absolute top-0 left-0 p-[3px]  text-white  text-xs  rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
           style={{ backgroundColor: card?.color }}
-        />
+        >
+        {card.cardKey}
+        </span>
         {/* message indicator */}
         {card?.seen === false && (
           <span
@@ -168,7 +171,7 @@ const Card = ({ card, listID }) => {
         )}
         {card?.tags?.length > 0 && (
           <div className="flex justify-between items-center mb-2">
-            <div className="py-2 text-white flex gap-1 flex-wrap">
+            <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
                     <CardChip small tag={tag} key={tag?.name} />
@@ -199,7 +202,7 @@ const Card = ({ card, listID }) => {
         )}
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-[16px] leading-6 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
+          <p className="text-[16px] leading-6 mt-3 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
           </p>
         </div>

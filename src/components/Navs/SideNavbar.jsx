@@ -74,7 +74,7 @@ const SideNavbar = () => {
   const members = useSelector((state) => state.workspace.workspaceMembers);
   
   const adminRoll = members?.filter((member) => member.role === "owner");
-  console.log(adminRoll[0]?._id)
+  
   const showPlusButton = adminRoll.map(
     (admin) => admin?._id === loginUserInfo?._id
   );
