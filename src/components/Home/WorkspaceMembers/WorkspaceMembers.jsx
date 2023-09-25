@@ -19,7 +19,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
         (state) => state.workspace.selectedWorkspace
     )
 
-    const [members, setMembers] = useState([])
+    const members = useSelector((state) => state.workspace.workspaceMembers);
    
 
 
@@ -51,22 +51,22 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
         setShowUpdateMemberModal(false)
     }
 
-    const fetchWorkspaceMembers = async () => {
-        try {
-            const { data } = await get_workspace_member(selectedWorkspace)
-            setMembers(data?.teamMembers)
+    // const fetchWorkspaceMembers = async () => {
+    //     try {
+    //         const { data } = await get_workspace_member(selectedWorkspace)
+    //         setMembers(data?.teamMembers)
             
-        } catch (err) {
-            console.log('Error occured ==> ', err)
-        }
-    }
+    //     } catch (err) {
+    //         console.log('Error occured ==> ', err)
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchWorkspaceMembers()
-    }, [showRemovedModal])
+    // useEffect(() => {
+    //     fetchWorkspaceMembers()
+    // }, [showRemovedModal])
 
 
-    let roles = members?.role
+   
 
     // Isuues Here
 
