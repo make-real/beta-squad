@@ -144,7 +144,7 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
-  console.log()
+  console.log(card)
   
 
   return (

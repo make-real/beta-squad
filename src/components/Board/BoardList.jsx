@@ -38,11 +38,12 @@ const BoardList = ({ showType, listIndex, boardList }) => {
     //     fetchData();
     // }, [selectedSpaceId, boardList?._id]);
 
-    // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
+    
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {
         setCardLoading(true);
         const cardObject = { name: text };
+        console.log(text)
 
         try {
             // its a POST method | object send into backend/server

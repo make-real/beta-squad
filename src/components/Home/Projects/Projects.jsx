@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import PlusIcon from "../../../assets/plus.svg";
 import FolderIcon from "../../../assets/icon_component/Folder";
 import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
@@ -17,6 +18,7 @@ import { useEffect } from "react";
 import { squadBorderClassName } from "../../../constant/data";
 import { get_workspace_member } from "../../../api/workSpace";
 
+
 const Projects = ({
   showType,
   showCreateSquadModal,
@@ -25,7 +27,8 @@ const Projects = ({
   userRole,
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
-  const [members, setMembers] = useState([]);
+  const members = useSelector((state) => state.workspace.workspaceMembers);
+  
 
   const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
   const [deletingProject, setDeletingProject] = useState({
@@ -39,8 +42,7 @@ const Projects = ({
   const selectedWorkspace = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
-  
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -68,21 +70,10 @@ const Projects = ({
     }));
   };
 
-  const fetchWorkspaceMembers = async () => {
-    try {
-      const { data } = await get_workspace_member(selectedWorkspace);
-      setMembers(data?.teamMembers);
-    } catch (err) {
-      console.log("Error occured ==> ", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchWorkspaceMembers();
-  }, []);
-
-  const { id } = useParams();
  
+
+
+
   // useEffect(() => {
   //     window.onload = () => {
   //         if (!id) {
@@ -102,7 +93,7 @@ const Projects = ({
             return (
               <>
                 <div
-                key={space._id}
+                  key={space._id}
                   style={{
                     backgroundColor: space.color + "10",
                   }}
@@ -118,7 +109,7 @@ const Projects = ({
                         `/projects/${selectedWorkspace}/squad/${space._id}`
                       );
                     }}
-                    className="absolute inset-0 w-full h-full cursor-pointer"
+                    className="absolute flex inset-0 w-full h-full cursor-pointer"
                   ></div>
 
                   {userRole?.role === "owner" && (
@@ -130,10 +121,40 @@ const Projects = ({
                     />
                   )}
 
-                  <FolderIcon style={{ fill: space.color }} />
-                  <p className="text-[#424D5B] font-semibold cursor-pointer">
-                    {space.name}
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-[16px]">
+                      <FolderIcon style={{ fill: space.color }} />
+                      <p className="text-[#424D5B] font-semibold cursor-pointer">
+                        {space.name}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center my-2 mx-4">
+                      <div className={"flex items-center justify-start"}>
+                        {members.slice(0,5).map((user, i) => (
+                          <div className="ml-[-10px]">
+                            {user.avatar ? (
+                              <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
+                                <img
+                                  src={user.avatar}
+                                  alt=""
+                                  className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                                />
+                              </span>
+                            ) : (
+                              <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
+                                <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
+                                  {i || user?.fullName.charAt(0)}
+                                </p>
+                              </span>
+                            )}
+                          </div>
+                        ))}
+
+                        
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             );
