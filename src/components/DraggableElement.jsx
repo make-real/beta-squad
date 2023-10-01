@@ -2,6 +2,7 @@
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 const DraggableElement = ({ showType, elements, render, listId }) => {
+    
     return (
         <Droppable droppableId={listId} type="task">
             {(provided) => (

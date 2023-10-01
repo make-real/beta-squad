@@ -171,10 +171,10 @@ const Board = ({ showType, addBoardRef }) => {
   };
 
   return (
-    <section className={`duration-200 overflow-auto   customScroll h-full`}>
+    <section className={`duration-200 overflow-auto customScroll h-full`}>
       {squadId ? (
         showType === "grid" ? (
-          <div className="py-1 flex gap-3 items-start  min-w-fit h-[98vh]">
+          <div className="py-1 flex gap-3 items-start min-w-fit h-[98vh]">
             <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"

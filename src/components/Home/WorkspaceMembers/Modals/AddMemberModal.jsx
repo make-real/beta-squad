@@ -11,13 +11,12 @@ import { WORKSPACE_ROLE } from "../../../../constant/enums";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
+  console.log('addmember')
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
-  const [memberData, setMemberData] = useState({
-    email: "",
-    designation: "",
-  });
+  const [memberData, setMemberData] = useState({});
+  console.log(memberData)
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +38,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
 
       // reset all input fields...
       setMemberData({ name: "", color: "", privacy: "" });
+      // setMemberData({ email: "", designation: "" });
       window.location.reload(true);
       // close this modal
       setShowAddMemberModal(false);
@@ -57,8 +57,6 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
   const handleChange = (e) => {
     setMemberData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  console.log(memberData);
 
   return (
     <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center bg-[#03112440] py-[20px] z-[999]">

@@ -61,14 +61,14 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : (workspaces?.length === 1 && allSpaces?.length === 0) ||
-        (allSpaces[0]?.name === "Onboarding" &&
-          [...members.filter((m) => m._id !== userInfo._id)].length === 0);
+      (allSpaces[0]?.name === "Onboarding" &&
+        [...members.filter((m) => m._id !== userInfo._id)].length === 0);
 
   const showCreateSquadScreen =
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : allSpaces?.length === 0 ||
-        (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
+      (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
   const showAddMemberScreen =
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
@@ -318,11 +318,10 @@ const CreateSquadModal = () => {
                     setSelectedColor(color);
                   }}
                   style={{ backgroundColor: color }}
-                  className={`relative rounded-[4px] cursor-pointer ${
-                    selectedColor === color
-                      ? `w-[22px] h-[22px] border-[2px] border-white`
-                      : "w-[16px] h-[16px]"
-                  }`}
+                  className={`relative rounded-[4px] cursor-pointer ${selectedColor === color
+                    ? `w-[22px] h-[22px] border-[2px] border-white`
+                    : "w-[16px] h-[16px]"
+                    }`}
                 >
                   {selectedColor === color && (
                     <div
@@ -401,6 +400,7 @@ const CreateSquadModal = () => {
 };
 
 const AddMemberModal = () => {
+  console.log('workspace')
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
@@ -419,7 +419,7 @@ const AddMemberModal = () => {
         currentWorkspace._id,
         memberData.email
       );
-
+        console.log('this api called', data)
       // display a notification for user
       toast.success(`Member added`, {
         autoClose: 3000,
@@ -476,29 +476,29 @@ const AddMemberModal = () => {
             />
           </div>
           {/* <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
-                        Member Type
-                    </p>
-                    <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
-                        <img src={TaguserIcon} alt="" />
-                        <select
-                            id=""
-                            className="w-full bg-transparent text-[#818892] text-[14px] border-none outline-none"
-                            onChange={handleChange}
-                            name="role"
-                        >
-                            <option selected value="">
-                                Select member type
-                            </option>
-                            {Object.values(WORKSPACE_ROLE).map((role) => (
-                                <option
-                                    selected={memberData.role === role}
-                                    value={role}
-                                >
-                                    {role}
-                                </option>
-                            ))}
-                        </select>
-                    </div> */}
+            Member Type
+          </p>
+          <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
+            <img src={TaguserIcon} alt="" />
+            <select
+              id=""
+              className="w-full bg-transparent text-[#818892] text-[14px] border-none outline-none"
+              onChange={handleChange}
+              name="role"
+            >
+              <option selected value="">
+                Select member type
+              </option>
+              {Object.values(WORKSPACE_ROLE).map((role) => (
+                <option
+                  selected={memberData.role === role}
+                  value={role}
+                >
+                  {role}
+                </option>
+              ))}
+            </select>
+          </div> */}
           <button className="mt-[40px] w-full py-[17px] rounded-[8px] bg-[#6576FF] text-white">
             Send Invitation
           </button>

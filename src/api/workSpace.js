@@ -26,10 +26,11 @@ export const update_workspace = (id, data) => {
   return useAxios.patch(`/workspaces/${id}`, formData);
 };
 
-export const add_workspace_member = (id, email) => {
+export const add_workspace_member = (id, email, designation) => {
   return useAxios.put(`workspaces/${id}/add-team-members`, {
     userEmail: email,
-    guest: true,
+    guest: designation,
+    role: designation,
   });
 };
 

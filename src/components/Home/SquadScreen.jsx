@@ -209,7 +209,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
              
              
              
-             {console.log(TabsName)}
+             {/* {console.log(TabsName)} */}
               {/* issue is here */}
               <div className="flex items-center w-[60%] overflow-hidden   hover:overflow-auto pb-1">
                 {TabsName.map((value, idx) => {
@@ -274,7 +274,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               <div className="flex items-center">
                 <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
                 {members.slice(0, 3).map((user, i) => (
-                        <div className="ml-[-10px]">
+                        <div key={i} className="ml-[-10px]">
                           {user.avatar ? (
                             <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
                               <img

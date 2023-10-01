@@ -21,11 +21,8 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     )
     const { loginUserInfo } = useUserInfoContext();
     const members = useSelector((state) => state.workspace.workspaceMembers);
-    const adminRoll = members?.filter((member) => member.role === "owner");
-  
-    const showUpdateDeleteButton = adminRoll.map(
-      (admin) => admin?._id === loginUserInfo?._id
-    );
+
+   
    
 
 
