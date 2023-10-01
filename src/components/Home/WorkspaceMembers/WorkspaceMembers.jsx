@@ -14,34 +14,25 @@ import { get_workspace_member } from "../../../api/workSpace";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
 
-const SquadMembers = ({
-  showType,
-  showAddMemberModal,
-  setShowAddMemberModal,
-  userRole,
-}) => {
-  const selectedSpace = useSelector((state) => state.space.selectedSpace);
-  const selectedWorkspace = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
-  const { loginUserInfo } = useUserInfoContext();
-  const members = useSelector((state) => state.workspace.workspaceMembers);
-  const showupdate = members.filter(member =>member._id === loginUserInfo._id)
-  const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner");
-  console.log(showUpdateDeleteButton)
+const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRole }) => {
+    const selectedSpace = useSelector((state) => state.space.selectedSpace)
+    const selectedWorkspace = useSelector(
+        (state) => state.workspace.selectedWorkspace
+    )
+    const { loginUserInfo } = useUserInfoContext();
+    const members = useSelector((state) => state.workspace.workspaceMembers);
+    const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false)
+    const [updateMemberData, setUpdateMemberData] = useState(null)
+    const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false)
+    const [removeMemberData, setRemoveMemberData] = useState(null)
+    const [showRemovedModal, setShowRemovedModal] = useState(false)
 
-  const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
-  const [updateMemberData, setUpdateMemberData] = useState(null);
-  const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
-  const [removeMemberData, setRemoveMemberData] = useState(null);
-  const [showRemovedModal, setShowRemovedModal] = useState(false);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  const prepareUpdateMember = (data) => {
-    setUpdateMemberData(data);
-    setShowUpdateMemberModal(true);
-  };
+    const prepareUpdateMember = (data) => {
+        setUpdateMemberData(data)
+        setShowUpdateMemberModal(true)
+    }
 
   const prepareDeleteMember = (data) => {
     setRemoveMemberData(data);
