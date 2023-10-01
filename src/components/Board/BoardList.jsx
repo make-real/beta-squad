@@ -18,7 +18,6 @@ const BoardList = ({ showType, listIndex, boardList }) => {
 
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-
     const { addCard, updateBoardList } = useBoardCardContext();
 
     // useEffect(() => {
@@ -42,8 +41,8 @@ const BoardList = ({ showType, listIndex, boardList }) => {
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {
         setCardLoading(true);
-        const cardObject = { name: text };
-        console.log(text)
+        const cardObject = { name: text  };
+       
 
         try {
             // its a POST method | object send into backend/server
