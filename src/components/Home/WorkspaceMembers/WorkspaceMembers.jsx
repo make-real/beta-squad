@@ -22,10 +22,6 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     const { loginUserInfo } = useUserInfoContext();
     const members = useSelector((state) => state.workspace.workspaceMembers);
 
-   
-   
-
-
     const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false)
     const [updateMemberData, setUpdateMemberData] = useState(null)
     const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false)
@@ -33,7 +29,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     const [showRemovedModal, setShowRemovedModal] = useState(false)
 
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
+    
     const prepareUpdateMember = (data) => {
         setUpdateMemberData(data)
         setShowUpdateMemberModal(true)
