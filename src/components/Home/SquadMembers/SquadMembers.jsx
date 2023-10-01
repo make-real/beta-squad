@@ -49,6 +49,8 @@ const SquadMembers = ({ showType, selectedSpace }) => {
   }, [selectedSpace]);
  
   const userRole = members?.find((m) => m._id === userInfo._id);
+
+  
  
   return (
     <>

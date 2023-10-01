@@ -84,6 +84,7 @@ const Projects = ({
   //     };
   // }, [workspaces]);
 
+  console.log(allSpaces)
   return (
     <>
       {showType === "grid" ? (
@@ -129,31 +130,38 @@ const Projects = ({
                       </p>
                     </div>
 
-                    <div className="flex items-center my-2 mx-4">
-                      <div className={"flex items-center justify-start"}>
-                        {members.slice(0,5).map((user, i) => (
-                          <div className="ml-[-10px]">
-                            {user.avatar ? (
-                              <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
-                                <img
-                                  src={user.avatar}
-                                  alt=""
-                                  className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
-                                />
-                              </span>
-                            ) : (
-                              <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
-                                <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
-                                  {i || user?.fullName.charAt(0)}
-                                </p>
-                              </span>
-                            )}
-                          </div>
-                        ))}
-
-                        
+{/* 
+                    <div className="flex">
+              <div className="mb-3 flex pt-2">
+                {sliced?.map((user, i) => (
+                  <div style={{ marginLeft: i ? "-5px" : 0 }}>
+                    {user.avatar ? (
+                      <div className="flex">
+                        {" "}
+                        <img
+                          src={user.avatar}
+                          alt=""
+                          className="w-7 h-7 rounded-full bg-white"
+                        />
                       </div>
-                    </div>
+                    ) : (
+                      <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
+                        {user?.fullName.charAt(0)}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="-mx-2 mt-2">
+                {card?.assignee && neededValue ? (
+                  <p className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">
+                    +{neededLength}
+                  </p>
+                ) : (
+                  " "
+                )}
+              </div>
+            </div> */}
                   </div>
                 </div>
               </>

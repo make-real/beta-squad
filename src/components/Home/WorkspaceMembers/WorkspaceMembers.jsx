@@ -12,16 +12,20 @@ import { useSelector } from 'react-redux'
 import { get_space_members } from '../../../api/space'
 import { get_workspace_member } from '../../../api/workSpace'
 import { getAvatarUrl } from '../../../util/getAvatarUrl'
+import { useUserInfoContext } from '../../../context/UserInfoContext'
 
 const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRole }) => {
     const selectedSpace = useSelector((state) => state.space.selectedSpace)
     const selectedWorkspace = useSelector(
         (state) => state.workspace.selectedWorkspace
     )
-
+    const { loginUserInfo } = useUserInfoContext();
     const members = useSelector((state) => state.workspace.workspaceMembers);
-
-   
+    const adminRoll = members?.filter((member) => member.role === "owner");
+  
+    const showUpdateDeleteButton = adminRoll.map(
+      (admin) => admin?._id === loginUserInfo?._id
+    );
    
 
 
@@ -68,7 +72,6 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     // }, [showRemovedModal])
 
 
-   
 
     // Isuues Here
 
@@ -88,19 +91,21 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                       
                         return (
                             <div key={member._id} className="relative w-[297px] h-[110px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]">
-                                {member?.role === 'owner' 
-                                
-                                     && (
+
+
+
+                                { showUpdateDeleteButton[0] && 
                                           <EditDeleteMenu
                                               deleteFunc={prepareDeleteMember}
                                               data={member}
                                               editFunc={prepareUpdateMember}
                                               className="absolute top-[10px] right-[10px]"
                                           />
-                                      )
+                                      
                                    }
+
+
                                    <div className=''>  
-                                    
                                     <div>
                                    {member?.role === 'owner' ? (<div className="-my-2 w-[50px] text-xs bg-green-400 rounded-full ml-16 mb-2">
                                         <p className="text-black text-center">
@@ -153,6 +158,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
                                         <p className="text-[#818892] text-[13px] w-[120px]">
                                             {member?.email}
                                         </p>
+                                        <p className="text-[#818892] text-[13px] w-[120px]">{member?.designation}</p>
                                     </div>
                                     
                                 </div>

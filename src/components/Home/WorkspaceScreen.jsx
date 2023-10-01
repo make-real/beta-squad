@@ -43,6 +43,9 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     squad_members: <WorkspaceMembers showType={showType} />,
   };
 
+
+  
+
   useEffect(() => {
     let tab = location.hash.slice(1);
     if (tab) {
