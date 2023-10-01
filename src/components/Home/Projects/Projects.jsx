@@ -23,7 +23,6 @@ const Projects = ({
   showType,
   showCreateSquadModal,
   setShowCreateSquadModal,
-
   userRole,
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
