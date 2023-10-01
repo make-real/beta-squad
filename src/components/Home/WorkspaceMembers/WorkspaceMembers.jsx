@@ -20,7 +20,7 @@ const SquadMembers = ({ showType,showAddMemberModal,setShowAddMemberModal,userRo
     )
 
     const members = useSelector((state) => state.workspace.workspaceMembers);
-
+        console.log(members)
    
    
 

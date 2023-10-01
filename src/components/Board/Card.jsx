@@ -25,6 +25,7 @@ import { GrAttachment } from "react-icons/gr";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
+  console.log(card.color)
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -107,7 +108,7 @@ const Card = ({ card, listID }) => {
       );
       updateCard(listID, card._id, data.updatedCard);
     } catch (error) {
-  
+
       // toast.error(`${error?.response?.data?.issue?.message}`, {
       //     autoClose: 3000,
       // });
@@ -127,26 +128,47 @@ const Card = ({ card, listID }) => {
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
   const assignee = card.assignee
-  let assineesLength ;
-  if(assignee){
-      assineesLength = assignee.length
+  let assineesLength;
+  if (assignee) {
+    assineesLength = assignee.length
   }
   else {
     assineesLength = 0
   }
   const neededLength = assineesLength - 5;
   let sliced;
-   if(assignee){
-       sliced = assignee.slice(0,5)
-   }
-   else{
-         sliced= []
-   }
- 
-  const neededValue = neededLength > 0
-  console.log(card)
-  
+  if (assignee) {
+    sliced = assignee.slice(0, 5)
+  }
+  else {
+    sliced = []
+  }
 
+  const neededValue = neededLength > 0
+  // console.log(card)
+  // myCode - sojib
+  // const [color, setColor] = useState("#632a3bfb");
+
+  // Hex color code
+  const hexToRgb = (hex) => {
+    const r = parseInt(hex.substring(1, 3), 16);
+    const g = parseInt(hex.substring(3, 5), 16);
+    const b = parseInt(hex.substring(5, 7), 16);
+    return [r, g, b];
+  };
+
+  const rgb = hexToRgb(card?.color);
+
+  const averageRgb = (rgb) => {
+    const r = rgb[0];
+    const g = rgb[1];
+    const b = rgb[2];
+    return (r + g + b) / 3;
+  };
+  
+  const average = averageRgb(rgb);
+  const isDark = average < 100;
+  // const isLight = average >= 128;
   return (
     <>
       <div
@@ -155,12 +177,12 @@ const Card = ({ card, listID }) => {
         onMouseLeave={() => setVisible(false)}
         className="group relative w-[285px] h-fit bg-white px-3 py-3 rounded-2xl cursor-grab hover:bg-gray-200"
       >
-        {/* top-right shape */}
+        {/* top-right shape ,*/}
         <span
-          className="absolute top-0 left-0 p-[3px]  text-white  text-xs  rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
+          className={`absolute top-0 left-0 p-[3px] text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${isDark? 'text-white' : 'text-black'}`}
           style={{ backgroundColor: card?.color }}
         >
-        {card.cardKey}
+          {card.cardKey}
         </span>
         {/* message indicator */}
         {card?.seen === false && (
@@ -174,8 +196,9 @@ const Card = ({ card, listID }) => {
             <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
-                    <CardChip small tag={tag} key={tag?.name} />
-                  ))
+                  console.log(tag),
+                  <CardChip small tag={tag} key={tag?._id} />
+                ))
                 : null}
             </div>
             <div
@@ -220,7 +243,7 @@ const Card = ({ card, listID }) => {
                   backgroundColor: selectedSpaceObj?.color,
                   width:
                     (checked.length / (checked.length + unchecked.length)) *
-                      100 +
+                    100 +
                     "%",
                 }}
                 className="h-full rounded-full"
@@ -273,45 +296,45 @@ const Card = ({ card, listID }) => {
         )}
         {!!card.assignee?.length && (
           <>
-          <div className="flex">
-          <div className="mb-3 flex pt-2">
-            {sliced?.map((user, i) => (
-              <div style={{ marginLeft: i ? "-5px" : 0 }}>
-                {user.avatar ? (
-                 <div className="flex"> <img
-                    src={user.avatar}
-                    alt=""
-                    className="w-7 h-7 rounded-full bg-white"
-                  />
-                  
+            <div className="flex">
+              <div className="mb-3 flex pt-2">
+                {sliced?.map((user, i) => (
+                  <div key={i} style={{ marginLeft: i ? "-5px" : 0 }}>
+                    {user.avatar ? (
+                      <div className="flex"> <img
+                        src={user.avatar}
+                        alt=""
+                        className="w-7 h-7 rounded-full bg-white"
+                      />
+
+                      </div>
+                    ) : (
+                      <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
+                        {user?.fullName.charAt(0)}
+                      </p>
+                    )}
+
                   </div>
-                ) : (
-                  <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
-                    {user?.fullName.charAt(0)}
-                  </p>
-                )}
-                
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="-mx-2 mt-2">
-          {card?.assignee && neededValue ? 
-          <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
+              <div className="-mx-2 mt-2">
+                {card?.assignee && neededValue ?
+                  <p className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
+              </div>
+
+
+
+
             </div>
-
-           
-
-
-          </div>
-          <div className="flex  justify-end">
-            <><div className="flex -my-10 mr-3">
-              <GoCommentDiscussion className="mt-1 "/>
-            <p className="mx-1">{card.commentsCount}</p></div>
-            </>
-            <><div className="flex -my-10 ">
-              <GrAttachment className="mt-1"/>
-            <p className="mx-1">{card.attachmentsCount}</p></div>
-            </>
+            <div className="flex  justify-end">
+              <><div className="flex -my-10 mr-3">
+                <GoCommentDiscussion className="mt-1 " />
+                <p className="mx-1">{card.commentsCount}</p></div>
+              </>
+              <><div className="flex -my-10 ">
+                <GrAttachment className="mt-1" />
+                <p className="mx-1">{card.attachmentsCount}</p></div>
+              </>
             </div>
           </>
         )}
@@ -330,9 +353,8 @@ const Card = ({ card, listID }) => {
             </span>
             <span className="cursor-pointer">
               <CheckCircleIcon
-                className={`w-5 h-5 ${
-                  progress === 4 ? "bg-[#54CC7C] rounded-full" : ""
-                }`}
+                className={`w-5 h-5 ${progress === 4 ? "bg-[#54CC7C] rounded-full" : ""
+                  }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleProgressUpdate();
