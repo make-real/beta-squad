@@ -6,8 +6,6 @@ import {
   TrashIcon,
   EyeIcon,
   CheckCircleIcon,
-  CheckIcon,
-  CommandLineIcon,
 } from "@heroicons/react/24/outline";
 import ConfirmDialog from "./ConfirmDialog";
 import { cardUpdateApiCall } from "../../hooks/useFetch";
@@ -28,7 +26,7 @@ const Card = ({ card, listID }) => {
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
-  const { updateCard, toggleCardModal, setCardDetails } = useBoardCardContext();
+  const { updateCard, toggleCardModal } = useBoardCardContext();
   const [progress, setProgress] = useState(card?.progress);
   const [visible, setVisible] = useState(false);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
@@ -107,7 +105,6 @@ const Card = ({ card, listID }) => {
       );
       updateCard(listID, card._id, data.updatedCard);
     } catch (error) {
-  
       // toast.error(`${error?.response?.data?.issue?.message}`, {
       //     autoClose: 3000,
       // });
@@ -126,26 +123,25 @@ const Card = ({ card, listID }) => {
 
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
-  const assignee = card.assignee
-  let assineesLength ;
-  if(assignee){
-      assineesLength = assignee.length
-  }
-  else {
-    assineesLength = 0
+
+  
+  const assignee = card.assignee;
+  let assineesLength;
+  if (assignee) {
+    assineesLength = assignee.length;
+  } else {
+    assineesLength = 0;
   }
   const neededLength = assineesLength - 5;
   let sliced;
-   if(assignee){
-       sliced = assignee.slice(0,5)
-   }
-   else{
-         sliced= []
-   }
+  if (assignee) {
+    sliced = assignee.slice(0, 5);
+  } else {
+    sliced = [];
+  }
+
+  const neededValue = neededLength > 0;
  
-  const neededValue = neededLength > 0
-  console.log(card)
-  
 
   return (
     <>
@@ -157,10 +153,10 @@ const Card = ({ card, listID }) => {
       >
         {/* top-right shape */}
         <span
-          className="absolute top-0 left-0 p-[3px]  text-white  text-xs  rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
+          className="absolute top-0 left-0 py-[3px]  px-2 text-white font-light  text-[10px]  rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
           style={{ backgroundColor: card?.color }}
         >
-        {card.cardKey}
+          {card.cardKey}
         </span>
         {/* message indicator */}
         {card?.seen === false && (
@@ -273,45 +269,53 @@ const Card = ({ card, listID }) => {
         )}
         {!!card.assignee?.length && (
           <>
-          <div className="flex">
-          <div className="mb-3 flex pt-2">
-            {sliced?.map((user, i) => (
-              <div style={{ marginLeft: i ? "-5px" : 0 }}>
-                {user.avatar ? (
-                 <div className="flex"> <img
-                    src={user.avatar}
-                    alt=""
-                    className="w-7 h-7 rounded-full bg-white"
-                  />
-                  
+
+
+          {/* this is important */}
+            <div className="flex">
+              <div className="mb-3 flex pt-2">
+                {sliced?.map((user, i) => (
+                  <div style={{ marginLeft: i ? "-5px" : 0 }}>
+                    {user.avatar ? (
+                      <div className="flex">
+                        {" "}
+                        <img
+                          src={user.avatar}
+                          alt=""
+                          className="w-7 h-7 rounded-full bg-white"
+                        />
+                      </div>
+                    ) : (
+                      <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
+                        {user?.fullName.charAt(0)}
+                      </p>
+                    )}
                   </div>
-                ) : (
-                  <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
-                    {user?.fullName.charAt(0)}
-                  </p>
-                )}
-                
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="-mx-2 mt-2">
-          {card?.assignee && neededValue ? 
-          <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
+              <div className="-mx-2 mt-2">
+                {card?.assignee && neededValue ? (
+                  <p className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">
+                    +{neededLength}
+                  </p>
+                ) : (
+                  " "
+                )}
+              </div>
             </div>
-
-           
-
-
-          </div>
-          <div className="flex  justify-end">
-            <><div className="flex -my-10 mr-3">
-              <GoCommentDiscussion className="mt-1 "/>
-            <p className="mx-1">{card.commentsCount}</p></div>
-            </>
-            <><div className="flex -my-10 ">
-              <GrAttachment className="mt-1"/>
-            <p className="mx-1">{card.attachmentsCount}</p></div>
-            </>
+            <div className="flex  justify-end">
+              <>
+                <div className="flex -my-10 mr-3">
+                  <GoCommentDiscussion className="mt-1 " />
+                  <p className="mx-1">{card.commentsCount}</p>
+                </div>
+              </>
+              <>
+                <div className="flex -my-10 ">
+                  <GrAttachment className="mt-1" />
+                  <p className="mx-1">{card.attachmentsCount}</p>
+                </div>
+              </>
             </div>
           </>
         )}
