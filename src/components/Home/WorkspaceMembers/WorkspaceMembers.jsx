@@ -74,6 +74,8 @@ const SquadMembers = ({
 
   // Isuues Here
 
+console.log(members)
+
   return (
     <>
       {showType === "grid" ? (

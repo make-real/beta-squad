@@ -661,6 +661,8 @@ const SideNavbar = () => {
                 {!fullSidebar && (
                   <h1 className="text-[#0D1282] text-center">Chats</h1>
                 )}
+
+
                 {/* Chats List */}
                 <div className="mt-[10px] flex flex-col">
                   {members.map((member, idx) =>
