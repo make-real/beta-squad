@@ -22,7 +22,6 @@ export const AppStateContext = ({ children }) => {
   const [showChat, setShowChat] = useState(true);
   const [selectedTab, setSelectedTab] = useState("All");
 
-  // console.log(selectedTab)
 
   return (
     <AppState.Provider

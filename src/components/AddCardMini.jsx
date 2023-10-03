@@ -2,7 +2,6 @@ const AddCardMini = ({ setAddCard }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('click');
     }
 
 

@@ -201,12 +201,8 @@ const App = () => {
     });
 
     RtcEngine?.on("user-published", async (user, mediaType) => {
-      console.log("####################################");
-      console.log("user-published %s", mediaType);
-      console.log("####################################");
 
       await RtcEngine?.subscribe(user, mediaType);
-      console.log("subscribe success");
 
       // Subscribe to the remote user when the SDK triggers the "user-published" event.
 
@@ -218,11 +214,6 @@ const App = () => {
             video: user.videoTrack,
           })
         );
-
-        // const remoteAudioTrack = user.audioTrack;
-        // const remoteVideoTrack = user.videoTrack;
-        // const remoteUserId = user.uid.toString();
-        // remoteAudioTrack.play();
       }
       // Subscribe and play the remote audio track If the remote user publishes the audio track only.
       if (mediaType == "audio") {
@@ -331,65 +322,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
-        {/* <Route
-                    path="settings"
-                    element={
-                        <ProtectedRoute>
-                            <UserSettingLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route
-                        index
-                        element={
-                            <ProtectedRoute>
-                                <Profile />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="manage-workspace"
-                        element={
-                            <ProtectedRoute>
-                                <ManageWorkspace />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="developer"
-                        element={
-                            <ProtectedRoute>
-                                <DeveloperConsole />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="preferences"
-                        element={
-                            <ProtectedRoute>
-                                <Preferences />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="workspace-settings"
-                        element={
-                            <ProtectedRoute>
-                                <WorkspaceSettings />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="tags"
-                        element={
-                            <ProtectedRoute>
-                                <Tags />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Route> */}
-
         <Route
           path="settings"
           element={
@@ -415,65 +347,6 @@ const App = () => {
             }
           />
         </Route>
-
-        {/* <Route
-                    path="projects"
-                    element={
-                        <ProtectedRoute>
-                            <Layout selectedSpaceId={selectedSpaceId} />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route
-                        index
-                        element={
-                            <ProtectedRoute>
-                                <Chat />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="kanban"
-                        element={
-                            <ProtectedRoute>
-                                <Board selectedSpaceId={selectedSpaceId} />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="board/:id"
-                        element={
-                            <ProtectedRoute>
-                                <CardDetails />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="list"
-                        element={
-                            <ProtectedRoute>
-                                <CardAsList selectedSpaceId={selectedSpaceId} />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="chat/:id"
-                        element={
-                            <ProtectedRoute>
-                                <GroupChat />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="single-chat/:participantID"
-                        exact
-                        element={
-                            <ProtectedRoute>
-                                <SingleChat />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Route> */}
         <Route
           path="projects"
           element={
@@ -507,14 +380,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
-                            path="board/:id"
-                            element={
-                                <ProtectedRoute>
-                                    <CardDetails />
-                                </ProtectedRoute>
-                            }
-                        /> */}
+            
           </Route>
 
           <Route
@@ -527,14 +393,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          {/* <Route
-            path=":workspace_id/task_list/:userID"
-            element={
-              <ProtectedRoute>
-                <SingleChat />
-              </ProtectedRoute>
-            }
-          /> */}
+         
           <Route
             path=":workspace_id/chat/:participantID"
             element={
@@ -577,17 +436,6 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          {/* <Route
-                        path="single-chat/:participantID"
-                        exact
-                        element={
-                            <ProtectedRoute>
-                                <SingleChat />
-                            </ProtectedRoute>
-                        }
-                    /> */}
-          {/* <Route path="calendar" element={<ProtectedRoute> <Calender /> </ProtectedRoute>} />
-          <Route path="timeline" element={<ProtectedRoute> <Timeline /> </ProtectedRoute>} /> */}
         </Route>
 
         <Route path="*" element={<PageNotFound />} />

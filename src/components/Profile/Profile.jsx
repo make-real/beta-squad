@@ -68,20 +68,17 @@ const Profile = () => {
     data.append("fullName", userData.fullName);
     data.append("email", userData.email);
 
-    console.log(data);
 
     try {
       const { data: resData } = await update_user(data);
       setSuccess(true);
-
-      console.log(resData);
 
       setTimeout(() => {
         setSuccess(false);
       }, 1000);
     } catch (err) {
       setError(err.message);
-      console.log(err);
+
     }
   };
 

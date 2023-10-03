@@ -70,8 +70,6 @@ export const BoardCardContext = ({ children }) => {
   };
 
   const addBoardList = (newListObj) => {
-    console.log("PRE: ", boardLists);
-    console.log(newListObj);
     setBoardList((pre) => [...pre, newListObj]);
   };
 

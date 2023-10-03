@@ -23,8 +23,6 @@ const UserSettings = () => {
     (state) => state.workspace
   );
 
-  console.log(loginUserInfo)
-
   useEffect(() => {
     const fetchData = async () => {
       try {

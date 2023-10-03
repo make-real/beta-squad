@@ -28,7 +28,6 @@ const SquadMembers = ({
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const showupdate = members.filter(member =>member._id === loginUserInfo._id)
   const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner");
-  // console.log(showUpdateDeleteButton)
 
   const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
   const [updateMemberData, setUpdateMemberData] = useState(null);
@@ -58,23 +57,10 @@ const SquadMembers = ({
     setShowUpdateMemberModal(false);
   };
 
-  // const fetchWorkspaceMembers = async () => {
-  //     try {
-  //         const { data } = await get_workspace_member(selectedWorkspace)
-  //         setMembers(data?.teamMembers)
-
-  //     } catch (err) {
-  //         console.log('Error occured ==> ', err)
-  //     }
-  // }
-
-  // useEffect(() => {
-  //     fetchWorkspaceMembers()
-  // }, [showRemovedModal])
 
   // Isuues Here
 
-console.log(members)
+
 
   return (
     <>

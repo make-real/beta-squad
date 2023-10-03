@@ -60,8 +60,7 @@ const EditWorkspaceModal = ({ cancelFunc, data }) => {
             cancelFunc();
         } catch (error) {
             // error for developer for deBugging...
-            // console.log(error.response.data);
-            console.log(error);
+
 
             setErrMsg(error?.name);
             // error for user at notification...

@@ -6,7 +6,6 @@ const AddCard = ({ setAddCard }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('click');
     }
 
 

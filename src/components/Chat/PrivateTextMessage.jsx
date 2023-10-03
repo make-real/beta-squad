@@ -34,7 +34,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
     const reaction = msg.reactions?.find((r) => r?.reactor?._id === userId)?.reaction;
 
     const handleDelete = async () => {
-        console.log("delete");
+        
         try {
             await delete_message(space, msg._id);
         } catch (error) {

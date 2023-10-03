@@ -89,7 +89,6 @@ const WorkspaceSettings = () => {
   };
 
   const uploadLogo = async (e) => {
-    console.log("upload logo");
     try {
       setImageLoading(true);
       const file = e.target.files[0];

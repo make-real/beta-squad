@@ -100,7 +100,6 @@ const CardTags = (props) => {
     } catch (error) {
       // error for user at notification...
       toast.error(error?.response?.data?.issue, { autoClose: 3000 });
-      console.log(error?.response?.data?.issue);
     }
   };
 
@@ -126,7 +125,7 @@ const CardTags = (props) => {
         localCard._id,
         { tagId: data.tag._id }
       );
-      // console.log(updateCard.updatedCard);
+      
       setLocalCard(updateCard.updatedCard);
       setOptions((pre) => pre.filter((data) => data?._id !== data?.tag?._id));
       handleDataChange();

@@ -11,12 +11,12 @@ import { WORKSPACE_ROLE } from "../../../../constant/enums";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
-  console.log('addmember')
+
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const [memberData, setMemberData] = useState({});
-  console.log(memberData)
+
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -45,8 +45,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
       setShowAddMemberModal(false);
     } catch (error) {
       // error for developer for deBugging...
-      // console.log(error.response.data);
-      console.log(error);
+
       setErrMsg(error?.message);
       // error for user at notification...
       // toast.error(error?.message, {

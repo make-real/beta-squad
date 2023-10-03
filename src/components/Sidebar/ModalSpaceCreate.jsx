@@ -50,7 +50,6 @@ const ModalSpaceCreate = ({ setCreateSpaceModal }) => {
       dispatch(addNewSpace(data?.space));
     } catch (error) {
       // error for developer for deBugging...
-      console.log(error.response.data);
 
       // error for user at notification...
       toast.error(error?.response?.data?.issue?.name, { autoClose: 3000 });

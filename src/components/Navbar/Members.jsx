@@ -26,8 +26,6 @@ const Members = () => {
   const { selectedWorkspace } = useSelector((state) => state.workspace);
   const [search, setSearch] = React.useState("");
 
-  console.log(members)
-
   useEffect(() => {
     getSpaceMember();
     getWorkspaceMember();
@@ -41,7 +39,7 @@ const Members = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      
     }
   };
 
@@ -53,7 +51,7 @@ const Members = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      
     }
   };
   const addMember = (id) => async () => {
@@ -66,7 +64,7 @@ const Members = () => {
     } catch (error) {
       toast.error(error.message, { autoClose: 1000 });
       setAddingMember("");
-      console.log(error);
+      
     }
   };
   const leaveSpace = async () => {
@@ -77,7 +75,7 @@ const Members = () => {
     } catch (error) {
       toast.error(error.message, { autoClose: 1000 });
       setLeavingLoader(false);
-      console.log(error);
+      
     }
   };
   const toggleModal = () => {

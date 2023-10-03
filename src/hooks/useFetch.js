@@ -19,7 +19,6 @@ api.interceptors.request.use((req) => {
         req.headers.authorization = `Bearer ${serverSendToken}`;
     } else {
         // alert(`You Have No Internet Connection... ⛔ \nPlease Connect Your Internet Connection... 🔗`);
-        // console.log('No Token Found, Please Re-Connect Internet');
     }
 
     return req;
@@ -116,7 +115,7 @@ export const cardUpdateApiCall = (
     spaceId,
     listId,
     cardId,
-    cardObj // console.log(spaceId, listId, cardId, cardObj)
+    cardObj
 ) => api.patch(`/spaces/${spaceId}/board/${listId}/card/${cardId}`, cardObj);
 
 export const cardAttachmentUpdateApiCall = (spaceId, listId, cardId, cardObj) =>

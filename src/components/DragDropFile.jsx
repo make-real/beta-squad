@@ -12,15 +12,8 @@ function DragDropFile({
   setLocalCard,
   handleDataChange,
 }) {
-  // const [file, setFile] = useState(null);
-
-  // console.log(file);
-  // const handleChange = (file) => {
-  //     setFile(file);
-  // };
 
   const handle_card_attachments = async (files) => {
-    console.log(files);
     const formData = new FormData();
 
     for (const file of files) {

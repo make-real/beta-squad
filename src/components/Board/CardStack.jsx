@@ -73,7 +73,6 @@ const CardStack = ({ listName, card, listID }) => {
             );
             updateCard(listID, card._id, data.updatedCard);
         } catch (error) {
-            console.log(error?.response?.data?.issue?.message);
             toast.error(`${error?.response?.data?.issue?.message}`, {
                 autoClose: 3000,
             });
@@ -81,7 +80,6 @@ const CardStack = ({ listName, card, listID }) => {
     };
 
     const toggle_card_modal = () => {
-        console.log('taggling........');
         toggleCardModal(listID, card._id);
     };
 

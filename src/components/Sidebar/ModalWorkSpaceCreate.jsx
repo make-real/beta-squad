@@ -40,7 +40,6 @@ const ModalWorkSpaceCreate = ({ setNewWorkSpace }) => {
 
         } catch (error) {
             // display error notification for developers...
-            console.log(error?.response?.data?.issue);
 
             // display error notification for users...
             toast.error(error?.response?.data?.issue?.name, { autoClose: 3000 });

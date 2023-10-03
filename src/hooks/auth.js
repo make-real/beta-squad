@@ -27,7 +27,6 @@ function useAuth() {
             navigate("/projects");
         } catch (error) {
             setLoader(false);
-            console.log(error);
             setError(error.message);
         }
     };

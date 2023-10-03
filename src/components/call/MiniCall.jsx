@@ -107,7 +107,6 @@ export default function MiniCall() {
 
             socket?.emit("CAMERA_STATE_CHANGED", call?.data?._id, !cameraOff);
         } catch (error) {
-            console.log(error);
             if (error?.code === "DEVICE_NOT_FOUND") alert("Camera not found.");
             else alert("Unknown error.");
         }

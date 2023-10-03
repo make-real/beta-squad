@@ -14,7 +14,7 @@ const NotificationsModal = ({ setShowNotificationModal }) => {
 
             setNotifications(data.notifications);
         } catch (err) {
-            console.log(err);
+            
             setNotifications([]);
         }
     };

@@ -188,7 +188,6 @@ const Board = ({ showType, addBoardRef }) => {
                     className="flex items-start"
                   >
                     {filteredLists.length === 0 ? "Currently, Empty Board!" : filterdBoardList()?.map((boardList, index) => (
-                      // console.log(boardList),
                       <BoardList
                         showType={showType}
                         key={boardList?._id}
