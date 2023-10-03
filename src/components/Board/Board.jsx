@@ -29,7 +29,7 @@ const Board = ({ showType, addBoardRef }) => {
     setFilteredLists,
   } = useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +37,7 @@ const Board = ({ showType, addBoardRef }) => {
           const { data } = await useAxios.get(
             `/spaces/${squadId}/board?getCards=true`
           );
-
+          
           setBoardList(data.lists);
           setFilteredLists(data.lists);
           // setBoardList(data.lists?.reverse()?.slice(0));
@@ -187,7 +187,8 @@ const Board = ({ showType, addBoardRef }) => {
                     ref={provided.innerRef}
                     className="flex items-start"
                   >
-                    {filterdBoardList()?.map((boardList, index) => (
+                    {filteredLists.length === 0 ? "Currently, Empty Board!" : filterdBoardList()?.map((boardList, index) => (
+                      // console.log(boardList),
                       <BoardList
                         showType={showType}
                         key={boardList?._id}

@@ -28,7 +28,7 @@ const SquadMembers = ({
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const showupdate = members.filter(member =>member._id === loginUserInfo._id)
   const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner");
-
+  // console.log(showUpdateDeleteButton)
 
   const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
   const [updateMemberData, setUpdateMemberData] = useState(null);
@@ -38,10 +38,10 @@ const SquadMembers = ({
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  const prepareUpdateMember = (data) => {
-    setUpdateMemberData(data);
-    setShowUpdateMemberModal(true);
-  };
+    const prepareUpdateMember = (data) => {
+        setUpdateMemberData(data)
+        setShowUpdateMemberModal(true)
+    }
 
   const prepareDeleteMember = (data) => {
     setRemoveMemberData(data);

@@ -23,7 +23,6 @@ import { GrAttachment } from "react-icons/gr";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
- 
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -143,8 +142,23 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
- 
-  
+
+  const hexToRgb = (hex) => {
+    const r = parseInt(hex.substring(1, 3), 16);
+    const g = parseInt(hex.substring(3, 5), 16);
+    const b = parseInt(hex.substring(5, 7), 16);
+    return [r, g, b];
+  };
+  const rgb = hexToRgb(card.color);
+
+  const averageRgb = (rgb) => {
+    const r = rgb[0];
+    const g = rgb[1];
+    const b = rgb[2];
+    return (r + g + b) / 3;
+  };
+  const average = averageRgb(rgb);
+  const isDark = average > 100;
 
   return (
     <>
@@ -156,7 +170,7 @@ const Card = ({ card, listID }) => {
       >
         {/* top-right shape ,*/}
         <span
-          className="absolute top-0 left-0 p-[3px]  text-white  text-xs  rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px]"
+          className={`absolute top-0 left-0 p-[3px] text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${isDark ? 'text-black' : 'text-white'}`}
           style={{ backgroundColor: card?.color }}
         >
           {card.cardKey}
