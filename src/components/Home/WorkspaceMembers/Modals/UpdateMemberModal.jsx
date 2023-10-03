@@ -23,17 +23,21 @@ const UpdateMemberModal = ({
     setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-        try {
-            console.log(selectedWorkspaceId);
-            const { data } = await change_workspace_member_role(
-                selectedWorkspaceId,
-                {
-                    id: editData._id,
-                    role: editData.role,
-                }
-            );
+  console.log(editData._id , editData.role , editData.designation)
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      
+       await change_workspace_member_role(selectedWorkspaceId, {
+        id: editData._id,
+        role: editData.role,
+      });
+
+     try{
+        await change_workspace_member_designation(selectedWorkspaceId,{
+            id:editData._id,
+            designation:editData.designation
+          })
 
           // display a notification for user
           toast.success(`Role changed successfully`, {
