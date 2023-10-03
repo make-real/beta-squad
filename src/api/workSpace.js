@@ -29,7 +29,7 @@ export const update_workspace = (id, data) => {
 export const add_workspace_member = (id, email, designation) => {
   return useAxios.put(`workspaces/${id}/add-team-members`, {
     userEmail: email,
-    guest: designation,
+    designation: designation,
     role: designation,
   });
 };
@@ -42,6 +42,13 @@ export const change_workspace_member_role = (spaceId, { id, role }) => {
   return useAxios.put(`workspaces/${spaceId}/member-role`, {
     memberId: id,
     requestFor: role,
+  });
+};
+
+
+export const change_workspace_member_designation = (spaceId, { id, designation}) => {
+  return useAxios.patch(`workspaces/${spaceId}/team-members/${id}`, {
+    designation: designation,
   });
 };
 
