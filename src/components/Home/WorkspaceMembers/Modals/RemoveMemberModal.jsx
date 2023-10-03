@@ -24,7 +24,7 @@ const RemoveMemberModal = ({
     const removeMember = async () => {
         setShowRemoveMemberModal(false);
         try {
-            const res = await change_workspace_member_role(
+             await change_workspace_member_role(
                 currentWorkspace._id,
                 {
                     id: data._id,
