@@ -7,16 +7,13 @@ import CrossIcon from "../../../../assets/cross.svg";
 import InboxIcon from "../../../../assets/inbox.svg";
 import { validateEmail } from "../../../../util/helpers";
 import TaguserIcon from "../../../../assets/tag_user.svg";
-import { WORKSPACE_ROLE } from "../../../../constant/enums";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
-  console.log('addmember')
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const [memberData, setMemberData] = useState({});
-  console.log(memberData)
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 

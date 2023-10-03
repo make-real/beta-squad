@@ -23,7 +23,7 @@ import { GrAttachment } from "react-icons/gr";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
-  console.log(card.color)
+ 
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -143,7 +143,7 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
-  console.log(card)
+ 
   
 
   return (
@@ -173,7 +173,6 @@ const Card = ({ card, listID }) => {
             <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
-                  console.log(tag),
                   <CardChip small tag={tag} key={tag?._id} />
                 ))
                 : null}

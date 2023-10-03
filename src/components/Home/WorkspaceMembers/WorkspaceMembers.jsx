@@ -74,7 +74,7 @@ const SquadMembers = ({
 
   // Isuues Here
 
-console.log(members)
+
 
   return (
     <>
