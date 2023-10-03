@@ -13,6 +13,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Draggable } from 'react-beautiful-dnd';
 
 const BoardList = ({ showType, listIndex, boardList }) => {
+    // console.log(boardList)
     const [toggleEdit, setToggleEdit] = useState(false);
     const [cardLoading, setCardLoading] = useState(false);
 

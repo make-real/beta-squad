@@ -61,7 +61,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   } = useBoardCardContext();
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
-
+  // console.log(TabsName)
   
 
   const { state } = useLocation();
@@ -195,7 +195,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     ),
     members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
   };
-
+  
   // const TabsName = {
   //   all: "All",
   //   //importtant: "Important",
@@ -211,7 +211,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
              
              {/* {console.log(TabsName)} */}
               {/* issue is here */}
-              <div className="flex items-center w-[60%] overflow-hidden   hover:overflow-auto pb-1">
+              <div className="flex items-center w-[60%] overflow-hidden hover:overflow-auto pb-1">
                 {TabsName.map((value, idx) => {
                   return (
                     <a

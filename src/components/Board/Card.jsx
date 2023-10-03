@@ -189,7 +189,6 @@ const Card = ({ card, listID }) => {
             <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
-                  console.log(tag),
                   <CardChip small tag={tag} key={tag?._id} />
                 ))
                 : null}

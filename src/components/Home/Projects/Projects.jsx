@@ -83,7 +83,7 @@ const Projects = ({
   //     };
   // }, [workspaces]);
 
-  console.log(allSpaces)
+  // console.log(allSpaces)
   return (
     <>
       {showType === "grid" ? (

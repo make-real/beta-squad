@@ -27,7 +27,7 @@ const UpdateMemberModal = ({
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            console.log(selectedWorkspaceId);
+            // console.log(selectedWorkspaceId);
             const { data } = await change_workspace_member_role(
                 selectedWorkspaceId,
                 {
