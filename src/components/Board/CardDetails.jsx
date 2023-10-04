@@ -137,6 +137,9 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     }
     // }
   };
+
+
+  console.log(localCard)
   
   const handle_card_description_update_enter_btn = async (e) => {
     // if (e.key === 'Enter' && !e.shiftKey) {
@@ -335,6 +338,24 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const checked = localCard?.checkList?.filter((item) => item?.checked);
   const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
+
+  const hexToRgb = (hex) => {
+    const r = parseInt(hex.substring(1, 3), 16);
+    const g = parseInt(hex.substring(3, 5), 16);
+    const b = parseInt(hex.substring(5, 7), 16);
+    return [r, g, b];
+  };
+  const rgb = hexToRgb(localCard.color);
+
+  const averageRgb = (rgb) => {
+    const r = rgb[0];
+    const g = rgb[1];
+    const b = rgb[2];
+    return (r + g + b) / 3;
+  };
+  const average = averageRgb(rgb);
+  const isDark = average > 100;
+
   if (!localCard) {
     return (
       <section
@@ -347,6 +368,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
+ 
+
   return (
     <React.Fragment>
       <section
@@ -357,9 +380,10 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
         <div className="relative bg-white p-8 rounded-2xl h-full">
           <span
-            className={`absolute top-0 left-0 rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8`}
+            className={`absolute top-0 left-0 px-3 py-[3px] rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[16px]  
+            ${isDark ? 'text-black' : 'text-white'}`}
             style={{ backgroundColor: localCard?.color }}
-          />
+          > {localCard.cardKey}</span>
 
           <div className="flex items-center justify-between pb-4 px-1">
             {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">

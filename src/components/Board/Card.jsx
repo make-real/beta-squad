@@ -123,6 +123,8 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
+
+
   const hexToRgb = (hex) => {
     const r = parseInt(hex.substring(1, 3), 16);
     const g = parseInt(hex.substring(3, 5), 16);
@@ -150,7 +152,7 @@ const Card = ({ card, listID }) => {
       >
         {/* top-right shape ,*/}
         <span
-          className={`absolute top-0 left-0 p-[3px] text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${isDark ? 'text-black' : 'text-white'}`}
+          className={`absolute top-0 left-0 py-[3px] px-3 text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${isDark ? 'text-black' : 'text-white'}`}
           style={{ backgroundColor: card?.color }}
         >
           {card.cardKey}
