@@ -43,6 +43,8 @@ import { ClipLoader } from "react-spinners";
 import DocView from "../DocView";
 import { GrDocumentPdf } from "react-icons/gr";
 import PreviewDoc from "./PreviewDoc";
+import RichTextEditor from "../RichTextEditor";
+import { debounce } from "lodash";
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const { workspace_id, squadId: listID, id } = useParams();
@@ -50,7 +52,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const navigate = useNavigate();
   const { margin } = useStyleContext();
 
-  const [localCard, setLocalCard] = useState({});
+  const [localCard, setLocalCard] = useState({})
+  const [data, setData] = useState({})
   
 
   const [noteDone, setNoteDone] = useState(false);
@@ -138,7 +141,20 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // }
   };
 
-  
+
+  const debounceFn = debounce(handleDebounceFn, 1000)
+  function handleDebounceFn(val) {
+    setLocalCard((pre) => ({
+      ...pre,
+      description:val,
+    }));
+}
+const onEdit = (val) => {
+    
+  debounceFn(val)
+}
+
+
   const handle_card_description_update_enter_btn = async (e) => {
     // if (e.key === 'Enter' && !e.shiftKey) {
     const cardTagObject = {
@@ -655,31 +671,15 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   <div className="py-2 w-fit text-gray-400  group">
                     <p className="text-[14px] text-[#818892]">Description</p>
                   </div>
-                  {!editDescription ? (
-                    <textarea
-                      className="w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
-                      type="text"
-                      defaultValue={localCard?.description}
-                      onClick={() => setEditDescription((prev) => !prev)}
-                    />
-                  ) : (
-                    <textarea
-                      className={`w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px] focus:outline-none ${
-                        editDescription ? "ring-[1px]" : ""
-                      } focus:ring-[1px] focus:ring-violet-500`}
-                      type="text"
-                      defaultValue={localCard?.description}
-                      onChange={(e) => {
-                        setLocalCard((pre) => ({
-                          ...pre,
-                          description: e.target.value,
-                        }));
-                      }}
-                      onBlur={(e) =>
-                        handle_card_description_update_enter_btn(e)
-                      }
-                    />
-                  )}
+                 
+                    <RichTextEditor
+                    value={localCard.description}
+                    onChange={onEdit}
+                    onBlur={(e) =>
+                      handle_card_description_update_enter_btn(e)
+                    }
+                    ></RichTextEditor>
+                 
                   {/* <input
                                     type="text"
                                     className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"
