@@ -131,7 +131,7 @@ const Card = ({ card, listID }) => {
     const b = parseInt(hex.substring(5, 7), 16);
     return [r, g, b];
   };
-  const rgb = hexToRgb(card.color);
+  const rgb = hexToRgb(card?.color);
 
   const averageRgb = (rgb) => {
     const r = rgb[0];

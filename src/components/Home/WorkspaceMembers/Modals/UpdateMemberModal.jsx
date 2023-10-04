@@ -26,6 +26,7 @@ const UpdateMemberModal = ({
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    console.log(editData)
     try {
       
        await change_workspace_member_role(selectedWorkspaceId, {
@@ -151,16 +152,17 @@ const UpdateMemberModal = ({
           </p>
           <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
             <img src={TaguserIcon} alt="" />
-            <input
+            {/* <input
               className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
               type="text"
               placeholder="E.g. Designer"
               onChange={handleChange}
               value={editData.role}
               name="role"
-            />
-          </div>
-          {/* <select
+            /> */}
+
+
+<select
                             name="role"
                             onChange={handleChange}
                             id=""
@@ -169,7 +171,7 @@ const UpdateMemberModal = ({
                             <option selected value="">
                                 Select member type
                             </option>
-                            {Object.values(WORKSPACE_ROLE).map((role) => {
+                            {["admin","guest","user"].map((role) => {
                                 return (
                                     <option
                                         selected={
@@ -182,7 +184,9 @@ const UpdateMemberModal = ({
                                     </option>
                                 );
                             })}
-                        </select> */}
+                        </select>
+          </div>
+        
 
           <div className="flex items-center mt-[40px] gap-[30px]">
             <button
