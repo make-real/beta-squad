@@ -49,7 +49,6 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
                         display: user.fullName,
                     }));
 
-                    // console.log(arr);
                     setUsers(arr);
                 } catch (error) {
                     console.log(error);
@@ -231,7 +230,6 @@ const PrivateMessageBox = ({ messageToRespond, setMessageToRespond, custom, onCo
     useEffect(() => {
         if (Boolean(mediaBlobUrl) && audioSent) {
             uploadAudioFile(mediaBlobUrl);
-            console.log("Uploading...");
         }
     }, [mediaBlobUrl]);
 

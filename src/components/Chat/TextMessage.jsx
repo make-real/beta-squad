@@ -257,8 +257,6 @@ const RenderAttachment = ({ message, scrollToBottom, small }) => {
     return message?.content?.attachments?.map((src, idx) => {
       const extension = src.match(/\.([^\./\?]+)($|\?)/)[1];
 
-      console.log(src);
-
       if (
         ["png", "jpeg", "jpg", "ttif", "gif", "webp", "svg"].includes(extension)
       ) {
@@ -343,7 +341,7 @@ const TextMessage = ({
 
   useEffect(() => {
     socket?.on("NEW_SPACE_MESSAGE_RECEIVED", (msg) => {
-      console.log(msg);
+
       if (msg.to === selectedSpaceId) {
         if (userId === msg?.sender?._id && Boolean(msg?.content?.text)) return;
 

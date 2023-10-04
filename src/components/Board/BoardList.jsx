@@ -13,31 +13,12 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Draggable } from 'react-beautiful-dnd';
 
 const BoardList = ({ showType, listIndex, boardList }) => {
-    // console.log(boardList)
     const [toggleEdit, setToggleEdit] = useState(false);
     const [cardLoading, setCardLoading] = useState(false);
 
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const { addCard, updateBoardList } = useBoardCardContext();
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             // GET Method ==> Card --- under specific Space reference ID + board list reference
-    //             const { data } = await useAxios.get(
-    //                 `/spaces/${selectedSpaceId}/board/${boardList?._id}/card`
-    //             );
-
-    //             // get updated card all the time...
-    //             // console.log(data)
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, [selectedSpaceId, boardList?._id]);
-
     
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {

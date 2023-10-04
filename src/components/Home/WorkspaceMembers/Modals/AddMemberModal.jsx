@@ -10,10 +10,12 @@ import TaguserIcon from "../../../../assets/tag_user.svg";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
+
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const [memberData, setMemberData] = useState({});
+
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -42,8 +44,7 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
       setShowAddMemberModal(false);
     } catch (error) {
       // error for developer for deBugging...
-      // console.log(error.response.data);
-      console.log(error);
+
       setErrMsg(error?.message);
       // error for user at notification...
       // toast.error(error?.message, {

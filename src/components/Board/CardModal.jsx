@@ -95,7 +95,6 @@ const CardModal = ({
   );
 
   const handle_card_name_update_enter_btn = async (e) => {
-    console.log(e.target.value);
 
     if (e.key === "Enter") {
       const cardTagObject = { ...localCard, name: localCard.name };

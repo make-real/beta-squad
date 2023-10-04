@@ -86,7 +86,6 @@ const ConfirmDialog = ({
                 setDeleteAttachFileLoading(false);
             }
         } catch (error) {
-            console.log(error?.response?.data?.issue?.message);
             toast.error(`${error?.response?.data?.issue?.message}`, {
                 autoClose: 3000,
             });

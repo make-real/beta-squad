@@ -49,7 +49,7 @@ const Home = () => {
   useEffect(() => {
     if (params.workspace_id) return;
     if (loading) return;
-    console.log("should", shouldChangeRoute);
+    
     if (shouldChangeRoute) {
       navigate("/settings/manage-workspace");
     } else {

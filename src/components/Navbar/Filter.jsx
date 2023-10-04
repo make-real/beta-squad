@@ -98,7 +98,7 @@ const Filter = () => {
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error);
+      
     }
   };
 
@@ -110,7 +110,7 @@ const Filter = () => {
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error);
+      
     }
   };
 

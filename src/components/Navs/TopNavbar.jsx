@@ -139,7 +139,7 @@ const LoggedInTopNav = () => {
     localStorage.clear();
     navigate("/");
   };
-  // console.log(get_notifications)
+
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
@@ -157,7 +157,7 @@ const LoggedInTopNav = () => {
         count: data.notifications?.length,
       });
     } catch (err) {
-      console.log(err);
+      
       setNotifications({ seen: null, unseen: null, all: null, count: 0 });
     }
   };

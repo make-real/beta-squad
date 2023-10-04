@@ -70,19 +70,6 @@ const Projects = ({
   };
 
  
-
-
-
-  // useEffect(() => {
-  //     window.onload = () => {
-  //         if (!id) {
-  //             if (workspaces.length <= 0) {
-  //                 navigate("/settings/manage-workspace");
-  //             }
-  //         }
-  //     };
-  // }, [workspaces]);
-  
   return (
     <>
       {showType === "grid" ? (

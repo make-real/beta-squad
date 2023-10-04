@@ -104,7 +104,6 @@ const CardAsList = ({ selectedSpaceId }) => {
       });
       toast.success("New tag create + add successful");
     } catch (error) {
-      console.log(error.response.data.issue);
       toast.error(error.response.data.issue.message);
     }
     setCreateNewTag((pre) => ({ ...pre, name: "" }));
@@ -137,7 +136,6 @@ const CardAsList = ({ selectedSpaceId }) => {
       });
     } catch (error) {
       toast.error(error?.response?.data?.issue, { autoClose: 3000 });
-      console.log(error?.response?.data?.issue);
     }
   };
 

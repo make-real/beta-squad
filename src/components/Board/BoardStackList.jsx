@@ -27,23 +27,6 @@ const BoardStackList = ({ showType, listIndex, boardList }) => {
     const { getToggleProps, getCollapseProps } = useCollapse({ expanded });
     const [showAddBtn, setShowAddBtn] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             // GET Method ==> Card --- under specific Space reference ID + board list reference
-    //             const { data } = await useAxios.get(
-    //                 `/spaces/${selectedSpaceId}/board/${boardList?._id}/card`
-    //             );
-
-    //             // get updated card all the time...
-    //             // console.log(data)
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, [selectedSpaceId, boardList?._id]);
-
     // 🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {

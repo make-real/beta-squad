@@ -49,7 +49,6 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                         display: user.fullName,
                     }));
 
-                    // console.log(arr);
                     setUsers(arr);
                 } catch (error) {
                     console.log(error);
@@ -227,7 +226,6 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
     useEffect(() => {
         if (Boolean(mediaBlobUrl) && audioSent) {
             uploadAudioFile(mediaBlobUrl);
-            console.log("Uploading...");
         }
     }, [mediaBlobUrl]);
 

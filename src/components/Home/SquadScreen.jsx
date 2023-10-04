@@ -61,7 +61,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   } = useBoardCardContext();
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
-  // console.log(TabsName)
+
   
 
   const { state } = useLocation();
@@ -125,8 +125,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   useEffect(() => {
     getTags();
   }, [selectedSpace]);
-
-  //console.log("TAGS: ", tags);
+  
 
   useEffect(() => {
     if (selectedSpace) {
@@ -196,10 +195,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
   };
   
-  // const TabsName = {
-  //   all: "All",
-  //   //importtant: "Important",
-  // };
   return (
     <div className="bg-[#FFF] w-full h-full mb-0 pb-0 -mt-[80px]">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
@@ -207,15 +202,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
           <div className="flex flex-row items-center gap-4  py-[10px]">
             <div className="flex items-center w-full gap-8">
              
-             
-             
-             {/* {console.log(TabsName)} */}
-              {/* issue is here */}
-              <div className="flex items-center w-[60%] overflow-hidden hover:overflow-auto pb-1">
+            
+              <div className="flex items-center w-[60%] duration-200 overflow-auto customScroll pb-1">
                 {TabsName.map((value, idx) => {
                   return (
                     <a
-                      //href={`#${value.toLowerCase()}`}
                       key={idx}
                       onClick={() => setSelectedTab(value)}
                       className={`${

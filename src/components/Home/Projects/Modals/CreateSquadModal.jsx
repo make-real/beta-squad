@@ -48,12 +48,7 @@ const CreateSquadModal = ({ setShowCreateSquadModal }) => {
       setShowCreateSquadModal(false);
     } catch (error) {
       // error for developer for deBugging...
-      console.log(error.response.data);
       setErrMsg(error?.response?.data?.issue?.name);
-      // error for user at notification...
-      // toast.error(error?.response?.data?.issue?.name, {
-      //     autoClose: 3000,
-      // });
     }
   };
 

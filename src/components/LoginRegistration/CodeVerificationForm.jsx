@@ -98,15 +98,6 @@ const CodeVerificationForm = ({
     const handleSubmit = async (e) => {
         setLoader(true);
 
-        // e.preventDefault();
-
-        // const code =
-        //     firstCode?.current?.value +
-        //     secondCode?.current?.value +
-        //     thirdCode?.current?.value +
-        //     fourthCode?.current?.value +
-        //     fifthCode?.current?.value +
-        //     sixthCode?.current?.value;
 
         try {
             // user id + user given activation code, for authentication...
@@ -139,7 +130,6 @@ const CodeVerificationForm = ({
         } catch (error) {
             setLoader(false);
 
-            // console.log(error.response.data.issue?.message);
             setUserVerificationErrorStatus(
                 error?.response?.data?.issue?.message
             );

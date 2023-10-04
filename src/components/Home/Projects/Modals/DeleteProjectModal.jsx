@@ -30,15 +30,8 @@ const DeleteProjectModal = ({
             dispatch(removeSpace(data._id));
         } catch (error) {
             // error for developer for deBugging...
-            // console.log(error.response.data);
-            console.log(error);
             setDeletingProject((prev) => ({ ...prev, show: false }));
-
             setErrMsg(error?.name);
-            // error for user at notification...
-            // toast.error(error?.name, {
-            //     autoClose: 3000,
-            // });
         }
     };
 

@@ -53,9 +53,6 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     }
   }, [location]);
 
-  // const location = useLocation();
-
-  // console.log(location.state);
 
   const isFirstTime =
     JSON.parse(localStorage.getItem("stepFinished")) === true
@@ -400,7 +397,7 @@ const CreateSquadModal = () => {
 };
 
 const AddMemberModal = () => {
-  console.log('workspace')
+
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
@@ -419,7 +416,7 @@ const AddMemberModal = () => {
         currentWorkspace._id,
         memberData.email
       );
-        console.log('this api called', data)
+
       // display a notification for user
       toast.success(`Member added`, {
         autoClose: 3000,
@@ -428,7 +425,6 @@ const AddMemberModal = () => {
       localStorage.setItem("stepFinished", true);
     } catch (error) {
       // error for developer for deBugging...
-      // console.log(error.response.data);
       console.log(error);
 
       // error for user at notification...

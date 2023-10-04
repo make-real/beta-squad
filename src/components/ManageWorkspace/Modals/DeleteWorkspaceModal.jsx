@@ -31,8 +31,6 @@ const DeleteWorkspaceModal = ({ data, cancelFunc }) => {
             setDeleted(true);
         } catch (error) {
             // error for developer for deBugging...
-            // console.log(error.response.data);
-            console.log(error);
 
             // error for user at notification...
             toast.error(error?.response.data.name, {

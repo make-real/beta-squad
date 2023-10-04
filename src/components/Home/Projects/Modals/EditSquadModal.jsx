@@ -51,9 +51,6 @@ const EditSquadModal = ({ cancelEditProject, data }) => {
       // close this modal
       cancelEditProject(false);
     } catch (error) {
-      // error for developer for deBugging...
-      // console.log(error.response.data);
-      console.log(error);
 
       setErrMsg(error?.name || error?.message);
 

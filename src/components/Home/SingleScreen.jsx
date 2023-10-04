@@ -222,8 +222,8 @@ const SingleScreen = () => {
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[20px] flex flex-col">
           <div className="flex flex-row items-center gap-4  py-[10px]">
-            <div className="flex items-center w-full gap-8">
-              <div className="flex items-center w-[60%]   overflow-auto pb-1 customHScroll">
+            <div className="flex items-center w-full gap-8 overflow-hidden">
+              <div className="flex items-center w-full overflow-auto pb-1 customHScroll">
                 {tabsName.map((value, idx) => {
                   return (
                     <a
@@ -359,7 +359,7 @@ const SingleScreen = () => {
             </div>
           </div>
           <div className=" flex flex-row h-full">
-            <div className={`h-full w-full pb-5 mx-auto  overflow-hidden`}>
+            <div className={`h-full w-full pb-5 mx-auto overflow-hidden`}>
               {TabsScreen["board"]}
             </div>
         
@@ -451,20 +451,6 @@ const SingleBoardScreen = ({ showType }) => {
   const dispatch = useDispatch();
 
   const userId = JSON.parse(localStorage.getItem("userId"));
-
-  //   useEffect(() => {
-  //     getMessages();
-  //   }, [participantID, workspace_id]);
-
-  //   const getMessages = async () => {
-  //     try {
-  //       const { data } = await get_single_messages(workspace_id, participantID);
-
-  //       dispatch(addBulkMessagePrivate(data.messages.reverse()));
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
 
   return (
     <section className="duration-200 overflow-hidden">

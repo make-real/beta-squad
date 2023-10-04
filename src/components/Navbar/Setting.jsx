@@ -49,7 +49,7 @@ const Setting = () => {
     } catch (error) {
       toast.error(error.message, { autoClose: 1000 });
       setLoading(false);
-      console.log(error);
+      
     }
   };
 

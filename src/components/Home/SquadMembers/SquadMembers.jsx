@@ -34,7 +34,6 @@ const SquadMembers = ({ showType, selectedSpace }) => {
       fetchSquadMembers();
     } catch (err) {
       toast.error(err?.message, { autoClose: 3000 });
-      console.log(err);
     }
   };
 

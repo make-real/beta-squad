@@ -63,7 +63,6 @@ const SideBar = () => {
   );
   const [members, setMembers] = useState([]);
 
-  console.log(userMenu);
 
   useEffect(() => {
     if (selectedWorkspace) {

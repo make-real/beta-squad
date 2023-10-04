@@ -30,8 +30,6 @@ export const UserInfoContext = ({ children }) => {
         dispatch(setUserInfo(loginUserInfo));
     }, [loginUserInfo]);
 
-    // console.log(loginUserInfo)
-
     return (
         <UserInfo.Provider value={{ loginUserInfo, setLoginUserInfo }}>
             {children}

@@ -23,7 +23,7 @@ const UpdateMemberModal = ({
     setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  console.log(editData._id , editData.role , editData.designation)
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {

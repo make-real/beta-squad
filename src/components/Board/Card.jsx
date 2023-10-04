@@ -72,25 +72,6 @@ const Card = ({ card, listID }) => {
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
-  // may be problem
-  // useEffect(() => {
-  //     const cardProgressUpdate = async () => {
-  //         const cardTagObject = { ...card, progress: progress };
-  //         try {
-  //             const { data } = await cardUpdateApiCall(
-  //                 selectedSpaceId,
-  //                 listID,
-  //                 card._id,
-  //                 cardTagObject
-  //             );
-  //             updateCard(listID, card._id, data.updatedCard);
-  //         } catch (error) {
-  //             console.log(error?.response?.data?.issue);
-  //         }
-  //     };
-  //     cardProgressUpdate();
-  // }, [card, listID, progress, selectedSpaceId, updateCard]);
-
   const handleProgressUpdate = async () => {
     setProgress((pre) => (pre === 4 ? 0 : 4));
 
@@ -118,7 +99,7 @@ const Card = ({ card, listID }) => {
   }, []);
 
   const toggle_card_modal = () => {
-    console.log("taggling........");
+    
     toggleCardModal(listID, card._id);
   };
 
@@ -142,7 +123,6 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
-
   const hexToRgb = (hex) => {
     const r = parseInt(hex.substring(1, 3), 16);
     const g = parseInt(hex.substring(3, 5), 16);

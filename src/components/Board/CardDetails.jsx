@@ -347,8 +347,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
- 
-
   return (
     <React.Fragment>
       <section

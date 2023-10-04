@@ -66,7 +66,7 @@ const Login = () => {
       }
     } catch (error) {
       setLoader(false);
-      // console.log(error);
+
       setErrorInfo((pre) => ({
         ...pre,
         email: error.response.data?.issue?.email,
@@ -103,12 +103,12 @@ const Login = () => {
         ...pre,
         email: error.response?.data?.issue?.message,
       }));
-      console.log(error.response?.data?.issue?.message);
+
     }
   };
 
   const onSuccess = async (res) => {
-    console.log(res);
+
 
     const result = res?.profileObj;
     const token = res?.tokenId;
@@ -126,7 +126,6 @@ const Login = () => {
   };
 
   const onFailure = async (response) => {
-    console.log(response);
     alert("🔴 Google Sign In was unsuccessful.\n🔴 Try again later...");
   };
 
