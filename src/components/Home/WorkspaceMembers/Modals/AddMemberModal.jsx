@@ -7,7 +7,6 @@ import CrossIcon from "../../../../assets/cross.svg";
 import InboxIcon from "../../../../assets/inbox.svg";
 import { validateEmail } from "../../../../util/helpers";
 import TaguserIcon from "../../../../assets/tag_user.svg";
-import { WORKSPACE_ROLE } from "../../../../constant/enums";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
