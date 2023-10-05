@@ -429,3 +429,16 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+
+
+/* ql Style */
+
+.ql-editor {
+
+  background-color:rgba(236,236,236,0.5);
+  font-family: "Lexend", sans-serif;
+  color: rgb(29, 29, 29);
+  font-size: 15px;
+  border: none;
+}
