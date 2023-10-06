@@ -261,7 +261,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
             <div className="flex items-center justify-between w-1/2 ">
               <div className="flex items-center">
-                <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
+                {/* <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
                 {members.slice(0, 3).map((user, i) => (
                         <div key={i} className="ml-[-10px]">
                           {user.avatar ? (
@@ -292,7 +292,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   >
                     {showSquadMembers ? <AddMember /> : <AddMemberBefore />}
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="flex items-center gap-[22px] relative">
                 <div
