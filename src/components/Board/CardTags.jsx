@@ -118,7 +118,7 @@ const CardTags = (props) => {
         name: name,
         color: randomColor,
       });
-
+      console.log(data)
       const { data: updateCard } = await cardUpdateApiCall(
         selectedSpaceId,
         listID,
@@ -152,12 +152,10 @@ const CardTags = (props) => {
         const { data } = await get_tags({
           workSpaceId: selectedWorkspaceId,
         });
-
         // tags
         const remainTag = data?.tags.filter(
           ({ _id }) => !localCard?.tags?.some((tag) => tag._id === _id)
         );
-
         setOptions(remainTag);
       } catch (error) {
         console.log(error);

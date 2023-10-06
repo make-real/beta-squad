@@ -113,7 +113,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       const { data } = await get_tags({
         workSpaceId: workspace_id,
       });
-
       setTags(data);
       const remainTag = data?.tags.map((item) => item?.name);
       setTabsName(["All", ...remainTag]);
@@ -126,7 +125,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     getTags();
   }, [selectedSpace]);
   
-
   useEffect(() => {
     if (selectedSpace) {
       fetchSquadMembers();
@@ -154,7 +152,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       filterBoardList(selectedTab);
     }
   }, [selectedTab, filteredList, boardLists]);
-
   const startCall = (type) => {
     if (call?.data) return;
 
@@ -203,7 +200,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
             <div className="flex items-center w-full gap-8">
              
             
-              <div className="flex items-center w-[60%] duration-200 overflow-auto customScroll pb-1">
+              <div className="flex items-center w-[60%] duration-200 hover:overflow-auto customScroll pb-1">
                 {TabsName.map((value, idx) => {
                   return (
                     <a

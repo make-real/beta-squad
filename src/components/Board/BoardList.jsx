@@ -15,16 +15,15 @@ import { Draggable } from 'react-beautiful-dnd';
 const BoardList = ({ showType, listIndex, boardList }) => {
     const [toggleEdit, setToggleEdit] = useState(false);
     const [cardLoading, setCardLoading] = useState(false);
-
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
     const { addCard, updateBoardList } = useBoardCardContext();
-    
+    // console.log(getCardObj)
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {
         setCardLoading(true);
-        const cardObject = { name: text  };
-       
+        const cardObject = { name: text };
+
 
         try {
             // its a POST method | object send into backend/server
@@ -82,7 +81,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
-                >  
+                >
                     <div
                         {...provided.dragHandleProps}
                         className="overflow-hidden  flex justify-between items-center my-3"
@@ -112,7 +111,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                         ) : (
                             <p className="text-[#818892] flex-1 py-1 px-4">
                                 {boardList?.name || 'Development'}
-                                
+
                             </p>
                         )}
 
@@ -136,7 +135,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                         />
                     </div>
                     <span className="border-[1px] border-[#EEE9E9]" />
-                    <div className="flex flex-col items-center gap-3 overflow-y-auto customScroll pt-2">
+                    <div className="overflow-y-scroll flex flex-col items-center gap-3 customScroll pt-2">
                         <DraggableElement
                             listId={boardList?._id}
                             elements={boardList?.cards}
@@ -153,11 +152,11 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                                         card={card}
                                         listID={boardList?._id}
                                     />
+
                                 </div>
                             )}
                         />
                     </div>
-
                     <AddBtn
                         loading={cardLoading}
                         showType={showType}

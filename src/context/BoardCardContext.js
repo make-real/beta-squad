@@ -10,7 +10,7 @@ export const BoardCardContext = ({ children }) => {
 
   const [boardLists, setBoardList] = useState([]);
   const [filteredLists, setFilteredLists] = useState([]);
-
+  
   const filterBoardList = (filter_tag) => {
     const list = [...boardLists];
 
