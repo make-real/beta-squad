@@ -95,7 +95,8 @@ const LoggedInTopNav = () => {
     seen: null,
     unseen: null,
     all: null,
-    count: 0,
+    count1: 0,
+    count2: 0,
   });
 
   const isProjectScreen = useLocation().pathname.startsWith("/projects");
@@ -143,7 +144,7 @@ const LoggedInTopNav = () => {
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
-      const AllNotification = data.notification;
+      const AllNotification = data?.notification;
       const seenNotifications = data.notifications.filter(
         (n) => n.seen === true
       );
@@ -154,11 +155,12 @@ const LoggedInTopNav = () => {
         all: AllNotification,
         seen: seenNotifications,
         unseen: unseenNotifications,
-        count: data.notifications?.length,
+        count1: data.notifications?.length,
+        count2:unseenNotifications?.length,
       });
     } catch (err) {
       
-      setNotifications({ seen: null, unseen: null, all: null, count: 0 });
+      setNotifications({ seen: null, unseen: null, all: null, count1: 0 , count2:0 });
     }
   };
 
@@ -227,11 +229,13 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
+
   const NotificationTabs = {
     all: <AllNotification notifications={notifications.seen} />,
     unread: <UnreadNotification notifications={notifications.unseen} />,
   };
 
+  const unread = notifications.unseen[0]
   return (
     <>
       <div
@@ -246,11 +250,11 @@ const LoggedInTopNav = () => {
           <div className="relative">
             <img
               onClick={() => setShowNotificationModal(!showNotificationModal)}
-              className="w-[18px] cursor-pointer"
+              className="w-[22px] cursor-pointer"
               src={NotificationIcon}
               alt="notification"
             />
-
+            {unread && <div className="absolute rounded-full p-[7px] w-3 h-3 flex items-center justify-center text-white   -top-[10px] text-xs bg-red-500 left-[13px]">{notifications.count2 > 9 ? "9+" : notifications.count2  }</div>}
             {/* Notifications Dropdown Menu */}
             <div
               ref={notificationDropDownRef}
@@ -261,9 +265,9 @@ const LoggedInTopNav = () => {
               {/* Title */}
               <div className="flex items-center justify-between">
                 <h1 className="text-[#031124] text-[20px] font-bold leading-[30px]">
-                  Notifications{" "}
+                  Notifications
                   <span className="font-normal">
-                    ({notifications.count ?? 0})
+                    ({notifications.count1 ?? 0})
                   </span>
                 </h1>
                 {/* <div className="cursor-pointer">

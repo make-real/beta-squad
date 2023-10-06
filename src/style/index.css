@@ -429,3 +429,28 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+
+
+/* ql Style */
+
+.ql-editor {
+  font-family: "Lexend", sans-serif;
+  color: rgb(29, 29, 29);
+  font-size: 15px;
+  border: none;
+  padding: 16px
+}
+.ql-toolbar{
+  border-radius:20px 20px 0px 0px;
+  padding: 50px
+}
+
+.ql-container{
+  border-radius:0px 0px 20px 20px;
+  background-color:rgba(236,236,236,0.5);
+}
+
+.ql-toolbar.ql-snow{
+  padding:12px !important;
+}

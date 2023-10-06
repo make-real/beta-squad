@@ -242,7 +242,7 @@ const Board = ({ showType, addBoardRef }) => {
             </DragDropContext>
 
             {/*  + Add a list | Button UI */}
-            {addBoard && (
+            {/* {addBoard && (
               <AddBtn
                 loading={listLoading}
                 showType={showType}
@@ -250,7 +250,7 @@ const Board = ({ showType, addBoardRef }) => {
                 btnText="list"
                 onSubmit={(text) => handleBoardListCreation(squadId, text)}
               />
-
+              
             )}
           </div>
         )

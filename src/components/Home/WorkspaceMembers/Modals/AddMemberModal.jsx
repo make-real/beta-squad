@@ -10,12 +10,18 @@ import TaguserIcon from "../../../../assets/tag_user.svg";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
-  console.log('addmember')
+<<<<<<<<< Temporary merge branch 1
+=========
+
+>>>>>>>>> Temporary merge branch 2
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const [memberData, setMemberData] = useState({});
-  console.log(memberData)
+<<<<<<<<< Temporary merge branch 1
+=========
+
+>>>>>>>>> Temporary merge branch 2
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 

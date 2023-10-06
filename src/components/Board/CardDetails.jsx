@@ -43,6 +43,8 @@ import { ClipLoader } from "react-spinners";
 import DocView from "../DocView";
 import { GrDocumentPdf } from "react-icons/gr";
 import PreviewDoc from "./PreviewDoc";
+import RichTextEditor from "../RichTextEditor";
+import { debounce } from "lodash";
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const { workspace_id, squadId: listID, id } = useParams();
@@ -50,7 +52,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const navigate = useNavigate();
   const { margin } = useStyleContext();
 
-  const [localCard, setLocalCard] = useState({});
+  const [localCard, setLocalCard] = useState({})
+  const [data, setData] = useState({})
   
 
   const [noteDone, setNoteDone] = useState(false);
@@ -137,7 +140,21 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     }
     // }
   };
-  
+
+
+  const debounceFn = debounce(handleDebounceFn, 1000)
+  function handleDebounceFn(val) {
+    setLocalCard((pre) => ({
+      ...pre,
+      description:val,
+    }));
+}
+const onEdit = (val) => {
+    
+  debounceFn(val)
+}
+
+
   const handle_card_description_update_enter_btn = async (e) => {
     // if (e.key === 'Enter' && !e.shiftKey) {
     const cardTagObject = {
@@ -335,6 +352,30 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const checked = localCard?.checkList?.filter((item) => item?.checked);
   const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
+
+  if(localCard.color){
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.substring(1, 3), 16);
+      const g = parseInt(hex.substring(3, 5), 16);
+      const b = parseInt(hex.substring(5, 7), 16);
+      return [r, g, b];
+    }
+  
+    const rgb = hexToRgb(localCard?.color);
+    const averageRgb = (rgb) => {
+      const r = rgb[0];
+      const g = rgb[1];
+      const b = rgb[2];
+      return (r + g + b) / 3;
+    };
+    const average = averageRgb(rgb);
+     var isDark = average > 100;
+     
+  }
+
+
+
+
   if (!localCard) {
     return (
       <section
@@ -347,8 +388,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
+<<<<<<<<< Temporary merge branch 1
+ 
+=========
   const time = localCard
-  console.log(time)
+
+>>>>>>>>> Temporary merge branch 2
 
   return (
     <React.Fragment>
@@ -359,11 +404,12 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
 
         <div className="relative bg-white p-8 rounded-2xl h-full">
-          <span
-            className={`absolute top-0 left-0 rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[30px] w-8 h-8`}
+         {localCard &&  <span
+            className={`absolute top-0 left-0 px-3 py-[3px] text-sm rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[16px]  
+            ${isDark ? 'text-black' : 'text-white'}`}
             style={{ backgroundColor: localCard?.color }}
-          />
-
+          > {localCard.cardKey}</span>
+}
           <div className="flex items-center justify-between pb-4 px-1">
             {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
                     <div
@@ -630,31 +676,15 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   <div className="py-2 w-fit text-gray-400  group">
                     <p className="text-[14px] text-[#818892]">Description</p>
                   </div>
-                  {!editDescription ? (
-                    <textarea
-                      className="w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px]"
-                      type="text"
-                      defaultValue={localCard?.description}
-                      onClick={() => setEditDescription((prev) => !prev)}
-                    />
-                  ) : (
-                    <textarea
-                      className={`w-full border-0 p-2 rounded-2xl bg-[#ECECEC]/[0.5] text-slate-500 hover:border-gray-400 min-h-[100px] focus:outline-none ${
-                        editDescription ? "ring-[1px]" : ""
-                      } focus:ring-[1px] focus:ring-violet-500`}
-                      type="text"
-                      defaultValue={localCard?.description}
-                      onChange={(e) => {
-                        setLocalCard((pre) => ({
-                          ...pre,
-                          description: e.target.value,
-                        }));
-                      }}
-                      onBlur={(e) =>
-                        handle_card_description_update_enter_btn(e)
-                      }
-                    />
-                  )}
+                 
+                    <RichTextEditor
+                    value={localCard.description}
+                    onChange={onEdit}
+                    onBlur={(e) =>
+                      handle_card_description_update_enter_btn(e)
+                    }
+                    ></RichTextEditor>
+                 
                   {/* <input
                                     type="text"
                                     className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"

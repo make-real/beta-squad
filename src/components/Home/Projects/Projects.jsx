@@ -70,6 +70,7 @@ const Projects = ({
   };
 
  
+<<<<<<<<< Temporary merge branch 1
 
 
 
@@ -82,8 +83,9 @@ const Projects = ({
   //         }
   //     };
   // }, [workspaces]);
-
-  // console.log(allSpaces)
+  
+=========
+>>>>>>>>> Temporary merge branch 2
   return (
     <>
       {showType === "grid" ? (
