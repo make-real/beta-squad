@@ -23,7 +23,6 @@ import { GrAttachment } from "react-icons/gr";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
-  
   const dropDownRef = useRef();
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
@@ -124,7 +123,7 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
-  
+  // console.log(card)
   // change card color dynamic
   const hexToRgb = (hex) => {
     const r = parseInt(hex.substring(1, 3), 16);
