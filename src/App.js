@@ -24,13 +24,9 @@ import {
 import { fetchUserToken } from "./util/fetchUserToken";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
-import WorkspaceSettings from "./components/UserSettings/WorkspaceSettings";
-import Tags from "./components/UserSettings/Tags";
 import "react-toastify/dist/ReactToastify.css";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import SingleChat from "./components/Chat/Single/Chat";
-import GroupChat from "./components/Chat/Group/Chat";
 import TopNav from "./components/Navs/TopNavbar";
 import Home from "./components/Home/Home";
 import ManageWorkspaceScreen from "./components/ManageWorkspace/ManageWorkspace";
@@ -46,25 +42,8 @@ import {
   setSelectedSpaceObject,
   setSelectedSpaceId,
 } from "./store/slice/space";
-import { initFullSidebar } from "./store/slice/screen";
 import NavigateUser from "./components/Home/NavigateUser";
-import {
-  addCall,
-  addIndicationData,
-  addLocalAudioTrack,
-  addRemoteVideoTrack,
-  callReceived,
-  ignoreCall,
-  incrementCallTime,
-  initializeRtcEngine,
-  initializeSocket,
-} from "./store/slice/global";
-import MiniCall from "./components/call/MiniCall";
-import AgoraRTC from "agora-rtc-sdk-ng";
 import SingleScreen from "./components/Home/SingleScreen";
-import ComingSoonModal from "./components/Modals/ComingSoonModal";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "./firebase";
 import Welcome from "./components/LoginRegistration/Welcome";
 
 const ProtectedRoute = ({ children }) => {
@@ -152,140 +131,18 @@ const CardRoute = ({ children }) => {
 };
 
 const App = () => {
-  const indRef = useRef();
 
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
-  const { socket, RtcEngine, call } = useSelector((state) => state.global);
+  
   const uid = useSelector((state) => state.userInfo?.userInfo?.uid);
-  const dispatch = useDispatch();
 
-  const localVideoRef = useRef();
-
-  useEffect(() => {
-    dispatch(initializeSocket());
-    dispatch(initializeRtcEngine());
-    dispatch(initFullSidebar());
-  }, []);
-
-  useEffect(() => {
-    socket?.on("ON_CALL", (call) => {
-      dispatch(addCall(call));
-
-      setTimeout(() => dispatch(ignoreCall()), 60000);
-    });
-
-    socket?.on("ON_CALL_UPDATED", (call) => {
-      dispatch(addCall(call));
-    });
-
-    socket?.on("ON_JOIN_CALL", async (call, token) => {
-      dispatch(addCall(call));
-      dispatch(callReceived(true));
-
-      await RtcEngine?.join(
-        "d650cc9984014529827ee1a4bcb345fc",
-        call?.channelId,
-        token,
-        uid
-      );
-
-      const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-
-      dispatch(addLocalAudioTrack(localAudioTrack));
-
-      await RtcEngine?.publish([localAudioTrack]);
-    });
-
-    RtcEngine?.on("user-published", async (user, mediaType) => {
-
-      await RtcEngine?.subscribe(user, mediaType);
-
-      // Subscribe to the remote user when the SDK triggers the "user-published" event.
-
-      // Subscribe and play the remote video in the container If the remote user publishes a video track.
-      if (mediaType == "video") {
-        dispatch(
-          addRemoteVideoTrack({
-            uid: user.uid,
-            video: user.videoTrack,
-          })
-        );
-      }
-      // Subscribe and play the remote audio track If the remote user publishes the audio track only.
-      if (mediaType == "audio") {
-        const remoteAudioTrack = user.audioTrack;
-        // const remoteUserId = user.uid.toString();
-
-        remoteAudioTrack.play();
-      }
-
-      // Listen for the "user-unpublished" event.
-      RtcEngine?.on("user-unpublished", (user) => {
-        console.log(user.uid + "has left the channel");
-      });
-    });
-
-    RtcEngine?.on("volume-indicator", (volumes) => {
-      volumes.forEach((volume) => {
-        console.log(`UID ${volume.uid} Level ${volume.level}`);
-
-        dispatch(addIndicationData(Math.floor(volume.level / 2)));
-      });
-    });
-
-    return () => {
-      RtcEngine?.off("user-published");
-      RtcEngine?.off("user-unpublished");
-      RtcEngine?.off("volume-indicator");
-      socket?.off("ON_CALL_UPDATED");
-      socket?.off("ON_CALL");
-      socket?.off("ON_JOIN_CALL");
-    };
-  }, [socket, uid, RtcEngine]);
-
-  useEffect(() => {
-    socket?.on("ON_CALL_END", async (c) => {
-      try {
-        dispatch(callReceived(false));
-
-        await call?.localAudioTrack?.close();
-        await RtcEngine?.leave();
-        window.location.reload();
-      } catch (error) {
-        console.log(error);
-      }
-    });
-
-    return () => {
-      socket?.off("ON_CALL_END");
-    };
-  }, [socket, call]);
-
-  useEffect(() => {
-    let interval;
-
-    if (call?.data?.participants?.length >= 2)
-      interval = setInterval(() => dispatch(incrementCallTime()), 1000);
-
-    if (call?.data?.participants?.length === 1) clearInterval(interval);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [call?.data?.participants]);
-
-  useEffect(() => {
-    // Track a custom event
-    logEvent(analytics, "user-track");
-  }, []);
 
   return (
     <main className="overflow-hidden">
-      {call?.data && <MiniCall localVideoRef={localVideoRef} />}
 
       <Routes>
         <Route path="/" />

@@ -1,6 +1,4 @@
 import React, { useRef } from "react";
-import VideoCallIcon from "../../assets/video_call.svg";
-import AudioCallIcon from "../../assets/audio_call.svg";
 import {
   ChatBubbleBottomCenterTextIcon,
   CheckIcon,
@@ -12,28 +10,20 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
-import { addLocalAudioTrack, callReceived } from "../../store/slice/global";
 import { get_space_members, remove_space_members } from "../../api/space";
 import { AddBtn } from "../Board";
 import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
-import ring from "../../assets/ring.wav";
 import {
   useAppStateContext,
   useCommingSoonContext,
 } from "../../context/FeatureContext";
 import { useBoardCardContext } from "../../context/BoardCardContext";
-import AddMember from "../../assets/icons/svg/AddMember";
-import Message from "../../assets/icons/svg/Message";
-import PlusIcon from "../../assets/pus.svg";
-import FileIcon from "../../assets/icons/svg/FileIcon";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
 import board from "../../store/slice/board";
-import AddMemberBefore from "../../assets/icons/svg/AddMemberBefore";
 import ShowFile from "./ShowFile/ShowFile";
 import Add from "../../assets/icon_component/Add";
-import { RightArrow, RightOK } from "../../assets/icons";
 import Check from "../../assets/icons/svg/Check";
 import { PiFolderOpenBold } from "react-icons/pi";
 
@@ -49,7 +39,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch();
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-  const { socket, call } = useSelector((state) => state.global);
   const {
     addBoardList,
     addBoard,
@@ -130,14 +119,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   }, [selectedSpace]);
 
   useEffect(() => {
-    if (call?.data) {
-      if (call?.data?.participants?.length != 1) {
-        ringRef?.current?.pause();
-      }
-    }
-  }, [call?.data?.participants]);
-
-  useEffect(() => {
     if (!selectedTab) {
       setSelectedTab("All");
     }
@@ -150,17 +131,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       filterBoardList(selectedTab);
     }
   }, [selectedTab, filteredList, boardLists]);
-
-  const startCall = (type) => {
-    if (call?.data) return;
-
-    ringRef.current = new Audio(ring);
-    ringRef.current.loop = true;
-    ringRef.current.play();
-
-    dispatch(callReceived(true));
-    socket?.emit("START_CALL", selectedSpaceId, false, type);
-  };
 
   // useEffect(() => {
   //   if (state?.tab) {
