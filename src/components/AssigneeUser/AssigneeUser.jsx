@@ -21,7 +21,6 @@ const AssigneeUser = ({
 }) => {
     const dispatch = useDispatch();
     const selectedListId = useSelector((state) => state.cardAsList.listId);
-    console.log(selectedListId)
     const [allUserForAssignee, setAllUserForAssignee] = useState([]);
     const [searchUserForAssignee, setSearchUserForAssignee] = useState('');
     const [localCardAssigne, setLocalCardAssigne] = useState(

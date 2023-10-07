@@ -55,7 +55,7 @@ const CardAsList = ({ selectedSpaceId }) => {
   });
 
   const [showTagsDropDown, setShowTagsDropDown] = useState(false);
-  console.log(allCardAsList)
+
   const cardsList = async () => {
     try {
       const { data } = await getCardAsList(selectedSpaceId);

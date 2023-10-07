@@ -168,4 +168,4 @@ export const updateCardOrder = (spaceId, listId, cardId, order) =>
         order,
     });
 
-export const getCardAsList = (spaceId, listId) => api.get(`/spaces/${spaceId}/board/${listId}/card`);
+export const getCardAsList = (spaceId) => api.get(`/spaces/${spaceId}/row`);

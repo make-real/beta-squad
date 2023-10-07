@@ -123,12 +123,8 @@ const Card = ({ card, listID }) => {
    }
  
   const neededValue = neededLength > 0
-<<<<<<<<< Temporary merge branch 1
 
-=========
-  
-  // change card color dynamic
->>>>>>>>> Temporary merge branch 2
+
   const hexToRgb = (hex) => {
     const r = parseInt(hex.substring(1, 3), 16);
     const g = parseInt(hex.substring(3, 5), 16);
