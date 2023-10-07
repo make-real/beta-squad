@@ -107,7 +107,8 @@ const LoggedInTopNav = () => {
   const [selectedMember, setSelectedMember] = useState(null);
 
   const { participantID } = useParams();
-
+  const members = useSelector((state) => state.workspace.workspaceMembers);
+  const selectedmembers = members.find(member => member.email === userInfo.email)
   const isManageWorkspaceScreen =
     useLocation().pathname.search("manage-workspace") !== -1;
   const isProfileScreen = useLocation().pathname.search("profile") !== -1;
@@ -235,7 +236,7 @@ const LoggedInTopNav = () => {
     unread: <UnreadNotification notifications={notifications.unseen} />,
   };
 
-  // const unread = notifications?.unseen[0]
+
   return (
     <>
       <div
@@ -329,7 +330,7 @@ const LoggedInTopNav = () => {
                 {userInfo?.fullName}
               </h1>
               <p className="text-[12px] text-end text-gray-400">
-                @{userInfo?.username}
+               {selectedmembers?.designation ? selectedmembers.designation :"User"}
               </p>
             </div>
             <img
