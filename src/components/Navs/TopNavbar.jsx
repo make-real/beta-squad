@@ -255,7 +255,7 @@ const LoggedInTopNav = () => {
               src={NotificationIcon}
               alt="notification"
             />
-          <div className="absolute rounded-full p-[7px] w-3 h-3 flex items-center justify-center text-white   -top-[10px] text-xs bg-red-500 left-[13px]">{notifications.count2 > 9 ? "9+" : notifications.count2  }</div>
+
             {/* Notifications Dropdown Menu */}
             <div
               ref={notificationDropDownRef}

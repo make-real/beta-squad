@@ -5,12 +5,9 @@ import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { get_single_messages } from "../../api/chat";
 import { addBulkMessagePrivate } from "../../store/slice/privateChat";
-import { callReceived } from "../../store/slice/global";
 import PrivateTextMessage from "../Chat/PrivateTextMessage";
 import PrivateMessageBox from "../Chat/PrivateMessageBox";
 import SearchIcon from "../../assets/search.svg";
-import VideoCallIcon from "../../assets/video_call.svg";
-import AudioCallIcon from "../../assets/audio_call.svg";
 import GoogleMeet from "../../assets/images/meet.png";
 import GridIcon from "../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../assets/icon_component/RowVertical";
@@ -51,7 +48,6 @@ const SingleScreen = () => {
   const workspaceMembers = useSelector(
     (state) => state.workspace.workspaceMembers
   );
-  const { socket, call } = useSelector((state) => state?.global);
   const [showType, setShowType] = useState("grid");
 
   const dispatch = useDispatch();
@@ -80,12 +76,6 @@ const SingleScreen = () => {
     }
   };
 
-  const startCall = (type) => {
-    if (call?.data) return;
-
-    dispatch(callReceived(true));
-    socket?.emit("START_CALL", selectedMember?._id, true, type);
-  };
   const TabsScreen = {
     messages: <SingleChatScreen participantID={participantID} />,
     file: <ShowFile />,

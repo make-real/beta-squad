@@ -12,16 +12,7 @@ import AudioCallIcon from "../../../assets/audio_call.svg";
 
 import GridIcon from "../../../assets/icon_component/Grid";
 import RowVerticalIcon from "../../../assets/icon_component/RowVertical";
-import Draggable from "react-draggable";
-import VideoOff from "../../../assets/icon_component/VideoOff";
-import MicrophoneOn from "../../../assets/icon_component/MicrophoneOn";
-import CallEnd from "../../../assets/icon_component/CallEnd";
-import More from "../../../assets/icon_component/More";
-import Folder from "../../../assets/icon_component/Folder";
-import { callReceived } from "../../../store/slice/global";
 
-import ring from "../../../assets/ring.wav";
-import { useRef } from "react";
 import { useCommingSoonContext } from "../../../context/FeatureContext";
 
 const SingleChat = () => {
@@ -32,7 +23,6 @@ const SingleChat = () => {
   const workspaceMembers = useSelector(
     (state) => state.workspace.workspaceMembers
   );
-  const { socket, call } = useSelector((state) => state?.global);
   const [showType, setShowType] = useState("grid");
 
   const dispatch = useDispatch();
@@ -60,24 +50,6 @@ const SingleChat = () => {
     }
   };
 
-  const ringRef = useRef();
-
-  useEffect(() => {
-    if (call?.data?.participants?.length != 1) {
-      ringRef?.current?.pause();
-    }
-  }, [call?.data?.participants]);
-
-  const startCall = (type) => {
-    if (call?.data) return;
-
-    ringRef.current = new Audio(ring);
-    ringRef.current.loop = true;
-    ringRef.current.play();
-
-    dispatch(callReceived(true));
-    socket?.emit("START_CALL", selectedMember?._id, true, type);
-  };
   const TabsScreen = {
     messages: <SingleChatScreen participantID={participantID} />,
     board: <></>,
