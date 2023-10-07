@@ -235,6 +235,7 @@ const LoggedInTopNav = () => {
     unread: <UnreadNotification notifications={notifications.unseen} />,
   };
 
+
   return (
     <>
       <div
@@ -253,7 +254,7 @@ const LoggedInTopNav = () => {
               src={NotificationIcon}
               alt="notification"
             />
-            <div className="absolute rounded-full p-[7px] w-3 h-3 flex items-center justify-center text-white   -top-[10px] text-xs bg-red-500 left-[13px]">{notifications.count2 > 9 ? "9+" : notifications.count2  }</div>
+
             {/* Notifications Dropdown Menu */}
             <div
               ref={notificationDropDownRef}
@@ -442,9 +443,9 @@ const LoggedInTopNav = () => {
 const AllNotification = ({ notifications }) => {
   return (
     <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-      {notifications?.map((notification, i) => {
+      {notifications?.map((notification) => {
         return (
-          <div key={i} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
+          <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
             <div className="flex items-center gap-[17px]">
               <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                 <BellIcon style={{ fill: "#13E5C0" }} />
@@ -501,9 +502,9 @@ const AllNotification = ({ notifications }) => {
 const UnreadNotification = ({ notifications }) => {
   return (
     <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-      {notifications?.map((notification, i) => {
+      {notifications?.map((notification) => {
         return (
-          <div key={i} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
+          <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
             <div className="flex items-center gap-[17px]">
               <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                 <BellIcon style={{ fill: "#FB397F" }} />

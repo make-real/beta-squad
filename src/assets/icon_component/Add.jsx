@@ -20,7 +20,7 @@ const Add = () => {
       fill="#FB397F"
       stroke="#FB397F"
       strokeLinecap="round"
-      stroke-Linejoin="round"
+      strokeLinejoin="round"
       strokeWidth={32}
       d="M256 176v160M336 256H176"
     />
