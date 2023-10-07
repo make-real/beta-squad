@@ -29,7 +29,7 @@ const Board = ({ showType, addBoardRef }) => {
     setFilteredLists,
   } = useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +37,7 @@ const Board = ({ showType, addBoardRef }) => {
           const { data } = await useAxios.get(
             `/spaces/${squadId}/board?getCards=true`
           );
-          
+
           setBoardList(data.lists);
           setFilteredLists(data.lists);
           // setBoardList(data.lists?.reverse()?.slice(0));
@@ -169,7 +169,7 @@ const Board = ({ showType, addBoardRef }) => {
 
     return boardCopy;
   };
-
+  
   return (
     <section className={`duration-200 overflow-auto customScroll h-full`}>
       {squadId ? (
@@ -187,11 +187,11 @@ const Board = ({ showType, addBoardRef }) => {
                     ref={provided.innerRef}
                     className="flex items-start"
                   >
-                    {filteredLists.length === 0 ? "Currently, Empty Board!" : filterdBoardList()?.map((boardList, index) => (
+                    {filterdBoardList()?.map((filterList, index) => (
                       <BoardList
                         showType={showType}
-                        key={boardList?._id}
-                        boardList={boardList}
+                        key={filterList?._id}
+                        boardList={filterList}
                         listIndex={index}
                         />
                     ))}
@@ -251,7 +251,7 @@ const Board = ({ showType, addBoardRef }) => {
                 onSubmit={(text) => handleBoardListCreation(squadId, text)}
               />
               
-            )} */}
+            )}
           </div>
         )
       ) : (

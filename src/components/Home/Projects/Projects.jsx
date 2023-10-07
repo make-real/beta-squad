@@ -70,6 +70,22 @@ const Projects = ({
   };
 
  
+<<<<<<<<< Temporary merge branch 1
+
+
+
+  // useEffect(() => {
+  //     window.onload = () => {
+  //         if (!id) {
+  //             if (workspaces.length <= 0) {
+  //                 navigate("/settings/manage-workspace");
+  //             }
+  //         }
+  //     };
+  // }, [workspaces]);
+  
+=========
+>>>>>>>>> Temporary merge branch 2
   return (
     <>
       {showType === "grid" ? (

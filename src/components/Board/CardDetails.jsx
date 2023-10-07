@@ -388,7 +388,12 @@ const onEdit = (val) => {
     );
   }
 
+<<<<<<<<< Temporary merge branch 1
  
+=========
+  const time = localCard
+
+>>>>>>>>> Temporary merge branch 2
 
   return (
     <React.Fragment>
