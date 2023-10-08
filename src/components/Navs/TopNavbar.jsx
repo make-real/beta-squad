@@ -107,7 +107,8 @@ const LoggedInTopNav = () => {
   const [selectedMember, setSelectedMember] = useState(null);
 
   const { participantID } = useParams();
-
+  const members = useSelector((state) => state.workspace.workspaceMembers);
+  const selectedmembers = members.find(member => member.email === userInfo.email)
   const isManageWorkspaceScreen =
     useLocation().pathname.search("manage-workspace") !== -1;
   const isProfileScreen = useLocation().pathname.search("profile") !== -1;
@@ -254,6 +255,10 @@ const LoggedInTopNav = () => {
               src={NotificationIcon}
               alt="notification"
             />
+           {
+            notifications.count2 ? <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span> : <></>
+           }
+
 
             {/* Notifications Dropdown Menu */}
             <div
@@ -267,7 +272,7 @@ const LoggedInTopNav = () => {
                 <h1 className="text-[#031124] text-[20px] font-bold leading-[30px]">
                   Notifications
                   <span className="font-normal">
-                    ({notifications.count1 ?? 0})
+                    ({notifications.count2 ?? 0})
                   </span>
                 </h1>
                 {/* <div className="cursor-pointer">
@@ -329,7 +334,7 @@ const LoggedInTopNav = () => {
                 {userInfo?.fullName}
               </h1>
               <p className="text-[12px] text-end text-gray-400">
-                @{userInfo?.username}
+               {selectedmembers?.designation }
               </p>
             </div>
             <img

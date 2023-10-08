@@ -151,7 +151,7 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                 </div>
                 <div className="flex items-center gap-[16px]">
                   <p className="text-[#818892]">{member?.designation}</p>
-                  {/* <img src={ArrowDown} alt="" /> */}
+                 
                 </div>
               </div>
             );

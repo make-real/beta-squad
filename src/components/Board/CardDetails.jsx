@@ -45,6 +45,7 @@ import { GrDocumentPdf } from "react-icons/gr";
 import PreviewDoc from "./PreviewDoc";
 import RichTextEditor from "../RichTextEditor";
 import { debounce } from "lodash";
+import { Quill } from "react-quill";
 
 const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const { workspace_id, squadId: listID, id } = useParams();
