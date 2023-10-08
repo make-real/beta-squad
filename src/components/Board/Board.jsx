@@ -171,10 +171,10 @@ const Board = ({ showType, addBoardRef }) => {
   };
 
   return (
-    <section className={`duration-200 overflow-auto customScroll h-full`}>
+    <section className={`duration-200 overflow-y-auto customScroll w-full max-h-full`}>
       {squadId ? (
         showType === "grid" ? (
-          <div className="py-1 flex gap-3 items-start min-w-fit h-[98vh]">
+          <div className="py-1 flex gap-3 items-start overflow-y-auto">
             <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"
@@ -185,7 +185,7 @@ const Board = ({ showType, addBoardRef }) => {
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="flex items-start"
+                    className="flex items-start max-h-full"
                   >
                     {filteredLists.length === 0 ? "Currently, Empty Board!" : filterdBoardList()?.map((boardList, index) => (
                       <BoardList
