@@ -20,6 +20,7 @@ import { GrAttachment } from "react-icons/gr";
 //
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
+import Description from './../../assets/icons/svg/Description';
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
@@ -141,6 +142,11 @@ const Card = ({ card, listID }) => {
   };
   const average = averageRgb(rgb);
   const isDark = average > 100;
+  // document.getElementById("desText").innerHTML = localCard?.description ? localCard.description : "";
+
+  const Description = localCard.description;
+ 
+
 
   return (
     <>
@@ -202,8 +208,9 @@ const Card = ({ card, listID }) => {
           </p>
         </div>
         <div className="text-sm text-gray-800">
-          <p className="line-clamp-2 font-[12px] leading-[17.5px] font-inter">
-            {localCard?.description || ""}
+          <p id="desText" className="line-clamp-2 font-[12px] leading-[17.5px] font-inter" dangerouslySetInnerHTML={{ __html: Description }}>
+            {/* {localCard?.description || ""} */
+          }
           </p>
         </div>
 
