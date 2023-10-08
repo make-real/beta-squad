@@ -115,7 +115,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
                                 
                             </p>
                         )}
-{console.log(boardList)}
+
                         <Dropdown
                             position={['bottom right', 'top right']}
                             button={

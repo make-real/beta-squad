@@ -6,6 +6,7 @@ import { update_user } from "../../api/auth";
 import BackArrowIcon from "../../assets/back_arrow.svg";
 import GalleryIcon from "../../assets/gallery.svg";
 import DeleteProfileModal from "./Modals/DeleteProfileModal";
+import { useUserInfoContext } from "../../context/UserInfoContext";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -18,7 +19,7 @@ const Profile = () => {
   const [error, setError] = useState();
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
- 
+  const { loginUserInfo } = useUserInfoContext();
 
   const handleChange = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -108,7 +109,7 @@ const Profile = () => {
             <div className="relative w-[100px] h-[100px] rounded-full bg-[#6576FF40] p-[4px]">
               <img
                 className="w-full h-full rounded-full"
-                src={avatar.image ? avatar.dataURL : userData?.avatar}
+                src={loginUserInfo.avatar}
                 alt=""
               />
               <label
@@ -135,7 +136,7 @@ const Profile = () => {
                   className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
                   name="fullName"
                   onChange={handleChange}
-                  value={userData?.fullName}
+                  value={loginUserInfo?.fullName}
                 />
               </div>
               <div className="w-full">
@@ -149,7 +150,7 @@ const Profile = () => {
                   className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
                   name="email"
                   onChange={handleChange}
-                  value={userData?.email}
+                  value={loginUserInfo?.email}
                 />
               </div>
             </div>
@@ -188,7 +189,7 @@ const Profile = () => {
               >
                 Delete Profile
               </p>
-              <div className="flex items-center gap-[30px]">
+              <div className="flex  items-center gap-[30px]">
                 <button
                   onClick={() => navigate("/")}
                   className="bg-[#ECECEC] text-[14px] text-[#818892] font-semibold py-[17px] px-[92px] rounded-[8px]"

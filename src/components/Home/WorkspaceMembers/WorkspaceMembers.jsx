@@ -27,7 +27,7 @@ const SquadMembers = ({
   const { loginUserInfo } = useUserInfoContext();
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const showupdate = members.filter(member =>member._id === loginUserInfo._id)
-  const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner");
+  const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner" || "admin");
 
   const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
   const [updateMemberData, setUpdateMemberData] = useState(null);
