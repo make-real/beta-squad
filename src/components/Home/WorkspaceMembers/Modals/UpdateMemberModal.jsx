@@ -169,7 +169,7 @@ const UpdateMemberModal = ({
                             className="w-full bg-transparent text-[#031124] text-[16px] border-none outline-none"
                         >
                             <option selected value="">
-                                Select member type
+                            {editData.role}
                             </option>
                             {["admin","guest","user"].map((role) => {
                                 return (
