@@ -55,7 +55,7 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
     getLinks();
   }, [ShowFile, showAdd]);
 
-
+console.log(linkDatas)
   return (
     <div
       style={{}}
@@ -64,11 +64,11 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
       <div>
 
         {linkDatas?.map((data,index) => 
-          <div key={index} className="w-full relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]">
+          <a href={data.link} target="blank" key={index} className="w-full cursor-pointer relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]">
           <div className="flex items-center gap-2">
             <img
-              className="w-6 h-6"
-            src="https://i.ibb.co/JpSjLqx/image-6.png"
+              className="w-8 rounded-full h-8"
+            src={data.logo}
               alt=""
             />
             <div>
@@ -111,7 +111,7 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
               />
             )}
           />
-        </div>
+        </a>
         )}
         
         {showAdd ? (
