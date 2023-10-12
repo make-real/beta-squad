@@ -26,6 +26,9 @@ import ShowFile from "./ShowFile/ShowFile";
 import Add from "../../assets/icon_component/Add";
 import Check from "../../assets/icons/svg/Check";
 import { PiFolderOpenBold } from "react-icons/pi";
+import AddMembers from "./SquadMembers/Modals/AddMembers";
+import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
+
 
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
@@ -34,10 +37,11 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     useAppStateContext();
   const { participantID, workspace_id } = useParams();
   const [showType, setShowType] = useState("grid");
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
-  const dispatch = useDispatch();
+
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const {
     addBoardList,
@@ -150,7 +154,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
   const TabsScreen = {
     messages: <Chat />,
-    file: <ShowFile />,
+    file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,
     board: (
       <Board
         selectedSpaceId={workspace_id}
@@ -231,7 +235,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
             <div className="flex items-center justify-between w-1/2 ">
               <div className="flex items-center">
-                {/* <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
+                <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
                 {members.slice(0, 3).map((user, i) => (
                         <div key={i} className="ml-[-10px]">
                           {user.avatar ? (
@@ -255,14 +259,15 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   <div
                     className="ml-[-10px]"
                     onClick={() => {
-                      setShowSquadMembers(!showSquadMembers);
+                      setShowSquadMembers(!showSquadMembers)
                       setShowFile(false);
                       setShowChat(false);
                     }}
                   >
-                    {showSquadMembers ? <AddMember /> : <AddMemberBefore />}
+                   <AddMemberBefore />
                   </div>
-                </div> */}
+                  {/* {showAddMemberModal && <AddMembers selectedSpace={selectedSpace} setShowAddMemberModal={setShowAddMemberModal} />} */}
+                </div>
               </div>
               <div className="flex items-center gap-[22px] relative">
                 <div
@@ -293,6 +298,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                     />
                   </span>
                 </div>
+
+
+
                 <div
                   className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {
@@ -321,6 +329,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   </span>
                   {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
+
+                
                 <div
                   className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {

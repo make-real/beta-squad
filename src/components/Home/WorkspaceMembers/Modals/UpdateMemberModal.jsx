@@ -93,7 +93,7 @@ const UpdateMemberModal = ({
 
 
           <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
-            designation
+            Designation
           </p>
           <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
           <img src={BriefCaseIcon} alt="" />

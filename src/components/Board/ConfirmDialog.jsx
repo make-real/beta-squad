@@ -8,10 +8,13 @@ import { useSelector } from 'react-redux';
 import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { delete_file_link } from '../../api/showFiles';
 
 const ConfirmDialog = ({
     listID,
     cardID,
+    spaceID,
+    spaceFiledID,
     setCardSettingDropDownToggle,
     setConfirmModalOpen,
     setDeleteAttachFileLoading,
@@ -29,7 +32,7 @@ const ConfirmDialog = ({
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
     const handleCancel = (e) => {
-        e.stopPropagation();
+        // e.stopPropagation();
 
         if (cardID !== undefined && deleteAttachment === false) {
             setCardSettingDropDownToggle(false);
@@ -41,10 +44,13 @@ const ConfirmDialog = ({
     };
 
     const handleDelete = async (e) => {
-        e.stopPropagation();
+        // e.stopPropagation();
+
+
+
 
         try {
-            if (cardID === undefined) {
+            if (cardID !== undefined) {
                 const { data } = await boardListDelete(selectedSpaceId, listID);
                 removeBoardList(listID);
                 toast.success(`${data?.message}`, { autoClose: 3000 });
@@ -85,6 +91,18 @@ const ConfirmDialog = ({
                 }));
                 setDeleteAttachFileLoading(false);
             }
+
+
+            if(spaceFiledID){
+               const {data} = await delete_file_link(
+                spaceID,spaceFiledID
+               )
+
+               if(data){
+                toast.success(`${data?.message}`, { autoClose: 3000 });
+                setConfirmModalOpen(false)
+               }
+            }
         } catch (error) {
             toast.error(`${error?.response?.data?.issue?.message}`, {
                 autoClose: 3000,
@@ -94,13 +112,16 @@ const ConfirmDialog = ({
 
     return (
         <div
-            onClick={(e) => e.stopPropagation()}
+            // onClick={(e) => e.stopPropagation()}
             className="fixed top-0 left-0 right-0 bottom-0 z-10 bg-black/50 grid place-items-center cursor-default"
         >
             <div className="bg-white rounded-lg p-4 space-y-2 relative">
                 {/* ❌❌❌❌❌❌❌❌❌ button */}
                 <Close
-                    onClick={handleCancel}
+                    onClick={(e) => {
+                        handleCancel();
+                        setConfirmModalOpen(false);
+                    }}
                     className="absolute top-4 right-4 w-4 h-4 text-gray-400 cursor-pointer hover:text-red-500 duration-200"
                 />
 
@@ -130,7 +151,10 @@ const ConfirmDialog = ({
 
                 <div className="flex items-center justify-end gap-3">
                     <div
-                        onClick={handleCancel}
+                        onClick={(e) => {
+                            handleCancel();
+                            setConfirmModalOpen(false);
+                        }}
                         className="px-4 py-2 rounded-lg bg-gray-300 text-white cursor-pointer hover:text-black duration-200 ease-in-out"
                     >
                         Cancel
@@ -138,7 +162,10 @@ const ConfirmDialog = ({
 
                     <div
                         className="px-4 py-2 rounded-lg bg-teal-500 text-white cursor-pointer hover:text-black duration-200 ease-in-out"
-                        onClick={handleDelete}
+                        onClick={(e) => {
+                            handleDelete();
+                            setConfirmModalOpen(false);
+                        }}
                     >
                         Delete{' '}
                     </div>

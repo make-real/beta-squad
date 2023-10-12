@@ -60,10 +60,12 @@ export const BoardCardContext = ({ children }) => {
           }
         });
       });
-      if (cards.length) {
-        let new_board = { ...board, cards };
+
+      let new_board = { ...board, cards };
         new_list.push(new_board);
-      }
+      // if (cards.length) {
+        
+      // }
     });
 
     setFilteredLists(new_list);

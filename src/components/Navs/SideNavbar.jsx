@@ -636,7 +636,7 @@ const SideNavbar = () => {
                         alt="search"
                         className="cursor-pointer"
                       />
-                      <h2 className="text-[#0D1282]">Chat</h2>
+                      <h2 className="text-[#0D1282]">Squadmate</h2>
                     </div>
                     <div
                       className="flex items-center gap-2"
