@@ -124,7 +124,7 @@ const SquadMembers = ({
                       <p className="text-[#818892] text-[13px] w-[120px]">
                         {member?.email}
                       </p>
-                      {member.designation && <p className="text-[#818892]  items-center flex gap-2 text-[13px] w-[120px]">
+                      {member.designation && <p className="text-[#818892]  items-center flex gap-2 text-[13px]">
                       <img src={BriefCaseIcon} alt="" /> {member?.designation}
                       </p>}
                       
