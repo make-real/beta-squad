@@ -19,6 +19,7 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
     const [members, setMembers] = useState([]);
     const [selectedMembers, setSelectedMembers] = useState([]);
 
+
     const fetchWorkspaceMembers = async () => {
         try {
             const { data } = await get_workspace_member(currentWorkspace._id);
@@ -59,6 +60,7 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
     }, [workspaceMembers, alreadyAddedMembers]);
 
     const handleSelectedMember = (e, member) => {
+        e.preventDefault();
         let membersToAdd = [];
         if (e.target.checked) {
             membersToAdd = [...selectedMembers, member];
@@ -70,15 +72,16 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
 
     const handleAddMember = async () => {
         try {
-            selectedMembers.forEach(async (member) => {
-                await add_space_members(selectedSpace._id, member._id);
+            selectedMembers.map(async (member) => {
+               const data= await add_space_members(selectedSpace._id, member._id);
+              console.log(data)
             });
-            toast.success(
-                `Members added to ${selectedSpace.name} successfully.`,
-                {
-                    autoClose: 3000,
-                }
-            );
+            // toast.success(
+            //     `Members added to ${selectedSpace.name} successfully.`,
+            //     {
+            //         autoClose: 3000,
+            //     }
+            // );
             addMembers(selectedMembers);
         } catch (err) {
             console.log(err);
@@ -124,8 +127,8 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
                     />
                 </div>
                 <div className="flex flex-col h-full my-[23px] overflow-y-scroll no-scrollbar gap-[20px] min-h-[150px]">
-                    {members?.map((member) => (
-                        <div className="flex items-center">
+                    {members?.map((member,index) => (
+                        <div key={index} className="flex items-center">
                             <input
                                 type="checkbox"
                                 className="w-[15px] h-[15px]"

@@ -17,6 +17,8 @@ const CardSettingDropDown = ({
     cardModal,
     toggleEdit,
     setToggleEdit,
+    spaceID,
+    spaceFiledID
 }) => {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     if (cardModal === true) setCardSettingDropDownToggle(false);
@@ -57,6 +59,8 @@ const CardSettingDropDown = ({
                 <ConfirmDialog
                     listID={listID}
                     cardID={cardID}
+                    spaceID={ spaceID}
+                    spaceFiledID={spaceFiledID}
                     setConfirmModalOpen={setConfirmModalOpen}
                     setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />

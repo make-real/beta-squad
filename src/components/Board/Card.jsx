@@ -171,7 +171,7 @@ const Card = ({ card, listID }) => {
           />
         )}
         {card?.tags?.length > 0 && (
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-center we">
             <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
@@ -203,7 +203,7 @@ const Card = ({ card, listID }) => {
         )}
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-[16px] leading-6 mt-3 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
+          <p className="text-[16px] leading-6 mt-1 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
           </p>
         </div>

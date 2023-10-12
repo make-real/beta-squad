@@ -150,8 +150,8 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                   </div>
                 </div>
                 <div className="flex items-center gap-[16px]">
-                  <p className="text-[#818892]">{member?.designation}</p>
-                 
+                  {/* <p className="text-[#818892]">{member?.designation}</p>
+                  */}
                 </div>
               </div>
             );

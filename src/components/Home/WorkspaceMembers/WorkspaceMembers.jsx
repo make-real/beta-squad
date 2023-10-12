@@ -13,6 +13,7 @@ import { get_space_members } from "../../../api/space";
 import { get_workspace_member } from "../../../api/workSpace";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
+import BriefCaseIcon from "../../../../src/assets/briefcase.svg";
 
 const SquadMembers = ({
   showType,
@@ -96,16 +97,16 @@ const SquadMembers = ({
                         <p className="text-black text-center">{member.role}</p>
                       </div>
                     ) : member?.role === "admin" ? (
-                      <div className="-my-2 w-[50px] text-xs bg-red-400 rounded-full ml-16 mb-2">
-                        <p className="text-black text-center">{member.role}</p>
+                      <div className="-my-2 w-[50px] text-xs bg-amber-400 rounded-full ml-16 mb-2">
+                        <p className="text-white text-center">{member.role}</p>
                       </div>
-                    ) : member?.role === "moderator" ? (
+                    ) : member?.role === "user" ? (
                       <div className="-my-2 w-[50px] text-xs bg-purple-700 rounded-full ml-16 mb-2">
                         <p className="text-white text-center">{member.role}</p>
                       </div>
                     ) : (
                       <div className="-my-2 w-[50px] text-xs bg-red-700 rounded-full ml-16 mb-2">
-                        <p className="text-white text-center">{member.role}</p>
+                        <p className="text-white  text-center">{member.role}</p>
                       </div>
                     )}
                   </div>
@@ -123,9 +124,10 @@ const SquadMembers = ({
                       <p className="text-[#818892] text-[13px] w-[120px]">
                         {member?.email}
                       </p>
-                      <p className="text-[#818892] text-[13px] w-[120px]">
-                        {member?.designation}
-                      </p>
+                      {member.designation && <p className="text-[#818892]  items-center flex gap-2 text-[13px] w-[120px]">
+                      <img src={BriefCaseIcon} alt="" /> {member?.designation}
+                      </p>}
+                      
                     </div>
                   </div>
                 </div>
