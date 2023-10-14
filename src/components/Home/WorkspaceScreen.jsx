@@ -1,9 +1,5 @@
 import React from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
 import { useState } from "react";
-import PlusIcon from "../../assets/plus.svg";
 import Projects from "./Projects/Projects";
 import WorkspaceMembers from "./WorkspaceMembers/WorkspaceMembers";
 import { useEffect } from "react";
@@ -14,20 +10,15 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { spaceCreation } from "../../hooks/useFetch";
 import { addNewSpace } from "../../store/slice/space";
-
 import { add_workspace_member } from "../../api/workSpace";
 import CrossIcon from "../../assets/cross.svg";
 import InboxIcon from "../../assets/inbox.svg";
 import { validateEmail } from "../../util/helpers";
 import { useLocation } from "react-router-dom";
-import LoadingScreen from "../Loading/LoadingScreen";
 
 const WorkspaceScreen = ({ currentWorkspace }) => {
   const [selectedTab, setSelectedTab] = useState("projects");
-  const [role, setRole] = useState("");
   const [showType, setShowType] = useState("grid");
-
-
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const members = useSelector((state) => state.workspace.workspaceMembers);
@@ -43,9 +34,6 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     squad_members: <WorkspaceMembers showType={showType} />,
   };
 
-
-  
-
   useEffect(() => {
     let tab = location.hash.slice(1);
     if (tab) {
@@ -53,27 +41,25 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
     }
   }, [location]);
 
-
   const isFirstTime =
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : (workspaces?.length === 1 && allSpaces?.length === 0) ||
-      (allSpaces[0]?.name === "Onboarding" &&
-        [...members.filter((m) => m._id !== userInfo._id)].length === 0);
+        (allSpaces[0]?.name === "Onboarding" &&
+          [...members.filter((m) => m._id !== userInfo._id)].length === 0);
 
   const showCreateSquadScreen =
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : allSpaces?.length === 0 ||
-      (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
+        (allSpaces[0]?.name === "Onboarding" && allSpaces.length === 1);
   const showAddMemberScreen =
     JSON.parse(localStorage.getItem("stepFinished")) === true
       ? false
       : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
 
-  const userRole = members?.find((m) => m._id === userInfo._id)
-  const addUser =(userRole?.role === "admin" || userRole?.role === "owner")
-
+  const userRole = members?.find((m) => m._id === userInfo._id);
+  const addUser = userRole?.role === "admin" || userRole?.role === "owner";
 
   return (
     <>
@@ -174,7 +160,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Team Members
               </span>
-              { addUser && (
+              {addUser && (
                 <img
                   onClick={() => setShowAddMemberModal(true)}
                   src={BorderedPlusIcon}
@@ -317,10 +303,11 @@ const CreateSquadModal = () => {
                     setSelectedColor(color);
                   }}
                   style={{ backgroundColor: color }}
-                  className={`relative rounded-[4px] cursor-pointer ${selectedColor === color
-                    ? `w-[22px] h-[22px] border-[2px] border-white`
-                    : "w-[16px] h-[16px]"
-                    }`}
+                  className={`relative rounded-[4px] cursor-pointer ${
+                    selectedColor === color
+                      ? `w-[22px] h-[22px] border-[2px] border-white`
+                      : "w-[16px] h-[16px]"
+                  }`}
                 >
                   {selectedColor === color && (
                     <div
@@ -399,7 +386,6 @@ const CreateSquadModal = () => {
 };
 
 const AddMemberModal = () => {
-
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );

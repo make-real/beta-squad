@@ -1,16 +1,12 @@
 import React from "react";
 import PlusIcon from "../../../assets/plus.svg";
-import ArrowDown from "../../../assets/arrowdown.svg";
 import EditDeleteMenu from "../../DropDown/EditDeleteMenu";
 import AddMemberModal from "./Modals/AddMemberModal";
 import { useState } from "react";
 import UpdateMemberModal from "./Modals/UpdateMemberModal";
 import RemoveMemberModal from "./Modals/RemoveMemberModal";
 import MemberRemovedModal from "./Modals/MemberRemovedModal";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { get_space_members } from "../../../api/space";
-import { get_workspace_member } from "../../../api/workSpace";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
 import BriefCaseIcon from "../../../../src/assets/briefcase.svg";

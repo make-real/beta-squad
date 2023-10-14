@@ -41,6 +41,7 @@ const Projects = ({
   const selectedWorkspace = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
+  const userInfo = useSelector((state) => state.userInfo.userInfo);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ const Projects = ({
     }));
   };
 
- 
+  const editUser = userRole?.role === "admin" || userRole?.role === "owner";
   return (
     <>
       {showType === "grid" ? (
@@ -98,7 +99,7 @@ const Projects = ({
                     className="absolute flex inset-0 w-full h-full cursor-pointer"
                   ></div>
 
-                  {userRole?.role === "owner" && (
+                  {editUser && (
                     <EditDeleteMenu
                       deleteFunc={prepareDeleteProject}
                       editFunc={prepareEditProject}
