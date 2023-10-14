@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   ChatBubbleBottomCenterTextIcon,
   CheckIcon,
@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
 import { get_space_members, remove_space_members } from "../../api/space";
-import { AddBtn } from "../Board";
 import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
 import {
@@ -21,12 +20,10 @@ import {
 import { useBoardCardContext } from "../../context/BoardCardContext";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
 import GoogleMeet from "../../assets/images/meet.png";
-import board from "../../store/slice/board";
 import ShowFile from "./ShowFile/ShowFile";
 import Add from "../../assets/icon_component/Add";
 import Check from "../../assets/icons/svg/Check";
 import { PiFolderOpenBold } from "react-icons/pi";
-import AddMembers from "./SquadMembers/Modals/AddMembers";
 import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
 
 
@@ -37,7 +34,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     useAppStateContext();
   const { participantID, workspace_id } = useParams();
   const [showType, setShowType] = useState("grid");
-  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
@@ -54,9 +50,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   } = useBoardCardContext();
   const [tags, setTags] = useState();
   const [TabsName, setTabsName] = useState(["All"]);
-
-
-  const ringRef = useRef();
+;
 
   const [members, setMembers] = useState([]);
 
