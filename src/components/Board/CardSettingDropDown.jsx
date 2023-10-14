@@ -6,6 +6,7 @@ import Edit from '../../assets/icons/svg/Edit';
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardSettingDropDown = ({
     close,
+    removeUpdate,
     right,
     progress,
     setProgress,
@@ -32,7 +33,8 @@ const CardSettingDropDown = ({
 
     return (
         <div className="w-full rounded-2xl">
-            <div
+            {
+                removeUpdate && <div
                 className="boardActionDropDown group w-full flex justify-center items-center"
                 onClick={(e) => {
                     e.stopPropagation();
@@ -43,6 +45,7 @@ const CardSettingDropDown = ({
                 <Edit className="group-hover:text-teal-500" />
                 <span>Edit</span>
             </div>
+            }
 
             <div
                 className="boardActionDropDown group flex justify-center items-center"

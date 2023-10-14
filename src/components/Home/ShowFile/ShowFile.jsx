@@ -16,7 +16,7 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
   const [link, setLink] = useState("");
   const [title, setTitle] = useState("");
   const [ linkDatas , setLinkDatas] = useState([])
-
+ const [removeUpdate, setRemoveUpdate] = useState(false)
   const handleAddLinks = async () => {
     const linkData = {
       link: link,
@@ -25,7 +25,7 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
     if (selectedSpaceId) {
       try {
         const { data } = await add_file_link(selectedSpaceId, linkData);
-       toast.success(`${data} - link create successfully`, {
+       toast.success(" File link create successfully", {
           autoClose: 3000,
       });
       } catch (err) {
@@ -55,7 +55,6 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
     getLinks();
   }, [ShowFile, showAdd]);
 
-console.log(linkDatas)
   return (
     <div
       style={{}}
@@ -64,8 +63,8 @@ console.log(linkDatas)
       <div>
 
         {linkDatas?.map((data,index) => 
-          <a href={data.link} target="blank" key={index} className="w-full cursor-pointer relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]">
-          <div className="flex items-center gap-2">
+          <div  key={index} className="w-full cursor-pointer relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]">
+          <a href={data.link} target="blank" className="flex items-center gap-2">
             <img
               className="w-8 rounded-full h-8"
             src={data.logo}
@@ -80,11 +79,11 @@ console.log(linkDatas)
 }`, " dS mmm, yyyy")}
               </p>
             </div>
-          </div>
+          </a>
           <Dropdown
             position="bottom right"
             button={
-              <EllipsisHorizontalIcon className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200 ml-0" />
+              <EllipsisHorizontalIcon onClick={()=>{setRemoveUpdate(true)}} className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200 ml-0" />
             }
             width="150px"
             style={{ borderRadius: "1rem" }}
@@ -93,6 +92,7 @@ console.log(linkDatas)
               spaceID={selectedSpaceId}
               spaceFiledID={data._id}
               data={data}
+              removeUpdate={removeUpdate}
               // close={closePopup}
               // cardID={localCard._id}
               // progress={progress}
@@ -111,7 +111,7 @@ console.log(linkDatas)
               />
             )}
           />
-        </a>
+        </div>
         )}
         
         {showAdd ? (

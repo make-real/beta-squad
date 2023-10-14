@@ -10,6 +10,7 @@ import {
     MinusIcon,
     PlusIcon,
 } from '@heroicons/react/24/outline';
+import { getAvatarUrl } from '../../util/getAvatarUrl';
 
 const AssigneeUser = ({
     localCard,
@@ -138,21 +139,16 @@ const AssigneeUser = ({
                             onClick={() => handle_remove_assignee_users(user)}
                         >
                             <MinusIcon className="w-4 h-4 text-white bg-[#FF3659] rounded-full" />
-                            {user.avatar ? (
-                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
+                            <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
-                                        src={user.avatar}
+                                       src={
+                                        user?.avatar ??
+                                        getAvatarUrl(user?.fullName)
+                                      }
                                         alt=""
                                         className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
-                            ) : (
-                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
-                                    <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
-                                        {user?.fullName.charAt(0)}
-                                    </p>
-                                </span>
-                            )}
 
                             <span className="duration-150 group-hover:text-black">
                                 {user?.fullName}
@@ -177,21 +173,16 @@ const AssigneeUser = ({
                             onClick={() => handle_add_assignee_users(user)}
                         >
                             <PlusIcon className="w-4 h-4 text-white bg-[#54CC7C] rounded-full" />
-                            {user.avatar ? (
-                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
+                            <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
-                                        src={user.avatar}
+                                       src={
+                                        user?.avatar ??
+                                        getAvatarUrl(user?.fullName)
+                                      }
                                         alt=""
                                         className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"
                                     />
                                 </span>
-                            ) : (
-                                <span className="rounded-full  text-black font-bold grid place-items-center p-1">
-                                    <p className="h-5 w-5 text-[#14BCBE] flex justify-center items-center">
-                                        {user?.fullName.charAt(0)}
-                                    </p>
-                                </span>
-                            )}
                             <span className="duration-150 group-hover:text-black">
                                 {user?.fullName}
                             </span>

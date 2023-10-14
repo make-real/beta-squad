@@ -73,6 +73,8 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
 
   const userRole = members?.find((m) => m._id === userInfo._id);
 
+  const addUser = userRole?.role === "admin" || "owner";
+
   return (
     <>
       {isFirstTime || showCreateSquadScreen || showAddMemberScreen ? (
@@ -143,7 +145,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               </span>
 
               <>
-                {userRole?.role === "owner" && (
+                {addUser && (
                   <img
                     onClick={() => setShowCreateSquadModal(true)}
                     src={BorderedPlusIcon}
@@ -172,7 +174,7 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
               >
                 Team Members
               </span>
-              {userRole?.role === "owner" && (
+              { addUser && (
                 <img
                   onClick={() => setShowAddMemberModal(true)}
                   src={BorderedPlusIcon}

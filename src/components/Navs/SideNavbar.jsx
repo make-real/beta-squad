@@ -659,7 +659,7 @@ const SideNavbar = () => {
                   </div>
                 )}
                 {!fullSidebar && (
-                  <h1 className="text-[#0D1282] text-center">Chats</h1>
+                  <h1 className="text-[#0D1282] text-center">Squadmate</h1>
                 )}
 
 
