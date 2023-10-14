@@ -71,9 +71,9 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
       ? false
       : [...members.filter((m) => m._id !== userInfo._id)].length === 0;
 
-  const userRole = members?.find((m) => m._id === userInfo._id);
+  const userRole = members?.find((m) => m._id === userInfo._id)
+  const addUser =(userRole?.role === "admin" || userRole?.role === "owner")
 
-  const addUser = userRole?.role === "admin" || "owner";
 
   return (
     <>
