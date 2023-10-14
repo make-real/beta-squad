@@ -5,9 +5,13 @@ import ProfileCircle from "../../../../assets/profile_circle.svg";
 import BriefCaseIcon from "../../../../assets/briefcase.svg";
 import { useEffect } from "react";
 import { useState } from "react";
-import { change_workspace_member_designation, change_workspace_member_role } from "../../../../api/workSpace";
+import {
+  change_workspace_member_designation,
+  change_workspace_member_role,
+} from "../../../../api/workSpace";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { toUpper } from "lodash";
 
 const UpdateMemberModal = ({
   setShowUpdateMemberModal,
@@ -23,34 +27,28 @@ const UpdateMemberModal = ({
     setEditData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(editData)
     try {
-      
-       await change_workspace_member_role(selectedWorkspaceId, {
+      await change_workspace_member_role(selectedWorkspaceId, {
         id: editData._id,
         role: editData.role,
       });
 
-     try{
-        await change_workspace_member_designation(selectedWorkspaceId,{
-            id:editData._id,
-            designation:editData.designation
-          })
+      try {
+        await change_workspace_member_designation(selectedWorkspaceId, {
+          id: editData._id,
+          designation: editData.designation,
+        });
 
-          // display a notification for user
-          toast.success(`Role changed successfully`, {
-            autoClose: 3000,
-          });
-     }
-     catch (error) {
+        // display a notification for user
+        toast.success(`Role changed successfully`, {
+          autoClose: 3000,
+        });
+      } catch (error) {
         // error for developer for deBugging...
         console.log(error);
       }
-      
-     
     } catch (error) {
       // error for developer for deBugging...
       console.log(error);
@@ -91,12 +89,11 @@ const UpdateMemberModal = ({
             />
           </div>
 
-
           <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
             Designation
           </p>
           <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
-          <img src={BriefCaseIcon} alt="" />
+            <img src={BriefCaseIcon} alt="" />
             <input
               className="w-full placeholder:text-[#818892] text-[14px] border-none outline-none bg-transparent"
               type="text"
@@ -104,12 +101,10 @@ const UpdateMemberModal = ({
               onChange={handleChange}
               value={editData.designation}
               name="designation"
-
             />
           </div>
 
-
-           {/* <p className="mt-[20px] text-[14px] font-semibold text-[#424D5B]">
+          {/* <p className="mt-[20px] text-[14px] font-semibold text-[#424D5B]">
                         Designation
                     </p>
                     <div className="mt-[13px] w-full bg-[#ECECEC60] rounded-[8px] py-[16px] px-[20px] flex items-center gap-[10px]">
@@ -145,8 +140,6 @@ const UpdateMemberModal = ({
                         </select>
                     </div>  */}
 
-
-
           <p className="text-[14px] font-semibold text-[#424D5B] mt-[20px]">
             Role
           </p>
@@ -161,32 +154,29 @@ const UpdateMemberModal = ({
               name="role"
             /> */}
 
-
-<select
-                            name="role"
-                            onChange={handleChange}
-                            id=""
-                            className="w-full bg-transparent text-[#031124] text-[16px] border-none outline-none"
-                        >
-                            <option selected value="">
-                            {editData.role}
-                            </option>
-                            {["admin","guest","user"].map((role) => {
-                                return (
-                                    <option
-                                        selected={
-                                            role?.toLowerCase() ===
-                                            editData.type?.toLowerCase()
-                                        }
-                                        value={role}
-                                    >
-                                        {role}
-                                    </option>
-                                );
-                            })}
-                        </select>
+            <select
+              name="role"
+              onChange={handleChange}
+              id=""
+              className="w-full bg-transparent text-[#031124] text-[16px] border-none outline-none"
+            >
+              <option selected value="">
+                {editData?.role?.toUpperCase()}
+              </option>
+              {["admin", "guest", "user", "owner"].map((role) => {
+                return (
+                  <option
+                    selected={
+                      role?.toLowerCase() === editData.type?.toLowerCase()
+                    }
+                    value={role.toUpperCase()}
+                  >
+                    {role.toUpperCase()}
+                  </option>
+                );
+              })}
+            </select>
           </div>
-        
 
           <div className="flex items-center mt-[40px] gap-[30px]">
             <button

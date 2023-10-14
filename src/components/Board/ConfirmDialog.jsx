@@ -50,7 +50,7 @@ const ConfirmDialog = ({
 
 
         try {
-            if (cardID !== undefined) {
+            if (cardID === undefined) {
                 const { data } = await boardListDelete(selectedSpaceId, listID);
                 removeBoardList(listID);
                 toast.success(`${data?.message}`, { autoClose: 3000 });
@@ -93,7 +93,7 @@ const ConfirmDialog = ({
             }
 
 
-            if(spaceFiledID){
+            if(spaceFiledID && cardID !== undefined ){
                const {data} = await delete_file_link(
                 spaceID,spaceFiledID
                )

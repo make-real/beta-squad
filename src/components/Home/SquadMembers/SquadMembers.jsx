@@ -7,6 +7,7 @@ import { get_space_members, remove_space_members } from "../../../api/space";
 import { useEffect } from "react";
 import AddMembers from "./Modals/AddMembers";
 import { toast } from "react-toastify";
+import { getAvatarUrl } from "../../../util/getAvatarUrl";
 
 const SquadMembers = ({ showType, selectedSpace }) => {
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
@@ -138,7 +139,10 @@ const SquadMembers = ({ showType, selectedSpace }) => {
                  }
                 <div className="flex items-center gap-[10px]">
                   <img
-                    src={member?.avatar}
+                    src={
+                      member?.avatar ??
+                      getAvatarUrl(member?.fullName)
+                    }
                     alt=""
                     className="w-[50px] h-[50px] object-cover rounded-full"
                   />
