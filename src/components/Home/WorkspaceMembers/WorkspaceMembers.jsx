@@ -90,19 +90,19 @@ const SquadMembers = ({
                   <div>
                     {member?.role === "owner" ? (
                       <div className="-my-2 w-[50px] text-xs bg-green-400 rounded-full ml-16 mb-2">
-                        <p className="text-black text-center">{member.role}</p>
+                        <p className="text-black text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
                       </div>
                     ) : member?.role === "admin" ? (
                       <div className="-my-2 w-[50px] text-xs bg-amber-400 rounded-full ml-16 mb-2">
-                        <p className="text-white text-center">{member.role}</p>
+                        <p className="text-white text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
                       </div>
                     ) : member?.role === "user" ? (
                       <div className="-my-2 w-[50px] text-xs bg-purple-700 rounded-full ml-16 mb-2">
-                        <p className="text-white text-center">{member.role}</p>
+                        <p className="text-white text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
                       </div>
                     ) : (
                       <div className="-my-2 w-[50px] text-xs bg-red-700 rounded-full ml-16 mb-2">
-                        <p className="text-white  text-center">{member.role}</p>
+                        <p className="text-white  text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
                       </div>
                     )}
                   </div>
@@ -162,7 +162,7 @@ const SquadMembers = ({
                       </h2>
                     </div>
                     <div className="flex items-center gap-[16px]">
-                      <p className="text-[#818892]">{member?.role}</p>
+                      <p className="text-[#818892]">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
                       {/* <img src={ArrowDown} alt="" /> */}
                     </div>
                     <p className="text-[#818892]">{member?.email}</p>
