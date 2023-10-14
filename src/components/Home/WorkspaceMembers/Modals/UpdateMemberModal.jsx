@@ -161,7 +161,7 @@ const UpdateMemberModal = ({
               className="w-full bg-transparent text-[#031124] text-[16px] border-none outline-none"
             >
               <option selected value="">
-                {editData?.role?.toUpperCase()}
+                {editData?.role?.charAt(0).toUpperCase() + editData?.role?.slice(1)}
               </option>
               {["admin", "guest", "user", "owner"].map((role) => {
                 return (
@@ -169,9 +169,9 @@ const UpdateMemberModal = ({
                     selected={
                       role?.toLowerCase() === editData.type?.toLowerCase()
                     }
-                    value={role.toUpperCase()}
+                    value={role?.charAt(0).toUpperCase() + role?.slice(1)}
                   >
-                    {role.toUpperCase()}
+                    {role?.charAt(0).toUpperCase() + role?.slice(1)}
                   </option>
                 );
               })}
