@@ -11,6 +11,7 @@ import 'tippy.js/dist/tippy.css';
 import DraggableElement from '../DraggableElement';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Draggable } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
 
 const BoardList = ({ showType, listIndex, boardList }) => {
     const [toggleEdit, setToggleEdit] = useState(false);
@@ -18,23 +19,34 @@ const BoardList = ({ showType, listIndex, boardList }) => {
 
     const dropDownRef = useRef();
     const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+    const seletedTagId = useSelector((state)=>state?.TagId?.selectTagId )
+
     const { addCard, updateBoardList } = useBoardCardContext();
     
     // POST Method || add card inside board list...
     const handleCardCreation = async (text) => {
         setCardLoading(true);
-        const cardObject = { name: text  };
+        let cardObject
+        if (seletedTagId) {
+             cardObject = { name: text, tagId:seletedTagId };
+        }else{
+            cardObject = { name: text, };
+        }
+        
+    
+        
        
 
         try {
             // its a POST method | object send into backend/server
-            const { data } = await addCardIntoBoardList(
+            const  {data} = await addCardIntoBoardList(
                 selectedSpaceId,
                 boardList?._id,
                 cardObject
             );
 
             // update user UI...
+            console.log(data)
             addCard(data?.card, boardList?._id);
 
             setCardLoading(false);
@@ -49,9 +61,9 @@ const BoardList = ({ showType, listIndex, boardList }) => {
             setCardLoading(false);
 
             // error for user at notification...
-            // toast.error(error?.response?.data?.issue?.message, {
-            //     autoClose: 3000,
-            // });
+            toast.error(error?.response?.data?.issue?.message, {
+                autoClose: 3000,
+            });
         }
     };
 
