@@ -203,7 +203,7 @@ const Card = ({ card, listID }) => {
         )}
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-[16px] leading-6 mt-1 mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
+          <p className="text-[16px] leading-6 mt-[10px] mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
           </p>
         </div>

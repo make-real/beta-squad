@@ -8,6 +8,7 @@ import cardAsList from "./slice/cardAsList";
 import privateChat from "./slice/privateChat";
 import global from "./slice/global";
 import screen from "./slice/screen";
+import  TagId  from './slice/TagId';
 
 const rootReducer = combineReducers({
     workspace,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     privateChat,
     screen,
     global,
+    TagId
 });
 
 const store = configureStore({

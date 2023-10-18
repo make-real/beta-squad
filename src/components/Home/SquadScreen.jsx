@@ -25,6 +25,9 @@ import Add from "../../assets/icon_component/Add";
 import Check from "../../assets/icons/svg/Check";
 import { PiFolderOpenBold } from "react-icons/pi";
 import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
+import { MdElectricScooter } from "react-icons/md";
+import { selectTag } from "../../store/slice/TagId";
+import { calcLength } from "framer-motion";
 
 
 
@@ -37,6 +40,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
+  const dispatch = useDispatch()
 
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const {
@@ -48,13 +52,22 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     setFilteredLists,
     boardLists,
   } = useBoardCardContext();
-  const [tags, setTags] = useState();
+  const [tags, setTags] = useState([]);
   const [TabsName, setTabsName] = useState(["All"]);
 ;
 
   const [members, setMembers] = useState([]);
 
+ const selectTags =  tags?.tags?.filter(tag => tag?.name === selectedTab)
+
+ const selectTagId=selectTags? selectTags[0] :null
+  useEffect(()=>{
+     dispatch(selectTag(selectTagId?._id))
   
+  },[selectTagId,dispatch])
+   
+
+ 
 
   const handleBoardListCreation = async (squadId, text) => {
     const listObject = { name: text };

@@ -91,7 +91,7 @@ const CardModal = ({
 
   useEffect(
     () => updateCard(listID, localCard._id, localCard),
-    [listID, card._id, localCard]
+    [listID, card._id, localCard,updateCard]
   );
 
   const handle_card_name_update_enter_btn = async (e) => {

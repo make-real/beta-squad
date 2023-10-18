@@ -1,5 +1,5 @@
 // const api_url = process.env.REACT_APP_API_BASE_URL;
-const api_url = "https://betasquad-api.cyclenation.io";
+const api_url = "https://api.betasquad.io";
 const app_url = process.env.REACT_APP_BASE_URL;
 
 const config = {
