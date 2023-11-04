@@ -1,4 +1,4 @@
-import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore, combineReducers,  } from "@reduxjs/toolkit";
 import workspace from "./slice/workspace";
 import space from "./slice/space";
 import userInfo from "./slice/userInfo";
@@ -9,6 +9,7 @@ import privateChat from "./slice/privateChat";
 import global from "./slice/global";
 import screen from "./slice/screen";
 import  TagId  from './slice/TagId';
+import  cardsLists  from './slice/allboard';
 
 const rootReducer = combineReducers({
     workspace,
@@ -20,7 +21,9 @@ const rootReducer = combineReducers({
     privateChat,
     screen,
     global,
-    TagId
+    TagId,
+    cardsLists
+
 });
 
 const store = configureStore({

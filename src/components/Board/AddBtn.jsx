@@ -82,7 +82,7 @@ const AddBtn = ({ loading, showType, onSubmit, btnText, placeHolder }) => {
               Add
               {loading && (
                 <div className={"flex justify-center ml-2"}>
-                  <ClipLoader color="#36d7b7" size="20" />
+                  <ClipLoader color="#36d7b7" size="20px" />
                 </div>
               )}
             </button>

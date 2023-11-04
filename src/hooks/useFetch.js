@@ -106,10 +106,9 @@ export const boardListDelete = (spaceId, listId) =>
 
 // 🟨🟨🟨 Card
 // POST ==> Card Create --- under specific Space reference ID + Board List ID
-export const addCardIntoBoardList = (spaceId, listId, newCard) =>{
-    console.log(newCard)
+export const addCardIntoBoardList = (spaceId, listId, newCard) =>
     api.post(`/spaces/${spaceId}/board/${listId}/card`, newCard);
-}
+
   
 
 export const cardDeleteApiCall = (spaceId, listId, cardId) =>

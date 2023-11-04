@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-selectTagId:"",
+selectTagId:{},
 };
 
 export const TagId = createSlice({
@@ -12,7 +12,7 @@ export const TagId = createSlice({
             if(payload){
                 state.selectTagId = payload;
             }else{
-                state.selectTagId ="";
+                state.selectTagId ={};
             }
       
         },

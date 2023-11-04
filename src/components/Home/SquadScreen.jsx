@@ -28,6 +28,7 @@ import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
 import { MdElectricScooter } from "react-icons/md";
 import { selectTag } from "../../store/slice/TagId";
 import { calcLength } from "framer-motion";
+import { getAvatarUrl } from "../../util/getAvatarUrl";
 
 
 
@@ -62,7 +63,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
  const selectTagId=selectTags? selectTags[0] :null
   useEffect(()=>{
-     dispatch(selectTag(selectTagId?._id))
+     dispatch(selectTag(selectTagId))
   
   },[selectTagId,dispatch])
    
@@ -180,8 +181,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[80px] flex flex-col">
           <div className="flex flex-row items-center gap-4  py-[10px]">
             <div className="flex items-center w-full gap-8">
-             
-            
               <div className="flex items-center w-[60%] duration-200 overflow-auto customScroll pb-1">
                 {TabsName.map((value, idx) => {
                   return (
@@ -201,7 +200,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               </div>
               <div className="flex">
                 <div
-                  onClick={() => setSelectedTab("Done")}
+                  onClick={() =>setSelectedTab("Done")}
                   className={`${
                     selectedTab === "Done"
                       ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
@@ -245,21 +244,16 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                 <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
                 {members.slice(0, 3).map((user, i) => (
                         <div key={i} className="ml-[-10px]">
-                          {user.avatar ? (
                             <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
                               <img
-                                src={user.avatar}
+                                src={
+                                  user?.avatar ??
+                                  getAvatarUrl(user?.fullName)
+                                }
                                 alt=""
                                 className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
                               />
                             </span>
-                          ) : (
-                            <span className="rounded-full ring-[1px] bg-white ring-white text-black font-bold grid place-items-center p-1">
-                              <p className="h-7 w-7 text-[#14BCBE] flex justify-center items-center">
-                                {i || user?.fullName.charAt(0)}
-                              </p>
-                            </span>
-                          )}
                         </div>
                       ))}
 

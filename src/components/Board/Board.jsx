@@ -15,6 +15,10 @@ import { useSelector } from "react-redux";
 import { filterStatus } from "../../store/slice/board";
 import BoardStackList from "./BoardStackList";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getAllListCards } from "../../api/board";
+import { setFilterListBoard, testReducer } from "../../store/slice/allboard";
+import { useAppStateContext } from "../../context/FeatureContext";
 
 const Board = ({ showType, addBoardRef }) => {
   const { squadId } = useParams();
@@ -25,32 +29,98 @@ const Board = ({ showType, addBoardRef }) => {
     setBoardList,
     addBoardList,
     addBoard,
-    filteredLists,
+    // filteredLists,
     setFilteredLists,
   } = useBoardCardContext();
   const { filter } = useSelector((state) => state.board);
-  
+  const lists = useSelector((state) => state?.cardsLists?.data?.lists);
+  const seletedTagId = useSelector((state) => state?.TagId?.selectTagId);
+  const filteredLists = useSelector((state)=>state?.cardsLists?.filterBoardLists)
+  const IsDispatch = useSelector((state)=>state?.cardsLists?.IsDispatch)
+  const { selectedTab } =useAppStateContext();
+  // let filter_tag;
+  // if (seletedTagId.name) {
+  //   filter_tag = seletedTagId.name;
+  // } else {
+  //   filter_tag = "All";
+  // }
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          const { data } = await useAxios.get(
-            `/spaces/${squadId}/board?getCards=true`
-          );
-          
-          setBoardList(data.lists);
-          setFilteredLists(data.lists);
-          // setBoardList(data.lists?.reverse()?.slice(0));
+          dispatch(getAllListCards(squadId));
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [squadId, setBoardList]);
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch]);   
+
+useEffect(()=>{
+  const filterList = () => {
+    
+    let new_list = [];
+    if (selectedTab === "Done") {
+      lists?.map((board) => {
+        let cards = [];
+        board.cards.forEach((card) => {
+          if (card.progress === 4) {
+            cards.push(card);
+          }
+        });
+        if (cards.length) {
+          let new_board = { ...board, cards };
+          new_list.push(new_board);
+        }
+      });
+      dispatch(setFilterListBoard(new_list))
+      return;
+    }
+    if (selectedTab === "All") {
+      lists?.map((board) => {
+        let cards = [];
+        board.cards.forEach((card) => {
+          if (card.progress !== 4) {
+            cards.push(card);
+          }
+        });
+        let new_board = { ...board, cards };
+        new_list.push(new_board);
+      });
+      dispatch(setFilterListBoard(new_list))
+      return;
+    }
+
+
+    lists.map((board) => {
+      let cards = [];
+      board.cards.forEach((card) => {
+        card.tags.forEach((tag) => {
+          if (selectedTab === "All" && card.progress !== 4) {
+            cards.push(card);
+          }
+          if (tag.name === selectedTab && card.progress !== 4) {
+            cards.push(card);
+          }
+        });
+      });
+
+      let new_board = { ...board, cards };
+        new_list.push(new_board);
+    });
+
+    dispatch(setFilterListBoard(new_list))
+  };
+  filterList()
+},[dispatch, lists, selectedTab])
+
+
 
   const [listLoading, setListLoading] = useState(false);
-
   const handleBoardListCreation = async (squadId, text) => {
     const listObject = { name: text };
     setListLoading(true);
@@ -166,12 +236,13 @@ const Board = ({ showType, addBoardRef }) => {
       }
       return { ...brd, cards: filteredCard };
     });
-
     return boardCopy;
   };
 
   return (
-    <section className={`duration-200 overflow-y-auto customScroll w-full max-h-full`}>
+    <section
+      className={`duration-200 overflow-y-auto customScroll w-full max-h-full`}
+    >
       {squadId ? (
         showType === "grid" ? (
           <div className="py-1 flex gap-3 items-start overflow-y-auto">
@@ -187,14 +258,16 @@ const Board = ({ showType, addBoardRef }) => {
                     ref={provided.innerRef}
                     className="flex items-start max-h-full"
                   >
-                    {filteredLists.length === 0 ? "Currently, Empty Board!" : filterdBoardList()?.map((boardList, index) => (
-                      <BoardList
-                        showType={showType}
-                        key={boardList?._id}
-                        boardList={boardList}
-                        listIndex={index}
-                        />
-                    ))}
+                    {filteredLists.length === 0
+                      ? "Currently, Empty Board!"
+                      : filterdBoardList()?.map((boardList, index) => (
+                          <BoardList
+                            showType={showType}
+                            key={boardList?._id}
+                            boardList={boardList}
+                            listIndex={index}
+                          />
+                        ))}
                     {provided.placeholder}
                   </div>
                 )}

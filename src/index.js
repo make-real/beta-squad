@@ -16,19 +16,19 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 requestNotificationPermission();
 
-const channel = new BroadcastChannel("tab");
+// const channel = new BroadcastChannel("tab");
 
-channel.postMessage("another-tab");
-// note that listener is added after posting the message
+// channel.postMessage("another-tab");
+// // note that listener is added after posting the message
 
-channel.addEventListener("message", (msg) => {
-  if (msg.data === "another-tab") {
-    document.body.innerHTML = `<div class="container py-4 flex items-center justify-center self-center"><div class="bg-red-500 text-white p-4 rounded-lg text-center">
-        <p class="font-medium">Sorry, Multiple tabs are not allowed.</p>
-      </div></div>
-      `;
-  }
-});
+// channel.addEventListener("message", (msg) => {
+//   if (msg.data === "another-tab") {
+//     document.body.innerHTML = `<div class="container py-4 flex items-center justify-center self-center"><div class="bg-red-500 text-white p-4 rounded-lg text-center">
+//         <p class="font-medium">Sorry, Multiple tabs are not allowed.</p>
+//       </div></div>
+//       `;
+//   }
+// });
 
 root.render(
   // <React.StrictMode>

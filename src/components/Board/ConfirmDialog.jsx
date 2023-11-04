@@ -9,6 +9,9 @@ import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { delete_file_link } from '../../api/showFiles';
+import { useDispatch } from 'react-redux';
+import { RemoveCard } from '../../store/slice/allboard';
+import { DeleteCard } from '../../api/board';
 
 const ConfirmDialog = ({
     listID,
@@ -25,6 +28,7 @@ const ConfirmDialog = ({
     const navigate = useNavigate();
 
     const { removeBoardList, removeCard } = useBoardCardContext();
+    const dispatch = useDispatch();
 
     const selectedWorkspaceId = useSelector(
         (state) => state.workspace.selectedWorkspace
@@ -57,16 +61,18 @@ const ConfirmDialog = ({
             }
 
             if (cardID !== undefined && deleteAttachment !== true) {
-                const { data } = await cardDeleteApiCall(
-                    selectedSpaceId,
-                    listID,
-                    cardID
-                );
 
-                removeCard(listID, cardID);
-
-                // toast.success(`${data?.message}`, { autoClose: 3000 });
-
+                dispatch(DeleteCard({spaceId:selectedSpaceId,listId:listID, cardId:cardID})).then((data) => {
+                    if (data) {
+                      toast.success(data?.payload?.message, {
+                        autoClose: 1000,
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    //for developer
+                    console.error( error);
+                  })
                 navigate(
                     `/projects/${selectedWorkspaceId}/squad/${selectedSpaceId}`,
                     {

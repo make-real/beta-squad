@@ -63,9 +63,6 @@ export const BoardCardContext = ({ children }) => {
 
       let new_board = { ...board, cards };
         new_list.push(new_board);
-      // if (cards.length) {
-        
-      // }
     });
 
     setFilteredLists(new_list);
@@ -81,6 +78,7 @@ export const BoardCardContext = ({ children }) => {
     );
   };
 
+  
   const removeBoardList = (bid) =>
     setBoardList((pre) => pre.filter(({ _id }) => _id !== bid));
 
@@ -88,7 +86,7 @@ export const BoardCardContext = ({ children }) => {
     const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
 
     if (boardIndex < 0) return;
-
+ 
     setBoardList((prev) => {
       const tempBoard = [...prev];
 
@@ -101,6 +99,7 @@ export const BoardCardContext = ({ children }) => {
       return tempBoard;
     });
   };
+  
 
   const removeCard = (bid, cid) => {
     const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);

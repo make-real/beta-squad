@@ -43,7 +43,7 @@ import { useCommingSoonContext } from "../../context/FeatureContext";
 import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
 import { useUserInfoContext } from "../../context/UserInfoContext";
 
-const SideNavbar = () => {
+const SideNavbar = ({ShowSubscription}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentWorkspace = useSelector(
@@ -226,7 +226,7 @@ const SideNavbar = () => {
       <div
         className={`${
           fullSidebar ? "min-w-[225px] w-[225px]" : "w-max items-center"
-        } bg-[#FAFAFA] pt-[20px] flex flex-col fixed left-0 z-[50] h-screen overflow-y-scroll no-scrollbar`}
+        } bg-[#FAFAFA] pt-[20px] flex flex-col fixed left-0 ${ShowSubscription? "top-[34px]":"top-0"} z-[50] h-screen overflow-y-scroll no-scrollbar`}
       >
         <div
           className={`flex items-center justify-between mb-[32px] ${
