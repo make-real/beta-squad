@@ -21,6 +21,9 @@ import { GrAttachment } from "react-icons/gr";
 // import CardDetails from './CardDetails';
 // import { draftJsToHtml } from '../../util/draftJsToHtml';
 import Description from './../../assets/icons/svg/Description';
+import { useDispatch } from "react-redux";
+import { UpdatedCard } from "../../api/board";
+import { toast } from "react-toastify";
 
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
@@ -28,6 +31,7 @@ const Card = ({ card, listID }) => {
   const [cardSettingDropDownToggle, setCardSettingDropDownToggle] =
     useState(false);
   const { updateCard, toggleCardModal } = useBoardCardContext();
+  const dispatch = useDispatch()
   const [progress, setProgress] = useState(card?.progress);
   const [visible, setVisible] = useState(false);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
@@ -79,13 +83,18 @@ const Card = ({ card, listID }) => {
     const cardTagObject = { ...card, progress: progress === 0 ? 4 : 0 };
 
     try {
-      const { data } = await cardUpdateApiCall(
-        selectedSpaceId,
-        listID,
-        card._id,
-        cardTagObject
-      );
-      updateCard(listID, card._id, data.updatedCard);
+
+      dispatch(UpdatedCard({spaceId:selectedSpaceId,listId:listID,cardId:card._id,cardObj:cardTagObject})).then((data) => {
+        if (data) {
+          toast.success(`${data?.payload?.updatedCard?.name} - card updated`, {
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch((error) => {
+        //for developer
+        console.error( error);
+      })
     } catch (error) {
   
       // toast.error(`${error?.response?.data?.issue?.message}`, {

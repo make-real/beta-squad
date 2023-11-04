@@ -50,6 +50,11 @@ const UpdateMemberModal = ({
         console.log(error);
       }
     } catch (error) {
+     if(error?.message ===`Invalid keyword!- only valid keywords are: \"admin\", \"user\", \"guest\", \"remove\"`){
+      toast.error("Only Owner has this permission", {
+        autoClose: 3000,
+    });
+     }
       // error for developer for deBugging...
       console.log(error);
     }
