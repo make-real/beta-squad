@@ -50,14 +50,14 @@ const BoardList = ({ showType, listIndex, boardList }) => {
           if (data) {
             setCardLoading(false);
             //for user UI
-           if(data.payload){
-            toast.success(`${data.payload?.issue.message} - card created`, {
-              autoClose: 1000,
-            });
-           }
-            toast.error("Couldn't create a card with duplicate name in the same list!", {
+           if(data?.payload){
+            toast.success(`${data.payload?.card.name} - card created`, {
               autoClose: 2000,
             });
+           }else{
+            toast.error("Couldn't create a card with duplicate name in the same list!", {
+              autoClose: 2000,
+            });}
           }
         })
         .catch((error) => {
