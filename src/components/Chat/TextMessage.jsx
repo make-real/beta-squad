@@ -1,7 +1,7 @@
 import { BsEmojiSmile } from "react-icons/bs";
 import { RiArrowGoForwardLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { AiOutlineClockCircle } from "react-icons/ai";
+import { AiFillCheckCircle } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_messages } from "../../api/message";
@@ -39,7 +39,6 @@ const Message = ({
       console.log(error);
     }
   };
-
   const reaction = msg?.reactions?.find(
     (r) => r?.reactor?._id === userId
   )?.reaction;
@@ -51,11 +50,10 @@ const Message = ({
       console.log(error);
     }
   };
-
   return (
     <div
       style={{}}
-      className={`flex ${
+      className={`flex items-center ${
         msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""
       } pl-6 pr-8 py-1.5 relative  user-box ${
         msg?.reactions.length ? "mb-4" : ""
@@ -144,14 +142,14 @@ const Message = ({
         ></p>
 
         <small
-          className={`flex  justify-end mb-0 gap-2 ${
-            msg?.sender?._id === userId
+          className={`flex items-center  justify-end mb-0 gap-2 ${
+            msg?.seenBy?.length > 0
               ? "text-[#ACB0B6] font-[400]  "
               : " text-[#ACB0B6]  font-[400] "
           }`}
         >
-          {moment(msg?.createdAt).format('LT')}{" "}
-          {msg?.sender?._id === userId && <img src={tickIcon} alt="" />}
+          {moment(msg?.createdAt).format('LT')}
+          {msg?.seenBy?.length > 0 ?  <AiFillCheckCircle size={16} color="#2cd163"/>:  <AiFillCheckCircle size={16} /> }
         </small>
 
         {msg?.sendingFailed && (
@@ -175,8 +173,8 @@ const Message = ({
         )}
       </div>
 
-      <div className="flex flex-row-reverse h-fit text-gray-500 rounded-3xl py-1.5 px-2 msg-icons">
-        <div className="px-1.5 hover:text-blue-500 tooltip-box cursor-pointer">
+      <div className="flex flex-row-reverse h-fit text-gray-500 rounded-3xl py-1.5 msg-icons">
+        <div className="px-1 hover:text-blue-500 tooltip-box cursor-pointer">
           <BsEmojiSmile onClick={() => setShowReactEmojis(!showReactEmojis)} />
           <p className="tooltip-text select-none">Add a reaction</p>
 
@@ -219,29 +217,29 @@ const Message = ({
         </div>
         <div
           onClick={() => setMessageToRespond(msg)}
-          className="px-1.5 hover:text-blue-500 tooltip-box cursor-pointer"
+          className="px-[2px] hover:text-blue-500 tooltip-box cursor-pointer"
         >
           <RiArrowGoForwardLine />
-          <p className="tooltip-text">Respond to this message</p>
+          <p className="tooltip-text">Reply to this message</p>
         </div>
 
         {msg?.sender?._id === userId && (
-          <div className="px-1.5 hover:text-blue-500 tooltip-box group cursor-pointer">
+          <div className="px-[2px] hover:text-blue-500 tooltip-box group cursor-pointer">
             <BiDotsVerticalRounded
               className="text-[18px]"
               onClick={handleDelete}
             />
 
-            <div className="group-hover:scale-100 scale-0 origin-top-right transition-transform absolute right-[30%] top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm">
+            <div className="group-hover:scale-100 scale-0 origin-top-right transition-transform absolute  top-[20px] bg-white normal-shadow rounded-[10px] flex flex-col z-20 text-sm">
               {/* <div className='flex items-center gap-[15px] px-5 w-32 py-[10px] hover:bg-[#FEB45E10] cursor-pointer'>
-                <img src={PencilIcon} className='w-4 h-auto' />
+                <img src={PencilIcon} alt="" className='w-4 h-auto' />
                 <p className='font-semibold text-[#031124]'>Edit</p>
               </div> */}
               <div
                 onClick={handleDelete}
                 className="flex items-center gap-[15px] px-5 w-32 py-[17px] hover:bg-[#FB397F10] cursor-pointer"
               >
-                <img src={DeleteIcon} className="w-4 h-auto" />
+                <img src={DeleteIcon} alt="" className="w-4 h-auto" />
                 <p className="font-semibold text-[#031124]">Delete</p>
               </div>
             </div>

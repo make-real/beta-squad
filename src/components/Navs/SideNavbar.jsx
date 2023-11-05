@@ -636,7 +636,7 @@ const SideNavbar = ({ShowSubscription}) => {
                         alt="search"
                         className="cursor-pointer"
                       />
-                      <h2 className="text-[#0D1282]">Squadmate</h2>
+                      <h2 className="text-[#0D1282]">Chart</h2>
                     </div>
                     <div
                       className="flex items-center gap-2"

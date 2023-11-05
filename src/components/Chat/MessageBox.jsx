@@ -240,9 +240,6 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                 }}
             ></div>
 
-            {/* <div>
-        Demo mot dfdfdf sdsdfdsf afadsfadsfads asdfasdfadsf 
-      </div> */}
 
             <div className="px-3 mt-[10px] relative text-gray-300 flex w-full">
                 <div className="w-full h-full flex justify-center align-middle">
@@ -271,19 +268,19 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                         )}
                         {!isRecording ? (
                             <>
-                            <div className="w-full flex items-stretch justify-between relative   bg-white rounded-[20px] px-3 py-2">
+                            <div className="w-full flex items-stretch justify-between relative   bg-white rounded-[20px] px-3">
                                 <MentionsInput
                                   
                                     value={input}
                                     placeholder="Write message"
                                     onChange={(e) => setInput(e.target.value)}
-                                    singleLine={input.length >= 50 ? false : true}
+                                    // singleLine={input.length >= 50 ? false : true}
                                     onKeyDown={(e) => (e.key === "Enter" ? handleSendMessage() : null)}
                                     classNames={classNames}
                                     customSuggestionsContainer={(children) => (
                                         <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">{children}</div>
                                     )}
-                                    allowSuggestionsAboveCursor={true}
+                                    // allowSuggestionsAboveCursor={true}
                                     inputRef={inputRef}
                                     autoFocus
                                 >
@@ -306,7 +303,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                         displayTransform={(id) => users.find((user) => user.id === id).display}
                                     />
                                 </MentionsInput>
-                                <div className="text-gray-400 flex mt-[5px] ">
+                                <div className="text-gray-400 absolute bottom-5 right-1 flex mt-[5px] ">
                                     <div className="px-2 cursor-pointer relative">
                                         <BiMicrophone
                                             size={20}
