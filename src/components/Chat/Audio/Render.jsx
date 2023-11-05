@@ -16,16 +16,16 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
       // More info about options here https://wavesurfer-js.org/docs/options.html
       waveform.current = Wavesurfer.create({
         container: `#waveform_${rendomID}`,
-        width: 200,
-        height: 50,
-        barGap: 2,
-        barWidth: 3,
-        barRadius: 3,
-        cursorWidth: 3,
+        height: 20,
+        barGap: 1,
+        barWidth: 1,
+        barRadius: 1,
+        cursorWidth: 1,
         waveColor: "#D3D0D0",
         progressColor: "#6576FF",
         hideCursor: false,
         plugins: [],
+        overflow: "hidden"
       });
 
       waveform.current.on("finish", () => {
@@ -49,9 +49,9 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
   };
 
   return (
-    <div className='flex'>
+    <div className='flex items-center'>
       {isPlaying ? (
-        <span className='w-10 h-10 flex justify-center items-center bg-black rounded-full'>
+        <span className='w-6 h-6 flex justify-center items-center bg-black rounded-full'>
           <BsPauseFill
             size={30}
             className='animate-pulse text-white'
@@ -59,16 +59,15 @@ const AudioInput = ({ url, rendomID = Math.floor(Math.random() * 100) }) => {
           />
         </span>
       ) : (
-        <span className='w-10 h-10 flex justify-center items-center bg-black rounded-full'>
+        <span className='w-6 h-6 flex justify-center items-center bg-black rounded-full'>
           <BsPlayFill size={30} className='text-white' onClick={playAudio} />
         </span>
       )}
 
       <div
-      className=" w-[230px]		lg:w-[250px] xl:w-[300px]"
+      className=" w-[170px]		lg:w-[190px] xl:w-[250px]"
         id={`waveform_${rendomID}`}
         style={{
-          
         }}
       />
     </div>

@@ -20,6 +20,7 @@ import {
   Navigate,
   useParams,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import { fetchUserToken } from "./util/fetchUserToken";
 import { ToastContainer } from "react-toastify";
@@ -91,11 +92,11 @@ const ProjectRoute = ({ children }) => {
       }
     };
     getSpaceData();
-  }, [params?.workspace_id]);
+  }, [dispatch, params.workspace_id]);
 
   useEffect(() => {
     dispatch(setSelectedWorkSpaceId(params.workspace_id));
-  }, [workspaces, params]);
+  }, [workspaces, params, dispatch]);
 
   return children;
 };
@@ -113,7 +114,7 @@ const SquadAuth = ({ children }) => {
       )
     );
     dispatch(setSelectedWorkSpaceId(params.workspace_id));
-  }, [params, dispatch]);
+  }, [params, dispatch, allSpaces]);
 
   return children;
 };
@@ -132,13 +133,30 @@ const CardRoute = ({ children }) => {
 
 const App = () => {
 
+  // const location = useLocation();
+
+  // // When the component mounts, check if there's a last route in localStorage
+  // useEffect(() => {
+  //   const lastRouteFromStorage = localStorage.getItem('lastRoute');
+  //   if (lastRouteFromStorage) {
+  //     window.location.href = lastRouteFromStorage;
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem('lastRoute', location.pathname);
+  // }, [location.pathname]);
+
+
+
+
+
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
   );
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
   
-  const uid = useSelector((state) => state.userInfo?.userInfo?.uid);
 
 
   return (

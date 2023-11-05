@@ -11,7 +11,7 @@ const Chat = () => {
       style={{
         height: "97%",
       }}
-      className={`border  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
+      className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
     >
       <div
         style={
