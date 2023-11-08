@@ -85,7 +85,6 @@ const ManageWorkspace = () => {
       ? false
       : workspaces?.length > 0;
 
-     
   return (
     <>
       {loading ? (
@@ -100,11 +99,11 @@ const ManageWorkspace = () => {
                 Workspace
               </h2>
               <img
-                  onClick={() => setShowCreateWorkspaceModal(true)}
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
+                onClick={() => setShowCreateWorkspaceModal(true)}
+                src={BorderedPlusIcon}
+                alt=""
+                className="cursor-pointer text-[#0D1282] "
+              />
               <div className="flex items-center">
                 {/* <div className="flex items-center gap-[12px]">
                   <img src={SearchIcon} alt="search" className="" />
@@ -332,10 +331,13 @@ const CreateWorkspace = () => {
 
           <div className="flex items-center mt-[60px] gap-[30px]">
             <button
+              disabled={!workspaceData.name}
               type="submit"
-              className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
+              className={`${
+                workspaceData.name ? "bg-[#6576FF] cursor-pointer" : "bg-[#9fa5df] cursor-not-allowed"
+              } flex-1 py-[20px] rounded-[8px] flex items-center justify-center `}
             >
-              <p className=" text-[14px] font-semibold text-white">Create</p>
+              <p className="text-[14px] font-semibold text-white">Create</p>
             </button>
           </div>
         </form>

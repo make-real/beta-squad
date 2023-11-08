@@ -30,5 +30,6 @@ export const leave_space = (spaceId) => {
 };
 
 export const delete_space = (spaceId) => {
+    console.log(spaceId)
     return useAxios.delete(`/spaces/${spaceId}`);
 };

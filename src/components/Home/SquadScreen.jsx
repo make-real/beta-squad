@@ -29,6 +29,7 @@ import { MdElectricScooter } from "react-icons/md";
 import { selectTag } from "../../store/slice/TagId";
 import { calcLength } from "framer-motion";
 import { getAvatarUrl } from "../../util/getAvatarUrl";
+import { toast } from "react-toastify";
 
 
 
@@ -43,7 +44,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [listLoading, setListLoading] = useState(false);
   const dispatch = useDispatch()
 
-  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
+
   const {
     addBoardList,
     addBoard,
@@ -79,9 +80,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       setListLoading(false);
       addBoardList(data.list);
 
-      // toast.success(`${data?.list?.name} - list create successfully`, {
-      //     autoClose: 3000,
-      // });
+      toast.success(`${data?.list?.name} - list create successfully`, {
+          autoClose: 3000,
+      });
     } catch (error) {
       console.log(error.response.data);
 
@@ -173,8 +174,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     members: <SquadMembers showType={showType} selectedSpace={selectedSpace} />,
   };
 
-   
-  
   return (
     <div className="bg-[#FFF] w-full h-full mb-0 pb-0 -mt-[80px]">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>
@@ -364,6 +363,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                 </div>
               </div>
             </div>
+            
           </div>
           <div className=" flex flex-row h-full">
             <div className={`h-full w-full pb-5 mx-auto  overflow-hidden`}>

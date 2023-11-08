@@ -7,6 +7,7 @@ const initialState = {
   error: "",
   filterBoardLists: [],
   IsDispatch:true,
+  UserBoard:false,
 };
 
 export const cardsLists = createSlice({

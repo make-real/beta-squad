@@ -42,6 +42,7 @@ import ComingSoonModal from "../Modals/ComingSoonModal";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
 import { useUserInfoContext } from "../../context/UserInfoContext";
+import { setBoardHidden, setMessageShow } from "../../store/slice/allboard";
 
 const SideNavbar = ({ShowSubscription}) => {
   const navigate = useNavigate();
@@ -659,7 +660,7 @@ const SideNavbar = ({ShowSubscription}) => {
                   </div>
                 )}
                 {!fullSidebar && (
-                  <h1 className="text-[#0D1282] text-center">Squadmate</h1>
+                  <h1 className="text-[#0D1282] text-center">Chart</h1>
                 )}
 
 

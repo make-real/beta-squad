@@ -373,8 +373,11 @@ const CreateSquadModal = () => {
               </p>
             </button>
             <button
+             disabled={!createNewSpace.name}
               type="submit"
-              className="bg-[#6576FF] flex-1 py-[20px] rounded-[8px] flex items-center justify-center cursor-pointer"
+              className={`${
+              createNewSpace.name ? "bg-[#6576FF] cursor-pointer" : "bg-[#9fa5df] cursor-not-allowed"
+              } flex-1 py-[20px] rounded-[8px] flex items-center justify-center`}
             >
               <p className=" text-[14px] font-semibold text-white">Create</p>
             </button>
