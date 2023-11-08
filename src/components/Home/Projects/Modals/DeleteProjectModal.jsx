@@ -24,7 +24,9 @@ const DeleteProjectModal = ({
         setDeletingProject((prev) => ({ ...prev, show: true }));
 
         try {
-            const res = await delete_space(data._id);
+            console.log(data._id)
+            const res = await delete_space(data?._id);
+            console.log(res)
             setDeletingProject((prev) => ({ ...prev, done: true }));
             // display a notification for user
             dispatch(removeSpace(data._id));

@@ -38,10 +38,10 @@ const SingleScreen = () => {
     boardLists,
   } = useBoardCardContext();
   const { showModal, setShowModal } = useCommingSoonContext();
-  const [tabsName,setTabsName]=useState(["All"])
+  const [tabsName, setTabsName] = useState(["All"]);
   const [tags, setTags] = useState();
-  const [showFile,setShowFile]=useState(false)
-  const [showChat,setShowChat]=useState(false)
+  const [showFile, setShowFile] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const { participantID, workspace_id } = useParams();
   const [selectedTab, setSelectedTab] = useState("messages");
   const [selectedMember, setSelectedMember] = useState({});
@@ -60,8 +60,7 @@ const SingleScreen = () => {
     }
   }, [workspaceMembers, participantID]);
 
-
-  const singleMember=true
+  const singleMember = true;
   useEffect(() => {
     getMessages();
   }, [participantID, workspace_id]);
@@ -88,7 +87,6 @@ const SingleScreen = () => {
     messages: "Messages",
     board: "Board",
   };
-
 
   const addBoardRef = React.useRef();
   useEffect(() => {
@@ -118,7 +116,6 @@ const SingleScreen = () => {
 
   return (
     <div className="bg-[#FFF] w-full h-full">
-
       {/* <div className="relative h-full flex flex-col">
         <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[30px] pb-[36px] flex flex-col">
           <div className="flex items-center justify-between">
@@ -209,166 +206,97 @@ const SingleScreen = () => {
       </div> */}
       {/* test*/}
       <div className="bg-[#FFF] w-full h-full mb-0 pb-0">
-      <div className={`relative bg-[#FFF] h-full flex flex-col`}>
-        <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[20px] flex flex-col">
-          <div className="flex flex-row items-center gap-4  py-[10px]">
-            <div className="flex items-center w-full gap-8 overflow-hidden">
-              <div className="flex items-center w-full overflow-auto pb-1 customHScroll">
-                {tabsName.map((value, idx) => {
-                  return (
-                    <a
-                      //href={`#${value.toLowerCase()}`}
-                      key={idx}
-                      onClick={() => setSelectedTab(value)}
-                      className={`${
-                        selectedTab === value
-                          ? " text-[#6576FF] font-inter py-1 bg-slate-200 px-2  rounded-lg"
-                          : "text-[#818892] "
-                      } text-md cursor-pointer font-inter mr-3 whitespace-nowrap px-2  py-1 `}
-                    >
-                      {value}
-                    </a>
-                  );
-                })}
-              </div>
-              <div className="flex">
-                <div
-                  onClick={() => setSelectedTab("Done")}
-                  className={`${
-                    selectedTab === "Done"
-                      ? " text-[#6576FF] font-inter bg-slate-200 py-2 px-2  rounded-lg"
-                      : "text-[#818892] "
-                  } text-md cursor-pointer flex gap-2 border py-1 px-2 rounded-md font-inter mr-3 whitespace-nowrap `}
-                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                >
-                  <Check size="18" />
-                  <h3
-                    className={`${
-                      selectedTab === "Done"
-                        ? "text-[#6576FF]"
-                        : "text-gray-400"
-                    }  font-inter text-sm whitespace-nowrap`}
+        <div className={`relative bg-[#FFF] h-full flex flex-col`}>
+          <div className="w-full h-full bg-white rounded-[16px] px-[40px] pt-[20px] flex flex-col">
+            <div className="flex flex-row justify-end items-center gap-4  py-[10px]">
+              <div className="flex items-center   justify-end w-1/2 ">
+                <div className="flex items-center gap-[22px] relative">
+                  <div
+                    className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                   >
-                    Done
-                  </h3>
-                </div>
-                <div
-                  className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
-                  // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                  onClick={() => {
-                    setAddBoard(!addBoard);
-                    if (addBoard === false) {
-                      addBoardRef.current.scrollIntoView({
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  <Add />
-                  <h3 className="text-gray-400 font-inter text-sm whitespace-nowrap">
-                    New board
-                  </h3>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between w-1/2 ">
-             
-              <div className="flex items-center gap-[22px] relative">
-                <div
-                  className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
-                >
-                  <span
-                    className={`rounded-full ring-[1px] p-1 ${
-                      showChat
-                        ? "bg-[#54CC7C] ring-[#ECECEC]"
-                        : "ring-[#54CC7C]"
-                    } text-black font-bold grid place-items-center`}
+                    <span
+                      className={`rounded-full ring-[1px] p-1 ${
+                        showChat
+                          ? "bg-[#54CC7C] ring-[#ECECEC]"
+                          : "ring-[#54CC7C]"
+                      } text-black font-bold grid place-items-center`}
+                      onClick={() => {
+                        setShowChat((showChat) => !showChat);
+                      }}
+                    >
+                      <ChatBubbleBottomCenterTextIcon
+                        className={`w-5 h-5 ${
+                          showChat ? "text-white" : "text-[#54CC7C]"
+                        } `}
+                      />
+                    </span>
+                  </div>
+                  <div
+                    className="cursor-pointer"
                     onClick={() => {
-                      setShowChat((showChat) => !showChat);
-                     
+                      setShowChat(false);
+
+                      setShowFile(!showFile);
                     }}
                   >
-                    <ChatBubbleBottomCenterTextIcon
+                    <FileIcon
                       className={`w-5 h-5 ${
-                        showChat ? "text-white" : "text-[#54CC7C]"
+                        showFile ? "text-white" : "text-[#54CC7C]"
                       } `}
                     />
-                  </span>
-                </div>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                   
-
-                
-
-                    setShowChat(false);
-
-                    setShowFile(!showFile);
-                  }}
-                >
-                  <FileIcon
-                    className={`w-5 h-5 ${
-                      showFile ? "text-white" : "text-[#54CC7C]"
-                    } `}
-                  />
-                 
-                </div>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    //startCall("audio");
-                    setShowModal(!showModal);
-                  }}
-                >
-                  <CalendarIcon />
-                  {/* <img src={AudioCallIcon} alt="audio_call" /> */}
-                </div>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    //startCall("audio");
-                    // setShowModal(!showModal);
-                  }}
-                >
-                  <a
-                    className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
-                    href="https://meet.google.com/"
-                    target="_blank"
-                    rel="noreferrer"
+                  </div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      //startCall("audio");
+                      setShowModal(!showModal);
+                    }}
                   >
-                    <img
-                      src={GoogleMeet}
-                      alt="google_mmet"
-                      className="h-5 w-5"
-                    />
-                  </a>
+                    <CalendarIcon />
+                    {/* <img src={AudioCallIcon} alt="audio_call" /> */}
+                  </div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      //startCall("audio");
+                      // setShowModal(!showModal);
+                    }}
+                  >
+                    <a
+                      className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
+                      href="https://meet.google.com/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        src={GoogleMeet}
+                        alt="google_mmet"
+                        className="h-5 w-5"
+                      />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className=" flex flex-row h-full">
-            <div className={`h-full w-full pb-5 mx-auto overflow-hidden`}>
-              {TabsScreen["board"]}
+            <div className=" flex flex-row h-full">
+              <div className={`h-full w-full pb-5 mx-auto overflow-hidden`}>
+                {TabsScreen["board"]}
+              </div>
+
+              {!showChat && showFile && (
+                <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                  {TabsScreen["file"]}
+                </div>
+              )}
+              {showChat && (
+                <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
+                  {TabsScreen["messages"]}
+                </div>
+              )}
             </div>
-        
-            {!showChat && showFile && (
-              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
-                {TabsScreen["file"]}
-              </div>
-            )}
-            { showChat && (
-              <div className={`h-full w-1/2 mx-auto  overflow-hidden`}>
-                {TabsScreen["messages"]}
-              </div>
-            )}
           </div>
         </div>
       </div>
-    </div>
-
-      {/* <SquadScreen singleMember={singleMember} /> */}
     </div>
   );
 };
@@ -376,9 +304,9 @@ const SingleScreen = () => {
 // Single Chat work should done here.........
 const SingleChatScreen = () => {
   const { participantID, workspace_id } = useParams();
-      
+
   const [messageToRespond, setMessageToRespond] = useState();
- 
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -447,11 +375,11 @@ const SingleBoardScreen = ({ showType }) => {
       {userId ? (
         showType === "grid" ? (
           <div className="flex flex-col items-center justify-center">
-            <div className="h-full relative w-full max-w-[40%] max-h-[50%] bg-white rounded-[16px] px-[62px] py-[50px] overflow-y-scroll no-scrollbar flex flex-col items-center justify-center">
-              {/* <p>grid view</p> */}
+            <div className="h-full relative w-full max-w-[40%] max-h-[50%] bg-white rounded-[16px] px-[30px] overflow-y-scroll no-scrollbar flex flex-col items-center justify-center">
+
               <img src={Development} alt="" className="h-1/8" />
               <h1 className="text-[#6576FF] opacity-80 text-2xl">
-                We are developing this feature
+               Something great is coming soon
               </h1>
             </div>
             {/* <DragDropContext onDragEnd={dragEnd}>
