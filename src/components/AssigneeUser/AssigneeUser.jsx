@@ -11,6 +11,7 @@ import {
     PlusIcon,
 } from '@heroicons/react/24/outline';
 import { getAvatarUrl } from '../../util/getAvatarUrl';
+import avatar from "../../assets/profile_circle.svg"
 
 const AssigneeUser = ({
     localCard,
@@ -142,8 +143,8 @@ const AssigneeUser = ({
                             <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
                                        src={
-                                        user?.avatar ??
-                                        getAvatarUrl(user?.fullName)
+                                        user?.avatar ? user?.avatar:
+                                        avatar
                                       }
                                         alt=""
                                         className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"
@@ -176,8 +177,8 @@ const AssigneeUser = ({
                             <span className="rounded-full  text-black font-bold grid place-items-center p-1">
                                     <img
                                        src={
-                                        user?.avatar ??
-                                        getAvatarUrl(user?.fullName)
+                                        user?.avatar ? user?.avatar:
+                                  avatar
                                       }
                                         alt=""
                                         className="h-6 w-6 text-[#14BCBE] flex justify-center items-center rounded-full"

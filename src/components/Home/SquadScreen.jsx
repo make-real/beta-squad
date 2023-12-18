@@ -28,8 +28,9 @@ import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
 import { MdElectricScooter } from "react-icons/md";
 import { selectTag } from "../../store/slice/TagId";
 import { calcLength } from "framer-motion";
-import { getAvatarUrl } from "../../util/getAvatarUrl";
+
 import { toast } from "react-toastify";
+import avatar from "../../../src/assets/profile_circle.svg"
 
 
 
@@ -246,8 +247,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                             <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
                               <img
                                 src={
-                                  user?.avatar ??
-                                  getAvatarUrl(user?.fullName)
+                                  user?.avatar ? user?.avatar:
+                                  avatar
                                 }
                                 alt=""
                                 className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"

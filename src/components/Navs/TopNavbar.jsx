@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { userLogOut } from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
+import avatar from "../../assets/profile_circle.svg"
 import { setSelectedWorkSpaceId } from "../../store/slice/workspace";
 import {
   setSelectedSpaceId,
@@ -338,7 +339,8 @@ const LoggedInTopNav = () => {
               </p>
             </div>
             <img
-              src={userInfo?.avatar ?? getAvatarUrl(userInfo?.fullName)}
+              src={  userInfo?.avatar ? userInfo?.avatar:
+                avatar}
               alt=""
               className="w-[35px] h-[35px] rounded-full"
             />

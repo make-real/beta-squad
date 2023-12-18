@@ -16,6 +16,7 @@ function useAuth() {
     const googleAuth = async () => {
         setLoader(true);
         try {
+            console.log("login")
             const result = await signInWithPopup(auth, provider);
             const token = await result.user.getIdToken();
             const { data } = await o_auth_login(token);

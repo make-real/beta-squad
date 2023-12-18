@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
 import BriefCaseIcon from "../../../../src/assets/briefcase.svg";
+import avatar from "../../../assets/profile_circle.svg"
 
 const SquadMembers = ({
   showType,
@@ -109,7 +110,8 @@ const SquadMembers = ({
 
                   <div className="flex gap-[10px]">
                     <img
-                      src={member?.avatar ?? getAvatarUrl(member?.fullName)}
+                      src={ member?.avatar ? member?.avatar:
+                        avatar}
                       alt=""
                       className="w-[50px] h-[50px] object-cover rounded-full"
                     />
@@ -153,7 +155,8 @@ const SquadMembers = ({
                   <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                     <div className="flex items-center gap-[10px]">
                       <img
-                        src={member?.avatar ?? getAvatarUrl(member?.fullName)}
+                        src={  member?.avatar ? member?.avatar:
+                          avatar}
                         alt=""
                         className="w-[50px] h-[50px] object-cover rounded-full"
                       />
