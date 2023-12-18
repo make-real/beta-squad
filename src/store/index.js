@@ -10,6 +10,7 @@ import global from "./slice/global";
 import screen from "./slice/screen";
 import  TagId  from './slice/TagId';
 import  cardsLists  from './slice/allboard';
+import  subscription  from './slice/subscription';
 
 const rootReducer = combineReducers({
     workspace,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     screen,
     global,
     TagId,
-    cardsLists
+    cardsLists,
+    subscription
 
 });
 

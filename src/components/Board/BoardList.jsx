@@ -38,6 +38,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
       cardObject = { name: text };
     }
     const boardListId = boardList?._id;
+    console.log(boardListId)
     if (boardListId && cardObject) {
       dispatch(
         addCard({
@@ -47,6 +48,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
         })
       )
         .then((data) => {
+          console.log(data)
           if (data) {
             setCardLoading(false);
             //for user UI

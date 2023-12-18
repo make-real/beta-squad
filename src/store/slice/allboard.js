@@ -8,6 +8,7 @@ const initialState = {
   filterBoardLists: [],
   IsDispatch:true,
   UserBoard:false,
+  cardError:""
 };
 
 export const cardsLists = createSlice({
@@ -43,6 +44,8 @@ export const cardsLists = createSlice({
         state.error = null;
       })
       .addCase(addCard.fulfilled, (state, action) => {
+        console.log(action.payload)
+      state.cardError=action.payload
         // const { cardObj, bid } = action.payload
         // const data = state.data
         // const boardIndex = data.findIndex(({ _id }) => _id === bid);
@@ -56,6 +59,7 @@ export const cardsLists = createSlice({
         state.loading = false;
       })
       .addCase(addCard.rejected, (state, action) => {
+        console.log(action.payload)
         state.error = action.payload;
         state.loading = false;
       })
