@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import FolderIcon from "../../assets/icon_component/Folder";
 import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import avatar from "../../../src/assets/profile_circle.svg";
 import {
   get_space_data,
   get_workspace_data,
@@ -675,8 +676,8 @@ const SideNavbar = ({ShowSubscription}) => {
                               {/* <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] top-0 left-[-4px]"></div> */}
                               <img
                                 src={
-                                  member?.avatar ??
-                                  getAvatarUrl(member?.fullName)
+                                  member?.avatar ? member?.avatar:
+                                  avatar
                                 }
                                 className="w-[28px] h-[28px] rounded-full border object-cover"
                                 alt=""
@@ -693,7 +694,8 @@ const SideNavbar = ({ShowSubscription}) => {
                           <>
                             <img
                               src={
-                                member?.avatar ?? getAvatarUrl(member?.fullName)
+                                member?.avatar ? member?.avatar:
+                                avatar
                               }
                               className="w-[28px] h-[28px] rounded-full border object-cover"
                               alt=""
