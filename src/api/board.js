@@ -24,10 +24,11 @@ async({spaceId,listId,newCard})=>{
   try {
     const res = await useAxios.post(`/spaces/${spaceId}/board/${listId}/card`, newCard)
     if(res.data){
+      console.log(res.data)
       return res.data
     }
-
   } catch (error){
+    console.log(error)
     if (error) {
       return error.Message;
     }

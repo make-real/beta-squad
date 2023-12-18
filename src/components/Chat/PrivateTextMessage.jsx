@@ -16,6 +16,7 @@ import moment from "moment";
 import AudioInput from "./Audio/Render";
 import { addSingleMessagePrivate } from "../../store/slice/privateChat";
 import { useParams } from "react-router-dom";
+import { isSubscription } from "../../store/slice/subscription";
 
 const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }) => {
     const [showReactEmojis, setShowReactEmojis] = useState(false);
@@ -265,7 +266,8 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
                     dispatch(addBulkMessage(data.messages.reverse()));
                     scrollToBottom();
                 } catch (error) {
-                    alert(error.message);
+                    dispatch(isSubscription(error.message))
+                    // alert(error.message);
                 }
             };
 

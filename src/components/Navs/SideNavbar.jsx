@@ -1,14 +1,9 @@
-import React, { useEffect } from "react";
-import { CloseMenuBtn, Plus } from "../../assets/icons";
+import React, { useEffect } from "react";  
 import LogoIcon from "../../assets/logo.jpeg";
 import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
-import Squad from "../../assets/Squad.svg";
 import ChatIcon from "../../assets/ChatIcon.svg";
-import SmsIcon from "../../assets/sms.svg";
 import ClockIcon from "../../assets/clock.svg";
-import SearchIcon from "../../assets/search.svg";
-import SquadIcon from "../../assets/icon_component/Squad";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import FolderIcon from "../../assets/icon_component/Folder";
@@ -31,18 +26,15 @@ import {
 } from "../../store/slice/space";
 import { useSelector } from "react-redux";
 import BriefCaseIcon from "../../assets/briefcase.svg";
-import { ModalSearchSpace, ModalSpaceCreate } from "../Sidebar";
+import { ModalSearchSpace, } from "../Sidebar";
 import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal";
 import { toggleFullSidebar } from "../../store/slice/screen";
 import { getAvatarUrl } from "../../util/getAvatarUrl";
-import images from "../../assets";
-import { Comment } from "postcss";
 import ComingSoonModal from "../Modals/ComingSoonModal";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
 import { useUserInfoContext } from "../../context/UserInfoContext";
-import { setBoardHidden, setMessageShow } from "../../store/slice/allboard";
 
 const SideNavbar = ({ShowSubscription}) => {
   const navigate = useNavigate();
@@ -55,15 +47,11 @@ const SideNavbar = ({ShowSubscription}) => {
     useState(false);
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
-  const [newWorkSpace, setNewWorkSpace] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
-  const [userNotificationSMS, setUserNotificationSMS] = useState(false);
-  const [userNotificationBell, setUserNotificationBell] = useState(false);
-  const [userMenu, setUserMenu] = useState({ isOpen: false, sideBar: false });
   const { selectedSpace, allSpaces } = useSelector((state) => state.space);
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const selectedWorkspace = useSelector(
@@ -109,7 +97,6 @@ const SideNavbar = ({ShowSubscription}) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const userId = JSON.parse(localStorage.getItem("userId"));
-  const userImg = JSON.parse(localStorage.getItem("userInfo"))?.avatar;
 
   useEffect(() => {
     const getWorkSpaceData = async () => {
@@ -131,7 +118,7 @@ const SideNavbar = ({ShowSubscription}) => {
     };
 
     getWorkSpaceData();
-  }, [dispatch, workspaces?.length]);
+  }, [currentWorkspace, dispatch, params.workspace_id, workspaces.length]);
 
   useEffect(() => {
     const getSpaceData = async () => {
@@ -150,11 +137,9 @@ const SideNavbar = ({ShowSubscription}) => {
     };
 
     getSpaceData();
-  }, [selectedWorkspace, params?.workspace_id]);
+  }, [selectedWorkspace, params.workspace_id, dispatch]);
 
-  const openChat = (id) => {
-    navigate("single-chat/" + id);
-  };
+
 
   const isFirstTime =
     JSON.parse(localStorage.getItem("stepFinished")) === true
@@ -219,7 +204,6 @@ const SideNavbar = ({ShowSubscription}) => {
       window.removeEventListener("offline", offlineHandler);
     };
   }, []);
-  const isActive = false;
 
   // #2C3782
   return (
