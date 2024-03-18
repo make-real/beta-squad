@@ -211,7 +211,13 @@ const SingleScreen = () => {
             <div className="flex flex-row justify-end items-center gap-4  py-[10px]">
               <div className="flex items-center   justify-end w-1/2 ">
                 <div className="flex items-center gap-[22px] relative">
-                  <div
+                 {/* single chat icon and functionality removed from here */}
+
+
+
+
+                 
+                  {/* <div
                     className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                   >
                     <span
@@ -230,7 +236,7 @@ const SingleScreen = () => {
                         } `}
                       />
                     </span>
-                  </div>
+                  </div> */}
                   <div
                     className="cursor-pointer"
                     onClick={() => {

@@ -402,9 +402,9 @@ const CardModal = ({
                   )}
                 />
               </div>
-
+              {/* chat removed from here */}
               {/* chat */}
-              <div
+              {/* <div
                 className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg ${
                   showChat ? "bg-gray-200" : ""
                 }`}
@@ -415,7 +415,7 @@ const CardModal = ({
                 >
                   <ChatBubbleBottomCenterTextIcon className="w-5 h-5 text-[#54CC7C]" />
                 </span>
-              </div>
+              </div> */}
 
               {/* assignee */}
               <div className="cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400 p-1">
