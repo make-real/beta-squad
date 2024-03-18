@@ -273,7 +273,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               <div className="flex items-center gap-[22px] relative">
 
                 {/* chat icon disabled from here */}
-                {/* <div
+                <div
                   className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                 >
                   <span
@@ -300,7 +300,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                       } `}
                     />
                   </span>
-                </div> */}
+                </div>
 
 
 
@@ -333,23 +333,30 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                   {/* <img src={VideoCallIcon} alt="video_call" /> */}
                 </div>
 
-                
-                <div
+                {/* Calender is disabled from here */}
+
+
+
+                {/* <div
                   className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
                   onClick={() => {
                     //startCall("audio");
                     setShowModal(!showModal);
                   }}
                 >
-                  <CalendarIcon />
+                  <CalendarIcon /> */}
                   {/* <img src={AudioCallIcon} alt="audio_call" /> */}
-                </div>
-                <div
+                {/* </div> */}
+
+                   {/* Google meet is disabled from here */}
+
+
+                {/* <div
                   className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
-                  onClick={() => {
-                    //startCall("audio");
-                    // setShowModal(!showModal);
-                  }}
+                  onClick={() => { */}
+                    {/* //startCall("audio");
+                    // setShowModal(!showModal); */}
+                  {/* }}
                 >
                   <a
                     className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
@@ -363,7 +370,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                       className="h-5 w-5"
                     />
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
             

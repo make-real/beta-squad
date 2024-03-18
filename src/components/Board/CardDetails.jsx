@@ -96,11 +96,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
     // if chat needs to activate this also needs to activate
 
-  // useEffect(() => {
-  //   getCard().then(() => {
-  //     setShowChat(true);
-  //   });
-  // }, [workspace_id, listID, id]);
+  useEffect(() => {
+    getCard().then(() => {
+      setShowChat(true);
+    });
+  }, [workspace_id, listID, id]);
 
   // useEffect(() => {
   //     const handleEscapeKeyPress = (e) => {
@@ -496,7 +496,7 @@ const onEdit = (val) => {
 
 
               {/* chat */}
-              {/* <div
+              <div
                 className={`cursor-pointer hover:bg-gray-200  p-1 rounded-lg space-x-5`}
               >
                 <span
@@ -511,7 +511,7 @@ const onEdit = (val) => {
                     } `}
                   />
                 </span>
-              </div> */}
+              </div>
 
               {/* assignee */}
               <div>

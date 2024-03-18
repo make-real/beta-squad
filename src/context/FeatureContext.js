@@ -20,7 +20,7 @@ export const CommingSoonContext = ({ children }) => {
 
 export const AppStateContext = ({ children }) => {
   // chat base state turned false from here
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const [selectedTab, setSelectedTab] = useState("All");
 
 

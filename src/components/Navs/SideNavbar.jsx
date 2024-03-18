@@ -608,10 +608,10 @@ const SideNavbar = ({ShowSubscription}) => {
           </div>
         )} */}
         {/* modal */}
-        {showModal && <ComingSoonModal setShowModal={setShowModal} />}
+        {/* {showModal && <ComingSoonModal setShowModal={setShowModal} />} */}
 
         {/* Chats */}
-        {!isFirstTime || !firstTimeMember
+        {/* {!isFirstTime || !firstTimeMember
           ? defaultPage && (
               <div className="mt-[44px]">
                 {fullSidebar && (
@@ -629,10 +629,10 @@ const SideNavbar = ({ShowSubscription}) => {
                       onClick={() => {
                         setShowAddMemberModal(!showAddMemberModal);
                       }}
-                    >
+                    > */}
                       {/* bug issue */}
 
-                     {
+                     {/* {
                       showPlusButton[0] && (
                         <img
                         src={BorderedPlusIcon}
@@ -643,14 +643,14 @@ const SideNavbar = ({ShowSubscription}) => {
                      }
                     </div>
                   </div>
-                )}
-                {!fullSidebar && (
+                )} */}
+                {/* {!fullSidebar && (
                   <h1 className="text-[#0D1282] text-center">Chart</h1>
-                )}
+                )} */}
 
 
                 {/* Chats List */}
-                <div className="mt-[10px] flex flex-col">
+                {/* <div className="mt-[10px] flex flex-col">
                   {members.map((member, idx) =>
                     member?._id !== userId ? (
                       <div
@@ -661,7 +661,7 @@ const SideNavbar = ({ShowSubscription}) => {
                             : ""
                         } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
                         onClick={() => {
-                          // openChat(member._id)
+                         
                           dispatch(setSelectedSpaceId(null));
                           dispatch(setSelectedSpaceObject(null));
                           setSelectedChat(member);
@@ -673,7 +673,7 @@ const SideNavbar = ({ShowSubscription}) => {
                         {isOnline ? (
                           <>
                             <div className="relative">
-                              {/* <div className="absolute w-[12px] h-[12px] rounded-full bg-[#54CC7C] top-0 left-[-4px]"></div> */}
+                              
                               <img
                                 src={
                                   member?.avatar ? member?.avatar:
@@ -683,7 +683,7 @@ const SideNavbar = ({ShowSubscription}) => {
                                 alt=""
                               />
                             </div>
-                            {/* <img src={SmsIcon} alt="" className="w-[16px] h-[16px]" /> */}
+                           
                             {fullSidebar && (
                               <p className="text-[#000] flex items-center gap-1 text-[14px]">
                                 {member.fullName}
@@ -719,7 +719,7 @@ const SideNavbar = ({ShowSubscription}) => {
                 </div>
               </div>
             )
-          : null}
+          : null} */}
         {/* Footer Copyright */}
         <p
           className={`text-[#0D1282] text-center ${
