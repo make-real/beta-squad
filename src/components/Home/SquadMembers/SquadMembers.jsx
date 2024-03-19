@@ -9,16 +9,25 @@ import AddMembers from "./Modals/AddMembers";
 import { toast } from "react-toastify";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import avatar from "../../../assets/profile_circle.svg"
+import axios from "axios";
+import { get_my_profile } from "../../../api/auth";
 
-const SquadMembers = ({ showType, selectedSpace }) => {
+
+const SquadMembers =({ showType, selectedSpace }) => {
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [members, setMembers] = useState([]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
+  
+  
+
+  const getUser = JSON.parse(localStorage.getItem("userId"));
+
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
+      console.log(selectedSpace?._id)
 
       setMembers(data?.members);
     } catch (err) {
@@ -120,14 +129,10 @@ const SquadMembers = ({ showType, selectedSpace }) => {
             
             return (
               <div key={member._id} className="relative w-full h-[75px] rounded-[16px]  bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
-                {userRole?.role ==='manager' && (
+                {(userRole?.role === 'admin' || userRole?.role === 'manager') && (
+                   
                       <>
-                        {/* <div
-                         onClick={() => removeMember(member)}
-                         className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer"
-                        >
-                        <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                      </div> */}
+                        
                       <div className="absolute right-[10px] w-[16px] h-[16px] rounded-full flex items-center justify-center cursor-pointer">
                         <EditDeleteMenu
                           deleteFunc={() => removeMember(member)}

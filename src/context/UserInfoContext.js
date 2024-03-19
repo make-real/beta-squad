@@ -6,6 +6,7 @@ import { setUserInfo } from "../store/slice/userInfo";
 const UserInfo = createContext();
 
 export const UserInfoContext = ({ children }) => {
+    
     const [loginUserInfo, setLoginUserInfo] = useState(
         {} || JSON.parse(localStorage.getItem("userInfo"))
     );
@@ -16,19 +17,16 @@ export const UserInfoContext = ({ children }) => {
         const getUserInfo = async () => {
             if (!JSON.parse(localStorage.getItem("jwt"))) return;
             const { data } = await get_my_profile();
+            console.log(data)
             setLoginUserInfo(data.user);
+            localStorage.setItem("userInfo", JSON.stringify(data.user)); // Update local storage here
         };
         getUserInfo();
     }, []);
 
-
-
     useEffect(() => {
-        if (!JSON.parse(localStorage.getItem("userInfo"))) {
-            localStorage.setItem("userInfo", JSON.stringify(loginUserInfo));
-        }
         dispatch(setUserInfo(loginUserInfo));
-    }, [loginUserInfo]);
+    }, [loginUserInfo, dispatch]);
 
     return (
         <UserInfo.Provider value={{ loginUserInfo, setLoginUserInfo }}>
