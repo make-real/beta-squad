@@ -133,13 +133,14 @@ const SquadMembers =({ showType, selectedSpace }) => {
                    
                       <>
                         
-                      <div className="absolute right-[10px] w-[16px] h-[16px] rounded-full flex items-center justify-center cursor-pointer">
-                        <EditDeleteMenu
-                          deleteFunc={() => removeMember(member)}
-                          //editFunc={prepareEditProject}
-                          data={selectedSpace}
-                        />
-                      </div>
+                        <div
+                                              onClick={() =>
+                                                  removeMember(member)
+                                              }
+                                              className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer mt-5"
+                                          >
+                                              <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                                          </div>
                       </>
                     )
                  }
