@@ -74,7 +74,6 @@ const SideNavbar = ({ShowSubscription}) => {
 
   const params = useParams();
 
-  const { showModal, setShowModal } = useCommingSoonContext();
 
   const manageWorkspacePage =
     location.pathname === "/settings/manage-workspace";
@@ -97,7 +96,6 @@ const SideNavbar = ({ShowSubscription}) => {
   };
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = JSON.parse(localStorage.getItem("userId"));
 
   useEffect(() => {
     const getWorkSpaceData = async () => {
@@ -119,7 +117,10 @@ const SideNavbar = ({ShowSubscription}) => {
     };
 
     getWorkSpaceData();
-  }, [currentWorkspace, dispatch, params.workspace_id, workspaces.length]);
+  }, [dispatch]);
+  console.log(currentWorkspace)
+  console.log(params.workspace_id)
+  console.log(workspaces.length)
 
   useEffect(() => {
     const getSpaceData = async () => {

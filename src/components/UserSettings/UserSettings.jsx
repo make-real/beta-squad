@@ -34,7 +34,7 @@ const UserSettings = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const select = (e) => {
     dispatch(setSelectedWorkSpaceId(e));
