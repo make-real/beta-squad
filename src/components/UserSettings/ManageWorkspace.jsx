@@ -29,11 +29,6 @@ const ManageWorkspace = () => {
   const [wId, setWId] = useState("");
 
   const isLoading = (id) => id === wId;
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const { data } = await get_workspace_data();
@@ -43,10 +38,15 @@ const ManageWorkspace = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+   fetchData();
+  }, []);
+
+ 
 
   const onCreateWorkSpace = () => {
     setCreateWorkSpaceModal(false);
-    fetchData();
+    // fetchData();
   };
 
   const leaveWorkspace = async (id) => {

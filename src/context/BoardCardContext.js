@@ -141,31 +141,31 @@ export const BoardCardContext = ({ children }) => {
     if (type === "column") {
       const list = board[sourceIndex];
 
-      board.splice(sourceIndex, 1);
-      board.splice(targetIndex, 0, list);
+      board?.splice(sourceIndex, 1);
+      board?.splice(targetIndex, 0, list);
 
       setBoardList(board);
       return;
     }
 
-    const sourceBoard = board[board.findIndex(({ _id }) => _id === source)];
-    const targetBoard = board[board.findIndex(({ _id }) => _id === target)];
+    const sourceBoard = board[board?.findIndex(({ _id }) => _id === source)];
+    const targetBoard = board[board?.findIndex(({ _id }) => _id === target)];
 
-    const card = sourceBoard.cards[sourceIndex];
+    const card = sourceBoard?.cards[sourceIndex];
 
-    sourceBoard.cards.splice(sourceIndex, 1);
-    targetBoard.cards.splice(targetIndex, 0, card);
+    sourceBoard?.cards?.splice(sourceIndex, 1);
+    targetBoard?.cards?.splice(targetIndex, 0, card);
     setBoardList(board);
   };
 
   const toggleCardModal = (bid, cid) => {
     const copy = [...boardLists];
-    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
-    const cardIndex = copy[boardIndex].cards.findIndex(
+    const boardIndex = copy?.findIndex(({ _id }) => _id === bid);
+    const cardIndex = copy[boardIndex]?.cards?.findIndex(
       ({ _id }) => _id === cid
     );
     copy[boardIndex].cards[cardIndex].modal =
-      !copy[boardIndex].cards[cardIndex].modal;
+      !copy[boardIndex]?.cards[cardIndex]?.modal;
     setBoardList(copy);
   };
 

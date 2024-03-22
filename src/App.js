@@ -36,7 +36,7 @@ import CardDetails from "./components/Board/CardDetails";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addWorkSpace, setSelectedWorkSpaceId } from "./store/slice/workspace";
-import { get_space_data, get_workspace_data } from "./api/workSpace";
+import { get_space_data, } from "./api/workSpace";
 import { addSpace } from "./store/slice/space";
 import SquadScreen from "./components/Home/SquadScreen";
 import {

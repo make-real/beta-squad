@@ -31,7 +31,7 @@ const NavigateUser = () => {
         } else {
             navigate("/projects");
         }
-    }, [shouldChangeRoute, loading]);
+    }, [shouldChangeRoute, loading, navigate]);
 
     if (loading) return <LoadingScreen />;
 };
