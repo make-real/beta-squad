@@ -358,7 +358,7 @@ const TextMessage = ({
       socket?.off("NEW_SPACE_MESSAGE_RECEIVED");
       socket?.off("NEW_REACTION_RECEIVED");
     };
-  }, [socket]);
+  }, [dispatch, selectedSpaceId, socket, userId]);
 
   useEffect(() => {
     if (Boolean(selectedSpaceId)) {
@@ -372,8 +372,12 @@ const TextMessage = ({
           // alert(error.message);
         }
       };
-
-      loadMessages();
+      const interval = setInterval(() => {
+        loadMessages();
+      }, 500);
+  
+      return () => clearInterval(interval);
+     
     }
   }, [selectedSpaceId, dispatch]);
 
