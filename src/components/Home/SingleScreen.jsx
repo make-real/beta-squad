@@ -18,25 +18,15 @@ import { AddBtn } from "../Board";
 import { useCommingSoonContext } from "../../context/FeatureContext";
 import SquadScreen from "./SquadScreen";
 import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
-import Add from "../../assets/icon_component/Add";
-import Check from "../../assets/icons/svg/Check";
-import { useBoardCardContext } from "../../context/BoardCardContext";
+
 import { get_tags } from "../../api/tags";
 import FileIcon from "../../assets/icons/svg/FileIcon";
-import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+
 import ShowFile from "./ShowFile/ShowFile";
 
 const SingleScreen = () => {
   const location = useLocation();
-  const {
-    addBoardList,
-    addBoard,
-    setAddBoard,
-    filterBoardList,
-    filteredList,
-    setFilteredLists,
-    boardLists,
-  } = useBoardCardContext();
+ 
   const { showModal, setShowModal } = useCommingSoonContext();
   const [tabsName, setTabsName] = useState(["All"]);
   const [tags, setTags] = useState();
@@ -60,9 +50,13 @@ const SingleScreen = () => {
     }
   }, [workspaceMembers, participantID]);
 
-  const singleMember = true;
+ 
   useEffect(() => {
-    getMessages();
+    const interval = setInterval(() => {
+      getMessages();
+    }, 500);
+
+    return () => clearInterval(interval);
   }, [participantID, workspace_id]);
 
   const getMessages = async () => {

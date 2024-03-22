@@ -37,7 +37,11 @@ const SingleChat = () => {
   }, [workspaceMembers, participantID]);
 
   useEffect(() => {
-    getMessages();
+    const interval = setInterval(() => {
+      getMessages();
+    }, 500);
+
+    return () => clearInterval(interval);
   }, [participantID, workspace_id]);
 
   const getMessages = async () => {
@@ -172,7 +176,12 @@ const SingleChatScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getMessages();
+    const interval = setInterval(() => {
+      getMessages();
+    }, 500);
+
+    return () => clearInterval(interval);
+  
   }, [participantID, workspace_id]);
 
   const getMessages = async () => {
@@ -183,6 +192,8 @@ const SingleChatScreen = () => {
     } catch (error) {
       console.log(error);
     }
+
+    
   };
 
   return (

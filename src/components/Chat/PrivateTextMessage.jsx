@@ -270,8 +270,12 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
                     // alert(error.message);
                 }
             };
-
-            loadMessages();
+            const interval = setInterval(() => {
+                loadMessages();
+              }, 500);
+          
+              return () => clearInterval(interval);
+           
         }
     }, [selectedSpaceId, dispatch]);
 
