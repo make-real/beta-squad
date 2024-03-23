@@ -7,6 +7,7 @@ import { useEffect } from "react";
 // import SideBar from "../Sidebar/SideBar";
 import { useState } from "react";
 import Subscription from "../Navbar/Subscription";
+import { requestNotificationPermission } from "../../util/helpers";
 
 const Layout = ({ selectedSpaceId }) => {
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
@@ -14,6 +15,8 @@ const Layout = ({ selectedSpaceId }) => {
   const [ShowSubscription, setShowSubscription] = useState(false);
   const subscriptionError = useSelector((state) => state?.subscription?.subscriptionError);
     // console.log(subscriptionError);
+    requestNotificationPermission();
+
 
   useEffect(() => {
     if (subscriptionError) {

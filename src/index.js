@@ -10,11 +10,11 @@ import React from "react";
 import App from "./App";
 import "./style/index.css";
 import "reactjs-popup/dist/index.css";
-import { requestNotificationPermission } from "./util/helpers";
+// import { requestNotificationPermission } from "./util/helpers";
 import ComingSoonModal from "./components/Modals/ComingSoonModal";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-requestNotificationPermission();
+// requestNotificationPermission();
 
 
 
