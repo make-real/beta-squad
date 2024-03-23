@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { Close } from '../../assets/icons';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { delete_file_link } from '../../api/showFiles';
+import { delete_file_link, get_file_link } from '../../api/showFiles';
 import { useDispatch } from 'react-redux';
 import { RemoveCard } from '../../store/slice/allboard';
 import { DeleteCard } from '../../api/board';
@@ -24,6 +24,7 @@ const ConfirmDialog = ({
     deleteAttachment,
     setLocalCard,
     deleteAttachFile,
+    setLinkDatas
 }) => {
     const navigate = useNavigate();
 
@@ -52,16 +53,15 @@ const ConfirmDialog = ({
 
 
 
-
         try {
-            if (cardID === undefined) {
+            if (listID) {
                 const { data } = await boardListDelete(selectedSpaceId, listID);
                 removeBoardList(listID);
                 toast.success(`${data?.message}`, { autoClose: 3000 });
             }
 
-            if (cardID !== undefined && deleteAttachment !== true) {
-
+            if (cardID) {
+                console.log( spaceID,spaceFiledID)
                 dispatch(DeleteCard({spaceId:selectedSpaceId,listId:listID, cardId:cardID})).then((data) => {
                     if (data) {
                       toast.success(data?.payload?.message, {
@@ -84,6 +84,7 @@ const ConfirmDialog = ({
             }
 
             if (deleteAttachment) {
+               
                 const { data } = await cardUpdateApiCall(
                     selectedSpaceId,
                     listID,
@@ -99,12 +100,17 @@ const ConfirmDialog = ({
             }
 
 
-            if(spaceFiledID && cardID !== undefined ){
+            
+            if(spaceFiledID && spaceFiledID ){
+               
                const {data} = await delete_file_link(
                 spaceID,spaceFiledID
                )
 
                if(data){
+                const  datas  = await get_file_link(selectedSpaceId);
+
+                setLinkDatas(datas?.data?.spaceFiles);
                 toast.success(`${data?.message}`, { autoClose: 3000 });
                 setConfirmModalOpen(false)
                }

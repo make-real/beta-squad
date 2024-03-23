@@ -77,7 +77,11 @@ const NotLoggedInTopNav = () => {
 };
 
 const LoggedInTopNav = () => {
-  const userInfo = useSelector((state) => state.userInfo.userInfo);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [userInfo,setUserInfo]=useState(user)
+  useEffect(()=>{
+    setUserInfo(user)
+  },[])
  
 
   const selectedWorkspaceId = useSelector(
@@ -109,7 +113,7 @@ const LoggedInTopNav = () => {
 
   const { participantID } = useParams();
   const members = useSelector((state) => state.workspace.workspaceMembers);
-  const selectedmembers = members.find(member => member.email === userInfo.email)
+  const selectedmembers = members?.find(member => member?.email === userInfo?.email)
   const isManageWorkspaceScreen =
     useLocation().pathname.search("manage-workspace") !== -1;
   const isProfileScreen = useLocation().pathname.search("profile") !== -1;
@@ -119,7 +123,7 @@ const LoggedInTopNav = () => {
   useEffect(() => {
     if (workspaceMembers) {
       setSelectedMember(
-        workspaceMembers.find((value) => value._id === participantID)
+        workspaceMembers?.find((value) => value._id === participantID)
       );
     }
   }, [workspaceMembers, participantID]);

@@ -11,12 +11,12 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import dateFormat from "dateformat";
 
-const ShowFile = ({ selectedSpaceId,ShowFile }) => {
+const ShowFile = ({ selectedSpaceId, ShowFile }) => {
   const [showAdd, setShowAdd] = useState(false);
   const [link, setLink] = useState("");
   const [title, setTitle] = useState("");
-  const [ linkDatas , setLinkDatas] = useState([])
- const [removeUpdate, setRemoveUpdate] = useState(false)
+  const [linkDatas, setLinkDatas] = useState([]);
+  const [removeUpdate, setRemoveUpdate] = useState(false);
   const handleAddLinks = async () => {
     const linkData = {
       link: link,
@@ -24,27 +24,28 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
     };
     if (selectedSpaceId) {
       try {
-        const { data } = await add_file_link(selectedSpaceId, linkData);
-       toast.success(" File link create successfully", {
+        await add_file_link(selectedSpaceId, linkData);
+        const { data } = await get_file_link(selectedSpaceId);
+
+        setLinkDatas(data.spaceFiles);
+        toast.success(" File link create successfully", {
           autoClose: 3000,
-      });
+        });
       } catch (err) {
         console.log("Error occured ==> ", err);
-         toast.error(err?.response?.data?.issue?.message, {
+        toast.error(err?.response?.data?.issue?.message, {
           autoClose: 3000,
-      });
+        });
       }
     }
   };
-
-
 
   const getLinks = async () => {
     try {
       if (selectedSpaceId) {
         const { data } = await get_file_link(selectedSpaceId);
 
-        setLinkDatas(data.spaceFiles)
+        setLinkDatas(data.spaceFiles);
       }
     } catch (err) {
       console.log("Error occured ==> ", err);
@@ -61,59 +62,66 @@ const ShowFile = ({ selectedSpaceId,ShowFile }) => {
       className={`overflow-y-scroll  no-scrollbar custom-shadow bg-[#ECECEC80] py-10 px-4 rounded-2xl`}
     >
       <div>
-
-        {linkDatas?.map((data,index) => 
-          <div  key={index} className="w-full cursor-pointer relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]">
-          <a href={data.link} target="blank" className="flex items-center gap-2">
-            <img
-              className="w-8 rounded-full h-8"
-            src={data.logo}
-              alt=""
+        {linkDatas?.map((data, index) => (
+          <div
+            key={index}
+            className="w-full cursor-pointer relative h-[75px] mb-4 border rounded-[16px] items-center px-2 flex justify-between  bg-[#FFFFFF]"
+          >
+            <a
+              href={data.link}
+              target="blank"
+              className="flex items-center gap-2"
+            >
+              <img className="w-8 rounded-full h-8" src={data.logo} alt="" />
+              <div>
+                <h5 className="font-inter text-[16px] font-normal leading-6">
+                  {data.title}
+                </h5>
+                <p className="font-inter font-light text-[11px] leading-6">
+                  added {dateFormat(`${data.createdAt}`, " dS mmm, yyyy")}
+                </p>
+              </div>
+            </a>
+            <Dropdown
+              position="bottom right"
+              button={
+                <EllipsisHorizontalIcon
+                  onClick={() => {
+                    setRemoveUpdate(true);
+                  }}
+                  className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200 ml-0"
+                />
+              }
+              width="150px"
+              style={{ borderRadius: "1rem" }}
+              menu={({ closePopup }) => (
+                <CardSettingDropDown
+                  spaceID={selectedSpaceId}
+                  spaceFiledID={data?._id}
+                  data={data}
+                  removeUpdate={removeUpdate}
+                  setLinkDatas={setLinkDatas}
+                  // close={closePopup}
+                  // cardID={localCard._id}
+                  // progress={progress}
+                  // setProgress={setProgress}
+                  // listID={listID}
+                  // noteDone={noteDone}
+                  // setNoteDone={setNoteDone}
+                  // toggleEdit={toggleEdit}
+                  // setToggleEdit={setToggleEdit}
+                  // setModalActionToggling={
+                  //     setModalActionToggling
+                  // }
+                  // setCardSettingDropDownToggle={
+                  //     setModalActionToggling
+                  // }
+                />
+              )}
             />
-            <div>
-              <h5 className="font-inter text-[16px] font-normal leading-6">
-               {data.title}
-              </h5>
-              <p className="font-inter font-light text-[11px] leading-6">
-                added {dateFormat(`${data.createdAt
-}`, " dS mmm, yyyy")}
-              </p>
-            </div>
-          </a>
-          <Dropdown
-            position="bottom right"
-            button={
-              <EllipsisHorizontalIcon onClick={()=>{setRemoveUpdate(true)}} className="text-[#7088A1] cursor-pointer w-10 h-10 p-2 rounded-lg hover:bg-gray-200 hover:text-teal-500 duration-200 ml-0" />
-            }
-            width="150px"
-            style={{ borderRadius: "1rem" }}
-            menu={({ closePopup }) => (
-              <CardSettingDropDown
-              spaceID={selectedSpaceId}
-              spaceFiledID={data._id}
-              data={data}
-              removeUpdate={removeUpdate}
-              // close={closePopup}
-              // cardID={localCard._id}
-              // progress={progress}
-              // setProgress={setProgress}
-              // listID={listID}
-              // noteDone={noteDone}
-              // setNoteDone={setNoteDone}
-              // toggleEdit={toggleEdit}
-              // setToggleEdit={setToggleEdit}
-              // setModalActionToggling={
-              //     setModalActionToggling
-              // }
-              // setCardSettingDropDownToggle={
-              //     setModalActionToggling
-              // }
-              />
-            )}
-          />
-        </div>
-        )}
-        
+          </div>
+        ))}
+
         {showAdd ? (
           <div className="w-full relative   py-4  border rounded-[16px]  px-4    bg-[#FFFFFF]">
             <input
