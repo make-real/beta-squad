@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { update_user } from "../../api/auth";
+import { get_my_profile, update_user } from "../../api/auth";
 import BackArrowIcon from "../../assets/back_arrow.svg";
 import GalleryIcon from "../../assets/gallery.svg";
 import DeleteProfileModal from "./Modals/DeleteProfileModal";
@@ -43,7 +43,7 @@ const Profile = () => {
 
   const handleSave = async () => {
     let data = new FormData();
-    if (userData.current_password) {
+    if (userData?.current_password) {
       if (!userData?.new_password || !userData?.confirm_password) {
         setError(
           "Please provide new password or make the present password field empty"
@@ -54,26 +54,28 @@ const Profile = () => {
         setError("New Password doesn't match with confirm password");
         return;
       } else {
-        data.append("current_password", userData.current_password ?? "");
-        data.append("new_password", userData.new_password);
+        data.append("current_password", userData?.current_password ?? "");
+        data.append("new_password", userData?.new_password);
       }
     }
-    if (userData.fullName.toString().trim() === "") {
+    if (userData?.fullName?.toString().trim() === "") {
       setError("Name field can' be empty");
       return;
     }
     setError("");
-    if (avatar.image) {
+    if (avatar?.image) {
       data.append("avatar", avatar.image);
     }
-    data.append("fullName", userData.fullName);
-    data.append("email", userData.email);
+    data.append("fullName", userData?.fullName);
+    data.append("email", userData?.email);
 
 
     try {
       const { data: resData } = await update_user(data);
       setSuccess(true);
-
+      const  datas  = await get_my_profile();
+      setUserData(datas?.data?.user)
+      localStorage.setItem("userInfo", JSON.stringify(datas?.data?.user));
       setTimeout(() => {
         setSuccess(false);
       }, 1000);
@@ -86,6 +88,9 @@ const Profile = () => {
   useEffect(() => {
     setUserData(userInfo);
   }, []);
+
+  console.log(userData)
+  
 
   return (
     <>
@@ -109,7 +114,7 @@ const Profile = () => {
             <div className="relative w-[100px] h-[100px] rounded-full bg-[#6576FF40] p-[4px]">
               <img
                 className="w-full h-full rounded-full"
-                src={loginUserInfo.avatar}
+                src={userInfo?.avatar}
                 alt=""
               />
               <label
@@ -136,7 +141,7 @@ const Profile = () => {
                   className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
                   name="fullName"
                   onChange={handleChange}
-                  value={loginUserInfo?.fullName}
+                  value={userInfo?.fullName}
                 />
               </div>
               <div className="w-full">
@@ -150,7 +155,7 @@ const Profile = () => {
                   className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
                   name="email"
                   onChange={handleChange}
-                  value={loginUserInfo?.email}
+                  value={userInfo?.email}
                 />
               </div>
             </div>

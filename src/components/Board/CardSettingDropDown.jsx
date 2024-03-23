@@ -5,6 +5,7 @@ import Edit from '../../assets/icons/svg/Edit';
 
 // This <Component /> called by 🟨🟨🟨 Card.jsx 🟨🟨🟨
 const CardSettingDropDown = ({
+    setLinkDatas,
     close,
     removeUpdate,
     right,
@@ -62,6 +63,7 @@ const CardSettingDropDown = ({
                     cardID={cardID}
                     spaceID={ spaceID}
                     spaceFiledID={spaceFiledID}
+                    setLinkDatas={setLinkDatas}
                     setConfirmModalOpen={setConfirmModalOpen}
                     setCardSettingDropDownToggle={setCardSettingDropDownToggle}
                 />

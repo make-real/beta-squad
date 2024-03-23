@@ -118,9 +118,7 @@ const SideNavbar = ({ShowSubscription}) => {
 
     getWorkSpaceData();
   }, [dispatch]);
-  console.log(currentWorkspace)
-  console.log(params.workspace_id)
-  console.log(workspaces.length)
+
 
   useEffect(() => {
     const getSpaceData = async () => {

@@ -16,6 +16,7 @@ export const get_file_link = (spaceId) =>{
 
 
 export const delete_file_link = (spaceId,spaceFileId ) => {
+    
     return useAxios.delete(`spaces/${spaceId}/files/${spaceFileId}`);
 };
 
