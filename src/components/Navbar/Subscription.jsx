@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 const Subscription = () => {
   const userInfo = useSelector((state) => state?.userInfo?.userInfo);
-  const workpasce = useSelector((state) => state)
   const [loading, setLoading] = useState(false);
   const subscriptionError = useSelector(
     (state) => state?.subscription?.subscriptionError
@@ -23,15 +22,8 @@ const Subscription = () => {
   useEffect(() => {
     if (startDate && expiredDate) {
       const timeDiff = expiredDate - startDate;
-      // Convert milliseconds to days, hours, minutes, and seconds
-      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-      //if implement hours minutes seconds
-      // const hours = Math.floor(
-      //   (timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      // );
-      // const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      // const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
       setTimeDifference(days);
     }
@@ -53,8 +45,7 @@ const Subscription = () => {
         <div>
           {subscriptionError ? (
             <p className="text-center">
-             {subscriptionError} ,To upgrade,
-              please get in touch with
+              {subscriptionError} ,To upgrade, please get in touch with
               <a
                 href="mailto:premium@betaSquad.io"
                 className="underline  ml-1 "
@@ -64,12 +55,9 @@ const Subscription = () => {
             </p>
           ) : (
             <p className="text-center">
-              Your Free Trial will end in {timeDifference} days. To upgrade,
-              please get in touch with{" "}
-              <a
-                href="mailto:premium@betaSquad.io"
-                className="underline  ml-1 "
-              >
+              Your subscription has expired. To upgrade, please get in touch
+              with{" "}
+              <a href="mailto:premium@betaSquad.io" className="underline ml-1">
                 premium@betaSquad.io
               </a>
             </p>

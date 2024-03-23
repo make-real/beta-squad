@@ -19,7 +19,7 @@ import tickIcon from "../../assets/images/tick-square.svg";
 
 import moment from "moment";
 import AudioInput from "./Audio/Render";
-import { isSubscription } from "../../store/slice/subscription";
+
 
 const Message = ({
   space,
@@ -368,7 +368,7 @@ const TextMessage = ({
           dispatch(addBulkMessage(data.messages.reverse()));
           scrollToBottom();
         } catch (error) {
-          dispatch(isSubscription(error.message))
+         
           // alert(error.message);
         }
       };
