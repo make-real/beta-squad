@@ -84,7 +84,7 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className={`w-[300px] mb-2 mr-3 flex flex-col bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
+          className={`w-[300px] mb-2 mr-3 flex flex-col customHScroll bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
         >
           <div
             {...provided.dragHandleProps}
@@ -140,7 +140,7 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-col items-center gap-3 overflow-y-auto pt-2"
+                className="flex flex-col items-center gap-3 overflow-y-auto customHScroll pt-2"
                 style={{ maxHeight: "400px" }} // Adjust the max height as needed
               >
                 {/* Draggable Elements */}

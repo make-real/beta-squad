@@ -274,7 +274,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               <div className="flex items-center gap-[22px] relative">
 
                 {/* chat icon disabled from here */}
-                <div
+                {/* <div
                   className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                 >
                   <span
@@ -301,7 +301,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                       } `}
                     />
                   </span>
-                </div>
+                </div> */}
 
 
 

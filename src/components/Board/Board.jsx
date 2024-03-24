@@ -247,7 +247,7 @@ useEffect(()=>{
 console.log(filteredLists)
   return (
     <section
-      className={`duration-200 overflow-y-auto  w-full max-h-full`}
+      className={`duration-200 overflow-y-auto  customHScroll w-full max-h-full`}
     >
       {squadId ? (
         showType === "grid" ? (

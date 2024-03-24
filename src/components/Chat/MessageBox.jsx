@@ -307,7 +307,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                         displayTransform={(id) => users.find((user) => user.id === id).display}
                                     />
                                 </MentionsInput>
-                                <div className="text-gray-400 absolute bottom-5 right-1 flex mt-[5px] ">
+                                {/* <div className="text-gray-400 absolute bottom-5 right-1 flex mt-[5px] ">
                                     <div className="px-2 cursor-pointer relative">
                                         <BiMicrophone
                                             size={20}
@@ -315,10 +315,10 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
                                             onClick={handleStartRecording}
                                         />
                                     </div>
-                                    {/* )} */}
+                                    
 
                                   
-                                </div>
+                                </div> */}
                                 
                             </div>
                             <div className="flex mt-3 mx-3 text-[#818892] ">

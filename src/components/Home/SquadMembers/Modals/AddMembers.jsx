@@ -60,6 +60,7 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
     }, [workspaceMembers, alreadyAddedMembers]);
 
     const handleSelectedMember = (e, member) => {
+        console.log('event',e)
         e.preventDefault();
         let membersToAdd = [];
         if (e.target.checked) {
