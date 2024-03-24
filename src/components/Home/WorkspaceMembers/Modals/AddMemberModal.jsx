@@ -2,14 +2,17 @@ import React from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { add_workspace_member } from "../../../../api/workSpace";
+import { add_workspace_member, get_workspace_member } from "../../../../api/workSpace";
 import CrossIcon from "../../../../assets/cross.svg";
 import InboxIcon from "../../../../assets/inbox.svg";
 import { validateEmail } from "../../../../util/helpers";
 import TaguserIcon from "../../../../assets/tag_user.svg";
 import { RiErrorWarningLine } from "react-icons/ri";
+import { addWorkspaceMembers } from "../../../../store/slice/workspace";
+import { useDispatch } from "react-redux";
 
 const AddMemberModal = ({ setShowAddMemberModal }) => {
+  const dispatch = useDispatch();
 
   const currentWorkspace = useSelector(
     (state) => state.workspace.currentWorkspace
@@ -39,9 +42,10 @@ const AddMemberModal = ({ setShowAddMemberModal }) => {
       // reset all input fields...
       setMemberData({ name: "", color: "", privacy: "" });
       // setMemberData({ email: "", designation: "" });
-      window.location.reload(true);
       // close this modal
       setShowAddMemberModal(false);
+      const { data } = await get_workspace_member(currentWorkspace._id);
+      dispatch(addWorkspaceMembers(data?.teamMembers ?? []));
     } catch (error) {
       // error for developer for deBugging...
 
