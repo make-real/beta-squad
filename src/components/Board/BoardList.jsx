@@ -79,15 +79,13 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
     }
   };
   return (
-    <Draggable  draggableId={boardList?._id} index={listIndex}>
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
+    <>
+      <div
+          
           className={`w-[300px] mb-2 mr-3 flex flex-col customHScroll bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
         >
           <div
-            {...provided.dragHandleProps}
+           
             className="overflow-hidden  flex justify-between items-center my-3"
             ref={dropDownRef}
           >
@@ -175,8 +173,7 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
             onSubmit={(text) => handleCardCreation(text)}
           />
         </div>
-      )}
-    </Draggable>
+    </>
   );
 };
 
