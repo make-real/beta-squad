@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addCard } from "../../api/board";
 
-const BoardList = ({ showType, listIndex, boardList }) => {
+const BoardList = ({ showType, listIndex, boardList,setIsDepend }) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [cardLoading, setCardLoading] = useState(false);
   const dispatch = useDispatch();
@@ -86,12 +86,14 @@ const BoardList = ({ showType, listIndex, boardList }) => {
   };
 
   const handleBoardListUpdate = async (selectedSpaceId, listId, text) => {
+    console.log(selectedSpaceId, listId, text)
     try {
       await boardListUpdate(selectedSpaceId, listId, text);
 
       updateBoardList(listId, text);
 
       setToggleEdit(false);
+      setIsDepend(true)
 
       toast.success(`${text} - list updated successfully`, {
         autoClose: 1000,
@@ -104,9 +106,8 @@ const BoardList = ({ showType, listIndex, boardList }) => {
       });
     }
   };
-
   return (
-    <Draggable draggableId={boardList?._id} index={listIndex}>
+    <Draggable  draggableId={boardList?._id} index={listIndex}>
       {(provided) => (
         <div
           {...provided.draggableProps}
@@ -165,7 +166,7 @@ const BoardList = ({ showType, listIndex, boardList }) => {
             />
           </div>
           <span className="border-[1px] border-[#EEE9E9]" />
-          <div className="flex flex-col items-center gap-3 overflow-hidden customScroll pt-2">
+          <div className="flex flex-col items-center gap-3 overflow-auto  pt-2">
             <DraggableElement
               listId={boardList?._id}
               elements={boardList?.cards}

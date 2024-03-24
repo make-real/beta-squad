@@ -138,13 +138,13 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedTab === "All") {
-      filterBoardList("All");
-    } else {
-      filterBoardList(selectedTab);
-    }
-  }, [selectedTab, filteredList, boardLists]);
+  // useEffect(() => {
+  //   if (selectedTab === "All") {
+  //     filterBoardList("All");
+  //   } else {
+  //     filterBoardList(selectedTab);
+  //   }
+  // }, [selectedTab, filteredList, boardLists]);
 
   // useEffect(() => {
   //   if (state?.tab) {

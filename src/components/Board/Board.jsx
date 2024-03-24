@@ -32,6 +32,7 @@ const Board = ({ showType, addBoardRef }) => {
     // filteredLists,
     setFilteredLists,
   } = useBoardCardContext();
+  const [isDepend,setIsDepend]=useState(false)
   const { filter } = useSelector((state) => state.board);
   const lists = useSelector((state) => state?.cardsLists?.data?.lists);
   const seletedTagId = useSelector((state) => state?.TagId?.selectTagId);
@@ -51,14 +52,14 @@ const Board = ({ showType, addBoardRef }) => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          dispatch(getAllListCards(squadId));
+          dispatch(getAllListCards(squadId)).then((c)=>console.log(c))
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch]);   
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend]);   
 
 useEffect(()=>{
   const filterList = () => {
@@ -116,7 +117,7 @@ useEffect(()=>{
     dispatch(setFilterListBoard(new_list))
   };
   filterList()
-},[dispatch, lists, selectedTab])
+},[dispatch, lists, selectedTab,isDepend])
 
 
 
@@ -128,12 +129,11 @@ useEffect(()=>{
     try {
       const { data } = await addBoardListApiCall(squadId, listObject);
       setListLoading(false);
-      window.location.reload();
-      //addBoardList(data.list);
+      // addBoardList(data.list);
 
-      // toast.success(`${data?.list?.name} - list create successfully`, {
-      //   autoClose: 3000,
-      // });
+      toast.success(`${data?.list?.name} - list create successfully`, {
+        autoClose: 3000,
+      });
     } catch (error) {
       console.log(error.response.data);
       setListLoading(false);
@@ -145,6 +145,7 @@ useEffect(()=>{
 
   const dragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
+    console.log(result)
 
     try {
       handleDragEnd(
@@ -165,6 +166,7 @@ useEffect(()=>{
           draggableId,
           Number(destination.index) + 1
         );
+        setIsDepend(!isDepend)
       } else if (destination.droppableId === source.droppableId) {
         await updateCardOrder(
           squadId,
@@ -172,6 +174,8 @@ useEffect(()=>{
           draggableId,
           Number(destination.index) + 1
         );
+        setIsDepend(!isDepend)
+
       } else {
         await moveCard(
           squadId,
@@ -180,6 +184,8 @@ useEffect(()=>{
           destination.droppableId,
           Number(destination.index) + 1
         );
+        setIsDepend(!isDepend)
+
       }
     } catch (error) {
       console.log(error);
@@ -238,10 +244,10 @@ useEffect(()=>{
     });
     return boardCopy;
   };
-
+console.log(filteredLists)
   return (
     <section
-      className={`duration-200 overflow-y-auto customScroll w-full max-h-full`}
+      className={`duration-200 overflow-y-auto  w-full max-h-full`}
     >
       {squadId ? (
         showType === "grid" ? (
@@ -266,6 +272,7 @@ useEffect(()=>{
                             key={boardList?._id}
                             boardList={boardList}
                             listIndex={index}
+                            setIsDepend={setIsDepend}
                           />
                         ))}
                     {provided.placeholder}
