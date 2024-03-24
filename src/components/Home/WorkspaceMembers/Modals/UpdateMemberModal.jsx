@@ -8,16 +8,21 @@ import { useState } from "react";
 import {
   change_workspace_member_designation,
   change_workspace_member_role,
+  get_workspace_member,
 } from "../../../../api/workSpace";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { toUpper } from "lodash";
+import { useDispatch } from "react-redux";
+import { addWorkspaceMembers } from "../../../../store/slice/workspace";
 
 const UpdateMemberModal = ({
   setShowUpdateMemberModal,
   data,
   cancleUpdateMember,
 }) => {
+  const dispatch = useDispatch();
+
   const [editData, setEditData] = useState({});
   const selectedWorkspaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
@@ -40,11 +45,13 @@ const UpdateMemberModal = ({
           id: editData._id,
           designation: editData.designation,
         });
-
+        const { data } = await get_workspace_member(selectedWorkspaceId);
+        dispatch(addWorkspaceMembers(data?.teamMembers ?? []));
         // display a notification for user
         toast.success(`Role changed successfully`, {
           autoClose: 3000,
         });
+        
       } catch (error) {
         // error for developer for deBugging...
         console.log(error);

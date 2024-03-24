@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
 import BriefCaseIcon from "../../../../src/assets/briefcase.svg";
-import avatar from "../../../assets/profile_circle.svg"
+import avatar from "../../../assets/profile_circle.svg";
 
 const SquadMembers = ({
   showType,
@@ -24,8 +24,12 @@ const SquadMembers = ({
   );
   const { loginUserInfo } = useUserInfoContext();
   const members = useSelector((state) => state.workspace.workspaceMembers);
-  const showupdate = members.filter(member =>member._id === loginUserInfo._id)
-  const showUpdateDeleteButton = showupdate.map(member=>member.role ==="owner" || "admin");
+  const showupdate = members.filter(
+    (member) => member._id === loginUserInfo._id
+  );
+  const showUpdateDeleteButton = showupdate.map(
+    (member) => member.role === "owner" || "admin"
+  );
 
   const [showUpdateMemberModal, setShowUpdateMemberModal] = useState(false);
   const [updateMemberData, setUpdateMemberData] = useState(null);
@@ -35,10 +39,10 @@ const SquadMembers = ({
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    const prepareUpdateMember = (data) => {
-        setUpdateMemberData(data)
-        setShowUpdateMemberModal(true)
-    }
+  const prepareUpdateMember = (data) => {
+    setUpdateMemberData(data);
+    setShowUpdateMemberModal(true);
+  };
 
   const prepareDeleteMember = (data) => {
     setRemoveMemberData(data);
@@ -55,10 +59,7 @@ const SquadMembers = ({
     setShowUpdateMemberModal(false);
   };
 
-
   // Isuues Here
-
-
 
   return (
     <>
@@ -78,40 +79,55 @@ const SquadMembers = ({
                 key={member._id}
                 className="relative w-[297px] h-[110px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]"
               >
-                {showUpdateDeleteButton[0] && (
-                  <EditDeleteMenu
-                    deleteFunc={prepareDeleteMember}
-                    data={member}
-                    editFunc={prepareUpdateMember}
-                    className="absolute top-[10px] right-[10px]"
-                  />
-                )}
+                { (userRole?.role === "owner" || userRole?.role === "admin" )  && (
+                    <>
+                      {showUpdateDeleteButton[0] && (
+                        <EditDeleteMenu
+                          deleteFunc={prepareDeleteMember}
+                          data={member}
+                          editFunc={prepareUpdateMember}
+                          className="absolute top-[10px] right-[10px]"
+                        />
+                      )}
+                    </>
+                  )}
 
                 <div className="">
                   <div>
                     {member?.role === "owner" ? (
                       <div className="-my-2 w-[50px] text-xs bg-green-400 rounded-full ml-16 mb-2">
-                        <p className="text-black text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
+                        <p className="text-black text-center">
+                          {member?.role.charAt(0).toUpperCase() +
+                            member?.role.slice(1)}
+                        </p>
                       </div>
                     ) : member?.role === "admin" ? (
                       <div className="-my-2 w-[50px] text-xs bg-amber-400 rounded-full ml-16 mb-2">
-                        <p className="text-white text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
+                        <p className="text-white text-center">
+                          {member?.role.charAt(0).toUpperCase() +
+                            member?.role.slice(1)}
+                        </p>
                       </div>
                     ) : member?.role === "user" ? (
                       <div className="-my-2 w-[50px] text-xs bg-purple-700 rounded-full ml-16 mb-2">
-                        <p className="text-white text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
+                        <p className="text-white text-center">
+                          {member?.role.charAt(0).toUpperCase() +
+                            member?.role.slice(1)}
+                        </p>
                       </div>
                     ) : (
                       <div className="-my-2 w-[50px] text-xs bg-red-700 rounded-full ml-16 mb-2">
-                        <p className="text-white  text-center">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
+                        <p className="text-white  text-center">
+                          {member?.role.charAt(0).toUpperCase() +
+                            member?.role.slice(1)}
+                        </p>
                       </div>
                     )}
                   </div>
 
                   <div className="flex gap-[10px]">
                     <img
-                      src={ member?.avatar ? member?.avatar:
-                        avatar}
+                      src={member?.avatar ? member?.avatar : avatar}
                       alt=""
                       className="w-[50px] h-[50px] object-cover rounded-full"
                     />
@@ -122,10 +138,12 @@ const SquadMembers = ({
                       <p className="text-[#818892] text-[13px] w-[120px]">
                         {member?.email}
                       </p>
-                      {member.designation && <p className="text-[#818892]  items-center flex gap-2 text-[13px]">
-                      <img src={BriefCaseIcon} alt="" /> {member?.designation}
-                      </p>}
-                      
+                      {member.designation && (
+                        <p className="text-[#818892]  items-center flex gap-2 text-[13px]">
+                          <img src={BriefCaseIcon} alt="" />{" "}
+                          {member?.designation}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -155,8 +173,7 @@ const SquadMembers = ({
                   <div className="relative w-full h-[90px] rounded-[16px] bg-[#6576FF10] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
                     <div className="flex items-center gap-[10px]">
                       <img
-                        src={  member?.avatar ? member?.avatar:
-                          avatar}
+                        src={member?.avatar ? member?.avatar : avatar}
                         alt=""
                         className="w-[50px] h-[50px] object-cover rounded-full"
                       />
@@ -165,7 +182,10 @@ const SquadMembers = ({
                       </h2>
                     </div>
                     <div className="flex items-center gap-[16px]">
-                      <p className="text-[#818892]">{member?.role.charAt(0).toUpperCase() +member?.role.slice(1)}</p>
+                      <p className="text-[#818892]">
+                        {member?.role.charAt(0).toUpperCase() +
+                          member?.role.slice(1)}
+                      </p>
                       {/* <img src={ArrowDown} alt="" /> */}
                     </div>
                     <p className="text-[#818892]">{member?.email}</p>
