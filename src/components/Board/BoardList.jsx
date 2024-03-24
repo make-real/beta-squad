@@ -67,6 +67,7 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
       await boardListUpdate(selectedSpaceId, listId, text);
       updateBoardList(listId, text);
       setToggleEdit(false);
+      setIsDepend(!isDepend)
       toast.success(`${text} - list updated successfully`, {
         autoClose: 1000,
       });
