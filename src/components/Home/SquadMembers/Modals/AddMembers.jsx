@@ -18,7 +18,7 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
     const [alreadyAddedMembers, setAlreadyAddedMembers] = useState([]);
     const [members, setMembers] = useState([]);
     const [selectedMembers, setSelectedMembers] = useState([]);
-
+   
 
     const fetchWorkspaceMembers = async () => {
         try {
@@ -60,8 +60,6 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
     }, [workspaceMembers, alreadyAddedMembers]);
 
     const handleSelectedMember = (e, member) => {
-        console.log('event',e)
-        e.preventDefault();
         let membersToAdd = [];
         if (e.target.checked) {
             membersToAdd = [...selectedMembers, member];
@@ -134,6 +132,7 @@ const AddMembers = ({ setShowAddMemberModal, selectedSpace, addMembers }) => {
                                 type="checkbox"
                                 className="w-[15px] h-[15px]"
                                 onChange={(e) => {
+
                                     handleSelectedMember(e, member);
                                 }}
                             />
