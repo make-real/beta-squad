@@ -247,11 +247,11 @@ useEffect(()=>{
 console.log(filteredLists)
   return (
     <section
-      className={`duration-200 overflow-y-auto  customHScroll w-full max-h-full`}
+      className={`duration-200 overflow-y-auto  customScroll w-full max-h-full`}
     >
       {squadId ? (
         showType === "grid" ? (
-          <div className="py-1 flex gap-3 items-start overflow-y-auto">
+          <div className="py-1 flex gap-3 items-start ">
             <DragDropContext onDragEnd={dragEnd}>
               <Droppable
                 droppableId="all-columns"

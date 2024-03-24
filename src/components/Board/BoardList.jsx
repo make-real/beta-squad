@@ -138,7 +138,7 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-col items-center gap-3 overflow-y-auto customHScroll pt-2"
+                className="flex flex-col items-center gap-3 over customScroll  pt-2"
                 style={{ maxHeight: "400px" }} // Adjust the max height as needed
               >
                 {/* Draggable Elements */}
