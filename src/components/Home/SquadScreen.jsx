@@ -72,27 +72,27 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
 
  
 
-  const handleBoardListCreation = async (squadId, text) => {
-    const listObject = { name: text };
-    setListLoading(true);
+  // const handleBoardListCreation = async (squadId, text) => {
+  //   const listObject = { name: text };
+  //   setListLoading(true);
 
-    try {
-      const { data } = await addBoardListApiCall(squadId, listObject);
-      setListLoading(false);
-      addBoardList(data.list);
+  //   try {
+  //     const { data } = await addBoardListApiCall(squadId, listObject);
+  //     setListLoading(false);
+  //     addBoardList(data.list);
+  //     setAddBoard(true)
+  //     toast.success(`${data?.list?.name} - list create successfully`, {
+  //         autoClose: 3000,
+  //     });
+  //   } catch (error) {
+  //     console.log(error.response.data);
 
-      toast.success(`${data?.list?.name} - list create successfully`, {
-          autoClose: 3000,
-      });
-    } catch (error) {
-      console.log(error.response.data);
-
-      setListLoading(false);
-      // toast.error(error?.response?.data?.issue?.message, {
-      //     autoClose: 3000,
-      // });
-    }
-  };
+  //     setListLoading(false);
+  //     // toast.error(error?.response?.data?.issue?.message, {
+  //     //     autoClose: 3000,
+  //     // });
+  //   }
+  // };
 
   const fetchSquadMembers = async () => {
     try {
@@ -222,7 +222,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                 <div
                   className="border-[1px] p-1 px-3 rounded-md cursor-pointer select-none flex items-center  gap-1"
                   // onClick={(text) => handleBoardListCreation(workspace_id, text)}
-                  onClick={() => {
+                  onClick={(text) => {
+                    
                     setAddBoard(!addBoard);
                     if (addBoard === false) {
                       addBoardRef.current.scrollIntoView({

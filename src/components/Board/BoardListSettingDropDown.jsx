@@ -9,6 +9,7 @@ const BoardListSettingDropDown = ({
     boardListID,
     toggleEdit,
     setToggleEdit,
+    isDepend,setIsDepend
 }) => {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
@@ -41,6 +42,8 @@ const BoardListSettingDropDown = ({
                 <ConfirmDialog
                     listID={boardListID}
                     setConfirmModalOpen={setConfirmModalOpen}
+                    isDepend={isDepend}
+                    setIsDepend={setIsDepend}
                 />
             )}
         </>

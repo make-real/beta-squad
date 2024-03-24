@@ -30,6 +30,7 @@ export const BoardCardContext = ({ children }) => {
         }
       });
       setFilteredLists(new_list);
+      
       return;
     }
 
@@ -70,6 +71,7 @@ export const BoardCardContext = ({ children }) => {
 
   const addBoardList = (newListObj) => {
     setBoardList((pre) => [...pre, newListObj]);
+    
   };
 
   const updateBoardList = (id, text) => {

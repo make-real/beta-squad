@@ -130,7 +130,7 @@ useEffect(()=>{
       const { data } = await addBoardListApiCall(squadId, listObject);
       setListLoading(false);
       // addBoardList(data.list);
-
+     setIsDepend(!isDepend)
       toast.success(`${data?.list?.name} - list create successfully`, {
         autoClose: 3000,
       });
@@ -272,6 +272,7 @@ console.log(filteredLists)
                             key={boardList?._id}
                             boardList={boardList}
                             listIndex={index}
+                            isDepend={isDepend}
                             setIsDepend={setIsDepend}
                           />
                         ))}

@@ -24,7 +24,9 @@ const ConfirmDialog = ({
     deleteAttachment,
     setLocalCard,
     deleteAttachFile,
-    setLinkDatas
+    setLinkDatas,
+    isDepend,
+    setIsDepend
 }) => {
     const navigate = useNavigate();
 
@@ -57,6 +59,7 @@ const ConfirmDialog = ({
             if (listID) {
                 const { data } = await boardListDelete(selectedSpaceId, listID);
                 removeBoardList(listID);
+                setIsDepend(!isDepend)
                 toast.success(`${data?.message}`, { autoClose: 3000 });
             }
 

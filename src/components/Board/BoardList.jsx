@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addCard } from "../../api/board";
 
-const BoardList = ({ showType, listIndex, boardList,setIsDepend }) => {
+const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [cardLoading, setCardLoading] = useState(false);
   const dispatch = useDispatch();
@@ -125,6 +125,8 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend }) => {
                   boardListID={boardList?._id}
                   toggleEdit={toggleEdit}
                   setToggleEdit={setToggleEdit}
+                  isDepend={isDepend}
+                  setIsDepend={setIsDepend}
                 />
               )}
             />
