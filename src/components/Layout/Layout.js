@@ -13,18 +13,17 @@ const Layout = ({ selectedSpaceId }) => {
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
   const userInfo = useSelector((state) => state?.userInfo?.userInfo);
   const [ShowSubscription, setShowSubscription] = useState(false);
-  const subscriptionError = useSelector((state) => state?.subscription?.subscriptionError);
     // console.log(subscriptionError);
     requestNotificationPermission();
 
 
   useEffect(() => {
-    if (subscriptionError) {
+    if (userInfo?.subscription?.stop) {
       setShowSubscription(true);
     } else {
         setShowSubscription(false); 
     }
-  }, [subscriptionError,]);
+  }, [userInfo?.subscription?.stop]);
 
   return (
     <div className=" ">

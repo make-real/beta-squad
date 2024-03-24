@@ -18,7 +18,7 @@ import { populateUsers, sliceText } from "../../util/helpers";
 import { ScaleLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { addSingleMessage, makeSendingFailed } from "../../store/slice/message";
-import { isSubscription } from "../../store/slice/subscription";
+
 
 
 const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }) => {
@@ -54,7 +54,7 @@ const MessageBox = ({ messageToRespond, setMessageToRespond, custom, onComment }
 
                     setUsers(arr);
                 } catch (error) {
-                    dispatch(isSubscription(error.message))
+                  
                     console.log(error);
                 }
             };

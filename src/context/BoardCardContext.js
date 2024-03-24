@@ -17,16 +17,16 @@ export const BoardCardContext = ({ children }) => {
     let new_list = [];
 
     if (filter_tag === "Done") {
-      list.map((board) => {
+      list?.map((board) => {
         let cards = [];
-        board.cards.forEach((card) => {
-          if (card.progress === 4) {
-            cards.push(card);
+        board?.cards?.forEach((card) => {
+          if (card?.progress === 4) {
+            cards?.push(card);
           }
         });
-        if (cards.length) {
+        if (cards?.length) {
           let new_board = { ...board, cards };
-          new_list.push(new_board);
+          new_list?.push(new_board);
         }
       });
       setFilteredLists(new_list);
@@ -34,15 +34,15 @@ export const BoardCardContext = ({ children }) => {
     }
 
     if (filter_tag === "All") {
-      list.map((board) => {
+      list?.map((board) => {
         let cards = [];
-        board.cards.forEach((card) => {
-          if (card.progress !== 4) {
-            cards.push(card);
+        board?.cards?.forEach((card) => {
+          if (card?.progress !== 4) {
+            cards?.push(card);
           }
         });
         let new_board = { ...board, cards };
-        new_list.push(new_board);
+        new_list?.push(new_board);
       });
       setFilteredLists(new_list);
       return;
@@ -50,19 +50,19 @@ export const BoardCardContext = ({ children }) => {
 
     list.map((board) => {
       let cards = [];
-      board.cards.forEach((card) => {
-        card.tags.forEach((tag) => {
-          if (filter_tag === "All" && card.progress !== 4) {
-            cards.push(card);
+      board?.cards?.forEach((card) => {
+        card?.tags?.forEach((tag) => {
+          if (filter_tag === "All" && card?.progress !== 4) {
+            cards?.push(card);
           }
-          if (tag.name === filter_tag && card.progress !== 4) {
-            cards.push(card);
+          if (tag?.name === filter_tag && card?.progress !== 4) {
+            cards?.push(card);
           }
         });
       });
 
       let new_board = { ...board, cards };
-        new_list.push(new_board);
+        new_list?.push(new_board);
     });
 
     setFilteredLists(new_list);
@@ -74,7 +74,7 @@ export const BoardCardContext = ({ children }) => {
 
   const updateBoardList = (id, text) => {
     setBoardList((pre) =>
-      pre.filter((el) => (el._id === id ? (el.name = text) : el))
+      pre?.filter((el) => (el._id === id ? (el.name = text) : el))
     );
   };
 
@@ -102,30 +102,30 @@ export const BoardCardContext = ({ children }) => {
   
 
   const removeCard = (bid, cid) => {
-    const boardIndex = boardLists.findIndex(({ _id }) => _id === bid);
+    const boardIndex = boardLists?.findIndex(({ _id }) => _id === bid);
     if (boardIndex < 0) return;
 
-    const cardIndex = boardLists[boardIndex].cards.findIndex(
+    const cardIndex = boardLists[boardIndex]?.cards?.findIndex(
       ({ _id }) => _id === cid
     );
     if (cardIndex < 0) return;
 
     const tempBoard = [...boardLists];
-    tempBoard[boardIndex].cards.splice(cardIndex, 1);
+    tempBoard[boardIndex]?.cards?.splice(cardIndex, 1);
 
     setBoardList(tempBoard);
   };
 
   const updateCard = (bid, cid, newCard) => {
     const copy = [...boardLists];
-    const boardIndex = copy.findIndex(({ _id }) => _id === bid);
+    const boardIndex = copy?.findIndex(({ _id }) => _id === bid);
     if (boardIndex < 0) return;
-    const cardIndex = copy[boardIndex].cards.findIndex(
+    const cardIndex = copy[boardIndex]?.cards?.findIndex(
       ({ _id }) => _id === cid
     );
     if (cardIndex < 0) return;
     copy[boardIndex].cards[cardIndex] = {
-      ...copy[boardIndex].cards[cardIndex],
+      ...copy[boardIndex]?.cards[cardIndex],
       ...newCard,
     };
     setBoardList(copy);
