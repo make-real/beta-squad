@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { userLogOut } from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
-import avatar from "../../assets/profile_circle.svg"
+import avatar from "../../assets/profile_circle.svg";
 import { setSelectedWorkSpaceId } from "../../store/slice/workspace";
 import {
   setSelectedSpaceId,
@@ -31,8 +31,6 @@ import PrivateFolder from "../../assets/icon_component/PrivateFolder";
 import { BsSearch } from "react-icons/bs";
 import Search from "./search";
 const userId = JSON.parse(localStorage.getItem("userId"));
-
-
 
 const TopNav = () => {
   // const [userInfo, setUserInfo] = useState(null);
@@ -63,8 +61,14 @@ const NotLoggedInTopNav = () => {
   return (
     <div className="flex justify-between w-full py-[15px] px-[50px]">
       <div className="flex items-center gap-2">
-        <img src={LogoIcon} className="h-[28px] w-[28px] lg:w-[35px] lg:h-[35px] xl:h-[35px] xl:w-[35px]" alt="logo"  />
-        <h1 className="text-[#0D1282] text-[18px] xl:text-[20px]  lg:text-[20px] font-semibold">Squad</h1>
+        <img
+          src={LogoIcon}
+          className="h-[28px] w-[28px] lg:w-[35px] lg:h-[35px] xl:h-[35px] xl:w-[35px]"
+          alt="logo"
+        />
+        <h1 className="text-[#0D1282] text-[18px] xl:text-[20px]  lg:text-[20px] font-semibold">
+          Squad
+        </h1>
       </div>
       <Link
         to={`${currentPage === "register" ? "/" : "/register"}`}
@@ -78,11 +82,10 @@ const NotLoggedInTopNav = () => {
 
 const LoggedInTopNav = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [userInfo,setUserInfo]=useState(user)
-  useEffect(()=>{
-    setUserInfo(user)
-  },[])
- 
+  const [userInfo, setUserInfo] = useState(user);
+  useEffect(() => {
+    setUserInfo(user);
+  }, []);
 
   const selectedWorkspaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
@@ -113,13 +116,15 @@ const LoggedInTopNav = () => {
 
   const { participantID } = useParams();
   const members = useSelector((state) => state.workspace.workspaceMembers);
-  const selectedmembers = members?.find(member => member?.email === userInfo?.email)
+  const selectedmembers = members?.find(
+    (member) => member?.email === userInfo?.email
+  );
   const isManageWorkspaceScreen =
     useLocation().pathname.search("manage-workspace") !== -1;
   const isProfileScreen = useLocation().pathname.search("profile") !== -1;
   const userMenuDropDownRef = useRef();
   const notificationDropDownRef = useRef();
-
+  const [isDepend, setIsDepend] = useState(false);
   useEffect(() => {
     if (workspaceMembers) {
       setSelectedMember(
@@ -162,17 +167,22 @@ const LoggedInTopNav = () => {
         seen: seenNotifications,
         unseen: unseenNotifications,
         count1: data.notifications?.length,
-        count2:unseenNotifications?.length,
+        count2: unseenNotifications?.length,
       });
     } catch (err) {
-      
-      setNotifications({ seen: null, unseen: null, all: null, count1: 0 , count2:0 });
+      setNotifications({
+        seen: null,
+        unseen: null,
+        all: null,
+        count1: 0,
+        count2: 0,
+      });
     }
   };
 
   useEffect(() => {
     fetchNotification();
-  }, []);
+  }, [isDepend]);
 
   const handleClickOutside = (ref, event, updateFn) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -181,7 +191,6 @@ const LoggedInTopNav = () => {
   };
 
   // Auto close user drop down menu
-
 
   useEffect(() => {
     document.addEventListener(
@@ -203,7 +212,6 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
- 
   // Auto close notification drop down menu
   useEffect(() => {
     document.addEventListener(
@@ -216,7 +224,7 @@ const LoggedInTopNav = () => {
         ),
       true
     );
-   
+
     return () => {
       document.removeEventListener(
         "click",
@@ -230,27 +238,20 @@ const LoggedInTopNav = () => {
           handleClickOutside(userMenuDropDownRef, e, setShowNotificationModal),
         true
       );
-    
-
     };
   }, []);
 
-
   const NotificationTabs = {
     all: <AllNotification notifications={notifications.seen} />,
-    unread: <UnreadNotification notifications={notifications.unseen} />,
+    unread: <UnreadNotification notifications={notifications.unseen} setIsDepend={setIsDepend} isDepend={isDepend} />,
   };
-
 
   return (
     <>
       <div
         className={`relative py-[15px] pl-[19px] pr-[66px] flex items-center w-full justify-between`}
       >
-        
-        <Search/>
-       
-        
+        <Search />
 
         <div className="flex items-center h-full">
           <div className="relative">
@@ -260,10 +261,11 @@ const LoggedInTopNav = () => {
               src={NotificationIcon}
               alt="notification"
             />
-           {
-            notifications.count2 ? <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span> : <></>
-           }
-
+            {notifications.count2 ? (
+              <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span>
+            ) : (
+              <></>
+            )}
 
             {/* Notifications Dropdown Menu */}
             <div
@@ -303,7 +305,7 @@ const LoggedInTopNav = () => {
                         ? "text-[#6576FF] border-b-2 border-[#6576FF]"
                         : "text-[#818892]"
                     }`}
-                    onClick={() => setSelectedNotificationTab("unread")}
+                    onClick={() =>{ setSelectedNotificationTab("unread")}}
                   >
                     Unread
                   </li>
@@ -332,19 +334,19 @@ const LoggedInTopNav = () => {
 
           <div className="mx-[26px] h-full w-[2px] bg-[#031124] opacity-10"></div>
           <div
-          onClick={() => setShowDropDownMenu(!showDropDownMenu)}
-          className="flex gap-4 cursor-pointer">
+            onClick={() => setShowDropDownMenu(!showDropDownMenu)}
+            className="flex gap-4 cursor-pointer"
+          >
             <div className="">
               <h1 className="text-[14px] font-semibold">
                 {userInfo?.fullName}
               </h1>
               <p className="text-[12px] text-end text-gray-400">
-               {selectedmembers?.designation }
+                {selectedmembers?.designation}
               </p>
             </div>
             <img
-              src={  userInfo?.avatar ? userInfo?.avatar:
-                avatar}
+              src={userInfo?.avatar ? userInfo?.avatar : avatar}
               alt=""
               className="w-[35px] h-[35px] rounded-full"
             />
@@ -352,7 +354,6 @@ const LoggedInTopNav = () => {
               className="w-[15px] cursor-pointer"
               src={ArrowDown}
               alt="dropdown menu"
-              
             />
           </div>
           {/* User Dropdown Menu */}
@@ -510,12 +511,12 @@ const AllNotification = ({ notifications }) => {
     </div>
   );
 };
-const UnreadNotification = ({ notifications }) => {
+const UnreadNotification = ({ notifications ,setIsDepend,isDepend}) => {
   return (
     <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
       {notifications?.map((notification) => {
         return (
-          <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+          <div onMouseOver={()=>setIsDepend(!isDepend)} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
             <div className="flex items-center gap-[17px]">
               <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                 <BellIcon style={{ fill: "#FB397F" }} />
