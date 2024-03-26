@@ -35,6 +35,7 @@ import avatar from "../../../src/assets/profile_circle.svg"
 
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
+  console.log('selectedSpace',selectedSpace)
   const { showModal, setShowModal } = useCommingSoonContext();
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
@@ -137,7 +138,8 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       setSelectedTab("All");
     }
   }, []);
-
+console.log("members",members)
+console.log('selectedSpace',selectedSpace)
   // useEffect(() => {
   //   if (selectedTab === "All") {
   //     filterBoardList("All");
@@ -163,7 +165,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const addBoardRef = React.useRef();
 
   const TabsScreen = {
-    messages: <Chat />,
+    messages: <Chat selectedSpace={selectedSpace} members={members}/>,
     file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,
     board: (
       <Board
@@ -274,7 +276,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
               <div className="flex items-center gap-[22px] relative">
 
                 {/* chat icon disabled from here */}
-                {/* <div
+                <div
                   className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                 >
                   <span
@@ -301,7 +303,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                       } `}
                     />
                   </span>
-                </div> */}
+                </div>
 
 
 

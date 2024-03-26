@@ -60,7 +60,6 @@ const WorkspaceScreen = ({ currentWorkspace }) => {
 
   const userRole = members?.find((m) => m._id === userInfo._id);
   const addUser = userRole?.role === "admin" || userRole?.role === "owner";
-
   return (
     <>
       {isFirstTime || showCreateSquadScreen || showAddMemberScreen ? (

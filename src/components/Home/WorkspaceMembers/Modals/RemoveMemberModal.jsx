@@ -2,7 +2,7 @@ import CrossIcon from "../../../../assets/cross.svg";
 import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { change_workspace_member_role } from "../../../../api/workSpace";
+import { change_workspace_member_role, get_workspace_member } from "../../../../api/workSpace";
 import { useDispatch } from "react-redux";
 import { addWorkspaceMembers } from "../../../../store/slice/workspace";
 
@@ -43,6 +43,8 @@ const RemoveMemberModal = ({
             );
 
             setShowRemovedModal(true);
+            const newData  = await get_workspace_member(currentWorkspace._id);
+            dispatch(addWorkspaceMembers(newData?.data?.teamMembers ?? []));
             setTimeout(() => {
                 setShowRemovedModal(false);
                 setRemoveMemberData(null);

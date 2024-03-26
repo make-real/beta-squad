@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate, } from "react-router-dom";
+import { Link, useLocation, useNavigate,  } from "react-router-dom";
 import LogoIcon from "../../assets/squad_logo.png";
 import NotificationIcon from "../../assets/notification.svg";
 import ArrowDown from "../../assets/arrowdown.svg";
@@ -79,6 +79,7 @@ const LoggedInTopNav = () => {
   const [showDropDownMenu, setShowDropDownMenu] = useState(false);
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [showNotificationBox, setShowNotificationBox] = useState(false);
   const [notifications, setNotifications] = useState({
     seen: null,
     unseen: null,
@@ -86,7 +87,6 @@ const LoggedInTopNav = () => {
     count1: 0,
     count2: 0,
   });
-
 
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const selectedmembers = members?.find(
@@ -203,7 +203,7 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
- 
+
 
   return (
     <>
@@ -226,25 +226,29 @@ const LoggedInTopNav = () => {
               <></>
             )}
 
+            {/* Notifications Dropdown Menu */}
             <div
               ref={notificationDropDownRef}
               className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                 showNotificationModal ? "scale-100 pointer-events-auto" : ""
               } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[34px] px-[16px] pb-[20px] flex flex-col`}
             >
-            
+          
+              {/* Content */}
               <div className="mt-[18px] h-full overflow-hidden">
                 <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
                   {notifications?.unseen?.map((notification) => {
                     return (
-                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f5a2cc] rounded-[10px]">
-                      <div className="flex items-center gap-[17px]">
-                        <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                          <BellIcon style={{ fill: "#FB397F" }} />
+                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f6adc6] rounded-[10px]">
+                        <div className="flex items-center gap-[17px]">
+                          <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
+                           <BellIcon style={{ fill: "#FB397F" }} />
+                          </div>
+                          <p className="text-[#031124]">
+                            {notification.message}
+                          </p>
                         </div>
-                        <p className="text-[#031124]">{notification.message}</p>
                       </div>
-                    </div>
                     );
                   })}
                   {notifications?.seen?.map((notification) => {
@@ -252,10 +256,10 @@ const LoggedInTopNav = () => {
                       <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                            <BellIcon style={{ fill: "black" }} />
+                           <BellIcon style={{ fill: "black" }} />
                           </div>
                           <p className="text-[#031124]">
-                            {notification?.message}
+                            {notification.message}
                           </p>
                         </div>
                       </div>
@@ -377,10 +381,11 @@ const LoggedInTopNav = () => {
         </div>
       </div>
 
-    
+   
     </>
   );
 };
+
 
 
 export default TopNav;

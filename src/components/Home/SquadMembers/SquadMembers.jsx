@@ -8,26 +8,22 @@ import { useEffect } from "react";
 import AddMembers from "./Modals/AddMembers";
 import { toast } from "react-toastify";
 import { getAvatarUrl } from "../../../util/getAvatarUrl";
-import avatar from "../../../assets/profile_circle.svg"
+import avatar from "../../../assets/profile_circle.svg";
 import axios from "axios";
 import { get_my_profile } from "../../../api/auth";
 
-
-const SquadMembers =({ showType, selectedSpace }) => {
+const SquadMembers = ({ showType, selectedSpace }) => {
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [members, setMembers] = useState([]);
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  
-  
 
   const getUser = JSON.parse(localStorage.getItem("userId"));
 
   const fetchSquadMembers = async () => {
     try {
       const { data } = await get_space_members(selectedSpace?._id);
-      console.log(selectedSpace?._id)
+      console.log(selectedSpace?._id);
 
       setMembers(data?.members);
     } catch (err) {
@@ -57,11 +53,9 @@ const SquadMembers =({ showType, selectedSpace }) => {
       fetchSquadMembers();
     }
   }, [selectedSpace]);
- 
+
   const userRole = members?.find((m) => m._id === userInfo._id);
 
-  
- 
   return (
     <>
       {/* {showType === 'grid' ? (
@@ -126,30 +120,43 @@ const SquadMembers =({ showType, selectedSpace }) => {
       <div className="overflow-y-scroll  h-[90%] no-scrollbar custom-shadow bg-[#ECECEC80] py-10 px-2 rounded-2xl">
         <div className="flex  flex-col items-center gap-[10px]">
           {members.map((member) => {
-            
             return (
-              <div key={member._id} className="relative w-full h-[75px] rounded-[16px]  bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]">
-                {(userRole?.role === 'admin' || userRole?.role === 'manager') && (
-                   
-                      <>
-                        
-                        <div
-                                              onClick={() =>
-                                                  removeMember(member)
-                                              }
-                                              className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer mt-5"
-                                          >
-                                              <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
-                                          </div>
-                      </>
-                    )
-                 }
+              <div
+                key={member._id}
+                className="relative w-full h-[75px] rounded-[16px]  bg-[#FFF] cursor-pointer flex items-center gap-[13px] justify-between border px-[13px]"
+              >
+                {
+                 ( userRole?.role === "admin" ||
+                  userRole?.role === "manager"  )&&<>
+                   {
+                 ( userInfo?._id !== member?._id  ) &&  (
+                    <div
+                      onClick={() =>
+                        removeMember(member)
+                      }
+                      className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer mt-5"
+                    >
+                      <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                    </div>
+                  )
+                }
+                  </>
+                }
+               
+                {/* {(userRole?.role === "admin" ||
+                  userRole?.role === "manager") && (
+                  <>
+                    <div
+                      onClick={() => removeMember(member)}
+                      className="absolute top-[10px] right-[10px] w-[16px] h-[16px] rounded-full bg-[#FF365940] flex items-center justify-center cursor-pointer mt-5"
+                    >
+                      <div className="bg-[#FF3659] w-[7px] h-[1.25px]"></div>
+                    </div>
+                  </>
+                )} */}
                 <div className="flex items-center gap-[10px]">
                   <img
-                    src={
-                      member?.avatar ? member?.avatar:
-                      avatar
-                    }
+                    src={member?.avatar ? member?.avatar : avatar}
                     alt=""
                     className="w-[50px] h-[50px] object-cover rounded-full"
                   />
@@ -157,12 +164,14 @@ const SquadMembers =({ showType, selectedSpace }) => {
                     <h2 className="text-[#424D5B] font-semibold">
                       {member?.fullName}
                     </h2>
-                    <p className="text-[#818892] text-[14px]">{member?.email}</p>
+                    <p className="text-[#818892] text-[14px]">
+                      {member?.email}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-[16px]">
                   {/* <p className="text-[#818892]">{member?.designation}</p>
-                  */}
+                   */}
                 </div>
               </div>
             );
