@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate,  } from "react-router-dom";
 import LogoIcon from "../../assets/squad_logo.png";
 import NotificationIcon from "../../assets/notification.svg";
 import ArrowDown from "../../assets/arrowdown.svg";
@@ -16,30 +16,15 @@ import {
   setSelectedSpaceId,
   setSelectedSpaceObject,
 } from "../../store/slice/space";
-import NotificationsModal from "../Modals/NotificationsModal";
-import LeftArrow from "../../assets/left_arrow.svg";
-import VerticalDots from "../../assets/vertical_dots.svg";
-import HorizontalDots from "../../assets/horizontal_dots.svg";
 import BellIcon from "../../assets/icon_component/NotificationIcon";
-import { toggleFullSidebar } from "../../store/slice/screen";
 import { get_notifications } from "../../api/notification";
 import { useRef } from "react";
-import { getAvatarUrl } from "../../util/getAvatarUrl";
-import FolderIcon from "../../assets/icon_component/Folder";
-import TaskListIcon from "../../assets/icon_component/TaskListIcon";
-import PrivateFolder from "../../assets/icon_component/PrivateFolder";
-import { BsSearch } from "react-icons/bs";
 import Search from "./search";
-const userId = JSON.parse(localStorage.getItem("userId"));
 
 const TopNav = () => {
-  // const [userInfo, setUserInfo] = useState(null);
   const [jwt, setJwt] = useState(null);
-
   useEffect(() => {
-    // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const jwt = JSON.parse(localStorage.getItem("jwt"));
-    // setUserInfo(userInfo);
     setJwt(jwt);
   }, []);
 
@@ -90,11 +75,7 @@ const LoggedInTopNav = () => {
   const selectedWorkspaceId = useSelector(
     (state) => state.workspace.selectedWorkspace
   );
-  const currentWorkspace = useSelector(
-    (state) => state.workspace.currentWorkspace
-  );
-  const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
-  const selectedSpace = useSelector((state) => state.space.selectedSpaceObj);
+
   const [showDropDownMenu, setShowDropDownMenu] = useState(false);
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
@@ -107,31 +88,12 @@ const LoggedInTopNav = () => {
     count2: 0,
   });
 
-  const isProjectScreen = useLocation().pathname.startsWith("/projects");
-  const [selectedNotificationTab, setSelectedNotificationTab] = useState("all");
-  const workspaceMembers = useSelector(
-    (state) => state.workspace.workspaceMembers
-  );
-  const [selectedMember, setSelectedMember] = useState(null);
-
-  const { participantID } = useParams();
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const selectedmembers = members?.find(
     (member) => member?.email === userInfo?.email
   );
-  const isManageWorkspaceScreen =
-    useLocation().pathname.search("manage-workspace") !== -1;
-  const isProfileScreen = useLocation().pathname.search("profile") !== -1;
   const userMenuDropDownRef = useRef();
   const notificationDropDownRef = useRef();
-  const [isDepend, setIsDepend] = useState(false);
-  useEffect(() => {
-    if (workspaceMembers) {
-      setSelectedMember(
-        workspaceMembers?.find((value) => value._id === participantID)
-      );
-    }
-  }, [workspaceMembers, participantID]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -182,7 +144,7 @@ const LoggedInTopNav = () => {
 
   useEffect(() => {
     fetchNotification();
-  }, [isDepend]);
+  }, []);
 
   const handleClickOutside = (ref, event, updateFn) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -241,10 +203,7 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
-  const NotificationTabs = {
-    all: <AllNotification notifications={notifications.seen} />,
-    unread: <UnreadNotification notifications={notifications.unseen} setIsDepend={setIsDepend} isDepend={isDepend} />,
-  };
+
 
   return (
     <>
@@ -274,60 +233,40 @@ const LoggedInTopNav = () => {
                 showNotificationModal ? "scale-100 pointer-events-auto" : ""
               } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[34px] px-[16px] pb-[20px] flex flex-col`}
             >
-              {/* Title */}
-              <div className="flex items-center justify-between">
-                <h1 className="text-[#031124] text-[20px] font-bold leading-[30px]">
-                  Notifications
-                  <span className="font-normal">
-                    ({notifications.count2 ?? 0})
-                  </span>
-                </h1>
-                {/* <div className="cursor-pointer">
-                  <img src={VerticalDots} alt="" />
-                </div> */}
-              </div>
-              {/* Tab */}
-              <div className="mt-[8px] border-b border-b-[#ECECEC]">
-                <ul className="flex items-center gap-[28px]">
-                  <li
-                    className={`text-[15px] font-medium cursor-pointer ${
-                      selectedNotificationTab === "all"
-                        ? "text-[#6576FF] border-b-2 border-[#6576FF]"
-                        : "text-[#818892]"
-                    }`}
-                    onClick={() => setSelectedNotificationTab("all")}
-                  >
-                    All
-                  </li>
-                  <li
-                    className={`text-[15px] font-medium cursor-pointer ${
-                      selectedNotificationTab === "unread"
-                        ? "text-[#6576FF] border-b-2 border-[#6576FF]"
-                        : "text-[#818892]"
-                    }`}
-                    onClick={() =>{ setSelectedNotificationTab("unread")}}
-                  >
-                    Unread
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-[16px] flex items-center justify-between">
-                {/* <p className="text-[#818892] text-[15px] font-medium">
-                  Earlier
-                </p> */}
-                {/* <p
-                  onClick={() => {
-                    setShowNotificationBox(true);
-                    setShowNotificationModal(false);
-                  }}
-                  className="text-[#6576FF] text-[15px] cursor-pointer"
-                >
-                  See All
-                </p> */}
-              </div>
+          
               {/* Content */}
               <div className="mt-[18px] h-full overflow-hidden">
-                {NotificationTabs[selectedNotificationTab]}
+                <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
+                  {notifications?.unseen?.map((notification) => {
+                    return (
+                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f6adc6] rounded-[10px]">
+                        <div className="flex items-center gap-[17px]">
+                          <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
+                           <BellIcon style={{ fill: "#FB397F" }} />
+                          </div>
+                          <p className="text-[#031124]">
+                            {notification.message}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {notifications?.seen?.map((notification) => {
+                    return (
+                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+                        <div className="flex items-center gap-[17px]">
+                          <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
+                           <BellIcon style={{ fill: "black" }} />
+                          </div>
+                          <p className="text-[#031124]">
+                            {notification.message}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+               
               </div>
             </div>
           </div>
@@ -442,133 +381,11 @@ const LoggedInTopNav = () => {
         </div>
       </div>
 
-      {showNotificationBox && (
-        <NotificationsModal
-          setShowNotificationModal={setShowNotificationBox}
-          notifications={notifications.all}
-        />
-      )}
+   
     </>
   );
 };
 
-const AllNotification = ({ notifications }) => {
-  return (
-    <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-      {notifications?.map((notification) => {
-        return (
-          <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
-            <div className="flex items-center gap-[17px]">
-              <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                <BellIcon style={{ fill: "black" }} />
-              </div>
-              <p className="text-[#031124]">{notification.message}</p>
-            </div>
-            {/* <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
-                            <img src={HorizontalDots} alt="" />
-                        </div> */}
-          </div>
-        );
-      })}
-      {/* <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
-                <div className="flex items-center gap-[17px]">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                        <BellIcon style={{ fill: "#13E5C0" }} />
-                    </div>
-                    <p className="text-[#031124]">
-                        The Deadline for UI Design is knocking at the door. Do
-                        it now. ( Deadline 18.12.2022)
-                    </p>
-                </div>
-            </div>
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
-                <div className="flex items-center gap-[17px]">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                        <BellIcon style={{ fill: "#FB397F" }} />
-                    </div>
-                    <p className="text-[#031124]">
-                        The Deadline for UI Design is knocking at the door. Do
-                        it now. ( Deadline 18.12.2022)
-                    </p>
-                </div>
-                <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
-                    <img src={HorizontalDots} alt="" />
-                </div>
-            </div>
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#F2FAFF] rounded-[10px]">
-                <div className="flex items-center gap-[14px]">
-                    <img
-                        src="https://thumbs.dreamstime.com/b/nice-to-talk-smart-person-indoor-shot-attractive-interesting-caucasian-guy-smiling-broadly-nice-to-112345489.jpg"
-                        alt=""
-                        className="w-[50px] h-[50px] object-cover rounded-full"
-                    />
-                    <p className="text-[#031124]">
-                        Mahbub Rahman added you to Make Real as a UI/UX
-                        designer.
-                    </p>
-                </div>
-            </div> */}
-    </div>
-  );
-};
-const UnreadNotification = ({ notifications ,setIsDepend,isDepend}) => {
-  return (
-    <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-      {notifications?.map((notification) => {
-        return (
-          <div onMouseOver={()=>setIsDepend(!isDepend)} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
-            <div className="flex items-center gap-[17px]">
-              <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                <BellIcon style={{ fill: "#FB397F" }} />
-              </div>
-              <p className="text-[#031124]">{notification.message}</p>
-            </div>
-            {/* <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
-                            <img src={HorizontalDots} alt="" />
-                        </div> */}
-          </div>
-        );
-      })}
-      {/* <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#F2FAFF] rounded-[10px]">
-                <div className="flex items-center gap-[14px]">
-                    <img
-                        src="https://thumbs.dreamstime.com/b/nice-to-talk-smart-person-indoor-shot-attractive-interesting-caucasian-guy-smiling-broadly-nice-to-112345489.jpg"
-                        alt=""
-                        className="w-[50px] h-[50px] object-cover rounded-full"
-                    />
-                    <p className="text-[#031124]">
-                        Mahbub Rahman added you to Make Real as a UI/UX
-                        designer.
-                    </p>
-                </div>
-            </div>
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#FFEBF2] rounded-[10px]">
-                <div className="flex items-center gap-[17px]">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                        <BellIcon style={{ fill: "#FB397F" }} />
-                    </div>
-                    <p className="text-[#031124]">
-                        The Deadline for UI Design is knocking at the door. Do
-                        it now. ( Deadline 18.12.2022)
-                    </p>
-                </div>
-                <div className="w-[24px] h-[24px] shrink-0 rounded-full bg-white flex items-center justify-center absolute right-[6px] top-[7px] cursor-pointer">
-                    <img src={HorizontalDots} alt="" />
-                </div>
-            </div>
-            <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#C4FFF5] rounded-[10px]">
-                <div className="flex items-center gap-[17px]">
-                    <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                        <BellIcon style={{ fill: "#13E5C0" }} />
-                    </div>
-                    <p className="text-[#031124]">
-                        The Deadline for UI Design is knocking at the door. Do
-                        it now. ( Deadline 18.12.2022)
-                    </p>
-                </div>
-            </div> */}
-    </div>
-  );
-};
+
 
 export default TopNav;
