@@ -20,48 +20,76 @@ function generateProjectDetails(project, users) {
   return projectInfo;
 }
 
-// Function to parse task string
-const parseXMLToJSON = (xmlString) => {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const tasks = Array.from(xmlDoc.getElementsByTagName("Task")).map(
-      (taskNode) => {
-        const title = taskNode.querySelector("Title").textContent;
-        const description = taskNode.querySelector("Description").textContent;
-        
-        // Check if Assignees section exists
-        const assigneesNode = taskNode.querySelector("Assignees");
-        const assignees = assigneesNode ? Array.from(
-          assigneesNode.querySelectorAll("Assignee")
-        ).map((assigneeNode) => assigneeNode.textContent) : [];
-        
-        // Check if Checklist section exists
-        const checklistNode = taskNode.querySelector("Checklist");
-        const checklist = checklistNode ? Array.from(
-          checklistNode.querySelectorAll("SubTask")
-        ).map((subTaskNode) => subTaskNode.textContent) : [];
-        
-        const estimatedTime = taskNode.querySelector("EstimatedTime").textContent;
-        const start = taskNode.querySelector("Calendar > Start").textContent;
-        const end = taskNode.querySelector("Calendar > End").textContent;
-  
-        return {
-          Title: title,
-          Description: description,
-          Assignees: assignees,
-          Checklist: checklist,
-          EstimatedTime: estimatedTime,
-          Calendar: {
-            Start: start,
-            End: end,
-          },
-        };
+function parseInputString(inputString) {
+  // Regular expressions to match desired patterns
+  const titleRegex = /<Title>(.*?)<\/Title>/g;
+  const descriptionRegex = /<Description>(.*?)<\/Description>/g;
+  const subTaskRegex = /<SubTask>(.*?)<\/SubTask>/g;
+  const assigneeRegex = /<Assigne>(.*?)<\/Assigne>/g;
+  const timeRegex = /<Time>(.*?)<\/Time>/g;
+  const startRegex = /<Start>(.*?)<\/Start>/g;
+  const endRegex = /<End>(.*?)<\/End>/g;
+
+  // Array to store parsed objects
+  let result = [];
+
+  // Match titles
+  let titles = [...inputString.matchAll(titleRegex)];
+
+  // Iterate through each title
+  titles.forEach((titleMatch, index) => {
+    let titleObj = {};
+    titleObj.title = titleMatch[1].trim();
+
+    // Match description
+    let descriptionMatch = descriptionRegex.exec(inputString);
+    if (descriptionMatch) {
+      titleObj.description = descriptionMatch[1].trim();
+    }
+
+    // Match subtasks
+    let subTasks = [];
+    let subTaskMatch;
+    while ((subTaskMatch = subTaskRegex.exec(inputString)) !== null) {
+      subTasks.push(subTaskMatch[1].trim());
+    }
+    titleObj.checklist = { subTasks };
+
+    // Match assignees
+    let assignees = [];
+    let assigneeMatch;
+    while ((assigneeMatch = assigneeRegex.exec(inputString)) !== null) {
+      assignees.push(assigneeMatch[1].trim());
+    }
+    titleObj.assignees = assignees;
+
+    // Match time
+    let timeMatch = timeRegex.exec(inputString);
+    if (timeMatch) {
+      titleObj.time = timeMatch[1].trim();
+    }
+
+    // Match start date
+    let startMatch = startRegex.exec(inputString);
+    if (startMatch) {
+      titleObj.calendar = { start: startMatch[1].trim() };
+    }
+
+    // Match end date
+    let endMatch = endRegex.exec(inputString);
+    if (endMatch) {
+      if (!titleObj.calendar) {
+        titleObj.calendar = {};
       }
-    );
-  
-    return tasks;
-  };
-  
+      titleObj.calendar.end = endMatch[1].trim();
+    }
+
+    result.push(titleObj);
+  });
+
+  return result;
+}
+
 const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
@@ -77,6 +105,7 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
     }
 
     const userMessage = input;
+
     setInput("");
     setMessages([...messages, { text: userMessage, sender: "user" }]);
 
@@ -104,19 +133,24 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
                 Solutions/description (Based on the task)  should be straight forward and short. You will describe the work to the team.
                 You can assign multiple person to a task if needed.
                 Please make sure to use easy to understand and simple english.
-                Provide all the responses on template. Here’s a guide.<Title> Plain Text. Short </Title>
-                <Description> Description/Solution: </Description>
-                <Checklist>Checklist/SubTask: </Checklist>
+                Provide all the responses on template. Here’s a guide.
+                
+                <Title>Short</Title>
+                <Description> Description/Solution</Description>
+                <Checklist>
+                  <SubTask>Sub task 1</SubTask>
+                  <SubTask>Sub task 2</SubTask>
+                  <SubTask>Sub task 3</SubTask>
+                </Checklist>
                 <Assignes>
-                <Assigne “Assigne 1” />
-                <Assigne “Assigne 2" />
-                </Assigne>
-                <Time>Estimated Time: In hours.</Time>
+                  <Assigne>Assigne 1</Assigne>
+                  <Assigne>Assigne 2</Assigne>
+                </Assignes>
+                <Time>Estimated Time In hours</Time>
                 <Calendar>
-                <Start “Start Date” />
-                <End “End Date” />
-                 </Calendar>
-
+                  <Start>Start Date</Start>
+                  <End>End Date</End>
+                </Calendar>
                 `,
             },
             {
@@ -135,20 +169,18 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
       );
 
       const gptResponse = response.data.choices[0].message.content;
-      setA(gptResponse);
-      const parsedData = parseXMLToJSON(gptResponse); // Parse the XML response
-      console.log("lates Task Data:", parsedData)
-      if (gptResponse!==null) {
-        const d = parseXMLToJSON(`${a}`);
-        console.log("d", d);
-        const dddd = parseXMLToJSON(gptResponse);
-        console.log("d", dddd);
-      }
-      console.log("gptResponse", gptResponse);
+
+      console.log("------------------------");
+      console.log(gptResponse);
+      console.log("------------------------");
+      console.log("parseInputString", parseInputString(gptResponse));
+      console.log("------------------------");
+
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: gptResponse, sender: "gpt" },
       ]);
+
       setMsg(messages);
     } catch (error) {
       console.log(error);
@@ -158,12 +190,6 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
   // Access the last message
   const lastMessage = messages[messages.length - 1];
   const textOfLastMessage = lastMessage?.text;
-
-  // Parse the tasks from the last message
-  const data = parseXMLToJSON(`${a}`);
-
-  console.log("Parsed Task Data:", data);
-  // Sample response string
 
   return (
     <>
