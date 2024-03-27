@@ -51,7 +51,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          dispatch(getAllListCards(squadId)).then((c)=>console.log(c))
+          dispatch(getAllListCards(squadId))
         }
       } catch (error) {
         console.log(error);
