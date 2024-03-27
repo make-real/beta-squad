@@ -117,7 +117,8 @@ const AIMessageBox = ({
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
-
+console.log('first',listId)
+console.log('ff',selectedSpace)
   const sendMessage = async () => {
     setLoading(true);
     if (input === "") {
@@ -274,7 +275,7 @@ const AIMessageBox = ({
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
           <div className="w-full h-full flex  justify-center align-middle">
-            <div className="w-full flex items-stretch justify-between relative   bg-white rounded-t-[20px] px-3">
+            <div className="w-full flex items-stretch justify-between relative font-inter  bg-white rounded-t-[20px] px-3">
               <MentionsInput
                 value={input}
                 placeholder="Write message"
@@ -285,7 +286,7 @@ const AIMessageBox = ({
                 //   }
                 classNames={classNames}
                 customSuggestionsContainer={(children) => (
-                  <div className="bg-white absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">
+                  <div className="bg-white font-inter absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">
                     {children}
                   </div>
                 )}
