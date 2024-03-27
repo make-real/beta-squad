@@ -191,7 +191,7 @@ console.log('ff',selectedSpace)
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
-      console.log(updateData);
+      console.log('updateData', updateData);
       setTasks(updateData);
       const promises = updateData.map((task) => {
         const assigneeIds = task?.assignees.map((assigneeName) => {
@@ -206,7 +206,7 @@ console.log('ff',selectedSpace)
           description: task.description,
           startDate: task.calendar.start,
           endDate: task.calendar.end,
-          assignUser: assigneeIds,
+          assignUser: members ? assigneeIds : [],
           checkList: task.checklist.subTasks,
         };
 
@@ -221,7 +221,7 @@ console.log('ff',selectedSpace)
 
       Promise.all(promises)
         .then((responses) => {
-          console.log(responses);
+          console.log('responses', responses);
           setLoading(false);
           setReload(!reload);
         })
