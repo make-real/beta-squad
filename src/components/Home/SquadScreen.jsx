@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
-import { get_space_members, remove_space_members } from "../../api/space";
+import { get_space_members,  } from "../../api/space";
 import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
 import {
@@ -35,7 +35,6 @@ import avatar from "../../../src/assets/profile_circle.svg"
 
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
-  console.log('selectedSpace',selectedSpace)
   const { showModal, setShowModal } = useCommingSoonContext();
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
@@ -44,6 +43,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
+  const [reload,setReload]=useState(false)
   const dispatch = useDispatch()
 
 
@@ -59,6 +59,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [tags, setTags] = useState([]);
   const [TabsName, setTabsName] = useState(["All"]);
 ;
+const filteredLists = useSelector((state)=>state?.cardsLists?.filterBoardLists)
 
   const [members, setMembers] = useState([]);
 
@@ -71,7 +72,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   },[selectTagId,dispatch])
    
 
- 
 
   // const handleBoardListCreation = async (squadId, text) => {
   //   const listObject = { name: text };
@@ -138,8 +138,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       setSelectedTab("All");
     }
   }, []);
-console.log("members",members)
-console.log('selectedSpace',selectedSpace)
+
   // useEffect(() => {
   //   if (selectedTab === "All") {
   //     filterBoardList("All");
@@ -165,10 +164,11 @@ console.log('selectedSpace',selectedSpace)
   const addBoardRef = React.useRef();
 
   const TabsScreen = {
-    messages: <Chat selectedSpace={selectedSpace} members={members}/>,
+    messages: <Chat selectedSpace={selectedSpace} members={members} reload={reload} setReload={setReload} listId={filteredLists[0]}/>,
     file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,
     board: (
       <Board
+      reload={reload}
         selectedSpaceId={workspace_id}
         showType={showType}
         addBoardRef={addBoardRef}

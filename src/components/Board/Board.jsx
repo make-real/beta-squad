@@ -20,7 +20,7 @@ import { getAllListCards } from "../../api/board";
 import { setFilterListBoard, testReducer } from "../../store/slice/allboard";
 import { useAppStateContext } from "../../context/FeatureContext";
 
-const Board = ({ showType, addBoardRef }) => {
+const Board = ({ showType, addBoardRef,reload }) => {
   const { squadId } = useParams();
 
   const {
@@ -47,7 +47,6 @@ const Board = ({ showType, addBoardRef }) => {
   // }
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +58,7 @@ const Board = ({ showType, addBoardRef }) => {
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend]);   
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend,reload]);   
 
 useEffect(()=>{
   const filterList = () => {
@@ -117,7 +116,7 @@ useEffect(()=>{
     dispatch(setFilterListBoard(new_list))
   };
   filterList()
-},[dispatch, lists, selectedTab,isDepend])
+},[dispatch, lists, selectedTab,isDepend,reload])
 
 
 
@@ -244,7 +243,6 @@ useEffect(()=>{
     });
     return boardCopy;
   };
-console.log(filteredLists)
   return (
     <section
       className={`duration-200 overflow-y-auto  customScroll w-full max-h-full`}

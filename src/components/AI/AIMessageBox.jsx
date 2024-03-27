@@ -1,12 +1,24 @@
-import { useEffect, useState, useRef } from "react";
-import { get_mentionable_users } from "../../api/message";
+import { useState, useRef } from "react";
+import { createAiCard } from "../../api/board";
 import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "../../components/Chat/mention.module.css";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+const today = new Date();
+const options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+const formattedDate = `Today’s Date - ${today.toLocaleDateString(
+  "en-GB",
+  options
+)}`;
 
+console.log(formattedDate);
 // Function to generate project details
 function generateProjectDetails(project, users) {
   let projectInfo = `Project Name: ${project.name}\n`;
@@ -90,25 +102,32 @@ function parseInputString(inputString) {
   return result;
 }
 
-const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
+const AIMessageBox = ({
+  selectedSpace,
+  setMsg,
+  members,
+  listId,
+  reload,
+  setReload,
+}) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const inputRef = useRef();
-  const [a, setA] = useState(null);
-
+  const [tasks, setTasks] = useState([]); // State to store tasks
+  const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
 
   const sendMessage = async () => {
+    setLoading(true);
     if (input === "") {
       return;
     }
 
-    const userMessage = input;
+    const userMessage = `${formattedDate} ${input}`;
 
     setInput("");
     setMessages([...messages, { text: userMessage, sender: "user" }]);
-
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -170,11 +189,47 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
 
       const gptResponse = response.data.choices[0].message.content;
 
-      console.log("------------------------");
-      console.log(gptResponse);
-      console.log("------------------------");
-      console.log("parseInputString", parseInputString(gptResponse));
-      console.log("------------------------");
+      const updateData = parseInputString(gptResponse);
+      console.log(updateData);
+      setTasks(updateData);
+      const promises = updateData.map((task) => {
+        const assigneeIds = task?.assignees.map((assigneeName) => {
+          const member = members?.find(
+            (member) => member?.fullName === assigneeName
+          );
+          return member?._id;
+        });
+
+        const taskData = {
+          name: task.title,
+          description: task.description,
+          startDate: task.calendar.start,
+          endDate: task.calendar.end,
+          assignUser: assigneeIds,
+          checkList: task.checklist.subTasks,
+        };
+
+        return dispatch(
+          createAiCard({
+            spaceId: selectedSpace?._id,
+            listId: listId?._id,
+            data: taskData,
+          })
+        );
+      });
+
+      Promise.all(promises)
+        .then((responses) => {
+          console.log(responses);
+          setLoading(false);
+          setReload(!reload);
+        })
+        .catch((error) => {
+          console.error("Error creating AI cards:", error);
+          setLoading(false);
+          setReload(!reload);
+
+        });
 
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -184,13 +239,11 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
       setMsg(messages);
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      setReload(!reload);
+
     }
   };
-
-  // Access the last message
-  const lastMessage = messages[messages.length - 1];
-  const textOfLastMessage = lastMessage?.text;
-
   return (
     <>
       <div
@@ -265,7 +318,7 @@ const AIMessageBox = ({ selectedSpace, setMsg, members }) => {
               className="bg-[#6576ff] rounded-[10px] text-white py-1 px-4 flex items-center gap-2"
             >
               <FaRegCirclePlay />
-              Run
+              {loading ? "Creating Card" : "Run"}
             </button>
           </div>
         </div>
