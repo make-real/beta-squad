@@ -17,6 +17,8 @@ import ConfirmDialog from "./ConfirmDialog";
 import AssigneeUser from "../AssigneeUser/AssigneeUser";
 import CardTags from "./CardTags";
 import Button from "../Button";
+import { MdOutlineWatchLater } from "react-icons/md";
+
 // import CardProgress from './CardProgress';
 // import Editor from '../Editor';
 // import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
@@ -458,10 +460,10 @@ const onEdit = (val) => {
                 </p>
               )}
             </div>
+            <p className=" px-2 py-2 text-center rounded-lg flex gap-1 items-center  text-sm text-[#3699E0] bg-[#EDF7FF] "> <MdOutlineWatchLater className="text-sm" /> <span> Estimate Time:  {localCard?.estimatedTime}</span></p>
 
             <div className="flex items-center space-x-5 relative">
               {/* date */}
-              <p className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] ">Estimate Time: </p>
 
               <div className="ml-3 relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400">
                 <Dropdown
