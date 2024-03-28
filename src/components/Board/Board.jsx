@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { getAllListCards } from "../../api/board";
 import { setFilterListBoard, testReducer } from "../../store/slice/allboard";
 import { useAppStateContext } from "../../context/FeatureContext";
+import emptyIcon from "../../assets/empty.png";
 
 const Board = ({ showType, addBoardRef }) => {
   const { squadId } = useParams();
@@ -32,13 +33,15 @@ const Board = ({ showType, addBoardRef }) => {
     // filteredLists,
     setFilteredLists,
   } = useBoardCardContext();
-  const [isDepend,setIsDepend]=useState(false)
+  const [isDepend, setIsDepend] = useState(false);
   const { filter } = useSelector((state) => state.board);
   const lists = useSelector((state) => state?.cardsLists?.data?.lists);
   const seletedTagId = useSelector((state) => state?.TagId?.selectTagId);
-  const filteredLists = useSelector((state)=>state?.cardsLists?.filterBoardLists)
-  const IsDispatch = useSelector((state)=>state?.cardsLists?.IsDispatch)
-  const { selectedTab } =useAppStateContext();
+  const filteredLists = useSelector(
+    (state) => state?.cardsLists?.filterBoardLists
+  );
+  const IsDispatch = useSelector((state) => state?.cardsLists?.IsDispatch);
+  const { selectedTab } = useAppStateContext();
   // let filter_tag;
   // if (seletedTagId.name) {
   //   filter_tag = seletedTagId.name;
@@ -52,74 +55,70 @@ const Board = ({ showType, addBoardRef }) => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          dispatch(getAllListCards(squadId)).then((c)=>console.log(c))
+          dispatch(getAllListCards(squadId)).then((c) => console.log(c));
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend]);   
+  }, [squadId, setBoardList, dispatch, setFilteredLists, IsDispatch, isDepend]);
 
-useEffect(()=>{
-  const filterList = () => {
-    
-    let new_list = [];
-    if (selectedTab === "Done") {
-      lists?.map((board) => {
-        let cards = [];
-        board.cards.forEach((card) => {
-          if (card.progress === 4) {
-            cards.push(card);
+  useEffect(() => {
+    const filterList = () => {
+      let new_list = [];
+      if (selectedTab === "Done") {
+        lists?.map((board) => {
+          let cards = [];
+          board.cards.forEach((card) => {
+            if (card.progress === 4) {
+              cards.push(card);
+            }
+          });
+          if (cards.length) {
+            let new_board = { ...board, cards };
+            new_list.push(new_board);
           }
         });
-        if (cards.length) {
+        dispatch(setFilterListBoard(new_list));
+        return;
+      }
+      if (selectedTab === "All") {
+        lists?.map((board) => {
+          let cards = [];
+          board.cards.forEach((card) => {
+            if (card.progress !== 4) {
+              cards.push(card);
+            }
+          });
           let new_board = { ...board, cards };
           new_list.push(new_board);
-        }
-      });
-      dispatch(setFilterListBoard(new_list))
-      return;
-    }
-    if (selectedTab === "All") {
-      lists?.map((board) => {
+        });
+        dispatch(setFilterListBoard(new_list));
+        return;
+      }
+
+      lists.map((board) => {
         let cards = [];
         board.cards.forEach((card) => {
-          if (card.progress !== 4) {
-            cards.push(card);
-          }
+          card.tags.forEach((tag) => {
+            if (selectedTab === "All" && card.progress !== 4) {
+              cards.push(card);
+            }
+            if (tag.name === selectedTab && card.progress !== 4) {
+              cards.push(card);
+            }
+          });
         });
+
         let new_board = { ...board, cards };
         new_list.push(new_board);
       });
-      dispatch(setFilterListBoard(new_list))
-      return;
-    }
 
-
-    lists.map((board) => {
-      let cards = [];
-      board.cards.forEach((card) => {
-        card.tags.forEach((tag) => {
-          if (selectedTab === "All" && card.progress !== 4) {
-            cards.push(card);
-          }
-          if (tag.name === selectedTab && card.progress !== 4) {
-            cards.push(card);
-          }
-        });
-      });
-
-      let new_board = { ...board, cards };
-        new_list.push(new_board);
-    });
-
-    dispatch(setFilterListBoard(new_list))
-  };
-  filterList()
-},[dispatch, lists, selectedTab,isDepend])
-
-
+      dispatch(setFilterListBoard(new_list));
+    };
+    filterList();
+  }, [dispatch, lists, selectedTab, isDepend]);
 
   const [listLoading, setListLoading] = useState(false);
   const handleBoardListCreation = async (squadId, text) => {
@@ -130,7 +129,7 @@ useEffect(()=>{
       const { data } = await addBoardListApiCall(squadId, listObject);
       setListLoading(false);
       // addBoardList(data.list);
-     setIsDepend(!isDepend)
+      setIsDepend(!isDepend);
       toast.success(`${data?.list?.name} - list create successfully`, {
         autoClose: 3000,
       });
@@ -145,7 +144,7 @@ useEffect(()=>{
 
   const dragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-    console.log(result)
+    console.log(result);
 
     try {
       handleDragEnd(
@@ -166,7 +165,7 @@ useEffect(()=>{
           draggableId,
           Number(destination.index) + 1
         );
-        setIsDepend(!isDepend)
+        setIsDepend(!isDepend);
       } else if (destination.droppableId === source.droppableId) {
         await updateCardOrder(
           squadId,
@@ -174,8 +173,7 @@ useEffect(()=>{
           draggableId,
           Number(destination.index) + 1
         );
-        setIsDepend(!isDepend)
-
+        setIsDepend(!isDepend);
       } else {
         await moveCard(
           squadId,
@@ -184,8 +182,7 @@ useEffect(()=>{
           destination.droppableId,
           Number(destination.index) + 1
         );
-        setIsDepend(!isDepend)
-
+        setIsDepend(!isDepend);
       }
     } catch (error) {
       console.log(error);
@@ -244,7 +241,7 @@ useEffect(()=>{
     });
     return boardCopy;
   };
-console.log(filteredLists)
+  console.log(filteredLists);
   return (
     <section
       className={`duration-200 overflow-y-auto  customScroll w-full h-full`}
@@ -264,18 +261,32 @@ console.log(filteredLists)
                     ref={provided.innerRef}
                     className="flex items-start max-h-full"
                   >
-                    {filteredLists.length === 0
-                      ? <><div style={{width:"300px"}} className=" text-center rounded-xl md:mx-[250px] py-3 px-5 lg:mx-[300px] xl:mx-[350px] mt-36 bg-[#f7f7f7]">Currently, Empty Board!</div></>
-                      : filterdBoardList()?.map((boardList, index) => (
-                          <BoardList
-                            showType={showType}
-                            key={boardList?._id}
-                            boardList={boardList}
-                            listIndex={index}
-                            isDepend={isDepend}
-                            setIsDepend={setIsDepend}
+                    {filteredLists.length === 0 ? (
+                      <>
+                        <div
+                          style={{ width: "300px" }}
+                          className=" text-center rounded-xl md:mx-[250px] py-3 px-5 lg:mx-[300px] xl:mx-[350px] mt-32 bg-[#f7f7f7]"
+                        >
+                          <img
+                            className="w-[100px] h-[100px] mx-auto"
+                            src={emptyIcon}
+                            alt=""
                           />
-                        ))}
+                          <p className="text-lg text-center font-medium mt-2">No cards are available at present.</p>
+                        </div>
+                      </>
+                    ) : (
+                      filterdBoardList()?.map((boardList, index) => (
+                        <BoardList
+                          showType={showType}
+                          key={boardList?._id}
+                          boardList={boardList}
+                          listIndex={index}
+                          isDepend={isDepend}
+                          setIsDepend={setIsDepend}
+                        />
+                      ))
+                    )}
                     {provided.placeholder}
                   </div>
                 )}
@@ -321,18 +332,6 @@ console.log(filteredLists)
                 )}
               </Droppable>
             </DragDropContext>
-
-            {/*  + Add a list | Button UI */}
-            {/* {addBoard && (
-              <AddBtn
-                loading={listLoading}
-                showType={showType}
-                placeHolder="Add list name..."
-                btnText="list"
-                onSubmit={(text) => handleBoardListCreation(squadId, text)}
-              />
-              
-            )} */}
           </div>
         )
       ) : (

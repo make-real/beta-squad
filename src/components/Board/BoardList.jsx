@@ -139,9 +139,8 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className="flex flex-col items-center gap-3 over customScroll  pt-2"
-                style={{ maxHeight: "400px" }} // Adjust the max height as needed
+               
               >
-                {/* Draggable Elements */}
                 {boardList?.cards.map((card, index) => (
                   <Draggable
                     key={card._id}
