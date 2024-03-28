@@ -55,9 +55,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const navigate = useNavigate();
   const { margin } = useStyleContext();
 
-  const [localCard, setLocalCard] = useState({})
-  const [data, setData] = useState({})
-  
+  const [localCard, setLocalCard] = useState({});
+  const [data, setData] = useState({});
 
   const [noteDone, setNoteDone] = useState(false);
   const [progress, setProgress] = useState(localCard?.progress);
@@ -92,11 +91,11 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
   const [showChat, setShowChat] = useState(false);
 
   const getCard = async () => {
-    const { data } = await getSingleCard(workspace_id, listID, id,);
+    const { data } = await getSingleCard(workspace_id, listID, id);
     setLocalCard(data?.card);
   };
 
-    // if chat needs to activate this also needs to activate
+  // if chat needs to activate this also needs to activate
 
   useEffect(() => {
     getCard().then(() => {
@@ -146,19 +145,16 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     // }
   };
 
-
-  const debounceFn = debounce(handleDebounceFn, 1000)
+  const debounceFn = debounce(handleDebounceFn, 1000);
   function handleDebounceFn(val) {
     setLocalCard((pre) => ({
       ...pre,
-      description:val,
+      description: val,
     }));
-}
-const onEdit = (val) => {
-    
-  debounceFn(val)
-}
-
+  }
+  const onEdit = (val) => {
+    debounceFn(val);
+  };
 
   const handle_card_description_update_enter_btn = async (e) => {
     // if (e.key === 'Enter' && !e.shiftKey) {
@@ -357,15 +353,14 @@ const onEdit = (val) => {
   const checked = localCard?.checkList?.filter((item) => item?.checked);
   const unchecked = localCard?.checkList?.filter((item) => !item?.checked);
 
-
-  if(localCard.color){
+  if (localCard.color) {
     const hexToRgb = (hex) => {
       const r = parseInt(hex.substring(1, 3), 16);
       const g = parseInt(hex.substring(3, 5), 16);
       const b = parseInt(hex.substring(5, 7), 16);
       return [r, g, b];
-    }
-  
+    };
+
     const rgb = hexToRgb(localCard?.color);
     const averageRgb = (rgb) => {
       const r = rgb[0];
@@ -374,12 +369,8 @@ const onEdit = (val) => {
       return (r + g + b) / 3;
     };
     const average = averageRgb(rgb);
-     var isDark = average > 100;
-     
+    var isDark = average > 100;
   }
-
-
-
 
   if (!localCard) {
     return (
@@ -393,7 +384,7 @@ const onEdit = (val) => {
     );
   }
 
- console.log(localCard)
+  console.log(localCard);
 
   return (
     <React.Fragment>
@@ -404,12 +395,16 @@ const onEdit = (val) => {
         {/* <div className="pt-[85px] px-4 flex gap-3 items-start  min-w-fit h-[98vh]"> */}
 
         <div className="relative bg-white p-8 rounded-2xl h-full">
-         {localCard &&  <span
-            className={`absolute top-0 left-0 px-3 py-[3px] text-sm rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[16px]  
-            ${isDark ? 'text-black' : 'text-white'}`}
-            style={{ backgroundColor: localCard?.color }}
-          > {localCard.cardKey}</span>
-}
+          {localCard && (
+            <span
+              className={`absolute top-0 left-0 px-3 py-[3px] text-sm rounded-tl-[16px] rounded-bl-[0px] rounded-tr-[0px] rounded-br-[16px]  
+            ${isDark ? "text-black" : "text-white"}`}
+              style={{ backgroundColor: localCard?.color }}
+            >
+              {" "}
+              {localCard.cardKey}
+            </span>
+          )}
           <div className="flex items-center justify-between pb-4 px-1">
             {/* <div className="flex flex-wrap items-center pl-4 text-gray-400 text-sm">
                     <div
@@ -460,11 +455,16 @@ const onEdit = (val) => {
                 </p>
               )}
             </div>
-          
 
             <div className="flex items-center space-x-5 relative">
               {/* date */}
-              <p className=" px-2 py-2 text-center rounded-lg flex gap-1 items-center  text-sm text-[#3699E0] bg-[#EDF7FF] "> <MdOutlineWatchLater className="text-sm" /> <span>   {localCard?.estimatedTime}</span></p>
+              {localCard?.estimatedTime && (
+                <p className=" px-2 py-2 text-center rounded-lg flex gap-1 items-center  text-sm text-[#3699E0] bg-[#EDF7FF] ">
+                  {" "}
+                  <MdOutlineWatchLater className="text-sm" />{" "}
+                  <span> {localCard?.estimatedTime}</span>
+                </p>
+              )}
               <div className="ml-3 relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400">
                 <Dropdown
                   width={350}
@@ -495,9 +495,8 @@ const onEdit = (val) => {
                   )}
                 />
               </div>
-              
-              {/* chat disabled from here  */}
 
+              {/* chat disabled from here  */}
 
               {/* chat */}
               <div
@@ -681,15 +680,13 @@ const onEdit = (val) => {
                   <div className="py-2 w-fit text-gray-400  group">
                     <p className="text-[14px] text-[#818892]">Description</p>
                   </div>
-                 
-                    <RichTextEditor
+
+                  <RichTextEditor
                     value={localCard.description}
                     onChange={onEdit}
-                    onBlur={(e) =>
-                      handle_card_description_update_enter_btn(e)
-                    }
-                    ></RichTextEditor>
-                 
+                    onBlur={(e) => handle_card_description_update_enter_btn(e)}
+                  ></RichTextEditor>
+
                   {/* <input
                                     type="text"
                                     className="w-full p-3 outline-none border rounded-md text-teal-500 font-bold bg-gray-50"
@@ -758,10 +755,8 @@ const onEdit = (val) => {
                               }
                             />
                           </label>
- 
 
-            {/* There is a issue */}
-
+                          {/* There is a issue */}
 
                           <input
                             type="text"
