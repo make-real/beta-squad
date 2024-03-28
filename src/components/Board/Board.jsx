@@ -247,7 +247,7 @@ useEffect(()=>{
 console.log(filteredLists)
   return (
     <section
-      className={`duration-200 overflow-y-auto  customScroll w-full max-h-full`}
+      className={`duration-200 overflow-y-auto  customScroll w-full h-full`}
     >
       {squadId ? (
         showType === "grid" ? (
@@ -265,7 +265,7 @@ console.log(filteredLists)
                     className="flex items-start max-h-full"
                   >
                     {filteredLists.length === 0
-                      ? "Currently, Empty Board!"
+                      ? <><div style={{width:"300px"}} className=" text-center rounded-xl md:mx-[250px] py-3 px-5 lg:mx-[300px] xl:mx-[350px] mt-36 bg-[#f7f7f7]">Currently, Empty Board!</div></>
                       : filterdBoardList()?.map((boardList, index) => (
                           <BoardList
                             showType={showType}
