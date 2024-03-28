@@ -60,7 +60,7 @@ const SquadMembers = ({
   };
 
   // Isuues Here
-
+console.log('members',members)
   return (
     <>
       {showType === "grid" ? (
@@ -74,12 +74,21 @@ const SquadMembers = ({
                         </div>
                     </div> */}
           {members.map((member) => {
+              const isCurrentUserOwner = userRole?.role === "owner";
+              const isMemberOwner = member.role === "owner";
+            
+              // Only show EditDeleteMenu if:
+              // - Current user is owner AND member is not the owner OR
+              // - Current user is admin
+              const showEditDelete = isCurrentUserOwner && !isMemberOwner || userRole?.role === "admin";
+            console.log(member)
             return (
               <div
                 key={member._id}
                 className="relative w-[297px] h-[110px] rounded-[16px] bg-[#6576FF10] cursor-pointer px-[13px] pt-[20px]"
               >
-                { (userRole?.role === "owner" || userRole?.role === "admin" )  && (
+
+                { showEditDelete  && (
                     <>
                       {showUpdateDeleteButton[0] && (
                         <EditDeleteMenu

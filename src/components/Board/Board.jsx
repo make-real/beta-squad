@@ -282,6 +282,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
                           boardList={boardList}
                           listIndex={index}
                           isDepend={isDepend}
+                          reload={reload}
                           setIsDepend={setIsDepend}
                         />
                       ))
@@ -324,6 +325,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
                         key={boardList?._id}
                         boardList={boardList}
                         listIndex={index}
+                        reload={reload}
                       />
                     ))}
                     {provided.placeholder}

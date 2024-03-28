@@ -16,7 +16,7 @@ import {
 import { motion } from "framer-motion";
 import useCollapse from "react-collapsed";
 
-const BoardStackList = ({ showType, listIndex, boardList }) => {
+const BoardStackList = ({ showType, listIndex, boardList ,reload}) => {
   const selectedSpaceId = useSelector((state) => state.space.selectedSpace);
 
   const { addCard } = useBoardCardContext();
