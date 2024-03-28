@@ -394,7 +394,7 @@ const AIMessageBox = ({
                 onChange={(e) => setInput(e.target.value)}
                 classNames={classNames}
                 customSuggestionsContainer={(children) => (
-                  <div className="bg-white font-inter absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">
+                  <div className="bg-white font-inter absolute bottom-1 min-w-[300px] shadow-sm rounded-lg">
                     {children}
                   </div>
                 )}
