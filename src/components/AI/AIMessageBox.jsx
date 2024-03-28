@@ -367,32 +367,38 @@ const AIMessageBox = ({
                 <>
                   {dt.sender === "gpt" && (
                     <>
-                      <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                        <div>Successfully Created Card List:</div>
+                      {dt?.success?.length > 0 && (
+                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                          <div>Successfully Created Card List:</div>
 
-                        {dt?.success?.map((success, i) => (
-                          <>
-                            <div key={i}>
-                              {i + 1}. {success}
-                            </div>
-                          </>
-                        ))}
-                      </div>
+                          {dt?.success?.map((success, i) => (
+                            <>
+                              <div key={i}>
+                                {i + 1}. {success}
+                              </div>
+                            </>
+                          ))}
+                        </div>
+                      )}
                     </>
                   )}
                 </>
                 <>
                   {dt.sender === "gpt" && (
                     <>
-                      <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                        <div>UnSuccessful Created Card List:</div>
+                      {dt?.failure?.length > 0 && (
+                        <>
+                          <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                            <div>UnSuccessful Created Card List:</div>
 
-                        {dt?.failure?.map((fail, i) => (
-                          <div key={i}>
-                            {i + 1}. {fail}
+                            {dt?.failure?.map((fail, i) => (
+                              <div key={i}>
+                                {i + 1}. {fail}
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        </>
+                      )}
                     </>
                   )}
                 </>
