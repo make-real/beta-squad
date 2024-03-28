@@ -17,8 +17,6 @@ const formattedDate = `Today’s Date - ${today.toLocaleDateString(
   options
 )}`;
 
-
-
 // Function to generate project details
 function generateProjectDetails(project, users) {
   let projectInfo = `Project Name: ${project.name}\n`;
@@ -289,7 +287,7 @@ const AIMessageBox = ({
               failure: failures,
             },
           ]);
-       
+
           setLoading(false);
           setReload(!reload);
         })
@@ -304,7 +302,6 @@ const AIMessageBox = ({
       setReload(!reload);
     }
   };
-
 
   return (
     <>
@@ -321,77 +318,71 @@ const AIMessageBox = ({
           className="overflow-y-auto"
         >
           <div className="flex flex-col items-start">
-            {messages.map((dt, index) => (
-              <React.Fragment key={index}>
-                {/* Render user messages */}
-                {dt.sender === "user" && (
-                  <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                    {dt.text.split(/(\d+\.)\s*/).map((part, idx) => {
-                      // Ignore empty parts
-                      if (!part.trim()) return null;
-                      // Check if the part is a number
-                      if (idx % 2 === 1) {
-                        // Number part
-                        return (
-                          <div key={idx} className="max-w-[200px]">
-                            {part.trim()}
-                          </div>
-                        );
-                      } else {
-                        // Text part
-                        return (
-                          <div key={idx} className="max-w-[200px]">
-                            {part.trim()}
-                          </div>
-                        );
-                      }
-                    })}
-                    <span className="flex justify-end">{dt?.time}</span>
-                  </div>
-                )}
+            {messages.map((dt, index) => {
+              const lines = dt?.text.split(/\d+\./).filter(Boolean);
+              console.log(lines);
 
-                {/* Render success list */}
-
-                <>
-                  {dt.sender === "gpt" && (
-                    <>
-                      {dt?.success?.length > 0 && (
-                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                          <div>Successfully Created Card List:</div>
-
-                          {dt?.success?.map((success, i) => (
-                            <>
-                              <div key={i}>
-                                {i + 1}. {success}
-                              </div>
-                            </>
+              return (
+                <React.Fragment key={index}>
+                  {/* Render user messages */}
+                  {dt.sender === "user" && (
+                    <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
+                      {console.log("aaaaaaa", dt?.text)}
+                      <div >
+                        <h3>{lines.shift()}</h3>
+                        <ol>
+                          {lines.map((line, index) => (
+                            <li key={index}>{index+1}. {line.trim()}</li>
                           ))}
-                        </div>
-                      )}
-                    </>
+                        </ol>
+                      </div>
+                      <span className="flex justify-end">{dt?.time}</span>
+                    </div>
                   )}
-                </>
-                <>
-                  {dt.sender === "gpt" && (
-                    <>
-                      {dt?.failure?.length > 0 && (
-                        <>
-                          <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                            <div>UnSuccessful Created Card List:</div>
 
-                            {dt?.failure?.map((fail, i) => (
-                              <div key={i}>
-                                {i + 1}. {fail}
-                              </div>
+                  {/* Render success list */}
+
+                  <>
+                    {dt.sender === "gpt" && (
+                      <>
+                        {dt?.success?.length > 0 && (
+                          <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                            <div>Successfully Created Card List:</div>
+
+                            {dt?.success?.map((success, i) => (
+                              <>
+                                <div key={i}>
+                                  {i + 1}. {success}
+                                </div>
+                              </>
                             ))}
                           </div>
-                        </>
-                      )}
-                    </>
-                  )}
-                </>
-              </React.Fragment>
-            ))}
+                        )}
+                      </>
+                    )}
+                  </>
+                  <>
+                    {dt.sender === "gpt" && (
+                      <>
+                        {dt?.failure?.length > 0 && (
+                          <>
+                            <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                              <div>UnSuccessful Created Card List:</div>
+
+                              {dt?.failure?.map((fail, i) => (
+                                <div key={i}>
+                                  {i + 1}. {fail}
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
