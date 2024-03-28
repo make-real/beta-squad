@@ -301,6 +301,8 @@ const AIMessageBox = ({
       setLoading(false);
       setReload(!reload);
     }
+    setReload(!reload);
+
   };
 
   return (

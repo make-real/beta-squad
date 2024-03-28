@@ -61,7 +61,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend]);   
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend,reload]);   
 
   useEffect(() => {
     const filterList = () => {
@@ -117,7 +117,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
     dispatch(setFilterListBoard(new_list))
   };
   filterList()
-},[dispatch, lists, selectedTab,isDepend])
+},[dispatch, lists, selectedTab,isDepend,reload])
 
 
 
@@ -145,7 +145,6 @@ const Board = ({ showType, addBoardRef,reload }) => {
 
   const dragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-    console.log(result);
 
     try {
       handleDragEnd(
