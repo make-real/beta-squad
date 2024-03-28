@@ -22,15 +22,16 @@ import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
 import { MdElectricScooter } from "react-icons/md";
 import { selectTag } from "../../store/slice/TagId";
 import { calcLength } from "framer-motion";
-
 import { toast } from "react-toastify";
 import avatar from "../../../src/assets/profile_circle.svg"
+import AiIcon from "../../assets/icons/chatbot-speech-bubble.png";
+import AiIcon2 from "../../assets/icons/chatbot-speech-bubble1.png";
+import { useSelector } from "react-redux";
 
 
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   console.log('selectedSpace',selectedSpace)
-  const { showModal, setShowModal } = useCommingSoonContext();
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
   const { workspace_id } = useParams();
@@ -38,6 +39,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
   const [listLoading, setListLoading] = useState(false);
+  const [reload, setReload] = useState(false);
   const dispatch = useDispatch()
 
 
@@ -63,6 +65,10 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
      dispatch(selectTag(selectTagId))
   
   },[selectTagId,dispatch])
+
+  const filteredLists = useSelector(
+    (state) => state?.cardsLists?.filterBoardLists
+  );
    
 
  
@@ -158,7 +164,13 @@ console.log('selectedSpace',selectedSpace)
   const addBoardRef = React.useRef();
 
   const TabsScreen = {
-    messages: <Chat selectedSpace={selectedSpace} members={members}/>,
+    messages:  <Chat
+    selectedSpace={selectedSpace}
+    members={members}
+    reload={reload}
+    setReload={setReload}
+    listId={filteredLists[0]}
+  />,
     file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,
     board: (
       <Board
