@@ -79,7 +79,6 @@ const LoggedInTopNav = () => {
   const [showDropDownMenu, setShowDropDownMenu] = useState(false);
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [showNotificationBox, setShowNotificationBox] = useState(false);
   const [notifications, setNotifications] = useState({
     seen: null,
     unseen: null,
@@ -174,7 +173,6 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
-  // Auto close notification drop down menu
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -231,21 +229,23 @@ const LoggedInTopNav = () => {
               ref={notificationDropDownRef}
               className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                 showNotificationModal ? "scale-100 pointer-events-auto" : ""
-              } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[34px] px-[16px] pb-[20px] flex flex-col`}
+              } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[10px] px-[16px] pb-[20px] flex flex-col`}
             >
-          
+           <h2 className="text-xl font-semibold">
+           Notification
+           </h2>
               {/* Content */}
-              <div className="mt-[18px] h-full overflow-hidden">
+              <div className="mt-[10px] h-full overflow-hidden">
                 <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
                   {notifications?.unseen?.map((notification) => {
                     return (
-                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f6adc6] rounded-[10px]">
+                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                            <BellIcon style={{ fill: "#FB397F" }} />
                           </div>
                           <p className="text-[#031124]">
-                            {notification.message}
+                            {notification?.message}
                           </p>
                         </div>
                       </div>
@@ -259,7 +259,7 @@ const LoggedInTopNav = () => {
                            <BellIcon style={{ fill: "black" }} />
                           </div>
                           <p className="text-[#031124]">
-                            {notification.message}
+                            {notification?.message}
                           </p>
                         </div>
                       </div>
