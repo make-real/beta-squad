@@ -209,9 +209,9 @@ const AIMessageBox = ({
           endDate: task.calendar.end,
           assignUser: members ? assigneeIds : [""],
           checkList: task.checklist.subTasks,
-          estimatedTime:task.time
+          estimatedTime: task.time,
         };
-
+        console.log("first", taskData);
         return dispatch(
           createAiCard({
             spaceId: selectedSpace?._id,
@@ -294,118 +294,6 @@ const AIMessageBox = ({
           }}
           className="overflow-y-auto"
         >
-          <div className="flex  flex-col  items-end">
-            {messages
-              .filter((dt) => dt.sender === "user")
-              .map((dt, index) => (
-                <div
-                  key={index}
-                  className="bg-white px-4 text-[#818892] py-2 m-2 w-[340px]  justify-end  rounded-lg"
-                >
-                  {dt.text.split(/(\d+\.)\s*/).map((part, idx) => {
-                    // Ignore empty parts
-                    if (!part.trim()) return null;
-                    // Check if the part is a number
-                    if (idx % 2 === 1) {
-                      // Number part
-                      return (
-                        <div key={idx} className="max-w-[200px]">
-                          {part.trim()}
-                        </div>
-                      );
-                    } else {
-                      // Text part
-                      return (
-                        <div key={idx} className="max-w-[200px]">
-                          {part.trim()}
-                        </div>
-                      );
-                    }
-                  })}
-
-                  <span className="flex justify-end">5.00 am</span>
-                </div>
-              ))}
-          </div>
-          <div className="flex justify-end flex-col items-start">
-            {messages
-              .filter((dt) => dt.sender === "gpt")
-              .map((dt, index) => (
-                <div
-                  key={index}
-                  className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[340px] justify-start rounded-lg"
-                >
-                  <div>Successfully Created Card List:</div>
-                  {dt?.success?.map((success, i) => (
-                    <div key={i}>{success?.title}</div>
-                  ))}
-                </div>
-              ))}
-          </div>
-        </div>
-        <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
-          <div className="w-full h-full flex  justify-center align-middle">
-            <div className="w-full flex items-stretch justify-between relative font-inter  bg-white rounded-t-[20px] px-3">
-              <MentionsInput
-                value={input}
-                placeholder="Write message"
-                onChange={(e) => setInput(e.target.value)}
-                // singleLine={input.length >= 50 ? false : true}
-                //   onKeyDown={(e) =>
-                //     e.key === "Enter" ? sendMessage() : null
-                //   }
-                classNames={classNames}
-                customSuggestionsContainer={(children) => (
-                  <div className="bg-white font-inter absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">
-                    {children}
-                  </div>
-                )}
-                // allowSuggestionsAboveCursor={true}
-                inputRef={inputRef}
-                autoFocus
-              >
-                <Mention
-                  className={classNames.mentions__mention}
-                  trigger="@"
-                  markup="{{__id__}}"
-                  renderSuggestion={(entry) => {
-                    return (
-                      <h1
-                        className={
-                          "bg-white text-sm px-5 py-2 hover:bg-blue-500 hover:text-white border-[0.2px] border-gray-300"
-                        }
-                      >
-                        {entry.display}
-                      </h1>
-                    );
-                  }}
-                />
-              </MentionsInput>
-            </div>
-          </div>
-          <div className="flex justify-end bg-white rounded-b-[20px] px-2 py-2">
-            <button
-              onClick={sendMessage}
-              className="bg-[#6576ff] rounded-[10px] text-white py-1 px-4 flex items-center gap-2"
-            >
-              <FaRegCirclePlay />
-              {loading ? "Creating Card" : "Run"}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div
-        style={{
-          height: "97%",
-        }}
-        className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
-      >
-        <div
-          style={{
-            height: messages?.length ? "400px" : "400px",
-          }}
-          className="overflow-y-auto"
-        >
           <div className="flex flex-col items-start">
             {messages.map((dt, index) => (
               <React.Fragment key={index}>
@@ -445,7 +333,9 @@ const AIMessageBox = ({
                         <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
                           <div>Successfully Created Card List:</div>
 
-                          <div key={i}>{success?.title}</div>
+                          <div key={i}>
+                            {i + 1}. {success?.title}
+                          </div>
                         </div>
                       ))}
                     </>
@@ -456,7 +346,9 @@ const AIMessageBox = ({
                     <>
                       {dt?.failure?.map((fail, i) => (
                         <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                          <div key={i}>{fail}</div>
+                          <div>UnSuccessful Created Card List:</div>
+
+                          <div key={i}>{i+1}. {fail}</div>
                         </div>
                       ))}
                     </>

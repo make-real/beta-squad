@@ -391,7 +391,7 @@ const onEdit = (val) => {
     );
   }
 
- 
+ console.log(localCard)
 
   return (
     <React.Fragment>
@@ -461,6 +461,8 @@ const onEdit = (val) => {
 
             <div className="flex items-center space-x-5 relative">
               {/* date */}
+              <p className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] ">Estimate Time: </p>
+
               <div className="ml-3 relative flex items-center space-x-2 cursor-pointer hover:bg-gray-200 hover:text-teal-500 duration-200 rounded-lg text-gray-400">
                 <Dropdown
                   width={350}
