@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createAiCard } from "../../api/board";
-import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "../../components/Chat/mention.module.css";
 import { FaRegCirclePlay } from "react-icons/fa6";
@@ -18,12 +17,7 @@ const formattedDate = `Today’s Date - ${today.toLocaleDateString(
   options
 )}`;
 
-console.log(today);
-const time = today.toLocaleTimeString("en-US", {
-  hour12: true,
-  hour: "2-digit",
-  minute: "2-digit",
-});
+
 
 // Function to generate project details
 function generateProjectDetails(project, users) {
@@ -122,7 +116,6 @@ const AIMessageBox = ({
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
-  const [successList, setSuccessList] = useState([]);
   const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
@@ -229,7 +222,6 @@ const AIMessageBox = ({
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
-      console.log("updateData", updateData);
       setTasks(updateData);
 
       // Changes start here
@@ -250,7 +242,6 @@ const AIMessageBox = ({
           checkList: task.checklist.subTasks,
           estimatedTime: task.time,
         };
-        console.log("first", taskData);
         return dispatch(
           createAiCard({
             spaceId: selectedSpace?._id,
@@ -298,13 +289,11 @@ const AIMessageBox = ({
               failure: failures,
             },
           ]);
-          console.log("Successful responses:", successes);
-          console.log("Failed responses:", failures);
+       
           setLoading(false);
           setReload(!reload);
         })
         .catch((error) => {
-          console.error("Error creating AI cards:", error);
           setLoading(false);
           setReload(!reload);
         });
@@ -316,7 +305,6 @@ const AIMessageBox = ({
     }
   };
 
-  console.log("successList", messages);
 
   return (
     <>
