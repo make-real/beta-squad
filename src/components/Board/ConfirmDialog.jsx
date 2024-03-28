@@ -62,7 +62,6 @@ const ConfirmDialog = ({
       }
 
      else if (cardID) {
-        console.log('sfaaaaaaaa')
         dispatch(
           DeleteCard({
             spaceId: selectedSpaceId,
@@ -71,10 +70,8 @@ const ConfirmDialog = ({
           })
         )
           .then((data) => {
-            console.log('card',data)
             if (data) {
             //   setIsDepend(!isDepend);
-           console.log('card',data)
               toast.success(data?.payload?.message, {
                 autoClose: 1000,
               });

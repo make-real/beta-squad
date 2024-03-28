@@ -242,7 +242,6 @@ const Board = ({ showType, addBoardRef,reload }) => {
     });
     return boardCopy;
   };
-console.log(filteredLists)
   return (
     <section
       className={`duration-200 overflow-y-auto  customScroll w-full h-full`}
