@@ -17,8 +17,8 @@ import { PiFolderOpenBold } from "react-icons/pi";
 import AddMemberBefore from "./../../assets/icons/svg/AddMemberBefore";
 import { selectTag } from "../../store/slice/TagId";
 import avatar from "../../../src/assets/profile_circle.svg";
-import AiIcon from "../../assets/icons/chatbot-speech-bubble.png";
-import AiIcon2 from "../../assets/icons/chatbot-speech-bubble1.png";
+import AiIcon from "../../assets/icons/robot1.png";
+import AiIcon2 from "../../assets/icons/robot.png";
 import { useSelector } from "react-redux";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
@@ -234,9 +234,9 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
                     }}
                   >
                     {showChat ? (
-                      <img src={AiIcon2} alt="" className={`w-5 h-5  `} />
-                    ) : (
                       <img src={AiIcon} alt="" className={`w-5 h-5  `} />
+                    ) : (
+                      <img src={AiIcon2} alt="" className={`w-5 h-5  `} />
                     )}
                   </span>
                 </div>
