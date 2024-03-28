@@ -18,7 +18,13 @@ const formattedDate = `Today’s Date - ${today.toLocaleDateString(
   options
 )}`;
 
-console.log(formattedDate);
+console.log(today);
+const time = today.toLocaleTimeString("en-US", {
+  hour12: true,
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
 // Function to generate project details
 function generateProjectDetails(project, users) {
   let projectInfo = `Project Name: ${project.name}\n`;
@@ -113,13 +119,41 @@ const AIMessageBox = ({
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const inputRef = useRef();
-  const [msg, setMsg] = useState([]);
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
   const [successList, setSuccessList] = useState([]);
-  const [successListRendered, setSuccessListRendered] = useState(false); // State to track if successList has been rendered
-  const [lastProcessedIndex, setLastProcessedIndex] = useState(-1); // Track the last processed index
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const date = new Date(); // Get the current date and time
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+      let period = "am";
+
+      // Convert hours to 12-hour format and determine period (am/pm)
+      if (hours >= 12) {
+        period = "pm";
+        hours = hours === 12 ? 12 : hours - 12;
+      }
+
+      // Ensure hours and minutes are always two digits
+      const formattedHours = String(hours).padStart(2, "0");
+      const formattedMinutes = String(minutes).padStart(2, "0");
+
+      setCurrentTime(`${formattedHours}.${formattedMinutes} ${period}`);
+    };
+
+    // Update the time every minute
+    const intervalId = setInterval(updateTime, 60000);
+
+    // Call updateTime immediately to set the initial time
+    updateTime();
+
+    // Clear the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const sendMessage = async () => {
     setLoading(true);
@@ -130,7 +164,10 @@ const AIMessageBox = ({
     const userMessage = `${formattedDate} ${input}`;
 
     setInput("");
-    setMessages([...messages, { text: userMessage, sender: "user" }]);
+    setMessages([
+      ...messages,
+      { text: userMessage, sender: "user", time: currentTime },
+    ]);
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -194,7 +231,9 @@ const AIMessageBox = ({
       const updateData = parseInputString(gptResponse);
       console.log("updateData", updateData);
       setTasks(updateData);
-      const promises = updateData.map((task) => {
+
+      // Changes start here
+      const taskPromises = updateData.map((task) => {
         const assigneeIds = task?.assignees.map((assigneeName) => {
           const member = members?.find(
             (member) => member?.fullName === assigneeName
@@ -220,21 +259,45 @@ const AIMessageBox = ({
           })
         );
       });
-      const successes = [];
-      const failures = [];
-      Promise.all(promises)
+
+      Promise.all(taskPromises)
         .then((responses) => {
-          console.log("responses", responses);
+          const successes = [];
+          const failures = [];
 
           // Separate successful and failed responses
           responses.forEach((response, index) => {
             if (response?.meta?.requestStatus === "fulfilled") {
-              successes.push({ title: updateData[index].title }); // Push the corresponding task data as an object
+              successes.push(updateData[index].title); // Push only the title of successful tasks
             } else {
-              failures.push([updateData[index].title]); // Push the corresponding task data
+              failures.push(updateData[index].title); // Push only the title of failed tasks
             }
           });
-          setSuccessList((prevSuccesses) => [...prevSuccesses, ...successes]);
+
+          const successMessage =
+            successes.length > 0
+              ? "SuccessfulTasks:\n" +
+                successes.map((success) => `• ${success.title}`).join("\n")
+              : "";
+          const failureMessage =
+            failures.length > 0
+              ? "FailedTasks:\n" +
+                failures.map((failure) => `• ${failure.title}`).join("\n")
+              : "";
+
+          // Combine success and failure messages
+          const gptResponseWithStatus = `${gptResponse}\n\n${successMessage}\n${failureMessage}`;
+
+          // Add success and failure messages to messages state
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              text: gptResponseWithStatus,
+              sender: "gpt",
+              success: successes,
+              failure: failures,
+            },
+          ]);
           console.log("Successful responses:", successes);
           console.log("Failed responses:", failures);
           setLoading(false);
@@ -245,31 +308,7 @@ const AIMessageBox = ({
           setLoading(false);
           setReload(!reload);
         });
-
-      const successMessage =
-        successes.length > 0
-          ? "SuccessfulTasks:\n" +
-            successes.map((success) => `• ${success.title}`).join("\n")
-          : "";
-      const failureMessage =
-        failures.length > 0
-          ? "FailedTasks:\n" +
-            failures.map((failure) => `• ${failure.title}`).join("\n")
-          : "";
-
-      // Combine success and failure messages
-      const gptResponseWithStatus = `${gptResponse}\n\n${successMessage}\n${failureMessage}`;
-
-      // Add success and failure messages to messages state
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          text: gptResponseWithStatus,
-          sender: "gpt",
-          success: successes,
-          failure: failures,
-        },
-      ]);
+      // Changes end here
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -277,8 +316,7 @@ const AIMessageBox = ({
     }
   };
 
-  console.log("first", successList);
-  console.log("m", messages);
+  console.log("successList", messages);
 
   return (
     <>
@@ -320,7 +358,7 @@ const AIMessageBox = ({
                         );
                       }
                     })}
-                    <span className="flex justify-end">5.00 am</span>
+                    <span className="flex justify-end">{dt?.time}</span>
                   </div>
                 )}
 
@@ -329,28 +367,32 @@ const AIMessageBox = ({
                 <>
                   {dt.sender === "gpt" && (
                     <>
-                      {dt?.success?.map((success, i) => (
-                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                          <div>Successfully Created Card List:</div>
+                      <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                        <div>Successfully Created Card List:</div>
 
-                          <div key={i}>
-                            {i + 1}. {success?.title}
-                          </div>
-                        </div>
-                      ))}
+                        {dt?.success?.map((success, i) => (
+                          <>
+                            <div key={i}>
+                              {i + 1}. {success}
+                            </div>
+                          </>
+                        ))}
+                      </div>
                     </>
                   )}
                 </>
                 <>
                   {dt.sender === "gpt" && (
                     <>
-                      {dt?.failure?.map((fail, i) => (
-                        <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                          <div>UnSuccessful Created Card List:</div>
+                      <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                        <div>UnSuccessful Created Card List:</div>
 
-                          <div key={i}>{i+1}. {fail}</div>
-                        </div>
-                      ))}
+                        {dt?.failure?.map((fail, i) => (
+                          <div key={i}>
+                            {i + 1}. {fail}
+                          </div>
+                        ))}
+                      </div>
                     </>
                   )}
                 </>
