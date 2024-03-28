@@ -3,7 +3,7 @@ import MessageBox from "./MessageBox";
 import { useState } from "react";
 import AIMessageBox from "../AI/AIMessageBox";
 
-const Chat = ({ selectedSpace,members }) => {
+const Chat = ({ selectedSpace,members,listId ,reload,setReload}) => {
   const [messageToRespond, setMessageToRespond] = useState();
   const [msg, setMsg] = useState([]);
   console.log("chat", msg);
@@ -11,7 +11,7 @@ const Chat = ({ selectedSpace,members }) => {
     // <div className="w-full pb-10 mx-auto mt-[40px] h-full">
     <>
       {selectedSpace ? (
-        <AIMessageBox setMsg={setMsg} members={members} selectedSpace={selectedSpace} />
+        <AIMessageBox reload={reload} setReload={setReload} setMsg={setMsg} listId={listId} members={members} selectedSpace={selectedSpace} />
       ) : (
         <div
           style={{

@@ -4,6 +4,7 @@
     /* outline: none;
     border: 3px solid #c2c1c1;
     border-radius: 1rem; */
+    font-family: inter;
   }
   
   .mentions--singleLine .mentions__control {
@@ -16,13 +17,14 @@
   }
   
   .mentions--multiLine .mentions__control {
-    font-family: monospace;
+    font-family: inter;
     font-size: 14pt;
   }
   .mentions--multiLine .mentions__highlighter {
     border: 1px solid transparent;
     padding: 9px;
     min-height: 63px;
+    font-family: inter;
   }
   .mentions--multiLine .mentions__input {
     padding: 10px;
@@ -46,4 +48,5 @@
     color: #1b9ed6;
     text-decoration: none;
     pointer-events: none;
+    font-family: inter;
   }

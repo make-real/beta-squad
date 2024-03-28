@@ -21,7 +21,7 @@ import { setFilterListBoard, testReducer } from "../../store/slice/allboard";
 import { useAppStateContext } from "../../context/FeatureContext";
 import emptyIcon from "../../assets/empty.png";
 
-const Board = ({ showType, addBoardRef }) => {
+const Board = ({ showType, addBoardRef,reload }) => {
   const { squadId } = useParams();
 
   const {
@@ -50,19 +50,18 @@ const Board = ({ showType, addBoardRef }) => {
   // }
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          dispatch(getAllListCards(squadId)).then((c) => console.log(c));
+          dispatch(getAllListCards(squadId)).then((c)=>console.log(c))
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists, IsDispatch, isDepend]);
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend]);   
 
   useEffect(() => {
     const filterList = () => {
@@ -115,10 +114,12 @@ const Board = ({ showType, addBoardRef }) => {
         new_list.push(new_board);
       });
 
-      dispatch(setFilterListBoard(new_list));
-    };
-    filterList();
-  }, [dispatch, lists, selectedTab, isDepend]);
+    dispatch(setFilterListBoard(new_list))
+  };
+  filterList()
+},[dispatch, lists, selectedTab,isDepend])
+
+
 
   const [listLoading, setListLoading] = useState(false);
   const handleBoardListCreation = async (squadId, text) => {
@@ -241,7 +242,7 @@ const Board = ({ showType, addBoardRef }) => {
     });
     return boardCopy;
   };
-  console.log(filteredLists);
+console.log(filteredLists)
   return (
     <section
       className={`duration-200 overflow-y-auto  customScroll w-full h-full`}

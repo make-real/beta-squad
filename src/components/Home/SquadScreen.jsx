@@ -7,36 +7,87 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Chat from "../Chat/Chat";
 import SquadMembers from "./SquadMembers/SquadMembers";
-import { get_space_members } from "../../api/space";
+import { get_space_members, remove_space_members } from "../../api/space";
+import { addBoardListApiCall } from "../../hooks/useFetch";
 import { get_tags } from "../../api/tags";
 import { useAppStateContext } from "../../context/FeatureContext";
 import { useBoardCardContext } from "../../context/BoardCardContext";
+import CalendarIcon from "../../assets/icons/svg/CalenderIcon";
+import GoogleMeet from "../../assets/images/meet.png";
 import ShowFile from "./ShowFile/ShowFile";
 import Add from "../../assets/icon_component/Add";
 import Check from "../../assets/icons/svg/Check";
 import { PiFolderOpenBold } from "react-icons/pi";
-import AddMemberBefore from "./../../assets/icons/svg/AddMemberBefore";
+import AddMemberBefore from './../../assets/icons/svg/AddMemberBefore';
+import { MdElectricScooter } from "react-icons/md";
 import { selectTag } from "../../store/slice/TagId";
-import avatar from "../../../src/assets/profile_circle.svg";
+import { calcLength } from "framer-motion";
+
+import { toast } from "react-toastify";
+import avatar from "../../../src/assets/profile_circle.svg"
+
+
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
-  console.log("selectedSpace", selectedSpace);
+  console.log('selectedSpace',selectedSpace)
+  const { showModal, setShowModal } = useCommingSoonContext();
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
   const { workspace_id } = useParams();
   const [showType, setShowType] = useState("grid");
   const [showSquadMembers, setShowSquadMembers] = useState(false);
   const [showFile, setShowFile] = useState(false);
-  const dispatch = useDispatch();
-  const { addBoard, setAddBoard } = useBoardCardContext();
+  const [listLoading, setListLoading] = useState(false);
+  const dispatch = useDispatch()
+
+
+  const {
+    addBoardList,
+    addBoard,
+    setAddBoard,
+    filterBoardList,
+    filteredList,
+    setFilteredLists,
+    boardLists,
+  } = useBoardCardContext();
   const [tags, setTags] = useState([]);
   const [TabsName, setTabsName] = useState(["All"]);
+;
+
   const [members, setMembers] = useState([]);
-  const selectTags = tags?.tags?.filter((tag) => tag?.name === selectedTab);
-  const selectTagId = selectTags ? selectTags[0] : null;
-  useEffect(() => {
-    dispatch(selectTag(selectTagId));
-  }, [selectTagId, dispatch]);
+
+ const selectTags =  tags?.tags?.filter(tag => tag?.name === selectedTab)
+
+ const selectTagId=selectTags? selectTags[0] :null
+  useEffect(()=>{
+     dispatch(selectTag(selectTagId))
+  
+  },[selectTagId,dispatch])
+   
+
+ 
+
+  // const handleBoardListCreation = async (squadId, text) => {
+  //   const listObject = { name: text };
+  //   setListLoading(true);
+
+  //   try {
+  //     const { data } = await addBoardListApiCall(squadId, listObject);
+  //     setListLoading(false);
+  //     addBoardList(data.list);
+  //     setAddBoard(true)
+  //     toast.success(`${data?.list?.name} - list create successfully`, {
+  //         autoClose: 3000,
+  //     });
+  //   } catch (error) {
+  //     console.log(error.response.data);
+
+  //     setListLoading(false);
+  //     // toast.error(error?.response?.data?.issue?.message, {
+  //     //     autoClose: 3000,
+  //     // });
+  //   }
+  // };
 
   const fetchSquadMembers = async () => {
     try {
@@ -80,14 +131,38 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       setSelectedTab("All");
     }
   }, []);
+console.log("members",members)
+console.log('selectedSpace',selectedSpace)
+  // useEffect(() => {
+  //   if (selectedTab === "All") {
+  //     filterBoardList("All");
+  //   } else {
+  //     filterBoardList(selectedTab);
+  //   }
+  // }, [selectedTab, filteredList, boardLists]);
+
+  // useEffect(() => {
+  //   if (state?.tab) {
+  //     setSelectedTab(state?.tab ?? "messages");
+  //     window.history.replaceState({}, document.title);
+  //   }
+  // }, [state?.tab]);
+
+  // useEffect(() => {
+  //   let tab = location?.hash?.slice(1);
+  //   if (tab) {
+  //     setSelectedTab(tab);
+  //   }
+  // }, [location]);
 
   const addBoardRef = React.useRef();
 
   const TabsScreen = {
-    messages: <Chat selectedSpace={selectedSpace} members={members} />,
+    messages: <Chat selectedSpace={selectedSpace} members={members}/>,
     file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,
     board: (
       <Board
+        reload={reload}
         selectedSpaceId={workspace_id}
         showType={showType}
         addBoardRef={addBoardRef}
@@ -160,22 +235,26 @@ console.log(members)
                     New board
                   </h3>
                 </div>
-                <div
-                  className={`${
-                    singleMember ? "hidden" : "flex ml-3 items-center justify-start"
-                  }`}
-                >
-                  {members?.slice(0, 3).map((user, i) => (
-                    <div key={i} className="ml-[-10px]">
-                      <span className="rounded-full ml-[-7px]   text-black font-bold grid place-items-center p-1">
-                        <img
-                          src={user?.avatar ? user?.avatar : avatar}
-                          alt=""
-                          className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
-                        />
-                      </span>
-                    </div>
-                  ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between w-1/2 ">
+              <div className="flex items-center">
+                <div className={`${singleMember ? "hidden":"flex items-center justify-start"}`}>
+                {members.slice(0, 3).map((user, i) => (
+                        <div key={i} className="ml-[-10px]">
+                            <span className="rounded-full ml-[-6px]   text-black font-bold grid place-items-center p-1">
+                              <img
+                                src={
+                                  user?.avatar ? user?.avatar:
+                                  avatar
+                                }
+                                alt=""
+                                className="h-7 w-7 text-[#14BCBE] flex justify-center items-center rounded-full"
+                              />
+                            </span>
+                        </div>
+                      ))}
 
                   <div
                     className="ml-[-10px]"
@@ -185,9 +264,13 @@ console.log(members)
                       setShowChat(false);
                     }}
                   >
-                    <AddMemberBefore setMembers={setMembers} />
+                   <AddMemberBefore />
                   </div>
                 </div>
+              </div>
+              <div className="flex items-center gap-[22px] relative">
+
+                {/* chat icon disabled from here */}
                 <div
                   className={`cursor-pointer hover:bg-gray-200 p-1 rounded-lg`}
                 >
@@ -209,11 +292,23 @@ console.log(members)
                       setShowFile(false);
                     }}
                   >
-                    <ChatBubbleBottomCenterTextIcon
-                      className={`w-5 h-5 ${
-                        showChat ? "text-white" : "text-[#54CC7C]"
-                      } `}
-                    />
+                    {showChat ? (
+                      <img
+                        src={AiIcon2}
+                        alt=""
+                        className={`w-5 h-5  `}
+                      />
+                    ) : (
+                      <img
+                        src={AiIcon}
+                        alt=""
+                        className={`w-5 h-5  `}
+                      />
+                    )}
+
+                    {/* <ChatBubbleBottomCenterTextIcon
+                      
+                    /> */}
                   </span>
                 </div>
 
@@ -239,6 +334,45 @@ console.log(members)
                     />
                   </span>
                 </div>
+
+                {/* Calender is disabled from here */}
+
+
+
+                {/* <div
+                  className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
+                  onClick={() => {
+                    //startCall("audio");
+                    setShowModal(!showModal);
+                  }}
+                >
+                  <CalendarIcon /> */}
+                  {/* <img src={AudioCallIcon} alt="audio_call" /> */}
+                {/* </div> */}
+
+                   {/* Google meet is disabled from here */}
+
+
+                {/* <div
+                  className="cursor-pointer rounded-md p-1 hover:bg-gray-200"
+                  onClick={() => { */}
+                    {/* //startCall("audio");
+                    // setShowModal(!showModal); */}
+                  {/* }}
+                >
+                  <a
+                    className="rounded-full ring-[1px] ring-[#54CC7C] p-1 grid place-items-center"
+                    href="https://meet.google.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={GoogleMeet}
+                      alt="google_mmet"
+                      className="h-5 w-5"
+                    />
+                  </a>
+                </div> */}
               </div>
             </div>
           </div>
