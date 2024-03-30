@@ -18,7 +18,6 @@ import { useDispatch } from "react-redux";
 import LoadingScreen from "../Loading/LoadingScreen";
 
 const ManageWorkspace = () => {
-  const [showType, setShowType] = useState("grid");
   const allWorkspaces = useSelector((state) => state.workspace.workspaces);
   const [workspaces, setWorkspaces] = useState([]);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
@@ -103,32 +102,7 @@ const ManageWorkspace = () => {
                 className="cursor-pointer text-[#0D1282] "
               />
               <div className="flex items-center">
-                {/* <div className="flex items-center gap-[12px]">
-                  <img src={SearchIcon} alt="search" className="" />
-                  <input
-                    type="text"
-                    placeholder="Search here"
-                    className=" placeholder:text-[#99A6B9] border-none outline-none"
-                  />
-                </div> */}
-                {/* <div className="flex items-center gap-[22px]">
-                                <div
-                                    className="cursor-pointer"
-                                    onClick={() => setShowType("grid")}
-                                >
-                                    <GridIcon
-                                        isSelected={showType === "grid"}
-                                    />
-                                </div>
-                                <div
-                                    className="cursor-pointer"
-                                    onClick={() => setShowType("stack")}
-                                >
-                                    <RowVerticalIcon
-                                        isSelected={showType === "stack"}
-                                    />
-                                </div>
-                            </div> */}
+                     
               </div>
             </div>
             <div className="mt-[30px] flex gap-[30px] flex-wrap">
@@ -185,14 +159,7 @@ const ManageWorkspace = () => {
                   </div>
                 );
               })}
-              {/* <div
-              
-                className="relative w-[215px] h-[156px] bg-[#ECECEC40] rounded-[16px] flex items-center justify-center cursor-pointer"
-              >
-                <div className="w-[60px] h-[60px] rounded-full flex items-center justify-center bg-white shadow-sm">
-                  <img src={PlusIcon} alt="" />
-                </div>
-              </div> */}
+             
             </div>
           </div>
         </div>

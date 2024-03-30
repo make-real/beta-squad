@@ -47,25 +47,7 @@ const Message = ({ space, msg, scrollToBottom, setMessageToRespond, forComment }
             className={`flex ${msg?.sender?._id === userId ? "flex-row-reverse self-end" : ""} pl-6 pr-8 py-1.5 relative user-box
       `}
         >
-            {/* <div
-                className={`w-10 h-10	border-4 rounded-full bg-slate-700 relative -mr-10 mt-1 z-[100]  ${
-                    msg?.sender?._id === userId
-                        ? "-ml-6 border-[#6576FF]"
-                        : "border-white"
-                }`}
-            >
-                {msg?.sender?.avatar ? (
-                    <img
-                        src={msg?.sender?.avatar}
-                        alt=""
-                        className="rounded-full"
-                    />
-                ) : (
-                    <h6 className="text-xs absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white">
-                        {msg?.sender?.fullName.slice(0, 1)}
-                    </h6>
-                )}
-            </div> */}
+           
 
             <div
                 style={{
@@ -276,7 +258,7 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
               return () => clearInterval(interval);
            
         }
-    }, [selectedSpaceId, dispatch]);
+    }, [, dispatch]);
 
     useEffect(() => {
         scrollToBottom();
@@ -289,10 +271,8 @@ const PrivateTextMessage = ({ messageToRespond, setMessageToRespond, forComment,
     };
 
     const socket = useSelector((state) => state.global.socket);
-
     const { participantID } = useParams();
 
-    const userId = JSON.parse(localStorage.getItem("userId"));
 
     useEffect(() => {
         socket?.on("NEW_CHAT_MESSAGE_RECEIVED", (msg) => {

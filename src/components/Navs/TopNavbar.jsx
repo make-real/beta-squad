@@ -93,6 +93,7 @@ const LoggedInTopNav = () => {
   );
   const userMenuDropDownRef = useRef();
   const notificationDropDownRef = useRef();
+ 
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -152,7 +153,7 @@ const LoggedInTopNav = () => {
   };
 
   // Auto close user drop down menu
-
+  const [redNotification,setRedNotification]=useState(notifications.count2===0?false:true)
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -212,19 +213,20 @@ const LoggedInTopNav = () => {
 
         <div className="flex items-center h-full">
           <div className="relative">
-            <img
+          <div onClick={()=>setRedNotification(false)}>
+           <img
               onClick={() => setShowNotificationModal(!showNotificationModal)}
               className="w-[22px] cursor-pointer"
               src={NotificationIcon}
               alt="notification"
             />
-            {notifications.count2 ? (
+            {redNotification ? (
               <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span>
             ) : (
               <></>
             )}
-
-            {/* Notifications Dropdown Menu */}
+          </div>
+           
             <div
               ref={notificationDropDownRef}
               className={`z-[999] origin-top-right scale-0 pointer-events-none ${
