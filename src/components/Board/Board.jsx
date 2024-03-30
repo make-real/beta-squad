@@ -26,9 +26,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
 
   const {
     handleDragEnd,
-    boardLists,
     setBoardList,
-    addBoardList,
     addBoard,
     // filteredLists,
     setFilteredLists,
@@ -36,25 +34,18 @@ const Board = ({ showType, addBoardRef,reload }) => {
   const [isDepend, setIsDepend] = useState(false);
   const { filter } = useSelector((state) => state.board);
   const lists = useSelector((state) => state?.cardsLists?.data?.lists);
-  const seletedTagId = useSelector((state) => state?.TagId?.selectTagId);
   const filteredLists = useSelector(
     (state) => state?.cardsLists?.filterBoardLists
   );
   const IsDispatch = useSelector((state) => state?.cardsLists?.IsDispatch);
   const { selectedTab } = useAppStateContext();
-  // let filter_tag;
-  // if (seletedTagId.name) {
-  //   filter_tag = seletedTagId.name;
-  // } else {
-  //   filter_tag = "All";
-  // }
 
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (squadId) {
-          dispatch(getAllListCards(squadId)).then((c)=>console.log(c))
+          dispatch(getAllListCards(squadId)).then((c)=>{})
         }
       } catch (error) {
         console.log(error);
@@ -242,7 +233,6 @@ const Board = ({ showType, addBoardRef,reload }) => {
     });
     return boardCopy;
   };
-console.log(filteredLists)
   return (
     <section
       className={`duration-200 overflow-y-auto  customScroll w-full h-full`}

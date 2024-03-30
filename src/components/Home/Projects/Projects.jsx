@@ -26,7 +26,6 @@ const Projects = ({
   userRole,
 }) => {
   const [deleteProjectData, setDeleteProjectData] = useState(null);
-  const members = useSelector((state) => state.workspace.workspaceMembers);
   
 
   const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
@@ -39,9 +38,14 @@ const Projects = ({
   const workspaces = useSelector((state) => state.workspace.workspaces);
   const { selectedSpace, allSpaces } = useSelector((state) => state.space);
   const selectedWorkspace = useSelector(
-    (state) => state.workspace.selectedWorkspace
+    (state) => state?.workspace?.selectedWorkspace
   );
-  const userInfo = useSelector((state) => state.userInfo.userInfo);
+  useEffect(()=>{
+    localStorage.setItem('lastVisitedProjects', selectedWorkspace);
+  },[selectedWorkspace]);
+ 
+ 
+ 
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -116,52 +120,12 @@ const Projects = ({
                       </p>
                     </div>
 
-{/* 
-                    <div className="flex">
-              <div className="mb-3 flex pt-2">
-                {sliced?.map((user, i) => (
-                  <div style={{ marginLeft: i ? "-5px" : 0 }}>
-                    {user.avatar ? (
-                      <div className="flex">
-                        {" "}
-                        <img
-                          src={user.avatar}
-                          alt=""
-                          className="w-7 h-7 rounded-full bg-white"
-                        />
-                      </div>
-                    ) : (
-                      <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
-                        {user?.fullName.charAt(0)}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="-mx-2 mt-2">
-                {card?.assignee && neededValue ? (
-                  <p className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">
-                    +{neededLength}
-                  </p>
-                ) : (
-                  " "
-                )}
-              </div>
-            </div> */}
+
                   </div>
                 </div>
               </>
             );
           })}
-
-          {/* <div
-                        onClick={() => setShowCreateSquadModal(true)}
-                        className="w-[214px] h-[110px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
-                    >
-                        <div className="w-[60px] h-[60px] rounded-full bg-white flex items-center justify-center">
-                            <img src={PlusIcon} alt="" />
-                        </div>
-                    </div> */}
         </div>
       ) : (
         showType === "stack" && (

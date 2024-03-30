@@ -22,7 +22,9 @@ import AiIcon2 from "../../assets/icons/chatbot-speech-bubble1.png";
 import { useSelector } from "react-redux";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
-  console.log("selectedSpace", selectedSpace);
+  useEffect(()=>{
+    localStorage.setItem('lastVisitedWorkspace', selectedSpace?._id);
+  },[selectedSpace]);
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
   const { workspace_id } = useParams();
@@ -119,7 +121,6 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
       />
     ),
   };
-  console.log(members);
   return (
     <div className="bg-[#FFF] w-full h-full mb-0 pb-0 -mt-[80px]">
       <div className={`relative bg-[#FFF] h-full flex flex-col`}>

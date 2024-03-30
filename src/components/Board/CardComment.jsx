@@ -36,11 +36,11 @@ const CardMessage = ({ listId, cardId }) => {
       }
     };
 
-    const interval = setInterval(() => {
-      getCard();
-    }, 500);
+    // const interval = setInterval(() => {
+    //   getCard();
+    // }, 500);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, [cardId, listId, selectedSpaceId]);
 
   const createComment = async (data) => {
