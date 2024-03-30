@@ -22,7 +22,10 @@ import AiIcon2 from "../../assets/icons/robot.png";
 import { useSelector } from "react-redux";
 
 const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
-  console.log("selectedSpace", selectedSpace);
+
+  useEffect(()=>{
+    localStorage.setItem('lastVisitedWorkspace', selectedSpace?._id);
+  },[selectedSpace?._id]);
   const { showChat, setShowChat, selectedTab, setSelectedTab } =
     useAppStateContext();
   const { workspace_id } = useParams();
