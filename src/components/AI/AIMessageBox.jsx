@@ -315,7 +315,7 @@ const AIMessageBox = ({
       >
         <div
           style={{
-            height: messages?.length ? "400px" : "400px",
+            height: messages?.length ? "900px" : "900px",
           }}
           className="overflow-y-auto"
         >

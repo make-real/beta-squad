@@ -455,7 +455,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
               )}
             </div>
 
-            <div className="flex items-center space-x-5 relative">
+            <div className="flex items-center space-x-3 relative">
               {/* date */}
               {localCard?.estimatedTime && (
                 <p className=" px-2 py-2 text-center rounded-lg flex gap-1 items-center  text-sm text-[#3699E0] bg-[#EDF7FF] ">
