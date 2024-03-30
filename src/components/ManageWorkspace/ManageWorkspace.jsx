@@ -1,7 +1,5 @@
 import React from "react";
-import SearchIcon from "../../assets/search.svg";
-import GridIcon from "../../assets/icon_component/Grid";
-import RowVerticalIcon from "../../assets/icon_component/RowVertical";
+
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import EditDeleteMenu from "../DropDown/EditDeleteMenu";
@@ -12,10 +10,9 @@ import CreateWorkspaceModal from "./Modals/CreateWorkspaceModal";
 import EditWorkspaceModal from "./Modals/EditWorkspaceModal";
 import DeleteWorkspaceModal from "./Modals/DeleteWorkspaceModal";
 import { useNavigate } from "react-router-dom";
-import CrossIcon from "../../assets/cross.svg";
 import BorderedPlusIcon from "../../assets/add.svg";
 import { workspaceCreation } from "../../hooks/useFetch";
-import { addOneWorkspace, addWorkSpace } from "../../store/slice/workspace";
+import { addOneWorkspace } from "../../store/slice/workspace";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import LoadingScreen from "../Loading/LoadingScreen";
@@ -25,6 +22,8 @@ const ManageWorkspace = () => {
   const [workspaces, setWorkspaces] = useState([]);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
+  const userInfo = useSelector((state) => state.userInfo.userInfo);
+
   const [editWorkspaceData, setEditWorkspaceData] = useState(null);
   const [showEditWorkspaceModal, setShowEditWorkspaceModal] = useState(false);
   const [deleteWorkspaceData, setDeleteWorkspaceData] = useState(null);
@@ -83,7 +82,6 @@ const ManageWorkspace = () => {
       : localStorage.getItem("hasWorkspace") === "no"
       ? false
       : workspaces?.length > 0;
-
   return (
     <>
       {loading ? (
@@ -109,18 +107,24 @@ const ManageWorkspace = () => {
             </div>
             <div className="mt-[30px] flex gap-[30px] flex-wrap">
               {workspaces.map((workspace, i) => {
+                const isOwner = workspace.teamMembers.some(
+                  (member) =>
+                    member?._id === userInfo?._id && member.role === "owner"
+                );
                 return (
                   <div
                     key={workspace._id + "-" + i}
                     className="relative w-[215px] min-h-[156px] bg-[#67BFFF10] rounded-[16px] pb-[20px]"
                   >
                     {/* <div className="absolute h-[6px] w-[37%] bg-[#67BFFF] rounded-bl-[4px] rounded-br-[4px] left-[31px] top-0"></div> */}
-                    <EditDeleteMenu
-                      data={workspace}
-                      editFunc={prepareEditWorkspace}
-                      deleteFunc={prepareDeleteWorkspace}
-                      className="absolute right-[10px] top-[10px] z-10"
-                    />
+                    {isOwner && (
+                      <EditDeleteMenu
+                        data={workspace}
+                        editFunc={prepareEditWorkspace}
+                        deleteFunc={prepareDeleteWorkspace}
+                        className="absolute right-[10px] top-[10px] z-10"
+                      />
+                    )}
                     <div
                       className="absolute inset-0 w-full h-full cursor-pointer"
                       onClick={() => navigate(`/projects/${workspace._id}`)}
@@ -301,7 +305,9 @@ const CreateWorkspace = () => {
               disabled={!workspaceData.name}
               type="submit"
               className={`${
-                workspaceData.name ? "bg-[#6576FF] cursor-pointer" : "bg-[#9fa5df] cursor-not-allowed"
+                workspaceData.name
+                  ? "bg-[#6576FF] cursor-pointer"
+                  : "bg-[#9fa5df] cursor-not-allowed"
               } flex-1 py-[20px] rounded-[8px] flex items-center justify-center `}
             >
               <p className="text-[14px] font-semibold text-white">Create</p>

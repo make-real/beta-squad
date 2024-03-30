@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createAiCard } from "../../api/board";
-import { useSelector } from "react-redux";
 import { MentionsInput, Mention } from "react-mentions";
 import classNames from "../../components/Chat/mention.module.css";
 import { FaRegCirclePlay } from "react-icons/fa6";
@@ -18,7 +17,6 @@ const formattedDate = `Today’s Date - ${today.toLocaleDateString(
   options
 )}`;
 
-console.log(formattedDate);
 // Function to generate project details
 function generateProjectDetails(project, users) {
   let projectInfo = `Project Name: ${project.name}\n`;
@@ -113,13 +111,40 @@ const AIMessageBox = ({
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const inputRef = useRef();
-  const [msg, setMsg] = useState([]);
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
-  const [successList, setSuccessList] = useState([]);
-  const [successListRendered, setSuccessListRendered] = useState(false); // State to track if successList has been rendered
-  const [lastProcessedIndex, setLastProcessedIndex] = useState(-1); // Track the last processed index
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const date = new Date(); // Get the current date and time
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+      let period = "am";
+
+      // Convert hours to 12-hour format and determine period (am/pm)
+      if (hours >= 12) {
+        period = "pm";
+        hours = hours === 12 ? 12 : hours - 12;
+      }
+
+      // Ensure hours and minutes are always two digits
+      const formattedHours = String(hours).padStart(2, "0");
+      const formattedMinutes = String(minutes).padStart(2, "0");
+
+      setCurrentTime(`${formattedHours}.${formattedMinutes} ${period}`);
+    };
+
+    // Update the time every minute
+    const intervalId = setInterval(updateTime, 60000);
+
+    // Call updateTime immediately to set the initial time
+    updateTime();
+
+    // Clear the interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const sendMessage = async () => {
     setLoading(true);
@@ -130,7 +155,10 @@ const AIMessageBox = ({
     const userMessage = `${formattedDate} ${input}`;
 
     setInput("");
-    setMessages([...messages, { text: userMessage, sender: "user" }]);
+    setMessages([
+      ...messages,
+      { text: userMessage, sender: "user", time: currentTime },
+    ]);
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -192,9 +220,10 @@ const AIMessageBox = ({
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
-      console.log("updateData", updateData);
       setTasks(updateData);
-      const promises = updateData.map((task) => {
+
+      // Changes start here
+      const taskPromises = updateData.map((task) => {
         const assigneeIds = task?.assignees.map((assigneeName) => {
           const member = members?.find(
             (member) => member?.fullName === assigneeName
@@ -211,7 +240,6 @@ const AIMessageBox = ({
           checkList: task.checklist.subTasks,
           estimatedTime: task.time,
         };
-        console.log("first", taskData);
         return dispatch(
           createAiCard({
             spaceId: selectedSpace?._id,
@@ -220,65 +248,62 @@ const AIMessageBox = ({
           })
         );
       });
-      const successes = [];
-      const failures = [];
-      Promise.all(promises)
+
+      Promise.all(taskPromises)
         .then((responses) => {
-          console.log("responses", responses);
+          const successes = [];
+          const failures = [];
 
           // Separate successful and failed responses
           responses.forEach((response, index) => {
             if (response?.meta?.requestStatus === "fulfilled") {
-              successes.push({ title: updateData[index].title }); // Push the corresponding task data as an object
+              successes.push(updateData[index].title); // Push only the title of successful tasks
             } else {
-              failures.push([updateData[index].title]); // Push the corresponding task data
+              failures.push(updateData[index].title); // Push only the title of failed tasks
             }
           });
-          setSuccessList((prevSuccesses) => [...prevSuccesses, ...successes]);
-          console.log("Successful responses:", successes);
-          console.log("Failed responses:", failures);
+
+          const successMessage =
+            successes.length > 0
+              ? "SuccessfulTasks:\n" +
+                successes.map((success) => `• ${success.title}`).join("\n")
+              : "";
+          const failureMessage =
+            failures.length > 0
+              ? "FailedTasks:\n" +
+                failures.map((failure) => `• ${failure.title}`).join("\n")
+              : "";
+
+          // Combine success and failure messages
+          const gptResponseWithStatus = `${gptResponse}\n\n${successMessage}\n${failureMessage}`;
+
+          // Add success and failure messages to messages state
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              text: gptResponseWithStatus,
+              sender: "gpt",
+              success: successes,
+              failure: failures,
+            },
+          ]);
+
           setLoading(false);
           setReload(!reload);
         })
         .catch((error) => {
-          console.error("Error creating AI cards:", error);
           setLoading(false);
           setReload(!reload);
         });
-
-      const successMessage =
-        successes.length > 0
-          ? "SuccessfulTasks:\n" +
-            successes.map((success) => `• ${success.title}`).join("\n")
-          : "";
-      const failureMessage =
-        failures.length > 0
-          ? "FailedTasks:\n" +
-            failures.map((failure) => `• ${failure.title}`).join("\n")
-          : "";
-
-      // Combine success and failure messages
-      const gptResponseWithStatus = `${gptResponse}\n\n${successMessage}\n${failureMessage}`;
-
-      // Add success and failure messages to messages state
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          text: gptResponseWithStatus,
-          sender: "gpt",
-          success: successes,
-          failure: failures,
-        },
-      ]);
+      // Changes end here
     } catch (error) {
       console.log(error);
       setLoading(false);
       setReload(!reload);
     }
-  };
+    setReload(!reload);
 
-  console.log("first", successList);
-  console.log("m", messages);
+  };
 
   return (
     <>
@@ -290,72 +315,76 @@ const AIMessageBox = ({
       >
         <div
           style={{
-            height: messages?.length ? "400px" : "400px",
+            height: messages?.length ? "900px" : "900px",
           }}
           className="overflow-y-auto"
         >
           <div className="flex flex-col items-start">
-            {messages.map((dt, index) => (
-              <React.Fragment key={index}>
-                {/* Render user messages */}
-                {dt.sender === "user" && (
-                  <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                    {dt.text.split(/(\d+\.)\s*/).map((part, idx) => {
-                      // Ignore empty parts
-                      if (!part.trim()) return null;
-                      // Check if the part is a number
-                      if (idx % 2 === 1) {
-                        // Number part
-                        return (
-                          <div key={idx} className="max-w-[200px]">
-                            {part.trim()}
-                          </div>
-                        );
-                      } else {
-                        // Text part
-                        return (
-                          <div key={idx} className="max-w-[200px]">
-                            {part.trim()}
-                          </div>
-                        );
-                      }
-                    })}
-                    <span className="flex justify-end">5.00 am</span>
-                  </div>
-                )}
+            {messages.map((dt, index) => {
+              const lines = dt?.text.split(/\d+\./).filter(Boolean);
+              console.log(lines);
 
-                {/* Render success list */}
-
-                <>
-                  {dt.sender === "gpt" && (
-                    <>
-                      {dt?.success?.map((success, i) => (
-                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                          <div>Successfully Created Card List:</div>
-
-                          <div key={i}>
-                            {i + 1}. {success?.title}
-                          </div>
-                        </div>
-                      ))}
-                    </>
+              return (
+                <React.Fragment key={index}>
+                  {/* Render user messages */}
+                  {dt.sender === "user" && (
+                    <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
+                      {console.log("aaaaaaa", dt?.text)}
+                      <div >
+                        <h3>{lines.shift()}</h3>
+                        <ol>
+                          {lines.map((line, index) => (
+                            <li key={index}>{index+1}. {line.trim()}</li>
+                          ))}
+                        </ol>
+                      </div>
+                      <span className="flex justify-end">{dt?.time}</span>
+                    </div>
                   )}
-                </>
-                <>
-                  {dt.sender === "gpt" && (
-                    <>
-                      {dt?.failure?.map((fail, i) => (
-                        <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                          <div>UnSuccessful Created Card List:</div>
 
-                          <div key={i}>{i+1}. {fail}</div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </>
-              </React.Fragment>
-            ))}
+                  {/* Render success list */}
+
+                  <>
+                    {dt.sender === "gpt" && (
+                      <>
+                        {dt?.success?.length > 0 && (
+                          <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                            <div>Successfully Created Card List:</div>
+
+                            {dt?.success?.map((success, i) => (
+                              <>
+                                <div key={i}>
+                                  {i + 1}. {success}
+                                </div>
+                              </>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </>
+                  <>
+                    {dt.sender === "gpt" && (
+                      <>
+                        {dt?.failure?.length > 0 && (
+                          <>
+                            <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                              <div>UnSuccessful Created Card List:</div>
+
+                              {dt?.failure?.map((fail, i) => (
+                                <div key={i}>
+                                  {i + 1}. {fail}
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
@@ -367,7 +396,7 @@ const AIMessageBox = ({
                 onChange={(e) => setInput(e.target.value)}
                 classNames={classNames}
                 customSuggestionsContainer={(children) => (
-                  <div className="bg-white font-inter absolute bottom-6 min-w-[300px] shadow-sm rounded-lg">
+                  <div className="bg-white font-inter absolute bottom-1 min-w-[300px] shadow-sm rounded-lg">
                     {children}
                   </div>
                 )}

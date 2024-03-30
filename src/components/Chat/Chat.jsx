@@ -6,7 +6,6 @@ import AIMessageBox from "../AI/AIMessageBox";
 const Chat = ({ selectedSpace,members,listId ,reload,setReload}) => {
   const [messageToRespond, setMessageToRespond] = useState();
   const [msg, setMsg] = useState([]);
-  console.log("chat", msg);
   return (
     // <div className="w-full pb-10 mx-auto mt-[40px] h-full">
     <>

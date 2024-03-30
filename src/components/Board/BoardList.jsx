@@ -11,10 +11,20 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addCard } from "../../api/board";
+import TopAddBtn from "./TopAddBtn";
+import { Bars2Icon, PlusIcon } from "@heroicons/react/24/outline";
 
-const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
+const BoardList = ({
+  showType,
+  listIndex,
+  boardList,
+  setIsDepend,
+  isDepend,
+  reload,
+}) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [cardLoading, setCardLoading] = useState(false);
+  const [addButton, setAddButton] = useState(false);
   const dispatch = useDispatch();
 
   const dropDownRef = useRef();
@@ -49,9 +59,12 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
                 autoClose: 2000,
               });
             } else {
-              toast.error("Couldn't create a card with duplicate name in the same list!", {
-                autoClose: 2000,
-              });
+              toast.error(
+                "Couldn't create a card with duplicate name in the same list!",
+                {
+                  autoClose: 2000,
+                }
+              );
             }
           }
         })
@@ -62,12 +75,12 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
   };
 
   const handleBoardListUpdate = async (selectedSpaceId, listId, text) => {
-    console.log(selectedSpaceId, listId, text)
+    console.log(selectedSpaceId, listId, text);
     try {
       await boardListUpdate(selectedSpaceId, listId, text);
       updateBoardList(listId, text);
       setToggleEdit(false);
-      setIsDepend(!isDepend)
+      setIsDepend(!isDepend);
       toast.success(`${text} - list updated successfully`, {
         autoClose: 1000,
       });
@@ -81,97 +94,110 @@ const BoardList = ({ showType, listIndex, boardList,setIsDepend,isDepend }) => {
   return (
     <>
       <div
-          
-          className={`w-[300px] mb-2 mr-3 flex flex-col customHScroll bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
+        className={`w-[300px] mb-2 mr-3 flex flex-col customHScroll bg-[#ECECEC]/[0.4] rounded-2xl pb-4`}
+      >
+        <div
+          className="overflow-hidden   flex justify-between items-center my-3"
+          ref={dropDownRef}
         >
-          <div
-           
-            className="overflow-hidden  flex justify-between items-center my-3"
-            ref={dropDownRef}
-          >
-            {toggleEdit ? (
-              <input
-                autoFocus
-                type="text"
-                defaultValue={boardList?.name}
-                onBlur={(e) =>
-                  handleBoardListUpdate(
-                    selectedSpaceId,
-                    boardList?._id,
-                    e.target.value
-                  )
-                }
-                className="text-[#818892] flex-1 py-1 px-4 ml-2 outline-none border rounded-lg hover:border-gray-400 bg-gray-50"
-              />
-            ) : (
-              <p className="text-[#818892] flex-1 py-1 px-4">
-                {boardList?.name || "Development"}
-              </p>
-            )}
-
-            <Dropdown
-              position={["bottom right", "top right"]}
-              button={
-                <span className="cursor-pointer py-1 px-4 text-[#424D5B]">
-                  <EllipsisHorizontalIcon className="h-5 w-6" />
-                </span>
+          {toggleEdit ? (
+            <input
+              autoFocus
+              type="text"
+              defaultValue={boardList?.name}
+              onBlur={(e) =>
+                handleBoardListUpdate(
+                  selectedSpaceId,
+                  boardList?._id,
+                  e.target.value
+                )
               }
-              width={180}
-              style={{ borderRadius: "0.75rem" }}
-              menu={({ closePopup }) => (
-                <BoardListSettingDropDown
-                  close={closePopup}
-                  boardListID={boardList?._id}
-                  toggleEdit={toggleEdit}
-                  setToggleEdit={setToggleEdit}
-                  isDepend={isDepend}
-                  setIsDepend={setIsDepend}
-                />
-              )}
+              className="text-[#818892] flex-1 py-1 px-4 ml-2 outline-none border rounded-lg hover:border-gray-400 bg-gray-50"
             />
+          ) : (
+            <p className="text-[#818892] flex-1 py-1 px-4">
+              {boardList?.name || "Development"}
+            </p>
+          )}
+          <div className="mt-1">
+            <button onClick={() => setAddButton(!addButton)}>
+              <PlusIcon
+                className={`h-6 w-6 text-[#818892] bg-[#FFFFFF] p-1 rounded-full `}
+              />
+            </button>
           </div>
-          <span className="border-[1px] border-[#EEE9E9]" />
-
-          {/* Droppable Component Wrapper */}
-          <Droppable droppableId={boardList?._id} type="CARD">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="flex flex-col items-center gap-3 over customScroll  pt-2"
-               
-              >
-                {boardList?.cards.map((card, index) => (
-                  <Draggable
-                    key={card._id}
-                    draggableId={card._id}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="mb-2"
-                      >
-                        <Card key={card._id} card={card} listID={boardList?._id} />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
+          <Dropdown
+            position={["bottom right", "top right"]}
+            button={
+              <span className="cursor-pointer py-1 px-4 text-[#424D5B]">
+                <EllipsisHorizontalIcon className="h-5 w-6" />
+              </span>
+            }
+            width={180}
+            style={{ borderRadius: "0.75rem" }}
+            menu={({ closePopup }) => (
+              <BoardListSettingDropDown
+                close={closePopup}
+                boardListID={boardList?._id}
+                toggleEdit={toggleEdit}
+                setToggleEdit={setToggleEdit}
+                isDepend={isDepend}
+                setIsDepend={setIsDepend}
+              />
             )}
-          </Droppable>
-
-          <AddBtn
+          />
+        </div>
+        <span className="border-[1px] border-[#EEE9E9]" />
+        {addButton && (
+          <TopAddBtn
             loading={cardLoading}
             showType={showType}
             placeHolder="Enter card name"
             btnText="card"
             onSubmit={(text) => handleCardCreation(text)}
+            inputToggle={addButton}
+            setInputToggle={setAddButton}
           />
-        </div>
+        )}
+        {/* Droppable Component Wrapper */}
+        <Droppable droppableId={boardList?._id} type="CARD">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="flex flex-col items-center gap-3 over customScroll  pt-2"
+            >
+              {boardList?.cards.map((card, index) => (
+                <Draggable key={card._id} draggableId={card._id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className="mb-2"
+                    >
+                      <Card
+                        key={card._id}
+                        card={card}
+                        listID={boardList?._id}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+
+        <AddBtn
+          loading={cardLoading}
+          showType={showType}
+          placeHolder="Enter card name"
+          btnText="card"
+          onSubmit={(text) => handleCardCreation(text)}
+        />
+      </div>
     </>
   );
 };
