@@ -4,8 +4,10 @@ import { MentionsInput, Mention } from "react-mentions";
 import classNames from "../../components/Chat/mention.module.css";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { AddAiMessage } from "../../store/slice/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
+import moment from "moment";
+
 const today = new Date();
 const options = {
   weekday: "long",
@@ -116,7 +118,8 @@ const AIMessageBox = ({
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
   const [currentTime, setCurrentTime] = useState("");
-
+  const { AiMessages } = useSelector((state) => state.AiMessageList);
+  const [msgReload,setMagReload]=useState(false)
   useEffect(() => {
     const updateTime = () => {
       const date = new Date(); // Get the current date and time
@@ -147,12 +150,16 @@ const AIMessageBox = ({
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
+  }, [dispatch, selectedSpace?._id,msgReload]);
+
   const sendMessage = async () => {
     setLoading(true);
     if (input === "") {
       return;
     }
-
+    const userInput = `${input}`;
     const userMessage = `${formattedDate} ${input}`;
 
     setInput("");
@@ -287,13 +294,16 @@ const AIMessageBox = ({
             (failedMessage.length > 0 && failedMessage.length > 0)
           ) {
             const data = {
-              message: userMessage,
+              message: userInput,
               successMessage: successMessages,
               failedMessage: failedMessage,
             };
 
             dispatch(AddAiMessage({ spaceId: selectedSpace?._id, data: data }))
               .then((r) => {
+                if(r){
+                  setMagReload(!msgReload)
+                }
               })
               .catch((error) => {
                 console.error("Error dispatching AddAiMessage:", error);
@@ -343,6 +353,19 @@ const AIMessageBox = ({
     }
     setReload(!reload);
   };
+  const groupedMessages = AiMessages?.reduce((acc, message) => {
+    const date = moment(message.createdAt).format("YYYY-MM-DD");
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(message);
+    return acc;
+  }, {});
+
+  // Sort dates in descending order
+  const sortedDates = Object.keys(groupedMessages)?.sort(
+    (a, b) => moment(b) - moment(a)
+  );
 
   return (
     <>
@@ -358,73 +381,146 @@ const AIMessageBox = ({
           }}
           className="overflow-y-auto"
         >
-          <div className="flex flex-col items-start">
-            {messages.map((dt, index) => {
-              const lines = dt?.text.split(/\d+\./).filter(Boolean);
+          {sortedDates?.map((date) => (
+            <div key={date}>
+              <div className="text-center flex justify-center mx-auto w-20  rounded-[10px] text-[#818892] bg-white my-2 p-1">
+                <p className="">
+                  {moment(date).calendar(null, {
+                    sameDay: "[Today]",
+                    nextDay: "[Tomorrow]",
+                    lastDay: "[Yesterday]",
+                    lastWeek: "[Last] dddd",
+                    sameElse: "DD/MM/YYYY",
+                  })}
+                </p>
+              </div>
+              {groupedMessages[date]?.reverse()?.map((dt, index) => {
+                const lines = dt?.message
+                  ?.split("\n")
+                  .filter((line) => line.trim() !== ""); // Split by newline character and filter out empty lines
+                return (
+                  // <div>dohel</div>
+                  <React.Fragment key={index}>
+                    {/* Render user messages */}
 
-              return (
-                <React.Fragment key={index}>
-                  {/* Render user messages */}
-                  {dt.sender === "user" && (
                     <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
                       <div>
-                        <h3>{lines.shift()}</h3>
-                        <ol>
-                          {lines.map((line, index) => (
-                            <li key={index}>
-                              {index + 1}. {line.trim()}
-                            </li>
+                        <ul>
+                          {/* Mapping over the lines array to render list items */}
+                          {lines?.map((line, i) => (
+                            // Render each line with its corresponding number
+                            <li key={i}>{line}</li>
                           ))}
-                        </ol>
+                        </ul>
                       </div>
-                      <span className="flex justify-end">{dt?.time}</span>
+                      <span className="flex justify-end">
+                        {" "}
+                        {moment(dt?.createdAt).format("LT")}
+                      </span>
                     </div>
-                  )}
 
-                  {/* Render success list */}
+                    {/* Render success list */}
 
-                  <>
-                    {dt.sender === "gpt" && (
+                    <>
                       <>
-                        {dt?.success?.length > 0 && (
+                        {dt?.successMessage?.length > 0 && (
                           <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
                             <div>Successfully Created Card List:</div>
 
-                            {dt?.success?.map((success, i) => (
+                            {dt?.successMessage?.map((success, i) => (
                               <>
                                 <div key={i}>
-                                  {i + 1}. {success}
+                                  {i + 1}. {success.message}
                                 </div>
                               </>
                             ))}
                           </div>
                         )}
                       </>
-                    )}
-                  </>
-                  <>
-                    {dt.sender === "gpt" && (
+                    </>
+                    <>
                       <>
-                        {dt?.failure?.length > 0 && (
+                        {dt?.failedMessage?.length > 0 && (
                           <>
                             <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
                               <div>UnSuccessful Created Card List:</div>
 
-                              {dt?.failure?.map((fail, i) => (
+                              {dt?.failedMessage?.map((fail, i) => (
                                 <div key={i}>
-                                  {i + 1}. {fail}
+                                  {i + 1}. {fail.message}
                                 </div>
                               ))}
                             </div>
                           </>
                         )}
                       </>
-                    )}
+                    </>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          ))}
+          {/* <div className="flex flex-col items-start">
+            {AiMessages?.map((dt, index) => {
+              const lines = dt?.message
+                ?.split("\n")
+                .filter((line) => line.trim() !== ""); 
+              return (
+                <React.Fragment key={index}>
+
+                  <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
+                    <div>
+                      <ul>
+                        {lines.map((line, i) => (
+                          <li key={i}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <span className="flex justify-end">
+                      {" "}
+                      {moment(dt?.createdAt).format("LT")}
+                    </span>
+                  </div>
+
+
+                  <>
+                    <>
+                      {dt?.successMessage?.length > 0 && (
+                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                          <div>Successfully Created Card List:</div>
+
+                          {dt?.successMessage?.map((success, i) => (
+                            <>
+                              <div key={i}>
+                                {i + 1}. {success.message}
+                              </div>
+                            </>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  </>
+                  <>
+                    <>
+                      {dt?.failedMessage?.length > 0 && (
+                        <>
+                          <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                            <div>UnSuccessful Created Card List:</div>
+
+                            {dt?.failedMessage?.map((fail, i) => (
+                              <div key={i}>
+                                {i + 1}. {fail.message}
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </>
                   </>
                 </React.Fragment>
               );
             })}
-          </div>
+          </div> */}
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
           <div className="w-full h-full flex  justify-center align-middle">

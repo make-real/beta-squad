@@ -8,8 +8,9 @@ export const getAllAiMessages = createAsyncThunk(
       const res = await useAxios.get(
         `/spaces/${spaceId}/ai-chat/get-messages?skip=0&limit=20`
       );
+
       if (res.data) {
-        return res.data;
+        return res?.data?.data;
       }
     } catch (error) {
       if (error) {
@@ -26,7 +27,7 @@ export const AddAiMessage = createAsyncThunk(
         `/spaces/${spaceId}/ai-chat/save-message`,data
       );
       if (res.data) {
-        return res.data;
+        return res.data.data;
       }
     } catch (error) {
       if (error) {
@@ -56,7 +57,7 @@ export const AiMessageSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllAiMessages.fulfilled, (state, action) => {
-        state.cardError = action.payload;
+        console.log(action.payload);
         state.AiMessages = action.payload;
         state.isDepend = !state.isDepend;
         state.loading = false;

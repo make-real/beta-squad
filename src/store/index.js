@@ -11,7 +11,7 @@ import screen from "./slice/screen";
 import TagId from "./slice/TagId";
 import cardsLists from "./slice/allboard";
 import subscription from "./slice/subscription";
-import { AiMessageSlice } from "./slice/ai";
+import  AiMessageSlice  from "./slice/ai";
 
 const rootReducer = combineReducers({
   workspace,
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
   TagId,
   cardsLists,
   subscription,
-  AiMessage: AiMessageSlice,
+  AiMessageList: AiMessageSlice,
 });
 
 const store = configureStore({
