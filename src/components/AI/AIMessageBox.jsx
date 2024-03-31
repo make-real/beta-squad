@@ -5,6 +5,7 @@ import classNames from "../../components/Chat/mention.module.css";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { AddAiMessage } from "../../store/slice/ai";
 const today = new Date();
 const options = {
   weekday: "long",
@@ -253,16 +254,55 @@ const AIMessageBox = ({
         .then((responses) => {
           const successes = [];
           const failures = [];
+          const successMessages = [];
+          const failedMessage = [];
 
           // Separate successful and failed responses
           responses.forEach((response, index) => {
             if (response?.meta?.requestStatus === "fulfilled") {
+              successMessages.push({
+                aiResponse: JSON.stringify(updateData[index]),
+                message: updateData[index].title,
+              });
+
               successes.push(updateData[index].title); // Push only the title of successful tasks
             } else {
-              failures.push(updateData[index].title); // Push only the title of failed tasks
+              failedMessage.push({
+                aiResponse: JSON.stringify(updateData[index]),
+                message: updateData[index].title,
+              }); // Push only the title of failed tasks
             }
           });
 
+          // if (
+          //   successMessages ||
+          //   failedMessage ||
+          //   (failedMessage && successMessages)
+          // ){
+
+          // }
+          if (
+            successMessages.length > 0 ||
+            failedMessage.length > 0 ||
+            (failedMessage.length > 0 && failedMessage.length > 0)
+          ) {
+            const data = {
+              message: userMessage,
+              successMessage: successMessages,
+              failedMessage: failedMessage,
+            };
+
+            dispatch(AddAiMessage({ spaceId: selectedSpace?._id, data: data }))
+              .then((r) => {
+              })
+              .catch((error) => {
+                console.error("Error dispatching AddAiMessage:", error);
+              });
+          } else {
+            // Handle if both successMessages and failedMessages are empty
+            setLoading(false);
+            setReload(!reload);
+          }
           const successMessage =
             successes.length > 0
               ? "SuccessfulTasks:\n" +
@@ -302,7 +342,6 @@ const AIMessageBox = ({
       setReload(!reload);
     }
     setReload(!reload);
-
   };
 
   return (
@@ -322,19 +361,19 @@ const AIMessageBox = ({
           <div className="flex flex-col items-start">
             {messages.map((dt, index) => {
               const lines = dt?.text.split(/\d+\./).filter(Boolean);
-              console.log(lines);
 
               return (
                 <React.Fragment key={index}>
                   {/* Render user messages */}
                   {dt.sender === "user" && (
                     <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                      {console.log("aaaaaaa", dt?.text)}
-                      <div >
+                      <div>
                         <h3>{lines.shift()}</h3>
                         <ol>
                           {lines.map((line, index) => (
-                            <li key={index}>{index+1}. {line.trim()}</li>
+                            <li key={index}>
+                              {index + 1}. {line.trim()}
+                            </li>
                           ))}
                         </ol>
                       </div>

@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import useAxios from ".";
-import Message from "./../assets/icons/svg/Message";
 
 export const getAllListCards = createAsyncThunk(
   "getAllListCards/allboard",
