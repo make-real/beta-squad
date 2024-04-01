@@ -298,6 +298,8 @@ const AIMessageBox = ({
               .then((r) => {
                 if (r) {
                   setMagReload(!msgReload);
+                  setReload(!reload);
+
                 }
               })
               .catch((error) => {
@@ -458,6 +460,7 @@ const AIMessageBox = ({
                   </div>
                 );
               })}
+          <div ref={messagesEndRef} />
             </div>
           ))}
         </div>
