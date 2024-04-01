@@ -384,7 +384,7 @@ const AIMessageBox = ({
           }}
           className="overflow-y-auto"
         >
-          {sortedDates?.map((date) => (
+          {sortedDates?.reverse().map((date) => (
             <div key={date}>
               <div className="text-center flex justify-center mx-auto w-20  rounded-[10px] text-[#818892] bg-white my-2 p-1">
                 <p className="">
