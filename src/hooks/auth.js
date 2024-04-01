@@ -21,9 +21,10 @@ function useAuth() {
             const token = await result.user.getIdToken();
             const { data } = await o_auth_login(token);
             setLoader(false);
-            localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
-            localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
+            localStorage.setItem("jwt", JSON.stringify(data?.jwtToken));
+            localStorage.setItem("userId", JSON.stringify(data?.loggedUser._id));
             localStorage.setItem("fullSidebar", "show");
+            localStorage.setItem("userInfo", JSON.stringify(data?.loggedUser))
             setLoginUserInfo(data.loggedUser);
             navigate("/projects");
         } catch (error) {
