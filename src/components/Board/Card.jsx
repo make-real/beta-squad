@@ -136,7 +136,7 @@ const Card = ({ card, listID }) => {
             <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
               {card?.tags?.length
                 ? card?.tags?.map((tag) => (
-                  <CardChip small tag={tag} key={tag?._id} />
+                  <CardChip  small tag={tag} key={tag?._id} />
                 ))
                 : null}
             </div>
@@ -196,7 +196,7 @@ const Card = ({ card, listID }) => {
           <div className="flex">
           <div className="mb-3 flex pt-2">
             {sliced?.map((user, i) => (
-              <div style={{ marginLeft: i ? "-5px" : 0 }}>
+              <div key={i} style={{ marginLeft: i ? "-5px" : 0 }}>
                 {user.avatar ? (
                  <div className="flex"> <img
                     src={user.avatar}

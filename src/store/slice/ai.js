@@ -57,13 +57,11 @@ export const AiMessageSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllAiMessages.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.AiMessages = action.payload;
         state.isDepend = !state.isDepend;
         state.loading = false;
       })
       .addCase(getAllAiMessages.rejected, (state, action) => {
-        console.log(action.payload);
         state.error = action.payload;
         state.loading = false;
       })
