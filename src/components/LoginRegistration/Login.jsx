@@ -109,28 +109,6 @@ const Login = () => {
     }
   };
 
-  const onSuccess = async (res) => {
-
-
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-
-    try {
-      // directly send user info at ==> Redux (Auth Reducer)
-      // for storing user info at localStorage, for later using as per requirement...
-      // dispatch({ type: AUTH, data: { result, token } });
-
-      // after user login, redirect user at the index page...
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onFailure = async (response) => {
-    alert("🔴 Google Sign In was unsuccessful.\n🔴 Try again later...");
-  };
-
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({

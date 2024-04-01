@@ -81,7 +81,6 @@ console.log('members',members)
               // - Current user is owner AND member is not the owner OR
               // - Current user is admin
               const showEditDelete = isCurrentUserOwner && !isMemberOwner || userRole?.role === "admin";
-            console.log(member)
             return (
               <div
                 key={member._id}

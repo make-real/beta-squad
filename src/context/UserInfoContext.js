@@ -17,7 +17,6 @@ export const UserInfoContext = ({ children }) => {
         const getUserInfo = async () => {
             if (!JSON.parse(localStorage.getItem("jwt"))) return;
             const { data } = await get_my_profile();
-            console.log(data)
             setLoginUserInfo(data.user);
             localStorage.setItem("userInfo", JSON.stringify(data.user)); // Update local storage here
         };
