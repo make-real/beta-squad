@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
 import moment from "moment";
+import parseInputString from "../../util/parseInputString";
 
 const today = new Date();
 const options = {
@@ -33,75 +34,7 @@ function generateProjectDetails(project, users) {
   return projectInfo;
 }
 
-function parseInputString(inputString) {
-  // Regular expressions to match desired patterns
-  const titleRegex = /<Title>(.*?)<\/Title>/g;
-  const descriptionRegex = /<Description>(.*?)<\/Description>/g;
-  const subTaskRegex = /<SubTask>(.*?)<\/SubTask>/g;
-  const assigneeRegex = /<Assigne>(.*?)<\/Assigne>/g;
-  const timeRegex = /<Time>(.*?)<\/Time>/g;
-  const startRegex = /<Start>(.*?)<\/Start>/g;
-  const endRegex = /<End>(.*?)<\/End>/g;
 
-  // Array to store parsed objects
-  let result = [];
-
-  // Match titles
-  let titles = [...inputString.matchAll(titleRegex)];
-
-  // Iterate through each title
-  titles.forEach((titleMatch, index) => {
-    let titleObj = {};
-    titleObj.title = titleMatch[1].trim();
-
-    // Match description
-    let descriptionMatch = descriptionRegex.exec(inputString);
-    if (descriptionMatch) {
-      titleObj.description = descriptionMatch[1].trim();
-    }
-
-    // Match subtasks
-    let subTasks = [];
-    let subTaskMatch;
-    while ((subTaskMatch = subTaskRegex.exec(inputString)) !== null) {
-      subTasks.push(subTaskMatch[1].trim());
-    }
-    titleObj.checklist = { subTasks };
-
-    // Match assignees
-    let assignees = [];
-    let assigneeMatch;
-    while ((assigneeMatch = assigneeRegex.exec(inputString)) !== null) {
-      assignees.push(assigneeMatch[1].trim());
-    }
-    titleObj.assignees = assignees;
-
-    // Match time
-    let timeMatch = timeRegex.exec(inputString);
-    if (timeMatch) {
-      titleObj.time = timeMatch[1].trim();
-    }
-
-    // Match start date
-    let startMatch = startRegex.exec(inputString);
-    if (startMatch) {
-      titleObj.calendar = { start: startMatch[1].trim() };
-    }
-
-    // Match end date
-    let endMatch = endRegex.exec(inputString);
-    if (endMatch) {
-      if (!titleObj.calendar) {
-        titleObj.calendar = {};
-      }
-      titleObj.calendar.end = endMatch[1].trim();
-    }
-
-    result.push(titleObj);
-  });
-
-  return result;
-}
 
 const AIMessageBox = ({
   selectedSpace,
@@ -460,67 +393,7 @@ const AIMessageBox = ({
               })}
             </div>
           ))}
-          {/* <div className="flex flex-col items-start">
-            {AiMessages?.map((dt, index) => {
-              const lines = dt?.message
-                ?.split("\n")
-                .filter((line) => line.trim() !== ""); 
-              return (
-                <React.Fragment key={index}>
-
-                  <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                    <div>
-                      <ul>
-                        {lines.map((line, i) => (
-                          <li key={i}>{line}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <span className="flex justify-end">
-                      {" "}
-                      {moment(dt?.createdAt).format("LT")}
-                    </span>
-                  </div>
-
-
-                  <>
-                    <>
-                      {dt?.successMessage?.length > 0 && (
-                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                          <div>Successfully Created Card List:</div>
-
-                          {dt?.successMessage?.map((success, i) => (
-                            <>
-                              <div key={i}>
-                                {i + 1}. {success.message}
-                              </div>
-                            </>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  </>
-                  <>
-                    <>
-                      {dt?.failedMessage?.length > 0 && (
-                        <>
-                          <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                            <div>UnSuccessful Created Card List:</div>
-
-                            {dt?.failedMessage?.map((fail, i) => (
-                              <div key={i}>
-                                {i + 1}. {fail.message}
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
-                  </>
-                </React.Fragment>
-              );
-            })}
-          </div> */}
+        
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
           <div className="w-full h-full flex  justify-center align-middle">
