@@ -116,25 +116,45 @@ const AIMessageBox = ({
 
   // Update input state with mentioned users' names only if mentions exist
 
-  const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
-    let updatedInput = newPlainTextValue;
+  // const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+  //   let updatedInput = newPlainTextValue;
 
-    // Filter out duplicate mentions
-    const uniqueMentions = [];
+  //   // Filter out duplicate mentions
+  //   const uniqueMentions = [];
+  //   const uniquePlainTextValue = newPlainTextValue.replace(
+  //     /\{\{([^{}]+?)\}\}/g,
+  //     (match, mention) => {
+  //       if (!uniqueMentions.includes(mention)) {
+  //         uniqueMentions.push(mention);
+  //         return match;
+  //       }
+  //       return "";
+  //     }
+  //   );
+
+  //   setInput(uniquePlainTextValue);
+  // };
+  const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+    // Track mentioned user IDs to avoid duplicates
+    const mentionedUserIds = new Set();
+  
+    // Filter out duplicate mentions and build updated input value
     const uniquePlainTextValue = newPlainTextValue.replace(
       /\{\{([^{}]+?)\}\}/g,
       (match, mention) => {
-        if (!uniqueMentions.includes(mention)) {
-          uniqueMentions.push(mention);
-          return match;
+        const userId = mention.trim(); // Extract user ID from mention
+        if (!mentionedUserIds.has(userId)) {
+          // If the user ID hasn't been mentioned yet, add it to the set
+          mentionedUserIds.add(userId);
+          return match; // Keep the mention in the input value
         }
-        return "";
+        return ''; // Remove duplicate mentions
       }
     );
-
+  
+    // Update the input value with unique mentions
     setInput(uniquePlainTextValue);
   };
-
   // submit message and call ai
   const sendMessage = async () => {
     setLoading(true);
