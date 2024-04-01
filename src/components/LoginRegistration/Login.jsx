@@ -43,13 +43,12 @@ const Login = () => {
 
       if (data?.loggedUser?.emailVerified) {
         // store user (JWT token) + (user ID) into local storage...
-        localStorage.setItem("userAllInfo", JSON.stringify(data.loggedUser));
-        localStorage.setItem("jwt", JSON.stringify(data.jwtToken));
-        localStorage.setItem("userId", JSON.stringify(data.loggedUser._id));
+        localStorage.setItem("userInfo", JSON.stringify(data?.loggedUser));
+        localStorage.setItem("jwt", JSON.stringify(data?.jwtToken));
+        localStorage.setItem("userId", JSON.stringify(data?.loggedUser._id));
         localStorage.setItem("fullSidebar", "show");
         // login user data send to ContextAPI for globally user ID sharing or many more need full logic...
-        setLoginUserInfo(data.loggedUser);
-        console.log(data)
+        setLoginUserInfo(data?.loggedUser);
 
         // navigate user into user profile page...
 
@@ -120,8 +119,6 @@ const Login = () => {
   });
 
   const [from, setFrom] = useState("forgotPassword");
-
-  const userEmail = JSON.parse(sessionStorage.getItem("userEmail"));
 
   return (
     <section className="lg:flex h-full  lg:justify-between  lg:items-center w-[70%]  gap-10  mx-auto">
