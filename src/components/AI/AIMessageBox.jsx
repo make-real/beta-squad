@@ -33,10 +33,12 @@ function generateProjectDetails(project, users, tags) {
     projectInfo += `${index + 1}. ${user.fullName} - ${user.role}\n`;
   });
 
-  projectInfo += "Tags -\n";
-  tags.forEach((tag, index) => {
-    projectInfo += `${index + 1}. ${tag.name}\n`;
-  });
+  if (tags) {
+    projectInfo += "Tags -\n";
+    tags.forEach((tag, index) => {
+      projectInfo += `${index + 1}. ${tag.name}\n`;
+    });
+  }
 
   return projectInfo;
 }
