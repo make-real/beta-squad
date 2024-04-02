@@ -10,6 +10,7 @@ import moment from "moment";
 import parseInputString from "../../util/parseInputString";
 import { get_mentionable_users } from "../../api/message";
 import { get_tags } from "../../api/tags";
+import { toggleRefetchAction } from "../../store/slice/toggleFetch";
 
 const today = new Date();
 const options = {
@@ -317,15 +318,21 @@ const AIMessageBox = ({
                 if (r) {
                   setMagReload(!msgReload);
                   setReload(!reload);
+                  dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
+
                 }
               })
               .catch((error) => {
                 console.error("Error dispatching AddAiMessage:", error);
+                dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
+
               });
           } else {
             // Handle if both successMessages and failedMessages are empty
             setLoading(false);
             setReload(!reload);
+            dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
+
           }
           const successMessage =
             successes.length > 0
@@ -354,6 +361,8 @@ const AIMessageBox = ({
 
           setLoading(false);
           setReload(!reload);
+          dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
+
         })
         .catch((error) => {
           setLoading(false);
@@ -366,6 +375,8 @@ const AIMessageBox = ({
       setReload(!reload);
     }
     setReload(!reload);
+    dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
+
   };
   const groupedMessages = AiMessages?.reduce((acc, message) => {
     const date = moment(message.createdAt).format("YYYY-MM-DD");

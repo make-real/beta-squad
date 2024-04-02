@@ -1,27 +1,16 @@
-const TOGGLE = 'TOGGLE';
+const TOGGLE_REFETCH = 'TOGGLE_REFETCH';
 
-// Define action creators
-export const toggleAction = () => ({
-  type: TOGGLE
+// Action creators
+export const toggleRefetchAction = () => ({
+  type: TOGGLE_REFETCH
 });
 
-// Define initial state
-const initialState = {
-  value: false
-};
-
-// Define reducer
-const reducer = (state = initialState, action) => {
+// Reducers
+export const isRefetchReducer = (state = false, action) => {
   switch (action.type) {
-    case TOGGLE:
-      return {
-        ...state,
-        value: !state.value
-      };
+    case TOGGLE_REFETCH:
+      return !state;
     default:
       return state;
   }
 };
-
-// Export reducer directly
-export default reducer;
