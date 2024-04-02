@@ -12,6 +12,7 @@ import TagId from "./slice/TagId";
 import cardsLists from "./slice/allboard";
 import subscription from "./slice/subscription";
 import  AiMessageSlice  from "./slice/ai";
+import { isRefetchReducer } from "./slice/toggleFetch";
 
 const rootReducer = combineReducers({
   workspace,
@@ -27,6 +28,8 @@ const rootReducer = combineReducers({
   cardsLists,
   subscription,
   AiMessageList: AiMessageSlice,
+  isRefetch: isRefetchReducer
+
 });
 
 const store = configureStore({

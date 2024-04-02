@@ -39,6 +39,8 @@ const Board = ({ showType, addBoardRef,reload,selectedSpaceId }) => {
   );
   const IsDispatch = useSelector((state) => state?.cardsLists?.IsDispatch);
   const { selectedTab } = useAppStateContext();
+  const isRefetch = useSelector(state => state.isRefetch); // Accessing isRefetch from state
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -52,7 +54,7 @@ const Board = ({ showType, addBoardRef,reload,selectedSpaceId }) => {
       }
     };
     fetchData();
-  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend,reload]);   
+  }, [squadId, setBoardList, dispatch, setFilteredLists,IsDispatch,isDepend,reload,isRefetch]);   
 
   useEffect(() => {
     const filterList = () => {
@@ -108,7 +110,7 @@ const Board = ({ showType, addBoardRef,reload,selectedSpaceId }) => {
     dispatch(setFilterListBoard(new_list))
   };
   filterList()
-},[dispatch, lists, selectedTab,isDepend,reload])
+},[dispatch, lists, selectedTab,isDepend,reload,isRefetch])
 
 
 
