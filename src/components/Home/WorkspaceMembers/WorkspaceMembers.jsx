@@ -7,7 +7,6 @@ import UpdateMemberModal from "./Modals/UpdateMemberModal";
 import RemoveMemberModal from "./Modals/RemoveMemberModal";
 import MemberRemovedModal from "./Modals/MemberRemovedModal";
 import { useSelector } from "react-redux";
-import { getAvatarUrl } from "../../../util/getAvatarUrl";
 import { useUserInfoContext } from "../../../context/UserInfoContext";
 import BriefCaseIcon from "../../../../src/assets/briefcase.svg";
 import avatar from "../../../assets/profile_circle.svg";
@@ -18,10 +17,7 @@ const SquadMembers = ({
   setShowAddMemberModal,
   userRole,
 }) => {
-  const selectedSpace = useSelector((state) => state.space.selectedSpace);
-  const selectedWorkspace = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
+
   const { loginUserInfo } = useUserInfoContext();
   const members = useSelector((state) => state.workspace.workspaceMembers);
   const showupdate = members.filter(
@@ -59,27 +55,13 @@ const SquadMembers = ({
     setShowUpdateMemberModal(false);
   };
 
-  // Isuues Here
-console.log('members',members)
   return (
     <>
       {showType === "grid" ? (
         <div className="mt-[10px] flex gap-[30px] flex-wrap  h-full">
-          {/* <div
-                        onClick={() => setShowAddMemberModal(true)}
-                        className="w-[297px] h-[90px] rounded-[16px] bg-[#ECECEC80] flex items-center justify-center gap-[16px] cursor-pointer"
-                    >
-                        <div className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center">
-                            <img src={PlusIcon} alt="" />
-                        </div>
-                    </div> */}
           {members.map((member) => {
               const isCurrentUserOwner = userRole?.role === "owner";
               const isMemberOwner = member.role === "owner";
-            
-              // Only show EditDeleteMenu if:
-              // - Current user is owner AND member is not the owner OR
-              // - Current user is admin
               const showEditDelete = isCurrentUserOwner && !isMemberOwner || userRole?.role === "admin";
             return (
               <div
@@ -155,9 +137,7 @@ console.log('members',members)
                     </div>
                   </div>
                 </div>
-                {/* <p className="text-[#818892] mt-[10px]">
-                                    {member.email}
-                                </p> */}
+               
               </div>
             );
           })}

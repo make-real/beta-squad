@@ -72,12 +72,7 @@ const LoggedInTopNav = () => {
     setUserInfo(user);
   }, []);
 
-  const selectedWorkspaceId = useSelector(
-    (state) => state.workspace.selectedWorkspace
-  );
-
   const [showDropDownMenu, setShowDropDownMenu] = useState(false);
-  const workspaces = useSelector((state) => state.workspace.workspaces);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notifications, setNotifications] = useState({
     seen: null,
@@ -302,49 +297,9 @@ const LoggedInTopNav = () => {
             ref={userMenuDropDownRef}
             className={`z-[999] origin-top-right scale-0 pointer-events-none ${
               showDropDownMenu ? "scale-100 pointer-events-auto" : ""
-            }  absolute top-[55px] w-[230px] min-h-[200px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
+            }  absolute top-[55px] w-[230px] min-h-[160px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
           >
-            <h2 className="px-[20px] text-[#818892] text-[16px]">Workspaces</h2>
-            <div className="mt-[15px] flex flex-col">
-              {workspaces?.length === 0 ? (
-                <p className="px-[20px] text-[14px] text-gray-400 text-center">
-                  No workspaces yet
-                </p>
-              ) : (
-                workspaces?.map((workspace, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      onClick={() => {
-                        dispatch(setSelectedWorkSpaceId(workspace?._id));
-                        dispatch(setSelectedSpaceId(null));
-                        dispatch(setSelectedSpaceObject(null));
-                        navigate(`/projects/${workspace._id}`);
-                        setShowDropDownMenu(false);
-                      }}
-                      className={`${
-                        selectedWorkspaceId === workspace._id
-                          ? "bg-gray-100"
-                          : ""
-                      } flex items-center gap-3 py-[10px] px-[20px] cursor-pointer`}
-                    >
-                      {workspace?.logo ? (
-                        <img
-                          src={workspace.logo}
-                          alt=""
-                          className="  w-[24px] h-[24px] bg-white rounded-full"
-                        />
-                      ) : (
-                        <div className="w-[22px] h-[22px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-white border font-medium text-[14px]">
-                          {workspace?.name.charAt(0)}
-                        </div>
-                      )}
-                      <p className="text-[14px]">{workspace.name}</p>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+           
             <div className="flex flex-col">
               <Link
                 to="/settings/manage-workspace"
