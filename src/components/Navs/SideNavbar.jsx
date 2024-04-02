@@ -10,7 +10,7 @@ import FolderIcon from "../../assets/icon_component/Folder";
 import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import avatar from "../../../src/assets/profile_circle.svg";
-import { FaAngleDown } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import {
   get_space_data,
   get_workspace_data,
@@ -355,7 +355,7 @@ const SideNavbar = ({ ShowSubscription }) => {
         {defaultPage && (
           <>
             <div
-              className={` mb-0 flex items-center     cursor-pointer py-[12px]  ${
+              className={` mb-0 flex items-center cursor-pointer py-[12px]  ${
                 selectedChat
                   ? ""
                   : selectedSpace
@@ -368,8 +368,8 @@ const SideNavbar = ({ ShowSubscription }) => {
                             : "pl-[15px] pr-[15px]"
                         }`}
             >
-              <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-2 py-[6px] bg-[#a5a7c6] rounded-md ">
-                <FaAngleDown />
+              <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-[8px] py-[6px] bg-[#a5a7c6] rounded-md ">
+               {showWorkSpaces?<FaAngleUp />:<FaAngleDown /> } 
               </span>
               <div
                 onClick={() => {
@@ -433,11 +433,11 @@ const SideNavbar = ({ ShowSubscription }) => {
                      dispatch(setSelectedWorkSpaceId(workspace?._id));
                      dispatch(setSelectedSpaceId(null));
                      dispatch(setSelectedSpaceObject(null));
-                     navigate(`/projects/${workspace._id}`);
+                     navigate(`/projects/${workspace?._id}`);
                      setShowWorkSpaces(false)
                    }}
                    className={`${
-                     selectedWorkspaceId === workspace._id
+                     selectedWorkspaceId === workspace?._id
                        ? "bg-gray-100"
                        : ""
                    } flex items-center gap-3 py-[10px] px-[20px] cursor-pointer`}
@@ -453,7 +453,7 @@ const SideNavbar = ({ ShowSubscription }) => {
                        {workspace?.name.charAt(0)}
                      </div>
                    )}
-                   <p className="text-[14px]">{workspace.name}</p>
+                   <p className="text-[14px]">{workspace?.name}</p>
                  </div>
                );
              })

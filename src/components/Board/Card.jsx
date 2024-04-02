@@ -20,8 +20,8 @@ import { toast } from "react-toastify";
 // This <Component /> called by 🟨🟨🟨 BoardList.jsx 🟨🟨🟨
 const Card = ({ card, listID }) => {
   const dropDownRef = useRef();
-  
-  const dispatch = useDispatch()
+
+  const dispatch = useDispatch();
   const [progress, setProgress] = useState(card?.progress);
   const selectedSpaceObj = useSelector((state) => state.space.selectedSpaceObj);
   const selectedWorkspaceId = useSelector(
@@ -31,10 +31,8 @@ const Card = ({ card, listID }) => {
 
   const [localCard, setLocalCard] = useState(card);
 
-
   const handleClick = (e) => {
-    if (!dropDownRef?.current?.contains(e.target)){
-
+    if (!dropDownRef?.current?.contains(e.target)) {
     }
   };
 
@@ -46,20 +44,28 @@ const Card = ({ card, listID }) => {
     const cardTagObject = { ...card, progress: progress === 0 ? 4 : 0 };
 
     try {
-
-      dispatch(UpdatedCard({spaceId:selectedSpaceId,listId:listID,cardId:card._id,cardObj:cardTagObject})).then((data) => {
-        if (data) {
-          toast.success(`${data?.payload?.updatedCard?.name} - card updated`, {
-            autoClose: 1000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error( error);
-      })
-    } catch (error) {
-  
-    }
+      dispatch(
+        UpdatedCard({
+          spaceId: selectedSpaceId,
+          listId: listID,
+          cardId: card._id,
+          cardObj: cardTagObject,
+        })
+      )
+        .then((data) => {
+          if (data) {
+            toast.success(
+              `${data?.payload?.updatedCard?.name} - card updated`,
+              {
+                autoClose: 1000,
+              }
+            );
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -67,28 +73,24 @@ const Card = ({ card, listID }) => {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-
   const checked = card.checkList?.filter((item) => item?.checked);
   const unchecked = card.checkList?.filter((item) => !item?.checked);
-  const assignee = card.assignee
-  let assineesLength ;
-  if(assignee){
-      assineesLength = assignee.length
-  }
-  else {
-    assineesLength = 0
+  const assignee = card.assignee;
+  let assineesLength;
+  if (assignee) {
+    assineesLength = assignee.length;
+  } else {
+    assineesLength = 0;
   }
   const neededLength = assineesLength - 5;
   let sliced;
-   if(assignee){
-       sliced = assignee.slice(0,5)
-   }
-   else{
-         sliced= []
-   }
- 
-  const neededValue = neededLength > 0
+  if (assignee) {
+    sliced = assignee.slice(0, 5);
+  } else {
+    sliced = [];
+  }
 
+  const neededValue = neededLength > 0;
 
   const hexToRgb = (hex) => {
     const r = parseInt(hex.substring(1, 3), 16);
@@ -108,8 +110,6 @@ const Card = ({ card, listID }) => {
   const isDark = average > 100;
 
   const Description = localCard.description;
- 
-
 
   return (
     <>
@@ -117,9 +117,10 @@ const Card = ({ card, listID }) => {
         ref={dropDownRef}
         className="group relative w-[285px] h-fit bg-white px-3 py-3 rounded-2xl cursor-grab hover:bg-gray-200"
       >
-        {/* top-right shape ,*/}
         <span
-          className={`absolute top-0 left-0 py-[3px] px-3 text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${isDark ? 'text-black' : 'text-white'}`}
+          className={`absolute top-0 left-0 py-[3px] px-3 text-xs rounded-t-[16px] rounded-tr-none rounded-bl-none rounded-br-[10px] ${
+            isDark ? "text-black" : "text-white"
+          }`}
           style={{ backgroundColor: card?.color }}
         >
           {card.cardKey}
@@ -131,35 +132,54 @@ const Card = ({ card, listID }) => {
             style={{ backgroundColor: "#FF3659" }}
           />
         )}
-        {card?.tags?.length > 0 && (
-          <div className="flex justify-between items-center mb-2">
-            <div className="py-2 text-white mt-3  flex gap-1 flex-wrap">
-              {card?.tags?.length
-                ? card?.tags?.map((tag) => (
-                  <CardChip  small tag={tag} key={tag?._id} />
-                ))
-                : null}
-            </div>
-            <div
-              style={
-               {}
-              }
-              className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
-            >
-              {progress === 4 && <img src={Check} alt="" className="w-6 h-6" />}
-            </div>
+        <div className="flex items-center justify-between">
+          <div>
+            {" "}
+            {card?.tags?.length > 0 && (
+              <div className="flex justify-between items-center mb-2">
+                <div className=" text-white mt-5  flex gap-1 flex-wrap">
+                  {card?.tags?.length
+                    ? card?.tags?.map((tag) => (
+                        <CardChip small tag={tag} key={tag?._id} />
+                      ))
+                    : null}
+                </div>
+                <div
+                  style={{}}
+                  className={`mt-[2px] flex items-center justify-center w-5 h-5 rounded-full text-white`}
+                >
+                  {progress === 4 && (
+                    <img src={Check} alt="" className="w-6 h-6" />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+          <div className="mt-[10px]">
+            {card.endDate && (
+              <div className="flex items-center gap-2 ">
+                <div> <Flag /></div>
+               
+                <p className="text-gray-400">
+                  {moment(card.endDate).format("MMMM DD")}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
 
         <div className="flex justify-between items-center mb-2">
-          <p className="text-[16px] leading-6 mt-[10px] mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
+          <p className="text-[16px] leading-6 mt-[6px] mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
           </p>
         </div>
         <div className="text-sm text-gray-800">
-          <p id="desText" className="line-clamp-2 font-[12px] leading-[17.5px] font-inter" dangerouslySetInnerHTML={{ __html: Description }}>
-            {/* {localCard?.description || ""} */
-          }
+          <p
+            id="desText"
+            className="line-clamp-2 font-[12px] leading-[17.5px] font-inter"
+            dangerouslySetInnerHTML={{ __html: Description }}
+          >
+            {/* {localCard?.description || ""} */}
           </p>
         </div>
 
@@ -171,7 +191,7 @@ const Card = ({ card, listID }) => {
                   backgroundColor: selectedSpaceObj?.color,
                   width:
                     (checked.length / (checked.length + unchecked.length)) *
-                    100 +
+                      100 +
                     "%",
                 }}
                 className="h-full rounded-full"
@@ -180,58 +200,55 @@ const Card = ({ card, listID }) => {
             <p className="text-gray-400 text-sm ml-2">
               {checked?.length}/{checked?.length + unchecked?.length}
             </p>
-           
           </div>
         )}
-        {card.endDate && (
-          <div className="flex items-center gap-2 ">
-            <Flag />
-            <p className="text-gray-400">
-              {moment(card.endDate).format("MMMM DD")}
-            </p>
-          </div>
-        )}
+
         {!!card.assignee?.length && (
           <>
-          <div className="flex">
-          <div className="mb-3 flex pt-2">
-            {sliced?.map((user, i) => (
-              <div key={i} style={{ marginLeft: i ? "-5px" : 0 }}>
-                {user.avatar ? (
-                 <div className="flex"> <img
-                    src={user.avatar}
-                    alt=""
-                    className="w-7 h-7 rounded-full bg-white"
-                  />
-                  
+            <div className="flex">
+              <div className="mb-3 flex pt-2">
+                {sliced?.map((user, i) => (
+                  <div key={i} style={{ marginLeft: i ? "-5px" : 0 }}>
+                    {user.avatar ? (
+                      <div className="flex">
+                        {" "}
+                        <img
+                          src={user.avatar}
+                          alt=""
+                          className="w-7 h-7 rounded-full bg-white"
+                        />
+                      </div>
+                    ) : (
+                      <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
+                        {user?.fullName.charAt(0)}
+                      </p>
+                    )}
                   </div>
-                ) : (
-                  <p className="w-6 h-6 rounded-full bg-white text-black font-bold grid place-items-center">
-                    {user?.fullName.charAt(0)}
-                  </p>
-                )}
-                
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="-mx-2 mt-2">
-          {card?.assignee && neededValue ? 
-          <p  className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">+{neededLength}</p> : " "}
+              <div className="-mx-2 mt-2">
+                {card?.assignee && neededValue ? (
+                  <p className="w-7 h-7 rounded-full bg-red-300 bg-opacity-50 text-center">
+                    +{neededLength}
+                  </p>
+                ) : (
+                  " "
+                )}
+              </div>
             </div>
-
-           
-
-
-          </div>
-          <div className="flex  justify-end">
-            <><div className="flex -my-10 mr-3">
-              <GoCommentDiscussion className="mt-1 "/>
-            <p className="mx-1">{card.commentsCount}</p></div>
-            </>
-            <><div className="flex -my-10 ">
-              <GrAttachment className="mt-1"/>
-            <p className="mx-1">{card.attachmentsCount}</p></div>
-            </>
+            <div className="flex  justify-end">
+              <>
+                <div className="flex -my-10 mr-3">
+                  <GoCommentDiscussion className="mt-1 " />
+                  <p className="mx-1">{card.commentsCount}</p>
+                </div>
+              </>
+              <>
+                <div className="flex -my-10 ">
+                  <GrAttachment className="mt-1" />
+                  <p className="mx-1">{card.attachmentsCount}</p>
+                </div>
+              </>
             </div>
           </>
         )}
@@ -250,8 +267,9 @@ const Card = ({ card, listID }) => {
             </span>
             <span className="cursor-pointer">
               <CheckCircleIcon
-                className={`w-5 h-5 ${progress === 4 ? "bg-[#54CC7C] rounded-full" : ""
-                  }`}
+                className={`w-5 h-5 ${
+                  progress === 4 ? "bg-[#54CC7C] rounded-full" : ""
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleProgressUpdate();
@@ -278,8 +296,6 @@ const Card = ({ card, listID }) => {
           setConfirmModalOpen={setConfirmModalOpen}
         />
       )}
-
-     
     </>
   );
 };
