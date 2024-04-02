@@ -7,6 +7,8 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
 import moment from "moment";
+import parseInputString from "../../util/parseInputString";
+import { get_mentionable_users } from "../../api/message";
 
 const today = new Date();
 const options = {
@@ -33,76 +35,6 @@ function generateProjectDetails(project, users) {
   return projectInfo;
 }
 
-function parseInputString(inputString) {
-  // Regular expressions to match desired patterns
-  const titleRegex = /<Title>(.*?)<\/Title>/g;
-  const descriptionRegex = /<Description>(.*?)<\/Description>/g;
-  const subTaskRegex = /<SubTask>(.*?)<\/SubTask>/g;
-  const assigneeRegex = /<Assigne>(.*?)<\/Assigne>/g;
-  const timeRegex = /<Time>(.*?)<\/Time>/g;
-  const startRegex = /<Start>(.*?)<\/Start>/g;
-  const endRegex = /<End>(.*?)<\/End>/g;
-
-  // Array to store parsed objects
-  let result = [];
-
-  // Match titles
-  let titles = [...inputString.matchAll(titleRegex)];
-
-  // Iterate through each title
-  titles.forEach((titleMatch, index) => {
-    let titleObj = {};
-    titleObj.title = titleMatch[1].trim();
-
-    // Match description
-    let descriptionMatch = descriptionRegex.exec(inputString);
-    if (descriptionMatch) {
-      titleObj.description = descriptionMatch[1].trim();
-    }
-
-    // Match subtasks
-    let subTasks = [];
-    let subTaskMatch;
-    while ((subTaskMatch = subTaskRegex.exec(inputString)) !== null) {
-      subTasks.push(subTaskMatch[1].trim());
-    }
-    titleObj.checklist = { subTasks };
-
-    // Match assignees
-    let assignees = [];
-    let assigneeMatch;
-    while ((assigneeMatch = assigneeRegex.exec(inputString)) !== null) {
-      assignees.push(assigneeMatch[1].trim());
-    }
-    titleObj.assignees = assignees;
-
-    // Match time
-    let timeMatch = timeRegex.exec(inputString);
-    if (timeMatch) {
-      titleObj.time = timeMatch[1].trim();
-    }
-
-    // Match start date
-    let startMatch = startRegex.exec(inputString);
-    if (startMatch) {
-      titleObj.calendar = { start: startMatch[1].trim() };
-    }
-
-    // Match end date
-    let endMatch = endRegex.exec(inputString);
-    if (endMatch) {
-      if (!titleObj.calendar) {
-        titleObj.calendar = {};
-      }
-      titleObj.calendar.end = endMatch[1].trim();
-    }
-
-    result.push(titleObj);
-  });
-
-  return result;
-}
-
 const AIMessageBox = ({
   selectedSpace,
   members,
@@ -114,12 +46,16 @@ const AIMessageBox = ({
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const inputRef = useRef();
+  const messagesEndRef = useRef(null); // Reference to the last message element
+
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
   const projectInfo = generateProjectDetails(selectedSpace, members);
   const [currentTime, setCurrentTime] = useState("");
   const { AiMessages } = useSelector((state) => state.AiMessageList);
-  const [msgReload,setMagReload]=useState(false)
+  const [msgReload, setMagReload] = useState(false);
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
     const updateTime = () => {
       const date = new Date(); // Get the current date and time
@@ -152,8 +88,74 @@ const AIMessageBox = ({
 
   useEffect(() => {
     dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
-  }, [dispatch, selectedSpace?._id,msgReload]);
+  }, [dispatch, selectedSpace?._id, msgReload]);
 
+
+ 
+  // load user
+  useEffect(() => {
+    if (Boolean(selectedSpace?._id)) {
+      const loadUsers = async () => {
+        try {
+          const { data } = await get_mentionable_users(selectedSpace?._id);
+
+          const arr = data?.users?.map((user) => ({
+            id: user._id,
+            display: user.fullName,
+          }));
+
+          setUsers(arr);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      loadUsers();
+    }
+  }, [selectedSpace?._id]);
+
+  // Update input state with mentioned users' names only if mentions exist
+
+  // const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+  //   let updatedInput = newPlainTextValue;
+
+  //   // Filter out duplicate mentions
+  //   const uniqueMentions = [];
+  //   const uniquePlainTextValue = newPlainTextValue.replace(
+  //     /\{\{([^{}]+?)\}\}/g,
+  //     (match, mention) => {
+  //       if (!uniqueMentions.includes(mention)) {
+  //         uniqueMentions.push(mention);
+  //         return match;
+  //       }
+  //       return "";
+  //     }
+  //   );
+
+  //   setInput(uniquePlainTextValue);
+  // };
+  const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+    // Track mentioned user IDs to avoid duplicates
+    const mentionedUserIds = new Set();
+  
+    // Filter out duplicate mentions and build updated input value
+    const uniquePlainTextValue = newPlainTextValue.replace(
+      /\{\{([^{}]+?)\}\}/g,
+      (match, mention) => {
+        const userId = mention.trim(); // Extract user ID from mention
+        if (!mentionedUserIds.has(userId)) {
+          // If the user ID hasn't been mentioned yet, add it to the set
+          mentionedUserIds.add(userId);
+          return match; // Keep the mention in the input value
+        }
+        return ''; // Remove duplicate mentions
+      }
+    );
+  
+    // Update the input value with unique mentions
+    setInput(uniquePlainTextValue);
+  };
+  // submit message and call ai
   const sendMessage = async () => {
     setLoading(true);
     if (input === "") {
@@ -281,13 +283,6 @@ const AIMessageBox = ({
             }
           });
 
-          // if (
-          //   successMessages ||
-          //   failedMessage ||
-          //   (failedMessage && successMessages)
-          // ){
-
-          // }
           if (
             successMessages.length > 0 ||
             failedMessage.length > 0 ||
@@ -301,8 +296,10 @@ const AIMessageBox = ({
 
             dispatch(AddAiMessage({ spaceId: selectedSpace?._id, data: data }))
               .then((r) => {
-                if(r){
-                  setMagReload(!msgReload)
+                if (r) {
+                  setMagReload(!msgReload);
+                  setReload(!reload);
+
                 }
               })
               .catch((error) => {
@@ -366,6 +363,14 @@ const AIMessageBox = ({
   const sortedDates = Object.keys(groupedMessages)?.sort(
     (a, b) => moment(b) - moment(a)
   );
+  useEffect(() => {
+    scrollToBottom();
+  }, [groupedMessages]);
+
+  // Scroll to bottom of the messages container
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
@@ -381,7 +386,7 @@ const AIMessageBox = ({
           }}
           className="overflow-y-auto"
         >
-          {sortedDates?.map((date) => (
+          {sortedDates?.reverse().map((date) => (
             <div key={date}>
               <div className="text-center flex justify-center mx-auto w-20  rounded-[10px] text-[#818892] bg-white my-2 p-1">
                 <p className="">
@@ -397,18 +402,15 @@ const AIMessageBox = ({
               {groupedMessages[date]?.reverse()?.map((dt, index) => {
                 const lines = dt?.message
                   ?.split("\n")
-                  .filter((line) => line.trim() !== ""); // Split by newline character and filter out empty lines
+                  .filter((line) => line.trim() !== "");
                 return (
-                  // <div>dohel</div>
-                  <React.Fragment key={index}>
-                    {/* Render user messages */}
-
+                  //  ref={index === 0 ? messagesEndRef : null}
+                  <div key={index}      
+                  >
                     <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
                       <div>
                         <ul>
-                          {/* Mapping over the lines array to render list items */}
                           {lines?.map((line, i) => (
-                            // Render each line with its corresponding number
                             <li key={i}>{line}</li>
                           ))}
                         </ul>
@@ -455,72 +457,12 @@ const AIMessageBox = ({
                         )}
                       </>
                     </>
-                  </React.Fragment>
+                  </div>
                 );
               })}
+          <div ref={messagesEndRef} />
             </div>
           ))}
-          {/* <div className="flex flex-col items-start">
-            {AiMessages?.map((dt, index) => {
-              const lines = dt?.message
-                ?.split("\n")
-                .filter((line) => line.trim() !== ""); 
-              return (
-                <React.Fragment key={index}>
-
-                  <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                    <div>
-                      <ul>
-                        {lines.map((line, i) => (
-                          <li key={i}>{line}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <span className="flex justify-end">
-                      {" "}
-                      {moment(dt?.createdAt).format("LT")}
-                    </span>
-                  </div>
-
-
-                  <>
-                    <>
-                      {dt?.successMessage?.length > 0 && (
-                        <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
-                          <div>Successfully Created Card List:</div>
-
-                          {dt?.successMessage?.map((success, i) => (
-                            <>
-                              <div key={i}>
-                                {i + 1}. {success.message}
-                              </div>
-                            </>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  </>
-                  <>
-                    <>
-                      {dt?.failedMessage?.length > 0 && (
-                        <>
-                          <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
-                            <div>UnSuccessful Created Card List:</div>
-
-                            {dt?.failedMessage?.map((fail, i) => (
-                              <div key={i}>
-                                {i + 1}. {fail.message}
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
-                  </>
-                </React.Fragment>
-              );
-            })}
-          </div> */}
         </div>
         <div className="px-3 mt-[10px] relative text-gray-300 flex flex-col  w-full">
           <div className="w-full h-full flex  justify-center align-middle">
@@ -528,7 +470,7 @@ const AIMessageBox = ({
               <MentionsInput
                 value={input}
                 placeholder="Write message"
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleInputChange} // Update input on change including mentions
                 classNames={classNames}
                 customSuggestionsContainer={(children) => (
                   <div className="bg-white font-inter absolute bottom-1 min-w-[300px] shadow-sm rounded-lg">
@@ -541,6 +483,7 @@ const AIMessageBox = ({
                 <Mention
                   className={classNames.mentions__mention}
                   trigger="@"
+                  data={users}
                   markup="{{__id__}}"
                   renderSuggestion={(entry) => {
                     return (
@@ -553,6 +496,9 @@ const AIMessageBox = ({
                       </h1>
                     );
                   }}
+                  displayTransform={(id) =>
+                    users.find((user) => user.id === id).display
+                  }
                 />
               </MentionsInput>
             </div>

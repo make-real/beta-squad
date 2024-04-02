@@ -239,9 +239,9 @@ const LoggedInTopNav = () => {
               {/* Content */}
               <div className="mt-[10px] h-full overflow-hidden">
                 <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-                  {notifications?.unseen?.map((notification) => {
+                  {notifications?.unseen?.map((notification,index) => {
                     return (
-                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+                      <div key={index} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                            <BellIcon style={{ fill: "#FB397F" }} />
@@ -253,9 +253,9 @@ const LoggedInTopNav = () => {
                       </div>
                     );
                   })}
-                  {notifications?.seen?.map((notification) => {
+                  {notifications?.seen?.map((notification,index) => {
                     return (
-                      <div className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+                      <div key={index} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
                            <BellIcon style={{ fill: "black" }} />
