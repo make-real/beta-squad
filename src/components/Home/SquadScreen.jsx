@@ -103,6 +103,7 @@ const SquadScreen = ({ currentWorkspace, selectedSpace, singleMember }) => {
         reload={reload}
         setReload={setReload}
         listId={filteredLists[0]}
+        tags={tags?.tags}
       />
     ),
     file: <ShowFile selectedSpaceId={selectedSpace?._id} showFile={showFile} />,

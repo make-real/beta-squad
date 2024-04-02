@@ -384,7 +384,6 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
     );
   }
 
-
   return (
     <React.Fragment>
       <section
@@ -450,7 +449,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
               {localCard?.createdAt && (
                 <p className="font-[400] text-sm text-[#818892]">
-                  Created - {formatDate(localCard.createdAt, "MMM dd yyyy")}
+                  Created - {formatDate(localCard.createdAt, "dd, MMM")}
                 </p>
               )}
             </div>
@@ -471,8 +470,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   button={
                     localCard.startDate ? (
                       <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
-                        {formatDate(localCard.startDate, "MMM, dd")} -{" "}
-                        {formatDate(localCard.endDate, "MMM, dd")}
+                        {formatDate(localCard.startDate, "dd, MMM")} -{" "}
+                        {formatDate(localCard.endDate, "dd, MMM")}
                       </div>
                     ) : (
                       <div className="flex items-center justify-between text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300 p-2 rounded-lg text-sm">

@@ -9,6 +9,7 @@ import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
 import moment from "moment";
 import parseInputString from "../../util/parseInputString";
 import { get_mentionable_users } from "../../api/message";
+import { get_tags } from "../../api/tags";
 
 const today = new Date();
 const options = {
@@ -23,7 +24,7 @@ const formattedDate = `Today’s Date - ${today.toLocaleDateString(
 )}`;
 
 // Function to generate project details
-function generateProjectDetails(project, users) {
+function generateProjectDetails(project, users, tags) {
   let projectInfo = `Project Name: ${project.name}\n`;
   projectInfo += `Project Stack: ${project.description}\n`;
   projectInfo += "Team -\n";
@@ -31,6 +32,13 @@ function generateProjectDetails(project, users) {
   users.forEach((user, index) => {
     projectInfo += `${index + 1}. ${user.fullName} - ${user.role}\n`;
   });
+
+  if (tags) {
+    projectInfo += "Tags -\n";
+    tags.forEach((tag, index) => {
+      projectInfo += `${index + 1}. ${tag.name}\n`;
+    });
+  }
 
   return projectInfo;
 }
@@ -41,6 +49,7 @@ const AIMessageBox = ({
   listId,
   reload,
   setReload,
+  AllTags,
 }) => {
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
@@ -50,12 +59,11 @@ const AIMessageBox = ({
 
   const [tasks, setTasks] = useState([]); // State to store tasks
   const [loading, setLoading] = useState(false);
-  const projectInfo = generateProjectDetails(selectedSpace, members);
+  const projectInfo = generateProjectDetails(selectedSpace, members, AllTags);
   const [currentTime, setCurrentTime] = useState("");
   const { AiMessages } = useSelector((state) => state.AiMessageList);
   const [msgReload, setMagReload] = useState(false);
   const [users, setUsers] = useState([]);
-
   useEffect(() => {
     const updateTime = () => {
       const date = new Date(); // Get the current date and time
@@ -90,8 +98,7 @@ const AIMessageBox = ({
     dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
   }, [dispatch, selectedSpace?._id, msgReload]);
 
-
- 
+  console.log("tags from ai", AllTags);
   // load user
   useEffect(() => {
     if (Boolean(selectedSpace?._id)) {
@@ -137,7 +144,7 @@ const AIMessageBox = ({
   const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
     // Track mentioned user IDs to avoid duplicates
     const mentionedUserIds = new Set();
-  
+
     // Filter out duplicate mentions and build updated input value
     const uniquePlainTextValue = newPlainTextValue.replace(
       /\{\{([^{}]+?)\}\}/g,
@@ -148,10 +155,10 @@ const AIMessageBox = ({
           mentionedUserIds.add(userId);
           return match; // Keep the mention in the input value
         }
-        return ''; // Remove duplicate mentions
+        return ""; // Remove duplicate mentions
       }
     );
-  
+
     // Update the input value with unique mentions
     setInput(uniquePlainTextValue);
   };
@@ -204,7 +211,12 @@ const AIMessageBox = ({
               <Assignes>
                 <Assigne>Assigne 1</Assigne>
                 <Assigne>Assigne 2</Assigne>
-              </Assignes>
+              </Assignes><Tags>
+              <Tag>frontend</Tag>
+              <Tag>UI</Tag>
+              <Tag>bug-fix</Tag>
+            </Tags>
+
               <Time>Estimated Time In hours</Time>
               <Calendar>
                 <Start>Start Date</Start>
@@ -230,6 +242,8 @@ const AIMessageBox = ({
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
+      console.log("gptResponse", gptResponse);
+      console.log("updateData", updateData);
       setTasks(updateData);
 
       // Changes start here
@@ -240,7 +254,11 @@ const AIMessageBox = ({
           );
           return member?._id;
         });
-
+        const taskTags = task?.tags.map((tagName) => {
+          const tag = AllTags?.find((tag) => tag?.name === tagName);
+          return tag;
+        });
+        console.log("taskTags", taskTags);
         const taskData = {
           name: task.title,
           description: task.description,
@@ -299,7 +317,6 @@ const AIMessageBox = ({
                 if (r) {
                   setMagReload(!msgReload);
                   setReload(!reload);
-
                 }
               })
               .catch((error) => {
@@ -388,8 +405,8 @@ const AIMessageBox = ({
         >
           {sortedDates?.reverse().map((date) => (
             <div key={date}>
-              <div className="text-center flex justify-center mx-auto w-20  rounded-[10px] text-[#818892] bg-white my-2 p-1">
-                <p className="">
+              <div className="text-center flex justify-center mx-auto w-24   rounded-[10px] text-[#818892] bg-white my-2 p-1">
+                <p className="text-sm">
                   {moment(date).calendar(null, {
                     sameDay: "[Today]",
                     nextDay: "[Tomorrow]",
@@ -405,20 +422,28 @@ const AIMessageBox = ({
                   .filter((line) => line.trim() !== "");
                 return (
                   //  ref={index === 0 ? messagesEndRef : null}
-                  <div key={index}      
-                  >
-                    <div className="bg-white px-4 text-[#818892] py-2 ml-auto m-2 w-[300px] justify-start rounded-lg">
-                      <div>
-                        <ul>
-                          {lines?.map((line, i) => (
-                            <li key={i}>{line}</li>
-                          ))}
-                        </ul>
+                  <div key={index}>
+                    <div className="flex justify-start items-center ml-auto  w-[340px] pr-2">
+                      
+                      <div className="bg-white px-4 text-[#404347] py-2 max-w-[280px] ml-auto   m-2  rounded-lg">
+                        <div>
+                          <ul>
+                            {lines?.map((line, i) => (
+                              <li key={i}>{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <span className="flex justify-end text-sm text-[#9ca3af]">
+                          {" "}
+                          {moment(dt?.createdAt).format("LT")}
+                        </span>
                       </div>
-                      <span className="flex justify-end">
-                        {" "}
-                        {moment(dt?.createdAt).format("LT")}
-                      </span>
+                      <img
+                      title={dt?.sender[0]?.fullName}
+                        src={dt?.sender[0]?.avatar}
+                        alt=""
+                        className="w-7 h-7 rounded-full bg-white "
+                      />
                     </div>
 
                     {/* Render success list */}
@@ -426,7 +451,7 @@ const AIMessageBox = ({
                     <>
                       <>
                         {dt?.successMessage?.length > 0 && (
-                          <div className="bg-[#54CC7C] px-4 text-white py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
+                          <div className="bg-[#a9e5bd] px-4 text-[#404347]  py-2 m-2 w-[300px] mr-auto justify-end rounded-lg">
                             <div>Successfully Created Card List:</div>
 
                             {dt?.successMessage?.map((success, i) => (
@@ -444,7 +469,7 @@ const AIMessageBox = ({
                       <>
                         {dt?.failedMessage?.length > 0 && (
                           <>
-                            <div className="bg-[#ef4444] px-4 text-white py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
+                            <div className="bg-[#fdb0cc] px-4 text-[#404347] py-2 m-2 mr-auto w-[300px] justify-end rounded-lg">
                               <div>UnSuccessful Created Card List:</div>
 
                               {dt?.failedMessage?.map((fail, i) => (
@@ -460,7 +485,7 @@ const AIMessageBox = ({
                   </div>
                 );
               })}
-          <div ref={messagesEndRef} />
+              <div ref={messagesEndRef} />
             </div>
           ))}
         </div>
