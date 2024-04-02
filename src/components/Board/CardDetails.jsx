@@ -449,7 +449,7 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
 
               {localCard?.createdAt && (
                 <p className="font-[400] text-sm text-[#818892]">
-                  Created - {formatDate(localCard.createdAt, "dd, MMM")}
+                  Created - {formatDate(localCard.createdAt, "dd MMM")}
                 </p>
               )}
             </div>
@@ -470,8 +470,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   button={
                     localCard.startDate ? (
                       <div className="p-2 text-center rounded-lg duration-200 text-sm text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300">
-                        {formatDate(localCard.startDate, "dd, MMM")} -{" "}
-                        {formatDate(localCard.endDate, "dd, MMM")}
+                        {formatDate(localCard.startDate, "dd MMM")} -{" "}
+                        {formatDate(localCard.endDate, "dd MMM")}
                       </div>
                     ) : (
                       <div className="flex items-center justify-between text-[#3699E0] bg-[#EDF7FF] hover:bg-gray-300 p-2 rounded-lg text-sm">
@@ -712,8 +712,8 @@ const CardDetails = ({ progressStatus, handleDataChange = () => {} }) => {
                   {localCard?.startDate && localCard?.endDate && (
                     <div className="border-b-[1px] border-b-[#ECECEC] pb-2 mb-2">
                       <p className="font-[600]">
-                        Task of {formatDate(localCard.startDate, "MMM, dd")} -{" "}
-                        {formatDate(localCard.endDate, "MMM, dd")}
+                        Task of {formatDate(localCard.startDate, "dd MMM")} -{" "}
+                        {formatDate(localCard.endDate, "dd MMM")}
                       </p>
                     </div>
                   )}
