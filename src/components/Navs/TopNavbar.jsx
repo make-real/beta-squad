@@ -345,7 +345,6 @@ const LoggedInTopNav = () => {
                 })
               )}
             </div>
-            <div className="w-[80%] mx-auto h-[1px] bg-gray-200 my-[15px]"></div>
             <div className="flex flex-col">
               <Link
                 to="/settings/manage-workspace"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";  
+import React, { useEffect } from "react";
 import LogoIcon from "../../assets/logo.jpeg";
 import CollapseIcon from "../../assets/collapse.jpeg";
 import BorderedPlusIcon from "../../assets/borderedplus.svg";
@@ -10,6 +10,7 @@ import FolderIcon from "../../assets/icon_component/Folder";
 import PrivateFolderIcon from "../../assets/icon_component/PrivateFolder";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import avatar from "../../../src/assets/profile_circle.svg";
+import { FaAngleDown } from "react-icons/fa";
 import {
   get_space_data,
   get_workspace_data,
@@ -27,17 +28,14 @@ import {
 } from "../../store/slice/space";
 import { useSelector } from "react-redux";
 import BriefCaseIcon from "../../assets/briefcase.svg";
-import { ModalSearchSpace, } from "../Sidebar";
+import { ModalSearchSpace } from "../Sidebar";
 import CreateSquadModal from "../Home/Projects/Modals/CreateSquadModal";
 import CreateWorkspaceModal from "../ManageWorkspace/Modals/CreateWorkspaceModal";
 import { toggleFullSidebar } from "../../store/slice/screen";
-import { getAvatarUrl } from "../../util/getAvatarUrl";
-import ComingSoonModal from "../Modals/ComingSoonModal";
-import { useCommingSoonContext } from "../../context/FeatureContext";
 import AddMemberModal from "../Home/WorkspaceMembers/Modals/AddMemberModal";
 import { useUserInfoContext } from "../../context/UserInfoContext";
 
-const SideNavbar = ({ShowSubscription}) => {
+const SideNavbar = ({ ShowSubscription }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentWorkspace = useSelector(
@@ -49,6 +47,7 @@ const SideNavbar = ({ShowSubscription}) => {
   const fullSidebar = useSelector((state) => state.screen.fullSidebar);
   const [showCreateSquadModal, setShowCreateSquadModal] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showWorkSpaces, setShowWorkSpaces] = useState(false);
 
   const [createSpaceModal, setCreateSpaceModal] = useState(false);
   const [spaceSearchModal, setSpaceSearchModal] = useState(false);
@@ -62,18 +61,18 @@ const SideNavbar = ({ShowSubscription}) => {
   const { loginUserInfo } = useUserInfoContext();
 
   const members = useSelector((state) => state.workspace.workspaceMembers);
-  
-  const adminRoll = members?.filter((member) => member.role === "owner" || "admin");
-  
+
+  const adminRoll = members?.filter(
+    (member) => member.role === "owner" || "admin"
+  );
+
   const showPlusButton = adminRoll.map(
     (admin) => admin?._id === loginUserInfo?._id
   );
- 
 
   const location = useLocation();
 
   const params = useParams();
-
 
   const manageWorkspacePage =
     location.pathname === "/settings/manage-workspace";
@@ -119,7 +118,6 @@ const SideNavbar = ({ShowSubscription}) => {
     getWorkSpaceData();
   }, [dispatch]);
 
-
   useEffect(() => {
     const getSpaceData = async () => {
       try {
@@ -138,8 +136,6 @@ const SideNavbar = ({ShowSubscription}) => {
 
     getSpaceData();
   }, [selectedWorkspace, params.workspace_id, dispatch]);
-
-
 
   const isFirstTime =
     JSON.parse(localStorage.getItem("stepFinished")) === true
@@ -186,6 +182,9 @@ const SideNavbar = ({ShowSubscription}) => {
   };
 
   //  active status
+  const selectedWorkspaceId = useSelector(
+    (state) => state.workspace.selectedWorkspace
+  );
 
   useEffect(() => {
     function onlineHandler() {
@@ -211,7 +210,9 @@ const SideNavbar = ({ShowSubscription}) => {
       <div
         className={`${
           fullSidebar ? "min-w-[225px] w-[225px]" : "w-max items-center"
-        } bg-[#FAFAFA] pt-[20px] flex flex-col fixed left-0 ${ShowSubscription? "top-[34px]":"top-0"} z-[50] h-screen overflow-y-scroll no-scrollbar`}
+        } bg-[#FAFAFA] pt-[20px] flex flex-col fixed left-0 ${
+          ShowSubscription ? "top-[34px]" : "top-0"
+        } z-[50] h-screen overflow-y-scroll no-scrollbar`}
       >
         <div
           className={`flex items-center justify-between mb-[32px] ${
@@ -243,14 +244,8 @@ const SideNavbar = ({ShowSubscription}) => {
                 fullSidebar ? "" : "rotate-180"
               }`}
             />
-            {/* <CloseMenuBtn
-              className={`text-[#0D1282] w-[28px] h-[28px] cursor-pointer transition-all duration-500 ${
-                fullSidebar ? "" : "rotate-180"
-              }`}
-            /> */}
           </div>
         </div>
-        {/* Manage Workspace Sidebar */}
         {manageWorkspacePage && (
           <>
             <div
@@ -271,13 +266,6 @@ const SideNavbar = ({ShowSubscription}) => {
                   </p>
                 )}
               </div>
-              {/* {fullSidebar && (
-                <img
-                  onClick={() => setShowCreateWorkspaceModal(true)}
-                  src={BorderedPlusIcon}
-                  alt=""
-                />
-              )} */}
             </div>
 
             {workspaces?.map((workspace, idx) => (
@@ -330,7 +318,11 @@ const SideNavbar = ({ShowSubscription}) => {
                                     : "pl-[25px] pr-[25px]"
                                 }`}
           >
+             
             <div className="flex items-center gap-3">
+            <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-2 py-[6px] bg-[#a5a7c6] rounded-md ">
+                <FaAngleDown />
+              </span>
               <div className="w-[30px] h-[30px] flex items-center justify-center bg-[#2C3782] rounded-full">
                 <svg
                   width="24"
@@ -360,155 +352,117 @@ const SideNavbar = ({ShowSubscription}) => {
           </div>
         )}
 
-        {/* Default Project Sidebar */}
-        {/* Workspace */}
-
         {defaultPage && (
-          <div
-            onClick={() => {
-              dispatch(setSelectedSpaceId(null));
-              dispatch(setSelectedSpaceObject(null));
-              navigate(`/projects/${selectedWorkspace}`);
-              setSelectedChat(null);
-            }}
-            className={` mb-0 flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
-              selectedChat
-                ? ""
-                : selectedSpace
-                ? "justify-between"
-                : "bg-[#CBCCE1] "
-            } 
-                        ${
-                          fullSidebar
-                            ? "pl-[25px] pr-[25px]"
-                            : "pl-[25px] pr-[25px]"
-                        }`}
-          >
-            <div className="flex items-center gap-3">
-              {currentWorkspace?.logo ? (
-                <div className="w-[28px] h-[28px] ">
-                  <img
-                    src={currentWorkspace?.logo}
-                    alt=""
-                    className="w-full h-full bg-white    rounded-full"
-                  />
-                </div>
-              ) : (
-                <div className=" w-[30px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
-                  {currentWorkspace?.name.charAt(0)}
-                </div>
-              )}
-
-              {fullSidebar && (
-                <p className="text-[14px]  text-black">
-                  {currentWorkspace?.name}
-                </p>
-              )}
-            </div>
-
-            {/* bug issue */}
-            {showPlusButton[0] && (
-              <div>
-                {fullSidebar && (
-                  <img
-                    onClick={() => setShowCreateSquadModal(true)}
-                    src={BorderedPlusIcon}
-                    alt=""
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        )}
-        {/* {defaultPage && (
-          <div className="flex justify-between  items-center w-full ">
+          <>
             <div
-              onClick={() => {
-                dispatch(setSelectedSpaceId(null));
-                dispatch(setSelectedSpaceObject(null));
-                navigate(`/projects/${selectedWorkspace}`);
-                setSelectedChat(null);
-              }}
-              className={` bg-[#6576FF20] flex items-center  gap-2  cursor-pointer py-[12px] justify-between ${
+              className={` mb-0 flex items-center     cursor-pointer py-[12px]  ${
                 selectedChat
                   ? ""
                   : selectedSpace
                   ? "justify-between"
                   : "bg-[#CBCCE1] "
               } 
-                                ${
-                                  fullSidebar
-                                    ? "pl-[25px] pr-[25px]"
-                                    : "pl-[25px] pr-[25px]"
-                                }`}
+                        ${
+                          fullSidebar
+                            ? "pl-[25px] pr-[25px]"
+                            : "pl-[15px] pr-[15px]"
+                        }`}
             >
-              <div className="flex gap-2 items-center">
-                {currentWorkspace?.logo ? (
-                  <div className="w-[28px] h-[28px] ">
-                    <img
-                      src={currentWorkspace?.logo}
-                      alt=""
-                      className="w-full h-full bg-white    rounded-full"
-                    />
-                  </div>
-                ) : (
-                  <div className=" w-[30px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
-                    {currentWorkspace?.name.charAt(0)}
+              <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-2 py-[6px] bg-[#a5a7c6] rounded-md ">
+                <FaAngleDown />
+              </span>
+              <div
+                onClick={() => {
+                  dispatch(setSelectedSpaceId(null));
+                  dispatch(setSelectedSpaceObject(null));
+                  navigate(`/projects/${selectedWorkspace}`);
+                  setSelectedChat(null);
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  {currentWorkspace?.logo ? (
+                    <div className="w-[28px] h-[28px] ">
+                      <img
+                        src={currentWorkspace?.logo}
+                        alt=""
+                        className="w-full h-full bg-white    rounded-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className=" w-[30px] h-[25px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-gray-300 border font-medium text-[14px]">
+                      {currentWorkspace?.name.charAt(0)}
+                    </div>
+                  )}
+
+                  {fullSidebar && (
+                    <p className="text-[14px]  text-black">
+                      {currentWorkspace?.name}
+                    </p>
+                  )}
+                  {showPlusButton[0] && (
+                  <div>
+                    {fullSidebar && (
+                      <img
+                        onClick={() => setShowCreateSquadModal(true)}
+                        src={BorderedPlusIcon}
+                        alt=""
+                      />
+                    )}
                   </div>
                 )}
-                {fullSidebar && (
-                  <p className="text-[14px]  text-black">
-                    {currentWorkspace?.name}
-                  </p>
-                )}
-              </div>
-              <div>
-                {fullSidebar && (
-                  <div
-                    className="w-max    text-end"
-                    onClick={() => setShowCreateSquadModal(true)}
-                  >
-                    <img
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
-                  </div>
-                )}
+                </div>
+
+                
               </div>
             </div>
-          </div>
-        )} */}
-        {/* Squad */}
+          </>
+        )}
+
+        {showWorkSpaces &&(
+           <div className="mt-[15px] ml- flex flex-col">
+           {workspaces?.length === 0 ? (
+             <p className="px-[20px] text-[14px] text-gray-400 text-center">
+               No workspaces yet
+             </p>
+           ) : (
+             workspaces?.map((workspace, idx) => {
+               return (
+                 <div
+                   key={idx}
+                   onClick={() => {
+                     dispatch(setSelectedWorkSpaceId(workspace?._id));
+                     dispatch(setSelectedSpaceId(null));
+                     dispatch(setSelectedSpaceObject(null));
+                     navigate(`/projects/${workspace._id}`);
+                     setShowWorkSpaces(false)
+                   }}
+                   className={`${
+                     selectedWorkspaceId === workspace._id
+                       ? "bg-gray-100"
+                       : ""
+                   } flex items-center gap-3 py-[10px] px-[20px] cursor-pointer`}
+                 >
+                   {workspace?.logo ? (
+                     <img
+                       src={workspace.logo}
+                       alt=""
+                       className="  w-[24px] h-[24px] bg-white rounded-full"
+                     />
+                   ) : (
+                     <div className="w-[22px] h-[22px] bg-[#2C3782] flex items-center justify-center cursor-pointer rounded-full shadow-xl hover:bg-[#4D6378] text-white border font-medium text-[14px]">
+                       {workspace?.name.charAt(0)}
+                     </div>
+                   )}
+                   <p className="text-[14px]">{workspace.name}</p>
+                 </div>
+               );
+             })
+           )}
+         </div>
+        )}
+
         {defaultPage && (
           <div className="">
-            {/* {fullSidebar && (
-              <div
-                className={`flex items-center justify-between pl-[17px] pr-[10px]`}
-              >
-             <div className="flex gap-2 pl-[17px]">
-             <img
-                      src={Squad}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
-                <h2 className="text-[#0D1282] font-normal leading-[36px]">My  Squad</h2>
-             </div>
-                <div className="flex items-center gap-2">
-               
-                  <div
-                    className="w-max"
-                    onClick={() => setShowCreateSquadModal(true)}
-                  >
-                    <img
-                      src={BorderedPlusIcon}
-                      alt=""
-                      className="cursor-pointer text-[#0D1282] "
-                    />
-                  </div>
-                </div>
-              </div>
-            )} */}
             {!fullSidebar && (
               <h1 className="text-[#0D1282] text-center">Squad</h1>
             )}
@@ -580,146 +534,6 @@ const SideNavbar = ({ShowSubscription}) => {
           </div>
         )}
 
-        {/* Task List */}
-        {/* {defaultPage && fullSidebar && (
-          <div className="mt-[10px] flex flex-col">
-            <div
-              className={`flex items-center cursor-pointer py-[10px] gap-[10px] ${
-                selectedChat === userId ? "bg-[#6576FF10]" : ""
-              } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
-              onClick={() => {
-                dispatch(setSelectedSpaceId(null));
-                dispatch(setSelectedSpaceObject(null));
-                setSelectedChat(userId);
-                // navigate(`/projects/${selectedWorkspace}/chat/${userId}`);
-                setShowModal(!showModal);
-              }}
-            >
-              <img
-                src={images.taskListIcon}
-                className="w-[28px] h-[28px] rounded-full border object-none bg-white"
-                alt=""
-              />
-              {fullSidebar && (
-                <p className="text-[#0D1282] text-[14px]">My Task List</p>
-              )}
-            </div>
-          </div>
-        )} */}
-        {/* modal */}
-        {/* {showModal && <ComingSoonModal setShowModal={setShowModal} />} */}
-
-        {/* Chats */}
-        {/* {!isFirstTime || !firstTimeMember
-          ? defaultPage && (
-              <div className="mt-[44px]">
-                {fullSidebar && (
-                  <div className="flex items-center justify-between pl-[17px] pr-[24px]">
-                    <div className="flex gap-2 pl-[13px]">
-                      <img
-                        src={ChatIcon}
-                        alt="search"
-                        className="cursor-pointer"
-                      />
-                      <h2 className="text-[#0D1282]">Chart</h2>
-                    </div>
-                    <div
-                      className="flex items-center gap-2"
-                      onClick={() => {
-                        setShowAddMemberModal(!showAddMemberModal);
-                      }}
-                    > */}
-                      {/* bug issue */}
-
-                     {/* {
-                      showPlusButton[0] && (
-                        <img
-                        src={BorderedPlusIcon}
-                        alt=""
-                        className="cursor-pointer text-[#0D1282] "
-                      />
-                      )
-                     }
-                    </div>
-                  </div>
-                )} */}
-                {/* {!fullSidebar && (
-                  <h1 className="text-[#0D1282] text-center">Chart</h1>
-                )} */}
-
-
-                {/* Chats List */}
-                {/* <div className="mt-[10px] flex flex-col">
-                  {members.map((member, idx) =>
-                    member?._id !== userId ? (
-                      <div
-                        key={idx}
-                        className={`flex items-center cursor-pointer py-[10px] gap-[10px] mx-2 rounded-lg ${
-                          selectedChat?._id === member?._id
-                            ? "bg-[#CBCCE1]"
-                            : ""
-                        } ${fullSidebar ? "pl-[25px]" : "pl-[25px] pr-[25px]"}`}
-                        onClick={() => {
-                         
-                          dispatch(setSelectedSpaceId(null));
-                          dispatch(setSelectedSpaceObject(null));
-                          setSelectedChat(member);
-                          navigate(
-                            `/projects/${selectedWorkspace}/chat/${member?._id}`
-                          );
-                        }}
-                      >
-                        {isOnline ? (
-                          <>
-                            <div className="relative">
-                              
-                              <img
-                                src={
-                                  member?.avatar ? member?.avatar:
-                                  avatar
-                                }
-                                className="w-[28px] h-[28px] rounded-full border object-cover"
-                                alt=""
-                              />
-                            </div>
-                           
-                            {fullSidebar && (
-                              <p className="text-[#000] flex items-center gap-1 text-[14px]">
-                                {member.fullName}
-                              </p>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            <img
-                              src={
-                                member?.avatar ? member?.avatar:
-                                avatar
-                              }
-                              className="w-[28px] h-[28px] rounded-full border object-cover"
-                              alt=""
-                            />
-                            {fullSidebar && (
-                              <p className="text-[#000] flex items-center gap-[4px] text-[14px]">
-                                {member.fullName}{" "}
-                                <img
-                                  src={ClockIcon}
-                                  alt=""
-                                  className="w-[16px] h-[16px]"
-                                />{" "}
-                                <span className="text-[8px]">10min</span>
-                              </p>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    ) : null
-                  )}
-                </div>
-              </div>
-            )
-          : null} */}
-        {/* Footer Copyright */}
         <p
           className={`text-[#0D1282] text-center ${
             fullSidebar ? "text-[12px] pl-[25px]" : "text-[22px]"

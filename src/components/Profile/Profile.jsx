@@ -1,12 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { get_my_profile, update_user } from "../../api/auth";
-import BackArrowIcon from "../../assets/back_arrow.svg";
 import GalleryIcon from "../../assets/gallery.svg";
 import DeleteProfileModal from "./Modals/DeleteProfileModal";
-import { useUserInfoContext } from "../../context/UserInfoContext";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -19,7 +17,7 @@ const Profile = () => {
   const [error, setError] = useState();
   const navigate = useNavigate();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const { loginUserInfo } = useUserInfoContext();
+
 
   const handleChange = (e) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -89,20 +87,12 @@ const Profile = () => {
     setUserData(userInfo);
   }, []);
 
-  console.log(userData)
+
   
 
   return (
     <>
       <div className="relative pt-[40px] pl-[38px] pr-[40px] pb-[40px] bg-[#FFF] h-full flex flex-col">
-        {/* <div className="flex items-center">
-                    <Link to="/projects" className="cursor-pointer">
-                        <img src={BackArrowIcon} alt="" />
-                    </Link>
-                    <p className="ml-[14px] font-semibold text-[15px] text-[#031124]">
-                        Profile
-                    </p>
-                </div> */}
         <div className="w-full h-full bg-white rounded-[16px] pt-[30px] pb-[50px] px-[40px] flex flex-col overflow-auto no-scrollbar">
           <h1 className="text-[#424D5B] text-[20px] leading-[25px] font-semibold">
             Profile
@@ -159,34 +149,7 @@ const Profile = () => {
                 />
               </div>
             </div>
-            {/* <div className="mt-[33px] flex w-full gap-[30px] mb-[40px]">
-              <div className="w-full">
-                <p className="text-[#818892] text-[14px] font-semibold">
-                  New password
-                </p>
-                <input
-                  type="text"
-                  placeholder="Enter new password"
-                  className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
-                  name="new_password"
-                  onChange={handleChange}
-                  value={userData?.new_password}
-                />
-              </div>
-              <div className="w-full">
-                <p className="text-[#818892] text-[14px] font-semibold">
-                  Confirm password
-                </p>
-                <input
-                  type="text"
-                  placeholder="Confirm new password"
-                  className="w-full bg-[#ECECEC60] rounded-[8px] text-[16px] text-[#031124] px-[18px] py-[14px] mt-[13px] border-none outline-none"
-                  name="confirm_password"
-                  onChange={handleChange}
-                  value={userData?.confirm_password}
-                />
-              </div>
-            </div> */}
+          
             <div className="mt-auto flex items-center justify-between">
               <p
                 onClick={() => setShowDeleteProfileModal(true)}
