@@ -21,7 +21,7 @@ import { setFilterListBoard, testReducer } from "../../store/slice/allboard";
 import { useAppStateContext } from "../../context/FeatureContext";
 import emptyIcon from "../../assets/empty.png";
 
-const Board = ({ showType, addBoardRef,reload }) => {
+const Board = ({ showType, addBoardRef,reload,selectedSpaceId }) => {
   const { squadId } = useParams();
 
   const {
@@ -274,6 +274,7 @@ const Board = ({ showType, addBoardRef,reload }) => {
                           listIndex={index}
                           isDepend={isDepend}
                           reload={reload}
+                          workSpaceId={selectedSpaceId}
                           setIsDepend={setIsDepend}
                         />
                       ))
