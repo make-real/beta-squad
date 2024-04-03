@@ -141,6 +141,27 @@ const AIMessageBox = ({
 
   //   setInput(uniquePlainTextValue);
   // };
+  // const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+  //   // Track mentioned user IDs to avoid duplicates
+  //   const mentionedUserIds = new Set();
+
+  //   // Filter out duplicate mentions and build updated input value
+  //   const uniquePlainTextValue = newPlainTextValue.replace(
+  //     /\{\{([^{}]+?)\}\}/g,
+  //     (match, mention) => {
+  //       const userId = mention.trim(); // Extract user ID from mention
+  //       if (!mentionedUserIds.has(userId)) {
+  //         // If the user ID hasn't been mentioned yet, add it to the set
+  //         mentionedUserIds.add(userId);
+  //         return match; // Keep the mention in the input value
+  //       }
+  //       return ""; // Remove duplicate mentions
+  //     }
+  //   );
+
+  //   // Update the input value with unique mentions
+  //   setInput(uniquePlainTextValue);
+  // };
   const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
     // Track mentioned user IDs to avoid duplicates
     const mentionedUserIds = new Set();
@@ -159,8 +180,26 @@ const AIMessageBox = ({
       }
     );
 
-    // Update the input value with unique mentions
-    setInput(uniquePlainTextValue);
+    // If Enter key is pressed and the current line is a list item
+    if (e.keyCode === "ENTER" && /^\s*\d+\.\s/.test(newPlainTextValue)) {
+      const lines = uniquePlainTextValue.split("\n");
+      const lastLine = lines[lines.length - 1];
+      const lastNumber = parseInt(lastLine.match(/^\s*(\d+)\.\s/)[1]); // Get the last number in the list
+      const nextNumber = lastNumber + 1;
+      setInput(uniquePlainTextValue + `${nextNumber}. `); // Append the next number to the list
+    }
+    // If Tab key is pressed, indent the current line to create a sublist
+    else if (e.keyCode === "ENTER") {
+      e.preventDefault(); // Prevent default Tab behavior
+      const lines = uniquePlainTextValue.split("\n");
+      const lastLine = lines[lines.length - 1];
+      const indentedLine = "    " + lastLine; // Add four spaces to indent
+      setInput(uniquePlainTextValue.slice(0, -lastLine.length) + indentedLine); // Replace the last line with the indented line
+    }
+    // Otherwise, update the input value with unique mentions
+    else {
+      setInput(uniquePlainTextValue);
+    }
   };
   // submit message and call ai
   const sendMessage = async () => {
@@ -405,6 +444,7 @@ Please make sure to use easy to understand and simple english.
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  console.log("input", input);
 
   return (
     <>
@@ -414,9 +454,11 @@ Please make sure to use easy to understand and simple english.
         }}
         className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
       >
-        <div className="py-2 px-1">
-          <AiDragAndDropFile />
-        </div>
+       {input.length > 0 && (
+  <div className="py-2 px-1">
+    <AiDragAndDropFile />
+  </div>
+)}
         <div
           style={{
             height: messages?.length ? "900px" : "900px",
