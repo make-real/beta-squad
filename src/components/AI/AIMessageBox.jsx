@@ -186,43 +186,55 @@ const AIMessageBox = ({
           messages: [
             {
               role: "system",
-              content: ` You are an AI task manager.
-              ${projectInfo}
-              I will give you a list of task and todays date.
-              I will provide the people working on the project with their name and roles.
-              You will add a title and solutions/description (Based on the task) to each task, and provide a list of people who will assign to that task.
-              If testing needed for that task assigned the tester from the team.
-              You will provide Estimated the time needed to complete task task.
-              You will provide task calendar as -
-              Start Date - Today’s Date
-              End Date - Based on the complexity of that task.
-              If needed break the task into subtask and provide the subtask list
-              Solutions/description (Based on the task)  should be straight forward and short. You will describe the work to the team.
-              You can assign multiple person to a task if needed.
-              Please make sure to use easy to understand and simple english.
-              Provide all the responses on template. Here’s a guide.
-              
-              <Title>Short</Title>
-              <Description> Description/Solution</Description>
-              <Checklist>
-                <SubTask>Sub task 1</SubTask>
-                <SubTask>Sub task 2</SubTask>
-                <SubTask>Sub task 3</SubTask>
-              </Checklist>
-              <Assignes>
-                <Assigne>Assigne 1</Assigne>
-                <Assigne>Assigne 2</Assigne>
-              </Assignes><Tags>
-              <Tag>frontend</Tag>
-              <Tag>UI</Tag>
-              <Tag>bug-fix</Tag>
-            </Tags>
+              content: `You are an AI task manager.  ${projectInfo}
 
-              <Time>Estimated Time In hours</Time>
-              <Calendar>
-                <Start>Start Date</Start>
-                <End>End Date</End>
-              </Calendar>
+You will help me in two ways.
+
+1. If I ask you question or seek help you will help me.
+2. I will give you a list of task and todays date. 
+
+I will provide the people working on the project with their name and roles.
+
+You will add a title and solutions/description (Based on the task) to each task, and provide a list of people who will assign to that task.
+
+I will also provide all the tags related to that project. You will add needed tag to the task. Don't use urgent/important tags if its not mentioned on the task
+
+You will provide Estimated time needed to complete a task.
+
+You will provide task calendar as -
+              Start Date - Today’s Date (if don't say when to start)
+              End Date - Based on the complexity of that task.
+
+If needed break the task into subtask and provide the subtask list
+
+Solutions/description (Based on the task)  should be straight forward and short. You will describe the work to the team.
+
+You can assign multiple person to a task only if needed. If it mention on the task who to assign, just assign that team member
+
+Please make sure to use easy to understand and simple english.
+
+ Must Provide all the task creation responses on this template. Here’s a guide.
+
+<Title>Short Title</Title>
+<Description> Description/Solution</Description>
+<SubTasks>
+    <SubTask>Sub task 1</SubTask>
+    <SubTask>Sub task 2</SubTask>
+    <SubTask>Sub task 3</SubTask>
+</SubTasks>
+<Assignes>
+    <Assigne>Assigne 1</Assigne>
+    <Assigne>Assigne 2</Assigne>
+</Assignes>
+<Tags>
+    <Tag>Tag 1</Tag>
+    <Tag>Tag 2</Tag>
+</Tags>
+<Time>Estimated Time In hours</Time>
+<Calendar>
+    <Start>Start Date</Start>
+    <End>End Date</End>
+</Calendar>
               `,
             },
             {
@@ -319,20 +331,17 @@ const AIMessageBox = ({
                   setMagReload(!msgReload);
                   setReload(!reload);
                   dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
                 }
               })
               .catch((error) => {
                 console.error("Error dispatching AddAiMessage:", error);
                 dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
               });
           } else {
             // Handle if both successMessages and failedMessages are empty
             setLoading(false);
             setReload(!reload);
             dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
           }
           const successMessage =
             successes.length > 0
@@ -362,7 +371,6 @@ const AIMessageBox = ({
           setLoading(false);
           setReload(!reload);
           dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
         })
         .catch((error) => {
           setLoading(false);
@@ -376,7 +384,6 @@ const AIMessageBox = ({
     }
     setReload(!reload);
     dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
   };
   const groupedMessages = AiMessages?.reduce((acc, message) => {
     const date = moment(message.createdAt).format("YYYY-MM-DD");
@@ -435,7 +442,6 @@ const AIMessageBox = ({
                   //  ref={index === 0 ? messagesEndRef : null}
                   <div key={index}>
                     <div className="flex justify-start items-center ml-auto  w-[340px] pr-2">
-                      
                       <div className="bg-white px-4 text-[#404347] py-2 max-w-[280px] ml-auto   m-2  rounded-lg">
                         <div>
                           <ul>
@@ -450,7 +456,7 @@ const AIMessageBox = ({
                         </span>
                       </div>
                       <img
-                      title={dt?.sender[0]?.fullName}
+                        title={dt?.sender[0]?.fullName}
                         src={dt?.sender[0]?.avatar}
                         alt=""
                         className="w-7 h-7 rounded-full bg-white "

@@ -155,12 +155,14 @@ const Card = ({ card, listID }) => {
               </div>
             )}
           </div>
-          <div className="absolute right-1 p-[2px] top-0">
+          <div className="absolute right-1 p-[5px] top-0">
             {card.endDate && (
               <div className="flex items-center gap-2 ">
-                <div> <Flag /></div>
-               
-                <p className="text-gray-400 text-[14px]">
+                <div>
+                  <Flag />
+                </div>
+
+                <p className="text-gray-400 text-[12px]">
                   {moment(card.endDate).format("MMMM DD")}
                 </p>
               </div>
@@ -178,8 +180,7 @@ const Card = ({ card, listID }) => {
             id="desText"
             className="line-clamp-2 font-[12px] leading-[17.5px] font-inter"
             dangerouslySetInnerHTML={{ __html: Description }}
-          >
-          </p>
+          ></p>
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
