@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate,  } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoIcon from "../../assets/squad_logo.png";
 import NotificationIcon from "../../assets/notification.svg";
 import ArrowDown from "../../assets/arrowdown.svg";
@@ -20,6 +20,8 @@ import BellIcon from "../../assets/icon_component/NotificationIcon";
 import { get_notifications } from "../../api/notification";
 import { useRef } from "react";
 import Search from "./search";
+import { io } from "socket.io-client";
+import config from "../../config";
 
 const TopNav = () => {
   const [jwt, setJwt] = useState(null);
@@ -34,9 +36,6 @@ const TopNav = () => {
     </div>
   );
 };
-
-
-
 
 const NotLoggedInTopNav = () => {
   const location = useLocation();
@@ -77,6 +76,7 @@ const LoggedInTopNav = () => {
 
   const [showDropDownMenu, setShowDropDownMenu] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [socket, setSocket] = useState(null);
   const [notifications, setNotifications] = useState({
     seen: null,
     unseen: null,
@@ -91,7 +91,6 @@ const LoggedInTopNav = () => {
   );
   const userMenuDropDownRef = useRef();
   const notificationDropDownRef = useRef();
- 
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -112,15 +111,14 @@ const LoggedInTopNav = () => {
     navigate("/");
   };
 
-  
   const fetchNotification = async () => {
     try {
       const { data } = await get_notifications(10);
       const AllNotification = data?.notification;
-      const seenNotifications = data.notifications.filter(
+      const seenNotifications = data?.notifications.filter(
         (n) => n.seen === true
       );
-      const unseenNotifications = data.notifications.filter(
+      const unseenNotifications = data?.notifications.filter(
         (n) => n.seen === false
       );
       setNotifications({
@@ -142,8 +140,23 @@ const LoggedInTopNav = () => {
   };
 
   useEffect(() => {
-    fetchNotification();
+    const sockets = io(config.BASE_URL, {
+      auth: {
+        socketAuthToken: JSON.parse(localStorage.getItem("jwt")),
+      },
+    });
+
+    setSocket(sockets);
+   
   }, []);
+
+  useEffect(() => {
+    socket?.on("NEW_NOTIFICATION_RECEIVED", (noti) => {
+      fetchNotification();
+      setRedNotification(true);
+     
+    });
+  }, [socket]);
 
   const handleClickOutside = (ref, event, updateFn) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -152,7 +165,7 @@ const LoggedInTopNav = () => {
   };
 
   // Auto close user drop down menu
-  const [redNotification,setRedNotification]=useState(notifications.count2===0?false:true)
+  const [redNotification, setRedNotification] = useState(false);
   useEffect(() => {
     document.addEventListener(
       "click",
@@ -201,6 +214,9 @@ const LoggedInTopNav = () => {
     };
   }, []);
 
+  useEffect(() => {
+    fetchNotification();
+  }, []);
 
   const calculateTimeDifference = (pastTime) => {
     const currentTime = new Date();
@@ -214,20 +230,18 @@ const LoggedInTopNav = () => {
     const years = Math.floor(days / 365);
 
     if (years > 0) {
-      return `${years} year${years > 1 ? 's' : ''} ago`;
+      return `${years} year${years > 1 ? "s" : ""} ago`;
     } else if (days > 0) {
-      return `${days} day${days > 1 ? 's' : ''} ago`;
+      return `${days} day${days > 1 ? "s" : ""} ago`;
     } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
     } else if (minutes > 0) {
-      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
     } else {
-      return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+      return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
     }
   };
 
-
-console.log(notifications)
   return (
     <>
       <div
@@ -237,64 +251,75 @@ console.log(notifications)
 
         <div className="flex items-center h-full">
           <div className="relative">
-          <div onClick={()=>setRedNotification(false)}>
-           <img
-              onClick={() => setShowNotificationModal(!showNotificationModal)}
-              className="w-[22px] cursor-pointer"
-              src={NotificationIcon}
-              alt="notification"
-            />
-            {redNotification ? (
-              <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span>
-            ) : (
-              <></>
-            )}
-          </div>
-           
+            <div
+              onClick={() => {
+                setRedNotification(false);
+                setShowNotificationModal(!showNotificationModal);
+              }}
+            >
+              <img
+                className="w-[22px] cursor-pointer"
+                src={NotificationIcon}
+                alt="notification"
+              />
+              {redNotification || notifications?.unseen?.length > 0 ? (
+                <span className="w-[8px] h-[8px] rounded-full absolute -top-[6px] left-4 bg-red-500"></span>
+              ) : (
+                <></>
+              )}
+            </div>
+
             <div
               ref={notificationDropDownRef}
               className={`z-[999] origin-top-right scale-0 pointer-events-none ${
                 showNotificationModal ? "scale-100 pointer-events-auto" : ""
               } transition-transform absolute top-[30px] -right-[15px] w-[425px] h-[480px] bg-white normal-shadow border rounded-[16px] pt-[10px] px-[16px] pb-[20px] flex flex-col`}
             >
-           <h2 className="text-xl font-semibold">
-           Notification
-           </h2>
+              <h2 className="text-xl font-semibold">Notification</h2>
               {/* Content */}
               <div className="mt-[10px] h-full overflow-hidden">
                 <div className="flex flex-col gap-[4px] overflow-y-scroll h-full">
-                  {notifications?.unseen?.map((notification,index) => {
+                  {notifications?.unseen?.map((notification, index) => {
                     return (
-                      <div key={index} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+                      <div
+                        key={index}
+                        className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]"
+                      >
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                           <BellIcon style={{ fill: "#FB397F" }} />
+                            <BellIcon style={{ fill: "#FB397F" }} />
                           </div>
                           <p className="text-[#031124]">
                             {notification?.message}
                           </p>
                         </div>
+                        <span className="text-[12px] absolute bottom-[2px] px-[3px] right-1">
+                          {calculateTimeDifference(notification?.createdAt)}
+                        </span>
                       </div>
                     );
                   })}
-                  {notifications?.seen?.map((notification,index) => {
+                  {notifications?.seen?.map((notification, index) => {
                     return (
-                      <div key={index} className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]">
+                      <div
+                        key={index}
+                        className="relative w-full pl-[16px] pr-[36px] py-[13px] flex items-center justify-between bg-[#f7f7f7] rounded-[10px]"
+                      >
                         <div className="flex items-center gap-[17px]">
                           <div className="w-[50px] h-[50px] flex items-center justify-center bg-white rounded-full shrink-0">
-                           <BellIcon style={{ fill: "black" }} />
+                            <BellIcon style={{ fill: "black" }} />
                           </div>
                           <p className="text-[#031124]">
                             {notification?.message}
                           </p>
-                         
                         </div>
-                        <span className="text-[12px] absolute bottom-[2px] px-[3px] right-1">{calculateTimeDifference(notification?.createdAt)}</span>
+                        <span className="text-[12px] absolute bottom-[2px] px-[3px] right-1">
+                          {calculateTimeDifference(notification?.createdAt)}
+                        </span>
                       </div>
                     );
                   })}
                 </div>
-               
               </div>
             </div>
           </div>
@@ -330,7 +355,6 @@ console.log(notifications)
               showDropDownMenu ? "scale-100 pointer-events-auto" : ""
             }  absolute top-[55px] w-[230px] min-h-[160px] bg-white normal-shadow border rounded-[20px] pt-[20px] pb-[10px]`}
           >
-           
             <div className="flex flex-col">
               <Link
                 to="/settings/manage-workspace"
@@ -367,12 +391,8 @@ console.log(notifications)
           </div>
         </div>
       </div>
-
-   
     </>
   );
 };
-
-
 
 export default TopNav;
