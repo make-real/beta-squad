@@ -359,7 +359,7 @@ const SideNavbar = ({ ShowSubscription }) => {
                 selectedChat
                   ? ""
                   : selectedSpace
-                  ? "justify-between"
+                  ? ""
                   : "bg-[#CBCCE1] "
               } 
                         ${
@@ -368,7 +368,7 @@ const SideNavbar = ({ ShowSubscription }) => {
                             : "pl-[15px] pr-[15px]"
                         }`}
             >
-              <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-[8px] py-[6px] bg-[#a5a7c6] rounded-md ">
+              <span onClick={()=>setShowWorkSpaces(!showWorkSpaces)} className="px-2 mr-[4px] py-[6px] rounded-md ">
                {showWorkSpaces?<FaAngleUp />:<FaAngleDown /> } 
               </span>
               <div
@@ -381,7 +381,7 @@ const SideNavbar = ({ ShowSubscription }) => {
               >
                 <div className="flex items-center gap-3">
                   {currentWorkspace?.logo ? (
-                    <div className="w-[28px] h-[28px] ">
+                    <div className="w-[26px] h-[26px] ">
                       <img
                         src={currentWorkspace?.logo}
                         alt=""
@@ -395,8 +395,8 @@ const SideNavbar = ({ ShowSubscription }) => {
                   )}
 
                   {fullSidebar && (
-                    <p className="text-[14px]  text-black">
-                      {currentWorkspace?.name}
+                    <p title={currentWorkspace?.name} className="text-[14px]  text-black">
+                      {currentWorkspace?.name.length<10?currentWorkspace?.name:currentWorkspace?.name.substring(0, 10) + "..."}
                     </p>
                   )}
                   {showPlusButton[0] && (
