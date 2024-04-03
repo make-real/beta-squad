@@ -11,33 +11,9 @@ function AiDragAndDropFile({
   card,
   setLocalCard,
   handleDataChange,
+  handle_card_attachments
 }) {
 
-  const handle_card_attachments = async (files) => {
-    const formData = new FormData();
-
-    for (const file of files) {
-      formData.append("attachments", file);
-    }
-
-    try {
-      setAttachFileLoading(true);
-      const { data } = await cardAttachmentUpdateApiCall(
-        selectedSpaceId,
-        listID,
-        card._id,
-        formData
-      );
-      setLocalCard((pre) => ({
-        ...pre,
-        attachments: data.updatedCard.attachments,
-      }));
-      setAttachFileLoading(false);
-      handleDataChange();
-    } catch (error) {
-      console.log(error?.response?.data?.issue);
-    }
-  };
 
   const stack2 = (
     <div className="flex justify-center items-center p-4 rounded-2xl border-2 border-dashed space-x-1 cursor-pointer text-gray-400 hover:text-gray-500 duration-150 bg-[#ECECEC]/[0.5]">

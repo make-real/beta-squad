@@ -11,6 +11,7 @@ import parseInputString from "../../util/parseInputString";
 import { get_mentionable_users } from "../../api/message";
 import { toggleRefetchAction } from "../../store/slice/toggleFetch";
 import AiDragAndDropFile from "./AiDragAndDropFile";
+import { CiCircleRemove } from "react-icons/ci";
 
 const today = new Date();
 const options = {
@@ -64,6 +65,7 @@ const AIMessageBox = ({
   const [currentTime, setCurrentTime] = useState("");
   const { AiMessages } = useSelector((state) => state.AiMessageList);
   const [msgReload, setMagReload] = useState(false);
+  const [images, setImages] = useState([]);
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const updateTime = () => {
@@ -98,6 +100,16 @@ const AIMessageBox = ({
   useEffect(() => {
     dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
   }, [dispatch, selectedSpace?._id, msgReload]);
+
+  const handle_card_attachments = async (files) => {
+    const imageUrls = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const imageUrl = URL.createObjectURL(file);
+      imageUrls.push(imageUrl);
+    }
+    setImages(imageUrls);
+  };
 
   // load user
   useEffect(() => {
@@ -444,8 +456,12 @@ Please make sure to use easy to understand and simple english.
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  console.log("input", input);
-
+  console.log("input", images);
+  const handleImageRemove = (indexToRemove) => {
+    setImages((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+  };
   return (
     <>
       <div
@@ -454,11 +470,38 @@ Please make sure to use easy to understand and simple english.
         }}
         className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
       >
-       {input.length > 0 && (
-  <div className="py-2 px-1">
-    <AiDragAndDropFile />
-  </div>
-)}
+        {input.length > 0 && (
+          <div className="py-2 px-1">
+            <AiDragAndDropFile
+              handle_card_attachments={handle_card_attachments}
+            />
+          </div>
+        )}
+        {input.length > 0 && (
+          <>
+            {" "}
+            {Array.isArray(images) && images.length > 0 && (
+              <div className="grid w-full  grid-cols-8 mx-4  my-2 py-2 gap-2">
+                {images.map((image, index) => (
+                  <div className="relative">
+                    <span
+                      onClick={() => handleImageRemove(index)} // Add onClick handler to remove the image
+                      className="absolute cursor-pointer -top-3 -right-2 text-red-600 text-xl"
+                    >
+                      <CiCircleRemove />
+                    </span>
+                    <img
+                      key={index}
+                      src={image}
+                      alt={image.name}
+                      className="w-14 h-12 rounded-md"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
         <div
           style={{
             height: messages?.length ? "900px" : "900px",
