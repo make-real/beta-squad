@@ -9,8 +9,8 @@ import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
 import moment from "moment";
 import parseInputString from "../../util/parseInputString";
 import { get_mentionable_users } from "../../api/message";
-import { get_tags } from "../../api/tags";
 import { toggleRefetchAction } from "../../store/slice/toggleFetch";
+import AiDragAndDropFile from "./AiDragAndDropFile";
 
 const today = new Date();
 const options = {
@@ -99,7 +99,6 @@ const AIMessageBox = ({
     dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
   }, [dispatch, selectedSpace?._id, msgReload]);
 
-  console.log("tags from ai", AllTags);
   // load user
   useEffect(() => {
     if (Boolean(selectedSpace?._id)) {
@@ -255,8 +254,7 @@ Please make sure to use easy to understand and simple english.
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
-      console.log("gptResponse", gptResponse);
-      console.log("updateData", updateData);
+
       setTasks(updateData);
 
       // Changes start here
@@ -269,9 +267,8 @@ Please make sure to use easy to understand and simple english.
         });
         const taskTags = task?.tags.map((tagName) => {
           const tag = AllTags?.find((tag) => tag?.name === tagName);
-          return tag;
+          return tag?._id; // Return only the _id property
         });
-        console.log("taskTags", taskTags);
         const taskData = {
           name: task.title,
           description: task.description,
@@ -280,7 +277,9 @@ Please make sure to use easy to understand and simple english.
           assignUser: members ? assigneeIds : [""],
           checkList: task.checklist.subTasks,
           estimatedTime: task.time,
+          tagId: taskTags,
         };
+
         return dispatch(
           createAiCard({
             spaceId: selectedSpace?._id,
@@ -415,6 +414,9 @@ Please make sure to use easy to understand and simple english.
         }}
         className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
       >
+        <div className="py-2 px-1">
+          <AiDragAndDropFile />
+        </div>
         <div
           style={{
             height: messages?.length ? "900px" : "900px",
