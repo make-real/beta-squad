@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { get_workspace_data } from "../../api/workSpace";
 import LoadingScreen from "../Loading/LoadingScreen";
-import Cookies from "js-cookie";
-import { each } from "lodash";
+import { io } from "socket.io-client";
+import config from "../../config";
 
 const NavigateUser = () => {
   const navigate = useNavigate();
@@ -25,6 +25,18 @@ const NavigateUser = () => {
   }, []);
 
   useEffect(() => {
+    const socket = io(config.BASE_URL, {
+      auth: {
+        socketAuthToken: JSON.parse(localStorage.getItem("jwt")),
+      },
+    });
+    socket.on("NEW_NOTIFICATION_RECEIVED", (noti) => {
+      console.log("Socket is connected");
+      console.log(noti);
+    });
+  }, []);
+
+  useEffect(() => {
     if (loading) return;
     if (shouldChangeRoute) {
       navigate("/settings/manage-workspace");
@@ -33,12 +45,10 @@ const NavigateUser = () => {
       const lastVisitedWorkspace = localStorage.getItem("lastVisitedWorkspace");
       if (lastVisitedProjects) {
         if (lastVisitedWorkspace) {
-            console.log(  `/projects/${lastVisitedProjects}/squad/${lastVisitedWorkspace}`)
           navigate(
             `/projects/${lastVisitedProjects}/squad/${lastVisitedWorkspace}`
           );
         } else {
-            console.log(`/projects/${lastVisitedProjects}`)
           navigate(`/projects/${lastVisitedProjects}`);
         }
       } else {

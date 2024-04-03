@@ -136,7 +136,7 @@ const Card = ({ card, listID }) => {
           <div>
             {" "}
             {card?.tags?.length > 0 && (
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center ">
                 <div className=" text-white mt-5  flex gap-1 flex-wrap">
                   {card?.tags?.length
                     ? card?.tags?.map((tag) => (
@@ -155,12 +155,12 @@ const Card = ({ card, listID }) => {
               </div>
             )}
           </div>
-          <div className="mt-[10px]">
+          <div className="absolute right-1 p-[2px] top-0">
             {card.endDate && (
               <div className="flex items-center gap-2 ">
                 <div> <Flag /></div>
                
-                <p className="text-gray-400">
+                <p className="text-gray-400 text-[14px]">
                   {moment(card.endDate).format("MMMM DD")}
                 </p>
               </div>
@@ -168,8 +168,8 @@ const Card = ({ card, listID }) => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mb-2">
-          <p className="text-[16px] leading-6 mt-[6px] mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
+        <div className="flex justify-between items-center mb-1">
+          <p className="text-[16px] leading-6 mt-[12px] mr-4 font-inter text-[rgba(17, 24, 39, 1)]  font-normal line-clamp-2">
             {card.name}
           </p>
         </div>
@@ -179,12 +179,11 @@ const Card = ({ card, listID }) => {
             className="line-clamp-2 font-[12px] leading-[17.5px] font-inter"
             dangerouslySetInnerHTML={{ __html: Description }}
           >
-            {/* {localCard?.description || ""} */}
           </p>
         </div>
 
         {!!(checked?.length + unchecked?.length) && (
-          <div className="relative flex items-center mt-3">
+          <div className="relative flex items-center mt-2">
             <div className="relative flex w-[100px] h-2 bg-slate-300 rounded-full">
               <div
                 style={{
