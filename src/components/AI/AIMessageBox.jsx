@@ -9,8 +9,8 @@ import { AddAiMessage, getAllAiMessages } from "../../store/slice/ai";
 import moment from "moment";
 import parseInputString from "../../util/parseInputString";
 import { get_mentionable_users } from "../../api/message";
-import { get_tags } from "../../api/tags";
 import { toggleRefetchAction } from "../../store/slice/toggleFetch";
+import AiDragAndDropFile from "./AiDragAndDropFile";
 
 const today = new Date();
 const options = {
@@ -99,7 +99,6 @@ const AIMessageBox = ({
     dispatch(getAllAiMessages({ spaceId: selectedSpace?._id }));
   }, [dispatch, selectedSpace?._id, msgReload]);
 
-  console.log("tags from ai", AllTags);
   // load user
   useEffect(() => {
     if (Boolean(selectedSpace?._id)) {
@@ -142,6 +141,27 @@ const AIMessageBox = ({
 
   //   setInput(uniquePlainTextValue);
   // };
+  // const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
+  //   // Track mentioned user IDs to avoid duplicates
+  //   const mentionedUserIds = new Set();
+
+  //   // Filter out duplicate mentions and build updated input value
+  //   const uniquePlainTextValue = newPlainTextValue.replace(
+  //     /\{\{([^{}]+?)\}\}/g,
+  //     (match, mention) => {
+  //       const userId = mention.trim(); // Extract user ID from mention
+  //       if (!mentionedUserIds.has(userId)) {
+  //         // If the user ID hasn't been mentioned yet, add it to the set
+  //         mentionedUserIds.add(userId);
+  //         return match; // Keep the mention in the input value
+  //       }
+  //       return ""; // Remove duplicate mentions
+  //     }
+  //   );
+
+  //   // Update the input value with unique mentions
+  //   setInput(uniquePlainTextValue);
+  // };
   const handleInputChange = (e, newValue, newPlainTextValue, mentions) => {
     // Track mentioned user IDs to avoid duplicates
     const mentionedUserIds = new Set();
@@ -160,8 +180,26 @@ const AIMessageBox = ({
       }
     );
 
-    // Update the input value with unique mentions
-    setInput(uniquePlainTextValue);
+    // If Enter key is pressed and the current line is a list item
+    if (e.keyCode === "ENTER" && /^\s*\d+\.\s/.test(newPlainTextValue)) {
+      const lines = uniquePlainTextValue.split("\n");
+      const lastLine = lines[lines.length - 1];
+      const lastNumber = parseInt(lastLine.match(/^\s*(\d+)\.\s/)[1]); // Get the last number in the list
+      const nextNumber = lastNumber + 1;
+      setInput(uniquePlainTextValue + `${nextNumber}. `); // Append the next number to the list
+    }
+    // If Tab key is pressed, indent the current line to create a sublist
+    else if (e.keyCode === "ENTER") {
+      e.preventDefault(); // Prevent default Tab behavior
+      const lines = uniquePlainTextValue.split("\n");
+      const lastLine = lines[lines.length - 1];
+      const indentedLine = "    " + lastLine; // Add four spaces to indent
+      setInput(uniquePlainTextValue.slice(0, -lastLine.length) + indentedLine); // Replace the last line with the indented line
+    }
+    // Otherwise, update the input value with unique mentions
+    else {
+      setInput(uniquePlainTextValue);
+    }
   };
   // submit message and call ai
   const sendMessage = async () => {
@@ -186,43 +224,55 @@ const AIMessageBox = ({
           messages: [
             {
               role: "system",
-              content: ` You are an AI task manager.
-              ${projectInfo}
-              I will give you a list of task and todays date.
-              I will provide the people working on the project with their name and roles.
-              You will add a title and solutions/description (Based on the task) to each task, and provide a list of people who will assign to that task.
-              If testing needed for that task assigned the tester from the team.
-              You will provide Estimated the time needed to complete task task.
-              You will provide task calendar as -
-              Start Date - Today’s Date
-              End Date - Based on the complexity of that task.
-              If needed break the task into subtask and provide the subtask list
-              Solutions/description (Based on the task)  should be straight forward and short. You will describe the work to the team.
-              You can assign multiple person to a task if needed.
-              Please make sure to use easy to understand and simple english.
-              Provide all the responses on template. Here’s a guide.
-              
-              <Title>Short</Title>
-              <Description> Description/Solution</Description>
-              <Checklist>
-                <SubTask>Sub task 1</SubTask>
-                <SubTask>Sub task 2</SubTask>
-                <SubTask>Sub task 3</SubTask>
-              </Checklist>
-              <Assignes>
-                <Assigne>Assigne 1</Assigne>
-                <Assigne>Assigne 2</Assigne>
-              </Assignes><Tags>
-              <Tag>frontend</Tag>
-              <Tag>UI</Tag>
-              <Tag>bug-fix</Tag>
-            </Tags>
+              content: `You are an AI task manager.  ${projectInfo}
 
-              <Time>Estimated Time In hours</Time>
-              <Calendar>
-                <Start>Start Date</Start>
-                <End>End Date</End>
-              </Calendar>
+You will help me in two ways.
+
+1. If I ask you question or seek help you will help me.
+2. I will give you a list of task and todays date. 
+
+I will provide the people working on the project with their name and roles.
+
+You will add a title and solutions/description (Based on the task) to each task, and provide a list of people who will assign to that task.
+
+I will also provide all the tags related to that project. You will add needed tag to the task. Don't use urgent/important tags if its not mentioned on the task
+
+You will provide Estimated time needed to complete a task.
+
+You will provide task calendar as -
+              Start Date - Today’s Date (if don't say when to start)
+              End Date - Based on the complexity of that task.
+
+If needed break the task into subtask and provide the subtask list
+
+Solutions/description (Based on the task)  should be straight forward and short. You will describe the work to the team.
+
+You can assign multiple person to a task only if needed. If it mention on the task who to assign, just assign that team member
+
+Please make sure to use easy to understand and simple english.
+
+ Must Provide all the task creation responses on this template. Here’s a guide.
+
+<Title>Short Title</Title>
+<Description> Description/Solution</Description>
+<SubTasks>
+    <SubTask>Sub task 1</SubTask>
+    <SubTask>Sub task 2</SubTask>
+    <SubTask>Sub task 3</SubTask>
+</SubTasks>
+<Assignes>
+    <Assigne>Assigne 1</Assigne>
+    <Assigne>Assigne 2</Assigne>
+</Assignes>
+<Tags>
+    <Tag>Tag 1</Tag>
+    <Tag>Tag 2</Tag>
+</Tags>
+<Time>Estimated Time In hours</Time>
+<Calendar>
+    <Start>Start Date</Start>
+    <End>End Date</End>
+</Calendar>
               `,
             },
             {
@@ -243,8 +293,7 @@ const AIMessageBox = ({
       const gptResponse = response.data.choices[0].message.content;
 
       const updateData = parseInputString(gptResponse);
-      console.log("gptResponse", gptResponse);
-      console.log("updateData", updateData);
+
       setTasks(updateData);
 
       // Changes start here
@@ -257,9 +306,8 @@ const AIMessageBox = ({
         });
         const taskTags = task?.tags.map((tagName) => {
           const tag = AllTags?.find((tag) => tag?.name === tagName);
-          return tag;
+          return tag?._id; // Return only the _id property
         });
-        console.log("taskTags", taskTags);
         const taskData = {
           name: task.title,
           description: task.description,
@@ -268,7 +316,9 @@ const AIMessageBox = ({
           assignUser: members ? assigneeIds : [""],
           checkList: task.checklist.subTasks,
           estimatedTime: task.time,
+          tagId: taskTags,
         };
+
         return dispatch(
           createAiCard({
             spaceId: selectedSpace?._id,
@@ -319,20 +369,17 @@ const AIMessageBox = ({
                   setMagReload(!msgReload);
                   setReload(!reload);
                   dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
                 }
               })
               .catch((error) => {
                 console.error("Error dispatching AddAiMessage:", error);
                 dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
               });
           } else {
             // Handle if both successMessages and failedMessages are empty
             setLoading(false);
             setReload(!reload);
             dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
           }
           const successMessage =
             successes.length > 0
@@ -362,7 +409,6 @@ const AIMessageBox = ({
           setLoading(false);
           setReload(!reload);
           dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
         })
         .catch((error) => {
           setLoading(false);
@@ -376,7 +422,6 @@ const AIMessageBox = ({
     }
     setReload(!reload);
     dispatch(toggleRefetchAction()); // Dispatch the toggle action for isRefetch
-
   };
   const groupedMessages = AiMessages?.reduce((acc, message) => {
     const date = moment(message.createdAt).format("YYYY-MM-DD");
@@ -399,6 +444,7 @@ const AIMessageBox = ({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  console.log("input", input);
 
   return (
     <>
@@ -408,6 +454,11 @@ const AIMessageBox = ({
         }}
         className={`border w-full  border-[#ECECEC] pb-3 rounded-lg custom-shadow   flex flex-col bg-[#F5F5F5]`}
       >
+       {input.length > 0 && (
+  <div className="py-2 px-1">
+    <AiDragAndDropFile />
+  </div>
+)}
         <div
           style={{
             height: messages?.length ? "900px" : "900px",
@@ -435,7 +486,6 @@ const AIMessageBox = ({
                   //  ref={index === 0 ? messagesEndRef : null}
                   <div key={index}>
                     <div className="flex justify-start items-center ml-auto  w-[340px] pr-2">
-                      
                       <div className="bg-white px-4 text-[#404347] py-2 max-w-[280px] ml-auto   m-2  rounded-lg">
                         <div>
                           <ul>
@@ -450,7 +500,7 @@ const AIMessageBox = ({
                         </span>
                       </div>
                       <img
-                      title={dt?.sender[0]?.fullName}
+                        title={dt?.sender[0]?.fullName}
                         src={dt?.sender[0]?.avatar}
                         alt=""
                         className="w-7 h-7 rounded-full bg-white "
