@@ -150,10 +150,6 @@ const SideNavbar = ({ ShowSubscription }) => {
       : (allSpaces?.length === 0 || allSpaces[0]?.name === "Onboarding") &&
         allSpaces.length === 1;
 
-  const firstTimeMember =
-    JSON.parse(localStorage.getItem("stepFinished")) === true
-      ? false
-      : [...members.filter((m) => m?._id !== user?._id)].length === 0;
 
   const squadOnDrop = (e) => {
     e.preventDefault();
@@ -453,7 +449,12 @@ const SideNavbar = ({ ShowSubscription }) => {
                        {workspace?.name.charAt(0)}
                      </div>
                    )}
-                   <p className="text-[14px]">{workspace?.name}</p>
+                    {fullSidebar && (
+                        <p className="text-[14px] ">
+                          {workspace?.name}
+                        </p>
+                      )}
+                  
                  </div>
                );
              })
