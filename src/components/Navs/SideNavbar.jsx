@@ -453,7 +453,12 @@ const SideNavbar = ({ ShowSubscription }) => {
                        {workspace?.name.charAt(0)}
                      </div>
                    )}
-                   <p className="text-[14px]">{workspace?.name}</p>
+                    {fullSidebar && (
+                        <p className="text-[14px] ">
+                          {workspace?.name}
+                        </p>
+                      )}
+                  
                  </div>
                );
              })
